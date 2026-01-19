@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\MeerDataGenerator;
+use App\Services\GenetixDataGenerator;
 
+ 
 use Illuminate\Http\Request;
 
 use App\Models\Area; 
@@ -29,11 +31,19 @@ class MainController extends Controller
         return view("main", ['area' => $area]);
     }
 
-    public function calcarea($id, Request $request, MeerDataGenerator $mdg) {
+    public function calcarea($id, Request $request, MeerDataGenerator $mdg, GenetixDataGenerator $gtx) {
 
-        $res = $mdg->calcPoints(100);
-print_r($res);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $table = json_decode($area->data);
 
+        $headPoints = $mdg->calcPoints(100, $table);
+ 
+        $population0 = $gtx->getFirstGeneration(10, 1, 100);
+      
+        
 
     }
 
