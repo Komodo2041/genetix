@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\MeerDataGenerator;
 use App\Services\GenetixDataGenerator;
 use App\Services\CrossingData;
- 
+use App\Services\MutationData; 
+
 use Illuminate\Http\Request;
 
 use App\Models\Area; 
@@ -31,7 +32,7 @@ class MainController extends Controller
         return view("main", ['area' => $area]);
     }
 
-    public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross) {
+    public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
         set_time_limit(3000);
         $area = Area::find($id);
         if (!$area) {
@@ -50,9 +51,9 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints();
         $nrPop = 0;
-        $maxPop = 10;
-   
-        while ($repeatQ < 5 && $nrPop < $maxPop) {
+        $maxPop = 20;
+    $t3 = microtime(true);
+        while ($repeatQ < 4 && $nrPop < $maxPop) {
             $t1 = microtime(true);
             $selectedIndividuals = $gtx->getindyvidual($res, 10);
             $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
@@ -61,13 +62,18 @@ class MainController extends Controller
             $maxQ = $res[0]['sum'];
             if ($maxQ == $oldQ) {
                 $repeatQ++; 
-            }        
+            } else {
+                $repeatQ = 0;
+            }    
+            echo $repeatQ." powtorzeniea <br/>";    
             $oldQ = $maxQ;
             $nrPop++;
              $t2 = microtime(true);
-              echo ($t2 - $t1)." s - Wynik POP:".$nrPop." - ". $maxQ ."<br/>";
+              echo ($t2 - $t1)." s - Wynik POP: ".$nrPop." - ". $maxQ ."<br/>";
         } 
 
+        $t4 = microtime(true);
+        echo "<br/>All: ".($t4 - $t3)." s "; 
     }
 
 

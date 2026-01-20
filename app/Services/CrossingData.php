@@ -1,19 +1,16 @@
 <?php
 
 namespace App\Services;
-
-
-
-
+ 
 class CrossingData
 {
 
-    public $nrcrossing = 100;
+    public $nrcrossing = 50;
 
     public function createNewPopulation($population) {
        $max = count($population);
        $res = [];
-       $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz"];
+       $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
        foreach ($methods AS $m) {
           for ($i = 0; $i < $this->nrcrossing; $i++) {
             $area = $this->$m($population, $max);
@@ -171,6 +168,95 @@ class CrossingData
         return $table;
     }
 
+    private function cutting_xy($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $level = rand(3, $max * 2 - 3);
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($i + $j <= $level) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+   private function cutting_xz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $level = rand(3, $max * 2 - 3);
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($i + $z <= $level) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+   private function cutting_yz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $level = rand(3, $max * 2 - 3);
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($j + $z <= $level) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }    
+
+   private function cutting_xyz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $level = rand(5, $max * 3 - 5);
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($j + $z + $i <= $level) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }  
+
+ 
 
 
     private function getRand($max) {
