@@ -133,8 +133,8 @@ class GenetixDataGenerator
 
     }
 
-    public function getmaxPoints() {
-        return 10000 * 10 * 10 * 10;
+    public function getmaxPoints($nrpoints) {
+        return 10000 * $nrpoints;
     }
 
     public function getindyvidual($res, $nr) {
