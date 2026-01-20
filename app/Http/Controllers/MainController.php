@@ -32,7 +32,7 @@ class MainController extends Controller
     }
 
     public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross) {
-
+        set_time_limit(3000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -53,16 +53,19 @@ class MainController extends Controller
         $maxPop = 10;
    
         while ($repeatQ < 5 && $nrPop < $maxPop) {
+            $t1 = microtime(true);
             $selectedIndividuals = $gtx->getindyvidual($res, 10);
             $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
-
-            $res = $gtx->calcPopulation($population0, $headPoints);
+ 
+            $res = $gtx->calcPopulation($newpopulaton, $headPoints);
             $maxQ = $res[0]['sum'];
             if ($maxQ == $oldQ) {
                 $repeatQ++; 
             }        
             $oldQ = $maxQ;
             $nrPop++;
+             $t2 = microtime(true);
+              echo ($t2 - $t1)." s - Wynik POP:".$nrPop." - ". $maxQ ."<br/>";
         } 
 
     }
