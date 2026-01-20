@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\MeerDataGenerator;
 use App\Services\GenetixDataGenerator;
-
+use App\Services\CrossingData;
  
 use Illuminate\Http\Request;
 
@@ -31,7 +31,7 @@ class MainController extends Controller
         return view("main", ['area' => $area]);
     }
 
-    public function calcarea($id, Request $request, MeerDataGenerator $mdg, GenetixDataGenerator $gtx) {
+    public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross) {
 
         $area = Area::find($id);
         if (!$area) {
@@ -40,13 +40,30 @@ class MainController extends Controller
         $table = json_decode($area->data);
 
         $headPoints = $gtx->calcPoints(100, $table);
-        
+        $t1 = microtime(true);
         $population0 = $gtx->getFirstGeneration(10, 1, 500);
+        $t2 = microtime(true);
+        echo ($t2 - $t1)." s<br/>";
         $res = $gtx->calcPopulation($population0, $headPoints);
         $maxQ = $res[0]['sum'];
+        $oldQ = $res[0]['sum'];
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints();
-  
+        $nrPop = 0;
+        $maxPop = 10;
+   
+        while ($repeatQ < 5 && $nrPop < $maxPop) {
+            $selectedIndividuals = $gtx->getindyvidual($res, 10);
+            $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
+
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            $maxQ = $res[0]['sum'];
+            if ($maxQ == $oldQ) {
+                $repeatQ++; 
+            }        
+            $oldQ = $maxQ;
+            $nrPop++;
+        } 
 
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+ 
+
 class GenetixDataGenerator
 {
 
@@ -134,5 +136,15 @@ class GenetixDataGenerator
     public function getmaxPoints() {
         return 10000 * 10 * 10 * 10;
     }
+
+    public function getindyvidual($res, $nr) {
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+            $table[] = $res[$i]['area'];
+        }
+        return $table;
+    }
+
+ 
 
 }
