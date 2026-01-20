@@ -131,4 +131,8 @@ class GenetixDataGenerator
 
     }
 
+    public function getmaxPoints() {
+        return 10000 * 10 * 10 * 10;
+    }
+
 }

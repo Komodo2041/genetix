@@ -41,12 +41,12 @@ class MainController extends Controller
 
         $headPoints = $gtx->calcPoints(100, $table);
         
-        $population0 = $gtx->getFirstGeneration(10, 1, 100);
+        $population0 = $gtx->getFirstGeneration(10, 1, 500);
         $res = $gtx->calcPopulation($population0, $headPoints);
-      
-        foreach ($res AS $r) {
-            print_r($r['sum']); echo "<br/>";
-        }
+        $maxQ = $res[0]['sum'];
+        $repeatQ = 0;
+        $maxPoints = $gtx->getmaxPoints();
+  
 
     }
 
