@@ -10,6 +10,8 @@ use App\Services\MutationData;
 use Illuminate\Http\Request;
 
 use App\Models\Area; 
+use App\Models\Calculation; 
+ 
 
 class MainController extends Controller
 {
@@ -51,7 +53,7 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(100);
         $nrPop = 0;
-        $maxPop = 50;
+        $maxPop = 60;
         $t3 = microtime(true);
 
         while ($repeatQ < 4 && $nrPop < $maxPop) {
@@ -73,11 +75,12 @@ class MainController extends Controller
              $t2 = microtime(true);
               echo ($t2 - $t1)." s - Wynik POP: ".$nrPop." - ". $maxQ ."<br/>";
         } 
-
-        
-
-        $t4 = microtime(true);
-        echo "<br/>All: ".($t4 - $t3)." s "; 
+          $t4 = microtime(true);
+ 
+        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ".($maxQ / $maxPoints)." Czas generacji ".($t4 - $t3)." s";
+        Calculation::create(["name" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id]);
+        return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
+ 
     }
 
 
