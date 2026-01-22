@@ -8,4 +8,9 @@ class Area extends Model
 {
     public $table = "area";
     public $fillable = ["name", "data"];
+
+    public function calculations() {
+        return $this->hasMany("App\Models\Calculation", "area_id");
+    } 
+
 }
