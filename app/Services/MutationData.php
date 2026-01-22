@@ -5,12 +5,12 @@ namespace App\Services;
 class MutationData
 {
 
-    public $nrmutation = 100;    
+    public $nrmutation = 60;    
 
     public function addmutation($pop) {
        $max = count($pop);
        echo "Populacja do muatacji ".$max."<br/>";
-       $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" /*, "changecolumnXZ", "changecolumnYZ" */];
+       $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
        foreach ($methods AS $m) {
           for ($i = 0; $i < $this->nrmutation; $i++) {
             $go = rand(0, $max - 1); 

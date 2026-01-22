@@ -51,7 +51,7 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(100);
         $nrPop = 0;
-        $maxPop = 40;
+        $maxPop = 50;
     $t3 = microtime(true);
 
         while ($repeatQ < 4 && $nrPop < $maxPop) {
