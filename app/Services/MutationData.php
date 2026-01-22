@@ -371,9 +371,9 @@ class MutationData
         $changey = rand(-1, 1);
         $changez = rand(-1, 1);
 
-        $pom = $pop[$i][$j][$z]; 
-        $pop[$i][$j][$z] = $pop[$i + $changex][$j + $changey][$z + $changez];
-        $pop[$i + $changex][$j + $changey][$z + $changez] = $pom;
+        $pom = $pop[$pom1][$pom2][$pom3]; 
+        $pop[$pom1][$pom2][$pom3] = $pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez];
+        $pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez] = $pom;
 
         return $pop;     
 
