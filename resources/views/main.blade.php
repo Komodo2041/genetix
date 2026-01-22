@@ -13,7 +13,11 @@
       @foreach ($area AS $a)
         <tr>
             <td>{{$a->name}}</td>
-            <td></td>
+            <td>
+              @foreach ($a?->calculations AS $c)
+                 {{$c->result}}<br/>
+              @endforeach
+            </td>
             <td>
 
  

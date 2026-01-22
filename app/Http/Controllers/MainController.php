@@ -17,7 +17,7 @@ class MainController extends Controller
 {
     public function list(Request $request, MeerDataGenerator $mdg) {
 
-        $area = Area::all();
+        $area = Area::with("calculations")->get();
 
         $save =  $request->input('save');
         if ($save) {
