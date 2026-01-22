@@ -52,16 +52,14 @@ class MainController extends Controller
         $maxPoints = $gtx->getmaxPoints(100);
         $nrPop = 0;
         $maxPop = 50;
-    $t3 = microtime(true);
+        $t3 = microtime(true);
 
         while ($repeatQ < 4 && $nrPop < $maxPop) {
             $t1 = microtime(true);
             $selectedIndividuals = $gtx->getindyvidual($res, 10);
             $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
-         //   if ($repeatQ > 2) {
-               $newpopulaton = $mutation->addmutation($newpopulaton);
-         //   }
-
+            $newpopulaton = $mutation->addmutation($newpopulaton);
+ 
             $res = $gtx->calcPopulation($newpopulaton, $headPoints);
             $maxQ = $res[0]['sum'];
             if ($maxQ == $oldQ) {
@@ -75,6 +73,8 @@ class MainController extends Controller
              $t2 = microtime(true);
               echo ($t2 - $t1)." s - Wynik POP: ".$nrPop." - ". $maxQ ."<br/>";
         } 
+
+        
 
         $t4 = microtime(true);
         echo "<br/>All: ".($t4 - $t3)." s "; 
