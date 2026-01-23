@@ -15,8 +15,8 @@ class MutationData
        if ($choosemutation == 2) {
             $methods = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
        } elseif ($choosemutation == 1) {
-            $methods = [ "neighbourchange10" , "neighbourchange5" , "neighbourchange", "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
-       }
+            $methods = [ "neighbourchange10" ,  "neighbourchange5" ,   "neighbourchange",  "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
+       }  
 
 
        foreach ($methods AS $m) {

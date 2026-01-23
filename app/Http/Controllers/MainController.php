@@ -35,7 +35,7 @@ class MainController extends Controller
     }
 
     public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
-        set_time_limit(3600);
+        set_time_limit(5000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
