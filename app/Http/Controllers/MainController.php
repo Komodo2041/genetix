@@ -28,6 +28,11 @@ class MainController extends Controller
                        Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
                        return redirect("/")->with('success', 'Utworzono nowy obszar dna');
                     break;
+                 case "Dodaj obszar 0 i 1":
+                    $res = $mdg->generate0and1(10);
+                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
+                       return redirect("/")->with('success', 'Utworzono obszar 0 i 1');
+                    break;                   
             }
         }
  
@@ -77,6 +82,56 @@ class MainController extends Controller
         Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id]);
         return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
  
+    }
+
+    public function calcarea_level($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
+        set_time_limit(5000);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints(100, $table);
+
+        $calculations = $area->calculations()->orderByRaw('RAND()')->get();
+        $population0 = [];
+        foreach ($calculations AS $c) {
+            $population0[] = json_decode($c->data);
+        }
+        
+ 
+        $res = $gtx->calcPopulation($population0, $headPoints);
+        $maxQ = $res[0]['sum'];
+        $oldQ = $res[0]['sum'];
+        $repeatQ = 0;
+        $maxPoints = $gtx->getmaxPoints(100);
+        $nrPop = 0;
+        $maxPop = 60;
+        $t3 = microtime(true);
+
+        while ($repeatQ < 4 && $nrPop < $maxPop) {   
+            $selectedIndividuals = $gtx->getindyvidual($res, 10);
+            $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
+            $newpopulaton = $mutation->addmutation($newpopulaton);
+ 
+            $res = $gtx->calcPopulation($newpopulaton, $headPoints);
+            $maxQ = $res[0]['sum'];
+            if ($maxQ == $oldQ) {
+                $repeatQ++; 
+            } else {
+                $repeatQ = 0;
+            }    
+             echo " Populacja: ".$nrPop." - wynik ".$maxQ." <br/>"; 
+            $oldQ = $maxQ;
+            $nrPop++;             
+        } 
+        $t4 = microtime(true);
+ 
+        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ".($maxQ / $maxPoints)." Czas generacji ".($t4 - $t3)." s";
+        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => 2]);
+
+      //  return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
+
     }
 
 

@@ -18,10 +18,10 @@
                  {{$c->result}}<br/>
               @endforeach
             </td>
-            <td>
+            <td> 
+                  <a href="/area/calc/{{$a->id}}">Dokonaj obliczeń obszaru - poziom 1</a><br/>
 
- 
-                  <a href="/area/calc/{{$a->id}}">Punkty do Obliczeń</a>
+                  <a href="/area/calc_level2/{{$a->id}}">Dokonaj obliczeń obszaru - poziom 2</a>
             </td>
         </tr>
       @endforeach
@@ -32,6 +32,9 @@
      @csrf
      <input type="hidden" value="1" name="save" />
      <input type="submit" name="action" value="Dodaj test Dno morza" />
+     <input type="submit" name="action" value="Dodaj obszar 0 i 1" />
+
+      
      </form>  
 </div>
 

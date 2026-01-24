@@ -28,7 +28,20 @@ class MeerDataGenerator
 
     }
 
+    public function generate0and1($nr) {
+        
+       $level = rand(0,9);
+       $table = [];
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) { 
+                   $table[$i][$j][$z] = rand(0,1);
+               }     
+           }       
+       }
+       return ["name" => "Obszar 0 i 1 - sz-".$nr, "data" => $table ];
 
+    }
  
 
 
