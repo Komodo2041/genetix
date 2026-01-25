@@ -21,7 +21,8 @@
             <td> 
                   <a href="/area/calc/{{$a->id}}">Dokonaj obliczeń obszaru - poziom 1</a><br/>
 
-                  <a href="/area/calc_level2/{{$a->id}}">Dokonaj obliczeń obszaru - poziom 2</a>
+                  <a href="/area/calc_level2/{{$a->id}}/2">Dokonaj obliczeń obszaru - poziom 2</a><br/>
+                  <a href="/area/calc_level2/{{$a->id}}/3">Dokonaj obliczeń obszaru - poziom 3</a><br/>
             </td>
         </tr>
       @endforeach

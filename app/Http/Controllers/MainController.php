@@ -84,7 +84,7 @@ class MainController extends Controller
  
     }
 
-    public function calcarea_level($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
+    public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
         set_time_limit(5000);
         $area = Area::find($id);
         if (!$area) {
@@ -92,8 +92,8 @@ class MainController extends Controller
         }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints(100, $table);
-
-        $calculations = $area->calculations()->orderByRaw('RAND()')->get();
+        $lvl = $lvl - 1;
+        $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->take(10)->orderByRaw('RAND()')->get();
         $population0 = [];
         foreach ($calculations AS $c) {
             $population0[] = json_decode($c->data);
@@ -128,7 +128,7 @@ class MainController extends Controller
         $t4 = microtime(true);
  
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ".($maxQ / $maxPoints)." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => 2]);
+        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1]);
 
       //  return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
 
