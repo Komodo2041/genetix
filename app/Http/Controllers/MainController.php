@@ -77,9 +77,10 @@ class MainController extends Controller
             $nrPop++;             
         } 
         $t4 = microtime(true);
- 
+      
+        $result = $maxQ / $maxPoints;  
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ".($maxQ / $maxPoints)." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id]);
+        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "obtainedresult" => $result]);
         return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
  
     }
@@ -129,7 +130,7 @@ class MainController extends Controller
          
         $result = $maxQ / $maxPoints; 
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result ." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1]);
+        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result ]);
 
        return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result);  
 
