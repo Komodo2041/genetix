@@ -145,6 +145,92 @@ class GenetixDataGenerator
         return $table;
     }
 
+
+    public function getPower($population0, $nr = 10) {
+    
+        $sum = 0;
+        for ($n = 0; $n < $nr; $n++) { 
+           $sum += $this->calcpowerone($population0[$n]);
+        }
+        return round($sum/$nr);      
+    }
+
+    public function getPowerfromarea($population0, $nr = 10) {
+    
+        $sum = 0;
+        for ($n = 0; $n < $nr; $n++) { 
+           $sum += $this->calcpowerone($population0[$n]['area']);
+        }
+        return round($sum/$nr);      
+    }    
+     
+
+    public function calcpowerone($area) {
+        $sum = 0;
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) {
+                    $sum += $area[$i][$j][$z];
+                 }
+             }
+         }
+         return $sum;         
+    }
  
+    public function usepower($newpopulaton, $power) {
+
+       $res = [];
+       foreach ($newpopulaton AS $area) {
+           $p = $this->calcpowerone($area);
+           $diff = $p - $power;
+           $abs = abs($diff);
+           if ($abs <= 10) {
+              $res[] = $area;
+           } else {
+              $change = $abs + rand(-5, 5);
+
+              if ($diff < 0) {
+                 $area = $this->addpower($area, $change);
+              } else {
+                 $area = $this->removepower($area, $change);
+              }
+              $res[] = $area;
+           }
+
+       }
+ 
+       return $res; 
+    }
+
+    private function addpower($pop, $change, $nr = 10) {
+        for ($n = 0; $n <= $change; $n++ ) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 1);
+            if ($pop[$x][$y][$z] > 0) {
+               $n--;
+            } else {
+                $pop[$x][$y][$z] = 0;
+            }
+ 
+        }
+        return $pop;
+    }
+
+    private function removepower($pop, $change, $nr = 10) {
+        for ($n = 0; $n <= $change; $n++ ) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 1);
+            if ($pop[$x][$y][$z] > 0) {
+               $pop[$x][$y][$z] = 0;
+            } else {
+               $n--;
+            }
+ 
+        }
+        return $pop;
+    }
 
 }

@@ -105,30 +105,38 @@ class MainController extends Controller
         foreach ($calculations AS $c) {
             $population0[] = json_decode($c->data);
         }
-        
- 
+
+        $power = $gtx->getPower($population0);
+    
+
         $res = $gtx->calcPopulation($population0, $headPoints);
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(100);
         $nrPop = 0;
-        $maxPop = 60;
+        $maxPop = 30;
+    
         $t3 = microtime(true);
 
         while ($repeatQ < 4 && $nrPop < $maxPop) {   
             $selectedIndividuals = $gtx->getindyvidual($res, 10);
             $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
-            $newpopulaton = $mutation->addmutation($newpopulaton);
  
+            $newpopulaton = $gtx->usepower($newpopulaton, $power);
+ 
+            $newpopulaton = $mutation->addmutation($newpopulaton);
             $res = $gtx->calcPopulation($newpopulaton, $headPoints);
+ 
+            $power = $gtx->getPowerfromarea($res);
+ 
             $maxQ = $res[0]['sum'];
             if ($maxQ == $oldQ) {
                 $repeatQ++; 
             } else {
                 $repeatQ = 0;
             }    
-             
+            $power = $gtx->getPowerfromarea($res);
             $oldQ = $maxQ;
             $nrPop++;             
         } 
