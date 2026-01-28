@@ -19,6 +19,12 @@ class MainController extends Controller
 
         $area = Area::with("calculations")->get();
         
+        $calco = Calculation::selectRaw('COUNT(id) AS count, area_id, level, MAX(obtainedresult) as max')->groupBy('area_id', 'level')->orderBy("level")->get()->toArray();
+        $calcoData = [];
+        foreach ($calco AS $c) {
+           $calcoData[$c["area_id"]][] = $c; 
+        }
+
         $save =  $request->input('save');
         if ($save) {
             $action = $request->input('action');
@@ -36,7 +42,7 @@ class MainController extends Controller
             }
         }
  
-        return view("main", ['area' => $area]);
+        return view("main", ['area' => $area, 'calco' => $calcoData]);
     }
 
     public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
