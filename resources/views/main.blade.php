@@ -14,9 +14,8 @@
         <tr>
             <td>{{$a->name}}</td>
             <td>
-              @foreach ($a?->calculations AS $c)
-                 {{$c->result}}<br/>
-              @endforeach
+              <h4>{{$a?->calculations->count()}} </h4> 
+ 
             </td>
             <td> 
                   <a href="/area/calc/{{$a->id}}">Dokonaj obliczeń obszaru - poziom 1</a><br/>

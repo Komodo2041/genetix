@@ -18,7 +18,7 @@ class MainController extends Controller
     public function list(Request $request, MeerDataGenerator $mdg) {
 
         $area = Area::with("calculations")->get();
-
+        
         $save =  $request->input('save');
         if ($save) {
             $action = $request->input('action');
@@ -121,16 +121,17 @@ class MainController extends Controller
             } else {
                 $repeatQ = 0;
             }    
-             echo " Populacja: ".$nrPop." - wynik ".$maxQ." <br/>"; 
+             
             $oldQ = $maxQ;
             $nrPop++;             
         } 
         $t4 = microtime(true);
- 
-        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ".($maxQ / $maxPoints)." Czas generacji ".($t4 - $t3)." s";
+         
+        $result = $maxQ / $maxPoints; 
+        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result ." Czas generacji ".($t4 - $t3)." s";
         Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1]);
 
-      //  return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
+       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result);  
 
     }
 
