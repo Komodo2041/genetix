@@ -11,12 +11,14 @@ class MutationData
        $max = count($pop);
       
        $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
-       $choosemutation = rand(0, 3);
+       $choosemutation = rand(0, 4);
        if ($choosemutation == 2) {
             $methods = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
        } elseif ($choosemutation == 1) {
             $methods = [ "neighbourchange10" ,  "neighbourchange5" ,   "neighbourchange",  "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
-       }  
+       }  elseif ($choosemutation == 3) {
+            $methods = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
+       }   
 
 
        foreach ($methods AS $m) {
@@ -393,6 +395,140 @@ class MutationData
        return $pop;
     }    
  
+ 
+ 
+    private function exchangecolumnXZ($pop, $nr = 10) {
+        $pom1 = rand(1, $nr - 3);
+        $pom2 = rand(1, $nr - 3);
+        $used = 0;
+
+        $changepom1 = rand(-1, 1);
+        $changepom2 = rand(-1, 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2) {
+                        $used = $pop[$i][$j][$z];
+                        $pop[$i][$j][$z] = $pop[$i + $changepom1][$j][$z + $changepom2];
+                        $pop[$i + $changepom1][$j][$z + $changepom2] = $used;
+                     }
+                }
+            }
+        }
+        return $pop;
+    }     
+
+    private function exchangecolumnXY($pop, $nr = 10) {
+        $pom1 = rand(1, $nr - 3);
+        $pom2 = rand(1, $nr - 3);
+        $used = 0;
+
+        $changepom1 = rand(-1, 1);
+        $changepom2 = rand(-1, 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $j == $pom2) {
+                        $used = $pop[$i][$j][$z];
+                        $pop[$i][$j][$z] = $pop[$i + $changepom1][$j + $changepom2][$z];
+                        $pop[$i + $changepom1][$j + $changepom2][$z] = $used;
+                     }
+                }
+            }
+        }
+        return $pop;
+    }   
+
+    private function exchangecolumnYZ($pop, $nr = 10) {
+        $pom1 = rand(1, $nr - 3);
+        $pom2 = rand(1, $nr - 3);
+        $used = 0;
+
+        $changepom1 = rand(-1, 1);
+        $changepom2 = rand(-1, 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($j == $pom1 && $z == $pom2) {
+                        $used = $pop[$i][$j][$z];
+                        $pop[$i][$j][$z] = $pop[$i][$j + $changepom1][$z + $changepom2];
+                        $pop[$i][$j + $changepom1][$z + $changepom2] = $used;
+                     }
+                }
+            }
+        }
+        return $pop;
+    }
+
+
+    private function exchangefarcolumnXZ($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $used = 0;
+
+        $changepom1 = rand(0, $nr - 1);
+        $changepom2 = rand(0, $nr - 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2) {
+                        $used = $pop[$i][$j][$z];
+                        $pop[$i][$j][$z] = $pop[$changepom1][$j][$changepom2];
+                        $pop[$changepom1][$j][$changepom2] = $used;
+                     }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    private function exchangefarcolumnXY($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $used = 0;
+
+        $changepom1 = rand(0, $nr - 1);
+        $changepom2 = rand(0, $nr - 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $j == $pom2) {
+                        $used = $pop[$i][$j][$z];
+                        $pop[$i][$j][$z] = $pop[$changepom1][$changepom2][$z];
+                        $pop[$changepom1][$changepom2][$z] = $used;
+                     }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    private function exchangefarcolumnYZ($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $used = 0;
+
+        $changepom1 = rand(0, $nr - 1);
+        $changepom2 = rand(0, $nr - 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($j == $pom1 && $z == $pom2) {
+                        $used = $pop[$i][$j][$z];
+                        $pop[$i][$j][$z] = $pop[$i][$changepom1][$changepom2];
+                        $pop[$i][$changepom1][$changepom2] = $used;
+                     }
+                }
+            }
+        }
+        return $pop;
+    }
 
 
 }
