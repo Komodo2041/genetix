@@ -44,53 +44,7 @@ class MainController extends Controller
  
         return view("main", ['area' => $area, 'calco' => $calcoData]);
     }
-
-    public function calcarea($id, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
-        set_time_limit(5000);
-        $area = Area::find($id);
-        if (!$area) {
-            return redirect("/")->with('error', 'Nie znaleziono podanego area');
-        }
-        $table = json_decode($area->data);
-
-        $headPoints = $gtx->calcPoints(100, $table);
-     
-        $population0 = $gtx->getFirstGeneration(10, 1, 500);
  
-        $res = $gtx->calcPopulation($population0, $headPoints);
-        $maxQ = $res[0]['sum'];
-        $oldQ = $res[0]['sum'];
-        $repeatQ = 0;
-        $maxPoints = $gtx->getmaxPoints(100);
-        $nrPop = 0;
-        $maxPop = 60;
-        $t3 = microtime(true);
-
-        while ($repeatQ < 4 && $nrPop < $maxPop) {   
-            $selectedIndividuals = $gtx->getindyvidual($res, 10);
-            $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
-            $newpopulaton = $mutation->addmutation($newpopulaton);
- 
-            $res = $gtx->calcPopulation($newpopulaton, $headPoints);
-            $maxQ = $res[0]['sum'];
-            if ($maxQ == $oldQ) {
-                $repeatQ++; 
-            } else {
-                $repeatQ = 0;
-            }    
-             
-            $oldQ = $maxQ;
-            $nrPop++;             
-        } 
-        $t4 = microtime(true);
-      
-        $result = $maxQ / $maxPoints;  
-        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ".($maxQ / $maxPoints)." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "obtainedresult" => $result]);
-        return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id);  
- 
-    }
-
     public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
         set_time_limit(5000);
         $area = Area::find($id);
@@ -103,6 +57,7 @@ class MainController extends Controller
         $population0 = []; 
         if ($lvl == 1) {
             $population0 = $gtx->getFirstGeneration(10, 1, 500);
+            $lvl = $lvl - 1;
         } else {
             $lvl = $lvl - 1;
             $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->take(10)->orderByRaw('RAND()')->get();
@@ -113,8 +68,7 @@ class MainController extends Controller
         }
 
         $power = $gtx->getPower($population0);
-    
-
+ 
         $res = $gtx->calcPopulation($population0, $headPoints);
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
