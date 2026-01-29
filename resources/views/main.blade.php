@@ -20,7 +20,7 @@
               @endforeach
             </td>
             <td> 
-                  <a href="/area/calc/{{$a->id}}">Dokonaj obliczeń obszaru - poziom 1</a><br/>
+                  <a href="/area/calc_level2/{{$a->id}}/1">Dokonaj obliczeń obszaru - poziom 1</a><br/>
 
                   @foreach ($calco[$a->id] AS $c) 
                       @if  ($c['count'] >= 10)

@@ -11,6 +11,11 @@ class CrossingData
        $max = count($population);
        $res = [];
        $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
+       $choosecross = rand(0, 1);
+       if ($choosecross == 1) {
+           $methods = [  "joinwith0", "joinwith1",  "chessboard_xy", "chessboard_xz", "chessboard_yz", "chessboardradom_xy", "chessboardrandom_xz", "chessboardrandom_yz",   
+                  "usedblockhalfhalf", "usedblockhalfhalfrandom", "chessboardrandom_xyz" ];
+       }        
        foreach ($methods AS $m) {
           for ($i = 0; $i < $this->nrcrossing; $i++) {
             $area = $this->$m($population, $max);
@@ -256,8 +261,262 @@ class CrossingData
         return $table;
     }  
 
+    private function joinwith0($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == 1 && $two[$i][$j][$z] == 1) {
+                       $table[$i][$j][$z] = 1;
+                    } else {
+                       $table[$i][$j][$z] = 0;
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+    
+    private function joinwith1($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == 0 && $two[$i][$j][$z] == 0) {
+                       $table[$i][$j][$z] = 0;
+                    } else {
+                       $table[$i][$j][$z] = 1;
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }    
+
  
 
+    private function chessboard_xy($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+      
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (($i + $j) % 2 == 1) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function chessboard_xz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+      
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (($i + $z) % 2 == 1) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function chessboard_yz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+      
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (($z + $j) % 2 == 1) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }    
+ 
+    private function chessboardradom_xy($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $usedtwenty = $this->get20rand();
+
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($usedtwenty[$i + $j]) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function chessboardrandom_xz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $usedtwenty = $this->get20rand();
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($usedtwenty[$i + $z]) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }    
+
+    private function chessboardrandom_yz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $usedtwenty = $this->get20rand();
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($usedtwenty[$j + $z]) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }       
+
+     private function usedblockhalfhalf($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = floor($i / 5) + floor($j / 5) + floor($z / 5);
+                    if ($sum % 2 == 1) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }    
+
+     private function usedblockhalfhalfrandom($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $usedtwenty = $this->get20rand();
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = floor($i / 5) * 4 + floor($j / 5) * 2 + floor($z / 5) * 1;
+                    if ($usedtwenty[$sum]) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }       
+
+    private function chessboardrandom_xyz($population, $max, $nr = 10) {
+         
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $usedtwenty = $this->get20rand();
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($usedtwenty[$i + $j + $z]) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+ 
+                }
+            }
+        }
+        return $table;
+    }  
+     
+
+    private function get20rand() {
+        $table = [];
+        for ($i = 0; $i < 30; $i++) {
+           $table[] = rand(0, 1);
+        }
+        return $table;
+    }
 
     private function getRand($max) {
         $res = [];

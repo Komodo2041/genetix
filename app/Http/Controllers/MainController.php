@@ -101,7 +101,7 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(100, $table);
 
         $population0 = []; 
-        if ($lvl == 0) {
+        if ($lvl == 1) {
             $population0 = $gtx->getFirstGeneration(10, 1, 500);
         } else {
             $lvl = $lvl - 1;
