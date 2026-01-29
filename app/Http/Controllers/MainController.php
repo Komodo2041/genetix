@@ -75,18 +75,19 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(100);
         $nrPop = 0;
-        $maxPop = 60;
-    
-        $t3 = microtime(true);
-
+        $maxPop = 65;
+ 
+        $usedmodify = [];
+        $t3 = microtime(true);        
         while ($repeatQ < 4 && $nrPop < $maxPop) {   
             $selectedIndividuals = $gtx->getindyvidual($res, 10);
-            $newpopulaton = $cross->createNewPopulation($selectedIndividuals);
+            $gtx->choosemodify($res, 10, $usedmodify);
+            $pop_result = $cross->createNewPopulation($selectedIndividuals);
  
-            $newpopulaton = $gtx->usepower($newpopulaton, $power);
+            $newpopulaton = $gtx->usepower($pop_result[0], $power);
  
-            $newpopulaton = $mutation->addmutation($newpopulaton);
-            $res = $gtx->calcPopulation($newpopulaton, $headPoints);
+            $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+            $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
  
             $power = $gtx->getPowerfromarea($res);
  
@@ -101,10 +102,12 @@ class MainController extends Controller
             $nrPop++;             
         } 
         $t4 = microtime(true);
-         
+        arsort($usedmodify); 
+       
         $result = $maxQ / $maxPoints; 
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result ." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result ]);
+        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result,
+         "usedmod" => json_encode($usedmodify)  ]);
 
        return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1));  
 

@@ -5,11 +5,12 @@ namespace App\Services;
 class CrossingData
 {
 
-    public $nrcrossing = 50;
+    public $nrcrossing = 45;
 
     public function createNewPopulation($population) {
        $max = count($population);
        $res = [];
+       $crossing = [];
        $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
        $choosecross = rand(0, 1);
        if ($choosecross == 1) {
@@ -20,9 +21,10 @@ class CrossingData
           for ($i = 0; $i < $this->nrcrossing; $i++) {
             $area = $this->$m($population, $max);
             $res[] = $area;
+            $crossing[] = $m;
           }
        }
-       return $res;
+       return [$res, $crossing];
 
     }
 

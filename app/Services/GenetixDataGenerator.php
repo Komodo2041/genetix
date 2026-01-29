@@ -29,15 +29,21 @@ class GenetixDataGenerator
        return $allGeneration;
     }
 
-    public function calcPopulation($population0, $headPoints) {
+    public function calcPopulation($population0, $headPoints, $usedcrossing = []) {
         $res = [];
+        $i = 0;
         foreach ($population0 AS $area) {
             $record = [];
             $pointsIndividual = $this->calcIndividualPoints($area, $headPoints);
             $record['points'] = $pointsIndividual;
             $record['area'] = $area;
             $record['sum'] = $this->calcAreaPoints($pointsIndividual);
-            
+            $record['id'] = $i;
+             
+            if (isset($usedcrossing[$i])) {
+                $record['howitwascreated'] = $usedcrossing[$i];
+            }
+            $i++;
             $res[] = $record;
         }
 
@@ -231,6 +237,21 @@ class GenetixDataGenerator
  
         }
         return $pop;
+    }
+
+    public function choosemodify($res, $nr, &$usedmodify) {
+             
+        for ($i = 0; $i < $nr; $i++) {
+            if (isset($res[$i]['howitwascreated'])) {
+               $hd = $res[$i]['howitwascreated'];
+               if (isset($usedmodify[$hd])) {
+                  $usedmodify[$hd]++;
+               } else {
+                  $usedmodify[$hd] = 1;
+               }
+            }
+        }
+        
     }
 
 }

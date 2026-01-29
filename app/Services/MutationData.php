@@ -5,9 +5,9 @@ namespace App\Services;
 class MutationData
 {
 
-    public $nrmutation = 60;    
+    public $nrmutation = 50;    
 
-    public function addmutation($pop) {
+    public function addmutation($pop, $crossing) {
        $max = count($pop);
       
        $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
@@ -26,10 +26,11 @@ class MutationData
             $go = rand(0, $max - 1); 
             $area = $this->$m($pop[$go]);
             $pop[] = $area;
+            $crossing[] = $m;
           }
        }
        
-       return $pop;
+       return [$pop, $crossing];
     }
 
     private function godown1x1($pop, $nr = 10) {
