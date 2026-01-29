@@ -99,11 +99,17 @@ class MainController extends Controller
         }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints(100, $table);
-        $lvl = $lvl - 1;
-        $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->take(10)->orderByRaw('RAND()')->get();
-        $population0 = [];
-        foreach ($calculations AS $c) {
-            $population0[] = json_decode($c->data);
+
+        $population0 = []; 
+        if ($lvl == 0) {
+            $population0 = $gtx->getFirstGeneration(10, 1, 500);
+        } else {
+            $lvl = $lvl - 1;
+            $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->take(10)->orderByRaw('RAND()')->get();
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
         }
 
         $power = $gtx->getPower($population0);
@@ -115,7 +121,7 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(100);
         $nrPop = 0;
-        $maxPop = 30;
+        $maxPop = 60;
     
         $t3 = microtime(true);
 
@@ -146,7 +152,7 @@ class MainController extends Controller
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result ." Czas generacji ".($t4 - $t3)." s";
         Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result ]);
 
-       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result);  
+       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1));  
 
     }
 
