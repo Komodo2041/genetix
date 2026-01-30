@@ -114,4 +114,41 @@ class MainController extends Controller
     }
 
 
+    public function percentshow($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $calc = [];
+        $table = json_decode($area->data);
+
+        foreach ($area->calculations AS $c) {
+           $pc = json_decode($c->data);
+           $calc[] = [
+              'level' => $c->level,
+              'sum' => $c->obtainedresult,
+              'points' => $this->calcpointer( $table, $pc)
+           ];    
+        }
+ 
+        return view("percent", ['calco' => $calc]);
+
+    }
+
+    private function calcpointer($one, $two) {
+        $sum = 0;
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       $sum++;
+                    } 
+                }                   
+            }            
+        }
+        return $sum;
+    }
+     
+
 }

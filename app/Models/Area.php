@@ -10,7 +10,7 @@ class Area extends Model
     public $fillable = ["name", "data"];
 
     public function calculations() {
-        return $this->hasMany("App\Models\Calculation", "area_id");
+        return $this->hasMany("App\Models\Calculation", "area_id")->orderBy("level");
     } 
 
 }
