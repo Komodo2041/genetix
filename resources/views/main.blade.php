@@ -16,7 +16,9 @@
             <td>
               <h4>All: {{$a?->calculations->count()}} </h4> 
               @foreach ($calco[$a->id] AS $c) 
-                 {{$c["level"]}} : {{$c["count"]}} : {{$c["max"]}} <br/>
+                  Level : {{$c["level"]}} - ALL : {{$c["count"]}}<br/>                  
+                  MAX : {{$c["max"]}} <br/>
+                  AVG : {{$c["avg"]}} <br/><br/>
               @endforeach
             </td>
             <td> 
