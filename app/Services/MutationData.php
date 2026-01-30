@@ -10,14 +10,14 @@ class MutationData
     public function addmutation($pop, $crossing) {
        $max = count($pop);
       
-       $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
-       $choosemutation = rand(0, 4);
-       if ($choosemutation == 2) {
-            $methods = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
-       } elseif ($choosemutation == 1) {
-            $methods = [ "neighbourchange10" ,  "neighbourchange5" ,   "neighbourchange",  "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
-       }  elseif ($choosemutation == 3) {
-            $methods = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
+       $methods = [ "changecolumnXZ" , "changecolumnYZ", "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ"  ];
+       $choosemutation = rand(0, 10);
+       if ($choosemutation == 5 || $choosemutation == 6 || $choosemutation == 7) {
+            $methods = ["goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange"]; 
+       } elseif ($choosemutation == 8 || $choosemutation == 9) {
+             $methods = ["shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1"];
+       }  elseif ($choosemutation == 10) {            
+            $methods = ["shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9" ];
        }   
 
 

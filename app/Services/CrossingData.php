@@ -5,18 +5,25 @@ namespace App\Services;
 class CrossingData
 {
 
-    public $nrcrossing = 45;
+    public $nrcrossing = 70;
+
+    /**
+     * nonused method "cutting_xyz"
+     * 
+     * 
+     */
 
     public function createNewPopulation($population) {
        $max = count($population);
        $res = [];
        $crossing = [];
-       $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
-       $choosecross = rand(0, 1);
-       if ($choosecross == 1) {
-           $methods = [  "joinwith0", "joinwith1",  "chessboard_xy", "chessboard_xz", "chessboard_yz", "chessboardradom_xy", "chessboardrandom_xz", "chessboardrandom_yz",   
-                  "usedblockhalfhalf", "usedblockhalfhalfrandom", "chessboardrandom_xyz" ];
-       }        
+       $methods = [ "updown",  "tassingz", "chessboardrandom_xz", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
+       $choosecross = rand(0, 7);
+       if ($choosecross == 5 || $choosecross == 6) {
+           $methods = [ "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz"];
+       }  elseif ($choosecross == 7) {
+                   $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];
+       }      
        foreach ($methods AS $m) {
           for ($i = 0; $i < $this->nrcrossing; $i++) {
             $area = $this->$m($population, $max);

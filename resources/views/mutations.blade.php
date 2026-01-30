@@ -7,10 +7,10 @@
 <div class="container">
     @if ($nc != "") 
        <p>Brak Krzyżowań : {{$nc}}</p>
-    @nedif
+    @endif
     @if ($nm != "") 
        <p>Brak Mutacji : {{$nm}}</p>
-    @nedif    
+    @endif    
    <table>
       <tr>
          <th>Nazwa</th>
