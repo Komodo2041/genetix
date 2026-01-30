@@ -5,7 +5,12 @@
 
 <h3>Krzyzowania i mutacje</h3>
 <div class="container">
-    
+    @if ($nc != "") 
+       <p>Brak Krzyżowań : {{$nc}}</p>
+    @nedif
+    @if ($nm != "") 
+       <p>Brak Mutacji : {{$nm}}</p>
+    @nedif    
    <table>
       <tr>
          <th>Nazwa</th>

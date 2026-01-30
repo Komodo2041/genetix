@@ -186,7 +186,8 @@ class MainController extends Controller
            }
         }        
         
-        return view("mutations", ['mutations' => $result, "all" => $all, 'cross' => $crossings, 'mutaions' => $mutations]);
+        return view("mutations", ['mutations' => $result, "all" => $all, 'cross' => $crossings, 'mutaions' => $mutations, 
+           "nc" => implode(",", $nonusedcross ), "nm" => implode(",", $nonusedmutations )   ]);
 
     }
 
