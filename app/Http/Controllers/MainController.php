@@ -173,6 +173,19 @@ class MainController extends Controller
         }
         $crossings = $cross->getAllMethod();
         $mutations = $mutation->getAllMethod();
+        $nonusedcross = [];
+        $nonusedmutations = [];
+        foreach ($crossings AS $c) {
+           if (!isset($result[$c])) {
+             $nonusedcross[] = $c;
+           }
+        }
+        foreach ($mutations AS $m) {
+           if (!isset($result[$m])) {
+             $nonusedmutations[] = $m;
+           }
+        }        
+        
         return view("mutations", ['mutations' => $result, "all" => $all, 'cross' => $crossings, 'mutaions' => $mutations]);
 
     }
