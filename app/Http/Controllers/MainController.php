@@ -150,5 +150,31 @@ class MainController extends Controller
         return $sum;
     }
      
+    public function mutations(CrossingData $cross, MutationData $mutation) {
+
+        $calculations = Calculation::take(10)->orderBy("id", "desc")->get();
+        $result = [];
+        foreach ($calculations AS $c) {
+           if ($c->usedmod) {
+              $table = json_decode($c->usedmod);
+              foreach ($table AS $key => $value) {
+                if (isset($result[$key])) {
+                   $result[$key] += $value;
+                } else {
+                   $result[$key] = $value;
+                }
+              }
+           }
+        }
+        $all = 0;
+        arsort($result);
+        foreach ($result AS $key => $value) {
+            $all += $value;
+        }
+        $crossings = $cross->getAllMethod();
+        $mutations = $mutation->getAllMethod();
+        return view("mutations", ['mutations' => $result, "all" => $all, 'cross' => $crossings, 'mutaions' => $mutations]);
+
+    }
 
 }

@@ -2,6 +2,9 @@
 @section('content')
 
 <h3>Powierzchnie do sprawdzania</h3>
+
+<a href="/mutations"><button>Mutacje - Krzyżowania</button></a><br/>
+
 <div class="container">
     
    <table>

@@ -530,6 +530,14 @@ class CrossingData
         
     }
  
+    public function getAllMethod() {
+       $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
+       $methods2 = [  "joinwith0", "joinwith1",  "chessboard_xy", "chessboard_xz", "chessboard_yz", "chessboardradom_xy", "chessboardrandom_xz", "chessboardrandom_yz",   
+                  "usedblockhalfhalf", "usedblockhalfhalfrandom", "chessboardrandom_xyz" ];
+        return array_merge($methods, $methods2);          
+              
+    }
+
 }
 
  

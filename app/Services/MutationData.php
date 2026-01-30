@@ -532,4 +532,13 @@ class MutationData
     }
 
 
+    public function getAllMethod() {
+       $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
+       $methods2 = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
+       $methods3 = [ "neighbourchange10" ,  "neighbourchange5" ,   "neighbourchange",  "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
+       $methods4 = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
+       return array_merge($methods, $methods2, $methods3, $methods4);         
+              
+    }
+
 }

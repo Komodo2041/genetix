@@ -9,4 +9,5 @@ Route::match(["get", "post"], '/', "App\Http\Controllers\MainController@list" );
 Route::match(["get", "post"], 'area/calc_level2/{id}/{lvl}', "App\Http\Controllers\MainController@calcarea_level" );
 
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\MainController@percentshow" );
+Route::get('mutations',  "App\Http\Controllers\MainController@mutations" );
  
