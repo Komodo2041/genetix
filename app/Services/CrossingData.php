@@ -18,10 +18,16 @@ class CrossingData
        $res = [];
        $crossing = [];
        $methods = [ "updown",  "tassingz", "chessboardrandom_xz", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
-       $choosecross = rand(0, 7);
-       if ($choosecross == 5 || $choosecross == 6) {
+       $choosecross = rand(0, 1);
+       if ($choosecross == 1) {
+          $methods = ["squerInSquere5AxZ", "squerInSquere6AxX", "squerInSquere6AxY", "squerInSquere6AxZ", "squerInSquere7AxX", "squerInSquere7AxY", "squerInSquere7AxZ"];
+       }
+ 
+
+       $choosecross = rand(0, 9);
+       if ($choosecross == 7 || $choosecross == 8) {
            $methods = [ "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz"];
-       }  elseif ($choosecross == 7) {
+       }  elseif ($choosecross == 9) {
                    $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];
        }      
        foreach ($methods AS $m) {
@@ -537,11 +543,188 @@ class CrossingData
         
     }
  
+    private function squerInSquere7AxZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 2);
+        $pom2 = rand(0, 2);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($i > $pom1 && $i <= $pom1 + 7 && $j > $pom2 && $j <= $pom2 + 7 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }
+ 
+    private function squerInSquere7AxY($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 2);
+        $pom2 = rand(0, 2);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($i > $pom1 && $i <= $pom1 + 7 && $z > $pom2 && $z <= $pom2 + 7 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }
+     
+    private function squerInSquere7AxX($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 2);
+        $pom2 = rand(0, 2);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($j > $pom1 && $j <= $pom1 + 7 && $z > $pom2 && $z <= $pom2 + 7 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }       
+ 
+    private function squerInSquere6AxZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 3);
+        $pom2 = rand(0, 3);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($i > $pom1 && $i <= $pom1 + 6 && $j > $pom2 && $j <= $pom2 + 6 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }
+  
+    private function squerInSquere6AxY($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 3);
+        $pom2 = rand(0, 3);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($i > $pom1 && $i <= $pom1 + 6 && $z > $pom2 && $z <= $pom2 + 6 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }
+    
+    private function squerInSquere6AxX($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 3);
+        $pom2 = rand(0, 3);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($j > $pom1 && $j <= $pom1 + 6 && $z > $pom2 && $z <= $pom2 + 6 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }  
+
+    private function squerInSquere5AxZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 4);
+        $pom2 = rand(0, 4);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($i > $pom1 && $i <= $pom1 + 5 && $j > $pom2 && $j <= $pom2 + 5 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }
+
+ 
     public function getAllMethod() {
        $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
        $methods2 = [  "joinwith0", "joinwith1",  "chessboard_xy", "chessboard_xz", "chessboard_yz", "chessboardradom_xy", "chessboardrandom_xz", "chessboardrandom_yz",   
                   "usedblockhalfhalf", "usedblockhalfhalfrandom", "chessboardrandom_xyz" ];
-        return array_merge($methods, $methods2);          
+       $methods3 = ["squerInSquere5AxZ", "squerInSquere6AxX", "squerInSquere6AxY", "squerInSquere6AxZ", "squerInSquere7AxX", "squerInSquere7AxY", "squerInSquere7AxZ"];
+        return array_merge($methods, $methods2, $methods3);          
               
     }
 
