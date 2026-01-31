@@ -543,7 +543,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($z == $pom1 && $j == $pom2 && ( $pom3 <= $i && $pom3 + 6 >= $i) ) {
+                     if ($z == $pom1 && $j == $pom2 && ( $pom3 < $i && $pom3 + 6 >= $i) ) {
                         $pop[$i][$j][$z] = rand(0,1);
                      }
                 }
@@ -561,7 +561,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $j == $pom2  && ( $pom3 <= $z && $pom3 + 6 >= $z)) {
+                     if ($i == $pom1 && $j == $pom2  && ( $pom3 < $z && $pom3 + 6 >= $z)) {
                         $pop[$i][$j][$z] = rand(0,1);
                      }
                 }
@@ -579,7 +579,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($z == $pom1 && $i == $pom2 && ( $pom3 <= $j && $pom3 + 6 >= $j)) {
+                     if ($z == $pom1 && $i == $pom2 && ( $pom3 < $j && $pom3 + 6 >= $j)) {
                         $pop[$i][$j][$z] = rand(0,1);
                      }
                 }
@@ -598,7 +598,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $z == $pom2 && ( $pom3 <= $j && $pom3 + 6 >= $j)) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 6 >= $j)) {
                         $used[] = $pop[$i][$j][$z];  
                      }
                 }
@@ -608,7 +608,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $z == $pom2 && ( $pom3 <= $j && $pom3 + 6 >= $j)) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 6 >= $j)) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -627,7 +627,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $j == $pom2 && ( $pom3 <= $z && $pom3 + 6 >= $z)) {
+                     if ($i == $pom1 && $j == $pom2 && ( $pom3 < $z && $pom3 + 6 >= $z)) {
                         $used[] = $pop[$i][$j][$z];  
                      }
                 }
@@ -637,7 +637,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $j == $pom2 && ( $pom3 <= $z && $pom3 + 6 >= $z)) {
+                     if ($i == $pom1 && $j == $pom2 && ( $pom3 < $z && $pom3 + 6 >= $z)) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -656,7 +656,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($j == $pom1 && $z == $pom2 && ( $pom3 <= $i && $pom3 + 6 >= $i)) {
+                     if ($j == $pom1 && $z == $pom2 && ( $pom3 < $i && $pom3 + 6 >= $i)) {
                         $used[] = $pop[$i][$j][$z];  
                      }
                 }
@@ -666,7 +666,7 @@ class MutationData
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
-                     if ($j == $pom1 && $z == $pom2 && ( $pom3 <= $i && $pom3 + 6 >= $i)) {
+                     if ($j == $pom1 && $z == $pom2 && ( $pom3 < $i && $pom3 + 6 >= $i)) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
