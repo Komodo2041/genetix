@@ -122,16 +122,46 @@ class MainController extends Controller
         $calc = [];
         $table = json_decode($area->data);
 
+        $levels = [[
+              'sum' => 0,
+              'all' => 0,
+              'avg' => 0
+           ]];
+        $maxlevel = 1;
         foreach ($area->calculations AS $c) {
            $pc = json_decode($c->data);
+           if (!isset($levels[$c->level])) {
+            $levels[$c->level] = [
+                'sum' => 0,
+                'all' => 0,
+                'avg' => 0
+            ];
+           }
+           $levels[$c->level]['sum'] += $c->obtainedresult;
+           $levels[$c->level]['all'] += 1;
            $calc[] = [
               'level' => $c->level,
               'sum' => $c->obtainedresult,
               'points' => $this->calcpointer( $table, $pc)
-           ];    
+           ]; 
+           if ( $c->level > $maxlevel) {
+              $maxlevel = $c->level;
+           }
         }
  
-        return view("percent", ['calco' => $calc]);
+        foreach ($levels AS $key => $value) {
+            if ($levels[$key]["all"] > 0) {
+                $levels[$key]["avg"] = $levels[$key]["sum"] /  $levels[$key]["all"];
+            } else {
+                $levels[$key]["avg"] = 0;
+            }
+            $levels[$key]["divlvl"] = 1;
+        }
+        for ($i = 1; $i <= $maxlevel; $i++) {
+            $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
+        }
+ 
+        return view("percent", ['calco' => $calc, 'levels' => $levels]);
 
     }
 

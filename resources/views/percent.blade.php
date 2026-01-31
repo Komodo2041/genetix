@@ -9,6 +9,26 @@
    <table>
       <tr>
          <th>Level</th>
+         <th>AVG</th> 
+         <th>Różnica</th> 
+         <th>Różnica - Ułamek</th> 
+      </tr>
+@foreach ($levels AS $key => $l) 
+   @if ($key > 0)
+        <tr>
+            <td>{{$key}}</td>
+            <td>{{$l['avg']}}</td>
+            <td>{{$l['divlvl']}}</td>
+            <td>{{ round(1/ $l['divlvl'])}}</td>
+        </tr>
+   @endif     
+@endforeach
+</table>
+
+   
+   <table>
+      <tr>
+         <th>Level</th>
          <th>Wynik</th>
          <th>Liczba Punktów</th>
       </tr>
