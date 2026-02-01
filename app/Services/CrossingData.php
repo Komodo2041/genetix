@@ -17,15 +17,13 @@ class CrossingData
        $max = count($population);
        $res = [];
        $crossing = [];
-       $methods = [ "updown",  "tassingz", "chessboardrandom_xz", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
-       $choosecross = rand(0, 1);
-       if ($choosecross == 1) {
-          $methods = ["squerInSquere5AxZ", "squerInSquere6AxX", "squerInSquere6AxY", "squerInSquere6AxZ", "squerInSquere7AxX", "squerInSquere7AxY", "squerInSquere7AxZ"];
-       }
+     
+       $methods = [ "updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX" ];
  
-
        $choosecross = rand(0, 9);
-       if ($choosecross == 7 || $choosecross == 8) {
+       if ($choosecross == 5 || $choosecross == 6) {
+          $methods = [ "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
+       }  elseif ($choosecross == 7 || $choosecross == 8) {
            $methods = [ "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz"];
        }  elseif ($choosecross == 9) {
                    $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];

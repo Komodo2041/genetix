@@ -9,18 +9,20 @@ class MutationData
 
     public function addmutation($pop, $crossing) {
        $max = count($pop);
-       $methods = [ "changecolumnXZ" , "changecolumnYZ", "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ" ];
+       $methods = [ "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6" ];
        $choosemutation = rand(0, 1);
-       if ($choosemutation == 1) { 
-            $methods = ["shufflecolumnYZgo6", "shufflecolumnXYgo6", "shufflecolumnXZgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6"];
+       if ($choosemutation == 1) {   
+            $methods = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ];   
        }
 
-       $choosemutation = rand(0, 10);
+       $choosemutation = rand(0, 12);
        if ($choosemutation == 5 || $choosemutation == 6 || $choosemutation == 7) {
-            $methods = ["goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange"]; 
+          $methods = [ "shufflecolumnXYgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ"];
        } elseif ($choosemutation == 8 || $choosemutation == 9) {
+            $methods = ["goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange"]; 
+       } elseif ($choosemutation == 10 || $choosemutation == 11) {
              $methods = ["shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1"];
-       }  elseif ($choosemutation == 10) {            
+       }  elseif ($choosemutation == 12) {            
             $methods = ["shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9" ];
        }   
 
@@ -675,7 +677,147 @@ class MutationData
         return $pop;     
 
     }      
+ 
+    private function changecolumnYZgo4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 5);
 
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom1 && $j == $pom2 && ( $pom3 < $i && $pom3 + 4 >= $i) ) {
+                        $pop[$i][$j][$z] = rand(0,1);
+                     }
+                }
+            }
+        }   
+        return $pop;     
+
+    } 
+  
+    private function changecolumnXZgo4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 5);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $j == $pom2  && ( $pom3 < $z && $pom3 + 4 >= $z)) {
+                        $pop[$i][$j][$z] = rand(0,1);
+                     }
+                }
+            }
+        }   
+        return $pop;     
+
+    }     
+  
+    private function changecolumnXYgo4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 5);
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom1 && $i == $pom2 && ( $pom3 < $j && $pom3 + 4 >= $j)) {
+                        $pop[$i][$j][$z] = rand(0,1);
+                     }
+                }
+            }
+        }   
+        return $pop;     
+
+    }
+  
+    private function shufflecolumnXZgo4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 5);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 4 >= $j)) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 4 >= $j)) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+  
+    private function shufflecolumnXYgo4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 5);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $j == $pom2 && ( $pom3 < $z && $pom3 + 4 >= $z)) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }   
+         shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $j == $pom2 && ( $pom3 < $z && $pom3 + 4 >= $z)) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }  
+
+    private function shufflecolumnYZgo4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 5);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($j == $pom1 && $z == $pom2 && ( $pom3 < $i && $pom3 + 4 >= $i)) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($j == $pom1 && $z == $pom2 && ( $pom3 < $i && $pom3 + 4 >= $i)) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }   
 
 
     public function getAllMethod() {
@@ -684,7 +826,8 @@ class MutationData
        $methods3 = [ "neighbourchange10" ,  "neighbourchange5" ,   "neighbourchange",  "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
        $methods4 = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
        $methods5 = ["shufflecolumnYZgo6", "shufflecolumnXYgo6", "shufflecolumnXZgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6"];
-       return array_merge($methods, $methods2, $methods3, $methods4, $methods5);         
+       $methods6 = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ]; 
+       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6);         
               
     }
 
