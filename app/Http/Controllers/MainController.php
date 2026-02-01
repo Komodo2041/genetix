@@ -79,7 +79,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);        
-        while ($repeatQ < 4 && $nrPop < $maxPop) {   
+        while ($repeatQ < 6 && $nrPop < $maxPop) {   
             $selectedIndividuals = $gtx->getindyvidual($res, 10);
             $gtx->choosemodify($res, 10, $usedmodify);
             $pop_result = $cross->createNewPopulation($selectedIndividuals);
