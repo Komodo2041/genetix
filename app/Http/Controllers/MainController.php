@@ -159,6 +159,8 @@ class MainController extends Controller
         }
         for ($i = 1; $i <= $maxlevel; $i++) {
             $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
+            $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
+           
         }
  
         return view("percent", ['calco' => $calc, 'levels' => $levels]);

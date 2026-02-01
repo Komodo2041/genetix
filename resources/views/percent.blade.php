@@ -11,7 +11,8 @@
          <th>Level</th>
          <th>AVG</th> 
          <th>Różnica</th> 
-         <th>Różnica - Ułamek</th> 
+         <th>Różnica - Ułamek</th>
+         <th>Przyrost do jedności</th> 
       </tr>
 @foreach ($levels AS $key => $l) 
    @if ($key > 0)
@@ -20,6 +21,11 @@
             <td>{{$l['avg']}}</td>
             <td>{{$l['divlvl']}}</td>
             <td>{{ round(1/ $l['divlvl'])}}</td>
+             <td>
+                @if ($key > 1) 
+               {{ $l['toone'] }}
+                @endif
+             </td>
         </tr>
    @endif     
 @endforeach
