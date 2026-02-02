@@ -19,17 +19,19 @@ class CrossingData
        $crossing = [];
      
        $methods = [ "updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX" ];
-       $choosecross = rand(0, 1);
+       $choosecross = rand(0, 2);
        if ($choosecross == 1) {
           $methods = [ "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0" ];
+       } elseif ($choosecross == 2) {
+          $methods = [ "layersin2xyz",  "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" ];
        }
  
-       $choosecross = rand(0, 9);
-       if ($choosecross == 5 || $choosecross == 6) {
+       $choosecross = rand(0, 11);
+       if ($choosecross == 7 || $choosecross == 8) {
           $methods = [ "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
-       }  elseif ($choosecross == 7 || $choosecross == 8) {
+       }  elseif ($choosecross == 9 || $choosecross == 10) {
            $methods = [ "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz"];
-       }  elseif ($choosecross == 9) {
+       }  elseif ($choosecross == 11) {
                    $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];
        }      
        foreach ($methods AS $m) {
@@ -874,13 +876,154 @@ class CrossingData
         return $table;
     }     
 
+  
+    private function layersinz2($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 2; $k++) {
+            $pom[] = $randNumbers[$k];
+        }        
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($z, $pom)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function layersinx2($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 2; $k++) {
+            $pom[] = $randNumbers[$k];
+        }        
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($i, $pom)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
  
+    private function layersinj2($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 2; $k++) {
+            $pom[] = $randNumbers[$k];
+        }        
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($j, $pom)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function layersinz4($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 4; $k++) {
+            $pom[] = $randNumbers[$k];
+        }        
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($z, $pom)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+ 
+    private function layersinx4($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 4; $k++) {
+            $pom[] = $randNumbers[$k];
+        }        
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($i, $pom)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function layersinj4($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 4; $k++) {
+            $pom[] = $randNumbers[$k];
+        }        
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($j, $pom)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }    
+
+    private function layersin2xyz($population, $max, $nr = 10) {
+        $population = $this->layersinj2($population, $max);
+        $population = $this->layersinx2($population, $max);
+        $population = $this->layersinz2($population, $max);
+        return $table;
+    }     
+
     public function getAllMethod() {
        $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
        $methods2 = [  "joinwith0", "joinwith1",  "chessboard_xy", "chessboard_xz", "chessboard_yz", "chessboardradom_xy", "chessboardrandom_xz", "chessboardrandom_yz",   
                   "usedblockhalfhalf", "usedblockhalfhalfrandom", "chessboardrandom_xyz" ];
        $methods3 = ["squerInSquere5AxZ", "squerInSquere6AxX", "squerInSquere6AxY", "squerInSquere6AxZ", "squerInSquere7AxX", "squerInSquere7AxY", "squerInSquere7AxZ"];
-        return array_merge($methods, $methods2, $methods3);          
+       $methods4 = [ "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0" ];
+       $methods5 = [ "layersin2xyz",  "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" ];
+        return array_merge($methods, $methods2, $methods3, $methods4, $methods5);          
               
     }
 
