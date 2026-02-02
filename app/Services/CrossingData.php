@@ -19,6 +19,10 @@ class CrossingData
        $crossing = [];
      
        $methods = [ "updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX" ];
+       $choosecross = rand(0, 1);
+       if ($choosecross == 1) {
+          $methods = [ "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0" ];
+       }
  
        $choosecross = rand(0, 9);
        if ($choosecross == 5 || $choosecross == 6) {
@@ -690,7 +694,7 @@ class CrossingData
         }
         return $table;
     }  
-
+ 
     private function squerInSquere5AxZ($population, $max, $nr = 10) {
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
@@ -715,6 +719,160 @@ class CrossingData
         }
         return $table;
     }
+ 
+    private function squerInSquere5AxY($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 4);
+        $pom2 = rand(0, 4);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($i > $pom1 && $i <= $pom1 + 5 && $z > $pom2 && $z <= $pom2 + 5 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }
+    
+    private function squerInSquere5AxX($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        
+        $pom1 = rand(0, 4);
+        $pom2 = rand(0, 4);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   if ($j > $pom1 && $j <= $pom1 + 5 && $z > $pom2 && $z <= $pom2 + 5 ) {
+                      $table[$i][$j][$z] = $one[$i][$j][$z];
+                   } else {
+                      $table[$i][$j][$z] = $two[$i][$j][$z];
+                   }
+  
+                }
+            }
+        }
+        return $table;
+    }    
+
+ 
+    private function blob3($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $three = $population[$randNumbers[2]];
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = $one[$i][$j][$z] + $two[$i][$j][$z] + $three[$i][$j][$z];
+                    if ($sum <= 1) {
+                       $table[$i][$j][$z] = 0;
+                    } else {
+                       $table[$i][$j][$z] = 1;
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }   
+
+ 
+    private function blob3random($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $three = $population[$randNumbers[2]];
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = $one[$i][$j][$z] + $two[$i][$j][$z] + $three[$i][$j][$z];
+                    if ($sum < 1) {
+                       $table[$i][$j][$z] = 0;
+                    } elseif ($sum > 2) {
+                       $table[$i][$j][$z] = 1;
+                    } else {
+                       $table[$i][$j][$z] = rand(0,1);
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }      
+   
+    private function blob6($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $blob = [];
+        for ($k =0; $k <= 6; $k++) {
+            $blob[] = $population[$i];
+        }
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = 0;
+                    for ($k =0; $k <= 6; $k++) {
+                        $sum += $blob[$k][$i][$j][$z];
+                    }                    
+                    if ($sum <= 3) {
+                       $table[$i][$j][$z] = 0;
+                    }  else {
+                        $table[$i][$j][$z] = 1;
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }     
+
+    private function blob6random($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $blob = [];
+        for ($k =0; $k <= 6; $k++) {
+            $blob[] = $population[$i];
+        }
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = 0;
+                    for ($k =0; $k <= 6; $k++) {
+                        $sum += $blob[$k][$i][$j][$z];
+                    }                    
+                    if ($sum <= 1) {
+                       $table[$i][$j][$z] = 0;
+                    } elseif ($sum >= 5) {
+                       $table[$i][$j][$z] = 1;
+                    } else {
+                        $table[$i][$j][$z] = rand(0,1);
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }     
 
  
     public function getAllMethod() {
