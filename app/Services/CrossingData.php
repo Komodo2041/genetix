@@ -882,7 +882,11 @@ class CrossingData
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }        
-        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];        
+
+
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -904,7 +908,10 @@ class CrossingData
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }        
-        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -926,7 +933,10 @@ class CrossingData
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }        
-        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -948,7 +958,10 @@ class CrossingData
         for ($k =0; $k < 4; $k++) {
             $pom[] = $randNumbers[$k];
         }        
-        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -970,7 +983,10 @@ class CrossingData
         for ($k =0; $k < 4; $k++) {
             $pom[] = $randNumbers[$k];
         }        
-        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -992,7 +1008,10 @@ class CrossingData
         for ($k =0; $k < 4; $k++) {
             $pom[] = $randNumbers[$k];
         }        
-        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
