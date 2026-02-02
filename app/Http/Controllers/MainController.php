@@ -134,7 +134,9 @@ class MainController extends Controller
             $levels[$c->level] = [
                 'sum' => 0,
                 'all' => 0,
-                'avg' => 0
+                'avg' => 0,
+                'areabulb' => $table,
+                'sameinlevel' => 0
             ];
            }
            $levels[$c->level]['sum'] += $c->obtainedresult;
@@ -147,6 +149,7 @@ class MainController extends Controller
            if ( $c->level > $maxlevel) {
               $maxlevel = $c->level;
            }
+           $levels[$c->level]['areabulb'] = $this->calcallinLevel($levels[$c->level]['areabulb'], $pc);
         }
  
         foreach ($levels AS $key => $value) {
@@ -160,7 +163,7 @@ class MainController extends Controller
         for ($i = 1; $i <= $maxlevel; $i++) {
             $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
             $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
-           
+            $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
         }
  
         return view("percent", ['calco' => $calc, 'levels' => $levels]);
@@ -175,11 +178,41 @@ class MainController extends Controller
                 for ($z = 0; $z < $nr; $z++) {
                     if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
                        $sum++;
-                    } 
-                }                   
-            }            
+                    }
+                }
+            }
         }
         return $sum;
+    }
+
+    private function getnumber2inarea($one) {
+        $sum = 0;
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == 2) {
+                       $sum++;
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
+
+    private function calcallinLevel($one, $two) {
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       $one[$i][$j][$z] = 2;
+                    }
+                }
+            }
+        }
+        return $one;
+
     }
      
     public function mutations(CrossingData $cross, MutationData $mutation) {

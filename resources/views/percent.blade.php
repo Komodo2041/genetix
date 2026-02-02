@@ -13,6 +13,7 @@
          <th>Różnica</th> 
          <th>Różnica - Ułamek</th>
          <th>Przyrost do jedności</th> 
+         <th>Wszystkie znalezione</th>
       </tr>
 @foreach ($levels AS $key => $l) 
    @if ($key > 0)
@@ -26,6 +27,9 @@
                {{ $l['toone'] }}
                 @endif
              </td>
+            <td>
+               {{$l["sameinlevel"]}}
+            </td>    
         </tr>
    @endif     
 @endforeach
