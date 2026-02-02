@@ -822,7 +822,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $blob = [];
         for ($k =0; $k <= 6; $k++) {
-            $blob[] = $population[$i];
+            $blob[] = $population[$k];
         }
  
         $table = [];
@@ -849,7 +849,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $blob = [];
         for ($k =0; $k <= 6; $k++) {
-            $blob[] = $population[$i];
+            $blob[] = $population[$k];
         }
  
         $table = [];
