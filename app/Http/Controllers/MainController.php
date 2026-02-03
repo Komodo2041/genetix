@@ -109,7 +109,7 @@ class MainController extends Controller
         Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result,
          "usedmod" => json_encode($usedmodify)  ]);
 
-       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1));  
+       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop);  
 
     }
 
