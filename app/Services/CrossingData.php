@@ -23,7 +23,7 @@ class CrossingData
        if ($choosecross == 1) {
           $methods = [ "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0" ];
        } elseif ($choosecross == 2) {
-          $methods = [ "layersin2xyz",  "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" ];
+          $methods = [    "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz" ];
        }
  
        $choosecross = rand(0, 11);
@@ -1028,10 +1028,37 @@ class CrossingData
         return $table;
     }    
 
+ 
     private function layersin2xyz($population, $max, $nr = 10) {
-        $population = $this->layersinj2($population, $max);
-        $population = $this->layersinx2($population, $max);
-        $population = $this->layersinz2($population, $max);
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 2; $k++) {
+            $pom[] = $randNumbers[$k];
+        }
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 2; $k++) {
+            $pom1[] = $randNumbers[$k];
+        }    
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < 2; $k++) {
+            $pom2[] = $randNumbers[$k];
+        }                            
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if (in_array($i, $pom) || in_array($j, $pom1) || in_array($z, $pom2)) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
         return $table;
     }     
 
