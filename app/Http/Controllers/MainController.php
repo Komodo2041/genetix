@@ -46,13 +46,13 @@ class MainController extends Controller
     }
  
     public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
-        set_time_limit(5000);
+        set_time_limit(8000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
         $table = json_decode($area->data);
-        $headPoints = $gtx->calcPoints(100, $table);
+        $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = []; 
         if ($lvl == 1) {
@@ -73,9 +73,9 @@ class MainController extends Controller
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $repeatQ = 0;
-        $maxPoints = $gtx->getmaxPoints(100);
+        $maxPoints = $gtx->getmaxPoints(120);
         $nrPop = 0;
-        $maxPop = 65;
+        $maxPop = 80;
  
         $usedmodify = [];
         $t3 = microtime(true);        

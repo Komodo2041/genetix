@@ -5,7 +5,7 @@ namespace App\Services;
 class MutationData
 {
 
-    public $nrmutation = 50;    
+    public $nrmutation = 45;    
 
     public function addmutation($pop, $crossing) {
        $max = count($pop);
