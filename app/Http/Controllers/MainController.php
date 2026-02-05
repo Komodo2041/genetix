@@ -56,7 +56,7 @@ class MainController extends Controller
 
         $population0 = []; 
         if ($lvl == 1) {
-            $population0 = $gtx->getFirstGeneration(10, 1, 500);
+            $population0 = $gtx->getFirstGeneration(10, 1, 450);
             $lvl = $lvl - 1;
         } else {
             $lvl = $lvl - 1;
@@ -122,25 +122,11 @@ class MainController extends Controller
         $calc = [];
         $table = json_decode($area->data);
 
-        $levels = [[
-              'sum' => 0,
-              'all' => 0,
-              'avg' => 0
-           ]];
+ 
         $maxlevel = 1;
         foreach ($area->calculations AS $c) {
            $pc = json_decode($c->data);
-           if (!isset($levels[$c->level])) {
-            $levels[$c->level] = [
-                'sum' => 0,
-                'all' => 0,
-                'avg' => 0,
-                'areabulb' => $table,
-                'sameinlevel' => 0
-            ];
-           }
-           $levels[$c->level]['sum'] += $c->obtainedresult;
-           $levels[$c->level]['all'] += 1;
+ 
            $calc[] = [
               'level' => $c->level,
               'sum' => $c->obtainedresult,
@@ -149,24 +135,11 @@ class MainController extends Controller
            if ( $c->level > $maxlevel) {
               $maxlevel = $c->level;
            }
-           $levels[$c->level]['areabulb'] = $this->calcallinLevel($levels[$c->level]['areabulb'], $pc);
+           
         }
  
-        foreach ($levels AS $key => $value) {
-            if ($levels[$key]["all"] > 0) {
-                $levels[$key]["avg"] = $levels[$key]["sum"] /  $levels[$key]["all"];
-            } else {
-                $levels[$key]["avg"] = 0;
-            }
-            $levels[$key]["divlvl"] = 1;
-        }
-        for ($i = 1; $i <= $maxlevel; $i++) {
-            $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
-            $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
-            $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
-        }
  
-        return view("percent", ['calco' => $calc, 'levels' => $levels]);
+        return view("percent", ['calco' => $calc ]);
 
     }
 
@@ -200,6 +173,8 @@ class MainController extends Controller
         return $sum;
     }
 
+ 
+
     private function calcallinLevel($one, $two) {
         $nr = 10;
         for ($i = 0; $i < $nr; $i++) {
@@ -215,6 +190,56 @@ class MainController extends Controller
 
     }
      
+    private function calcallinHistogramLevel($one, $two, $res) {
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       if (!isset($res[$i][$j][$z])) {
+                           $res[$i][$j][$z] = 1;
+                       } else {
+                           $res[$i][$j][$z]++;
+                       }
+                    } else {
+                       if (!isset($res[$i][$j][$z])) {
+                           $res[$i][$j][$z] = 0;
+                       }
+                    }
+                }
+            }
+        }
+        return $res;
+
+    }
+
+    private function gethistogram($hist, $maxo = 30) {
+        $nr = 10;
+        for ($i= 0; $i < $maxo; $i++ ) {
+            $res[$i] = 0;
+        }
+        $maxLevel = 0;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $h = $hist[$i][$j][$z];
+                    if (!isset($res[$h])) {
+                       $res[$h] = 1;                       
+                    } else {
+                       $res[$h]++;
+                    }
+                    if ($h > $maxLevel) {
+                        $maxLevel = $h;
+                    }
+                } 
+            }
+        }
+        for ($i = $maxLevel + 1; $i < $maxo; $i++) {
+            unset($res[$i]);
+        }
+        return $res;
+    }
+
     public function mutations(CrossingData $cross, MutationData $mutation) {
 
         $calculations = Calculation::take(10)->orderBy("id", "desc")->get();
@@ -255,5 +280,67 @@ class MainController extends Controller
            "nc" => implode(", ", $nonusedcross ), "nm" => implode(", ", $nonusedmutations )   ]);
 
     }
+
+
+    public function histogram($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $calc = [];
+        $table = json_decode($area->data);
+
+        $levels = [[
+              'sum' => 0,
+              'all' => 0,
+              'avg' => 0
+           ]];
+        $maxlevel = 1;
+        foreach ($area->calculations AS $c) {
+           $pc = json_decode($c->data);
+           if (!isset($levels[$c->level])) {
+            $levels[$c->level] = [
+                'sum' => 0,
+                'all' => 0,
+                'avg' => 0,
+                'areabulb' => $table,
+                'histogram' => [],
+                'tohistogram' => $table,
+                'sameinlevel' => 0
+            ];
+           }
+           $levels[$c->level]['sum'] += $c->obtainedresult;
+           $levels[$c->level]['all'] += 1;
+           $calc[] = [
+              'level' => $c->level,
+              'sum' => $c->obtainedresult,
+              'points' => $this->calcpointer( $table, $pc)
+           ]; 
+           if ( $c->level > $maxlevel) {
+              $maxlevel = $c->level;
+           }
+           $levels[$c->level]['areabulb'] = $this->calcallinLevel($levels[$c->level]['areabulb'], $pc);
+           $levels[$c->level]['histogram'] = $this->calcallinHistogramLevel($levels[$c->level]['tohistogram'], $pc, $levels[$c->level]['histogram']);
+        }
+ 
+        foreach ($levels AS $key => $value) {
+            if ($levels[$key]["all"] > 0) {
+                $levels[$key]["avg"] = $levels[$key]["sum"] /  $levels[$key]["all"];
+            } else {
+                $levels[$key]["avg"] = 0;
+            }
+            $levels[$key]["divlvl"] = 1;
+        }
+        for ($i = 1; $i <= $maxlevel; $i++) {
+            $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
+            $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
+            $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
+            $levels[$i]["show_histogram"] = $this->gethistogram($levels[$i]['histogram']);
+        }
+ 
+        return view("histogram", ['calco' => $calc, 'levels' => $levels]);
+
+    }
+
 
 }

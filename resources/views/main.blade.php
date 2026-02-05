@@ -25,8 +25,8 @@
               @endforeach
             </td>
             <td> 
-                  <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a><br/>
-           
+                  <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
+                  <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a><br/>
 
                   <a href="/area/calc_level2/{{$a->id}}/1">Dokonaj obliczeń obszaru - poziom 1</a><br/>
 
