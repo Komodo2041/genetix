@@ -18,7 +18,7 @@
 @foreach ($levels AS $key => $l) 
    @if ($key > 0)
         <tr>
-            <td>{{$key}}</td>
+            <td>{{$key}} @if  (isset($samecalc[$key])) ({{ $samecalc[$key] }}) @endif</td>
             <td>{{$l['avg']}}</td>
             <td>{{$l['divlvl']}}</td>
             <td>{{ round(1/ $l['divlvl'])}}</td>

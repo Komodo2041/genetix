@@ -352,7 +352,11 @@ class MainController extends Controller
             $levels[$i]["show_histogram"] = $this->gethistogram($levels[$i]['histogram']);
         }
  
-        return view("histogram", ['calco' => $calc, 'levels' => $levels]);
+        $samecalculations = Calculation::selectRaw(' count(id) AS count, level')->where("area_id", $id)->whereNotNull("same")->groupBy( 'level')->orderBy("level")->get();
+        $samecalculations = $samecalculations->pluck("count", "level")->toArray();
+         
+
+        return view("histogram", ['calco' => $calc, 'levels' => $levels, 'samecalc' => $samecalculations]);
 
     }
 
