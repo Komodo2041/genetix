@@ -3,7 +3,7 @@
 
 <h3>Powierzchnie do sprawdzania</h3>
 
-<a href="/mutations"><button>Mutacje - Krzyżowania</button></a><br/>
+<a href="/mutations"><button>Mutacje - Krzyżowania</button></a> 
 <a href="/samecalculations"><button>Znajdź podobne obliczenia</button></a><br/>
 
  

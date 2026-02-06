@@ -366,11 +366,12 @@ class MainController extends Controller
                 continue;                    
             }            
             $samecalculations = Calculation::where("data", $c->data)->where("id", "!=", $c->id)->get();
-            if ($samecalculations) {
+             
+            if ($samecalculations->count() > 0) {
                 foreach ($samecalculations AS $same) {
                     $used[] = $same->id;
                 }
-                Calculation::update("same", $c->id)->where("data", $c->data);
+                Calculation::where("data", $c->data)->update(["same" => $c->id]);
             }
 
         }
