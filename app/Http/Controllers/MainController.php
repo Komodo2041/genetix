@@ -55,8 +55,8 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        // $randomDoing = rand(0,1);
-        $randomDoing = 1;
+        $randomDoing = rand(0, 1);
+       // $randomDoing = 0;
         if ($lvl == 1) {
             $population0 = $gtx->getFirstGeneration(10, 1, 400);
             $lvl = $lvl - 1;
@@ -73,8 +73,9 @@ class MainController extends Controller
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
-            }   
-            $calculations = Calculation::where("area_id", $id)->where("level", $lvl - 2)->take(5)->orderByRaw('RAND()')->get();
+            }
+            $ix = rand(1, $lvl-1);
+            $calculations = Calculation::where("area_id", $id)->where("level", $ix)->take(5)->orderByRaw('RAND()')->get();
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }               
