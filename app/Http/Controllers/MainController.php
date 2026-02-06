@@ -62,14 +62,14 @@ class MainController extends Controller
             $lvl = $lvl - 1;
         } elseif ($randomDoing == 0 || $lvl <= 3) {
             $lvl = $lvl - 1;
-            $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->take(10)->orderByRaw('RAND()')->get();
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
         } else {
             $lvl = $lvl - 1;
-            $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->take(5)->orderByRaw('RAND()')->get();
+            $calculations = $this->getCalculationLevel($id, $lvl, 5); 
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
@@ -126,6 +126,30 @@ class MainController extends Controller
        return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop);  
 
     }
+
+    private function getCalculationLevel($id, $lvl, $nr) {
+        $used = [];
+        $newcalc = [];
+        $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->get();
+        foreach ($calc AS $c) {
+           if (in_array($c->same, $used)) {
+            continue;
+           } 
+           $newcalc[] = $c;
+           if ($c->same) {
+             $used[] = $c->same;
+           }
+           if (count($newcalc) >= $nr) {
+            break;
+           }
+        }
+        if (count($newcalc) < $nr) {
+            $newcalc = array_merge($newcalc, $newcalc);
+        }
+        return $newcalc;
+    }
+    
+   
 
 
     public function percentshow($id) {
