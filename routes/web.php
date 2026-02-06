@@ -12,4 +12,7 @@ Route::get('area/showpercent/{id}',  "App\Http\Controllers\MainController@percen
 Route::get('area/histogram/{id}',  "App\Http\Controllers\MainController@histogram" );
 
 Route::get('mutations',  "App\Http\Controllers\MainController@mutations" );
+
+
+Route::get('samecalculations',  "App\Http\Controllers\MainController@samecalculations" );
  

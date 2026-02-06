@@ -357,4 +357,24 @@ class MainController extends Controller
     }
 
 
+    public function samecalculations() {
+        $calculations = Calculation::where("same", null)->orderBy("id", "asc")->get();
+        $used = [];
+       
+        foreach ($calculations AS $c) {
+            if (in_array($c->id, $used)) {
+                continue;                    
+            }            
+            $samecalculations = Calculation::where("data", $c->data)->where("id", "!=", $c->id)->get();
+            if ($samecalculations) {
+                foreach ($samecalculations AS $same) {
+                    $used[] = $same->id;
+                }
+                Calculation::update("same", $c->id)->where("data", $c->data);
+            }
+
+        }
+        return redirect("/")->with('success', 'Szukano takich samych obliczeń. Znaleziono '.count($used)." takich samych obliczeń "); 
+    }
+
 }
