@@ -19,7 +19,7 @@
     <div class="container" >
 
      @if (session('success'))
-        <div  class="success">
+        <div  class="success" style="white-space: pre-line;">
             {{ session('success') }}
         </div>
     @endif

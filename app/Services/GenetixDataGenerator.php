@@ -152,9 +152,10 @@ class GenetixDataGenerator
     }
 
 
-    public function getPower($population0, $nr = 10) {
+    public function getPower($population0) {
     
         $sum = 0;
+        $nr = count($population0);
         for ($n = 0; $n < $nr; $n++) { 
            $sum += $this->calcpowerone($population0[$n]);
         }

@@ -123,7 +123,24 @@ class MainController extends Controller
         Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result,
          "usedmod" => json_encode($usedmodify)  ]);
 
-       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop);  
+ 
+        $additionalresultsmsg = "\n\n";  
+        $usedcalculations = [$res[0]['area']];
+        for ($i = 1; $i < count($res); $i++) {
+            if (0.999 * $res[0]['sum'] >= $res[$i]['sum']) {
+               $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i."  \n";
+               break;
+            }
+            $diff = $this->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
+            if ($diff === 0) {
+                $usedcalculations[] = $res[$i]['area'];
+                $result =  $res[$i]['sum'] / $maxPoints;
+                Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result, "nrcalc" => $i + 1 ]);
+                $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
+            } 
+        } 
+
+       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg);  
 
     }
 
@@ -148,9 +165,7 @@ class MainController extends Controller
         }
         return $newcalc;
     }
-    
-   
-
+ 
 
     public function percentshow($id) {
         $area = Area::find($id);
@@ -195,6 +210,22 @@ class MainController extends Controller
         }
         return $sum;
     }
+
+ 
+    private function checkedSameResultsinLine($usedcalculations, $area) {
+       $res = 0;
+       foreach ($usedcalculations AS $one ) {
+          $all = $this->calcpointer($one, $area);
+          
+          if ($all > 999) {
+            $res = $all;
+            break;
+          }
+       }
+        
+       return $res;
+    }
+
 
     private function getnumber2inarea($one) {
         $sum = 0;
@@ -280,7 +311,7 @@ class MainController extends Controller
 
     public function mutations(CrossingData $cross, MutationData $mutation) {
 
-        $calculations = Calculation::take(10)->orderBy("id", "desc")->get();
+        $calculations = Calculation::wherenull("nrcalc" )->take(10)->orderBy("id", "desc")->get();
         $result = [];
         foreach ($calculations AS $c) {
            if ($c->usedmod) {
