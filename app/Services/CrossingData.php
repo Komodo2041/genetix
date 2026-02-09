@@ -13,6 +13,9 @@ class CrossingData
      * 
      */
 
+    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4"];
+    public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
+
     public function createNewPopulation($population) {
        $max = count($population);
        $res = [];
@@ -34,8 +37,16 @@ class CrossingData
        }  elseif ($choosecross == 11) {
                    $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];
        }      
-       foreach ($methods AS $m) {
+         foreach ($methods AS $m) {
+          if (count($population) < 10) { 
+              if (in_array($m, $this->multipleCrossings)) {
+                  $m = $this->bestCrossing[rand(0, count($this->bestCrossing) - 1)];
+              }
+          }
+        
+
           for ($i = 0; $i < $this->nrcrossing; $i++) {
+ 
             $area = $this->$m($population, $max);
             $res[] = $area;
             $crossing[] = $m;
