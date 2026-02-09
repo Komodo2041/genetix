@@ -143,7 +143,7 @@ class GenetixDataGenerator
         return 10000 * $nrpoints;
     }
 
-    public function getindyvidual($res, $nr) {
+    public function getindyvidual($res, $nr = 10) {
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
             $table[] = $res[$i]['area'];

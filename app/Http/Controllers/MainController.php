@@ -56,7 +56,9 @@ class MainController extends Controller
 
         $population0 = [];
         $randomDoing = rand(0, 1);
-       // $randomDoing = 0;
+        $randomDoing = 2;
+
+        $individual = 10;
         if ($lvl == 1) {
             $population0 = $gtx->getFirstGeneration(10, 1, 400);
             $lvl = $lvl - 1;
@@ -67,7 +69,7 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
-        } else {
+        } elseif ($randomDoing == 1) {
             $lvl = $lvl - 1;
             $calculations = $this->getCalculationLevel($id, $lvl, 5); 
             $population0 = [];
@@ -79,6 +81,16 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }               
+        } elseif ($randomDoing == 2) {
+            $lvl = $lvl - 1;
+            $calculations = $this->getCalculationLevel($id, $lvl, 100, 0);  
+            $population0 = [];
+            $mostdifferent = $this->getmostdifferent($calculations, 2);  
+            foreach ($mostdifferent AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $individual = 2;
+                
         }
 
         $power = $gtx->getPower($population0);
@@ -94,7 +106,8 @@ class MainController extends Controller
         $usedmodify = [];
         $t3 = microtime(true);        
         while ($repeatQ < 8 && $nrPop < $maxPop) {   
-            $selectedIndividuals = $gtx->getindyvidual($res, 10);
+            $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+            $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
             $pop_result = $cross->createNewPopulation($selectedIndividuals);
  
@@ -128,7 +141,6 @@ class MainController extends Controller
         $usedcalculations = [$res[0]['area']];
         for ($i = 1; $i < count($res); $i++) {
             if (0.99999 * $res[0]['sum'] >= $res[$i]['sum']) {
-               $additionalresultsmsg .= "  ".(0.99999 * $res[0]['sum'])." vs ".$res[$i]['sum']." \n";
                $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i."  \n";
                break;
             }
@@ -146,7 +158,44 @@ class MainController extends Controller
 
     }
 
-    private function getCalculationLevel($id, $lvl, $nr) {
+    private function getmostdifferent($calculations, $nr) {
+ 
+       $count = count($calculations);
+       $results = [];
+       $res = [];
+       $used = [];
+       for ($i = 0; $i < $count; $i++) {
+          for ($j = 0; $j < $count; $j++) {
+             if ($i == $j) {
+                 $results[$i][$j] = 0;
+                 continue;
+             }
+             $results[$i][$j] = 1000 - $this->calcpointer(json_decode($calculations[$i]->data), json_decode($calculations[$j]->data));
+          }
+       }
+
+       $maxpairs = [];
+       $max = 0;
+       for ($i = 0; $i < $count; $i++) {
+          for ($j = 0; $j < $count; $j++) {
+             if ($i == $j) { 
+                 continue;
+             }
+             if ($results[$i][$j] > $max) {
+                $maxpairs = [$i, $j];
+                $max = $results[$i][$j];
+             }
+          }
+       }       
+ 
+       foreach ($maxpairs AS $m) {
+          $res[] = $calculations[$m];
+       }
+       return $res;
+
+    }
+
+    private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1) {
         $used = [];
         $newcalc = [];
         $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->get();
@@ -162,8 +211,10 @@ class MainController extends Controller
             break;
            }
         }
-        if (count($newcalc) < $nr) {
-            $newcalc = array_merge($newcalc, $newcalc);
+        if ($norepeat != 0) {
+            if (count($newcalc) < $nr) {
+                $newcalc = array_merge($newcalc, $newcalc);
+            }
         }
         return $newcalc;
     }
