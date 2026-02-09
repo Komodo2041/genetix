@@ -43,7 +43,6 @@ class CrossingData
                   $m = $this->bestCrossing[rand(0, count($this->bestCrossing) - 1)];
               }
           }
-        
 
           for ($i = 0; $i < $this->nrcrossing; $i++) {
  

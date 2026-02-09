@@ -55,22 +55,23 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 1);
-        $randomDoing = 2;
+        $randomDoing = rand(2, 3);
+       // $randomDoing = 3;
 
         $individual = 10;
+        $lvl = $lvl - 1;
         if ($lvl == 1) {
             $population0 = $gtx->getFirstGeneration(10, 1, 400);
-            $lvl = $lvl - 1;
+    
         } elseif ($randomDoing == 0 || $lvl <= 3) {
-            $lvl = $lvl - 1;
+        
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
         } elseif ($randomDoing == 1) {
-            $lvl = $lvl - 1;
+          
             $calculations = $this->getCalculationLevel($id, $lvl, 5); 
             $population0 = [];
             foreach ($calculations AS $c) {
@@ -82,7 +83,7 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }               
         } elseif ($randomDoing == 2) {
-            $lvl = $lvl - 1;
+             
             $calculations = $this->getCalculationLevel($id, $lvl, 100, 0);  
             $population0 = [];
             $mostdifferent = $this->getmostdifferent($calculations, 2);  
@@ -91,6 +92,16 @@ class MainController extends Controller
             }
             $individual = 2;
                 
+        } elseif ($randomDoing == 3) {
+         
+            $calculations = $this->getCalculationLevel($id, $lvl, 100, 0);  
+            $population0 = [];
+            $number = rand(3, 10);
+            $mostdifferent = $this->getmostdifferent($calculations, $number);  
+            foreach ($mostdifferent AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $individual = count($population0);            
         }
 
         $power = $gtx->getPower($population0);
@@ -188,9 +199,33 @@ class MainController extends Controller
           }
        }       
  
+ 
+       for ($i = 2; $i <= $nr; $i++) {
+           $max = 0;
+           for ($j = 0; $j < $count; $j++) {
+              if (in_array($j, $maxpairs)) {
+                 continue;
+              }
+              $sum = 0;
+              $newNumber = -1;
+              foreach ($maxpairs AS $m) {
+                  $sum += $results[$j][$m];
+              }
+              if ($sum > $max) {
+                $max = $sum;
+                $newNumber = $j;
+              }
+
+           }
+           if ($newNumber > -1) {
+               $maxpairs[] = $newNumber;
+           }
+       }
+
        foreach ($maxpairs AS $m) {
           $res[] = $calculations[$m];
        }
+
        return $res;
 
     }
