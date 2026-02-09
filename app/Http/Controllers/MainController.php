@@ -56,7 +56,7 @@ class MainController extends Controller
 
         $population0 = [];
         $randomDoing = rand(2, 3);
-       // $randomDoing = 3;
+      //  $randomDoing = 2;
 
         $individual = 10;
         $lvl = $lvl - 1;
@@ -84,7 +84,7 @@ class MainController extends Controller
             }               
         } elseif ($randomDoing == 2) {
              
-            $calculations = $this->getCalculationLevel($id, $lvl, 100, 0);  
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);  
             $population0 = [];
             $mostdifferent = $this->getmostdifferent($calculations, 2);  
             foreach ($mostdifferent AS $c) {
@@ -94,7 +94,7 @@ class MainController extends Controller
                 
         } elseif ($randomDoing == 3) {
          
-            $calculations = $this->getCalculationLevel($id, $lvl, 100, 0);  
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);  
             $population0 = [];
             $number = rand(3, 10);
             $mostdifferent = $this->getmostdifferent($calculations, $number);  

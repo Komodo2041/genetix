@@ -133,14 +133,14 @@ class GenetixDataGenerator
         $change = $diff / $v1;
         $result = 0;
         if ($change <= 1) {
-            $result = 10000 - $change * 10000;
+            $result = 1000000 - $change * 1000000;
         }
         return $result;
 
     }
 
     public function getmaxPoints($nrpoints) {
-        return 10000 * $nrpoints;
+        return 1000000 * $nrpoints;
     }
 
     public function getindyvidual($res, $nr = 10) {
