@@ -127,10 +127,12 @@ class MainController extends Controller
         $additionalresultsmsg = "\n\n";  
         $usedcalculations = [$res[0]['area']];
         for ($i = 1; $i < count($res); $i++) {
-            if (0.999 * $res[0]['sum'] >= $res[$i]['sum']) {
+            if (0.99999 * $res[0]['sum'] >= $res[$i]['sum']) {
+               $additionalresultsmsg .= "  ".(0.99999 * $res[0]['sum'])." vs ".$res[$i]['sum']." \n";
                $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i."  \n";
                break;
             }
+            
             $diff = $this->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
             if ($diff === 0) {
                 $usedcalculations[] = $res[$i]['area'];
