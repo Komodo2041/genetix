@@ -394,6 +394,7 @@ class MainController extends Controller
         for ($i = $maxLevel + 1; $i < $maxo; $i++) {
             unset($res[$i]);
         }
+      
         return $res;
     }
 
@@ -492,7 +493,7 @@ class MainController extends Controller
             $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
             $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
             $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
-            $levels[$i]["show_histogram"] = $this->gethistogram($levels[$i]['histogram']);
+            $levels[$i]["show_histogram"] = $this->gethistogram($levels[$i]['histogram'], $levels[$i]['all']);
         }
  
         $samecalculations = Calculation::selectRaw(' count(id) AS count, level')->where("area_id", $id)->whereNotNull("same")->groupBy( 'level')->orderBy("level")->get();
