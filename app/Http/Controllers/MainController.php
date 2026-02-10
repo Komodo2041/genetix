@@ -58,8 +58,8 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 6);
-       // $randomDoing = 5;
+        $randomDoing = rand(0, 7);
+        $randomDoing = 7;
  
         $individual = 10;
         $lvl = $lvl - 1;
@@ -124,7 +124,7 @@ class MainController extends Controller
  
             $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
 
-        } elseif ($randomDoing == 6) {
+        } elseif ($randomDoing == 6) { // inversion
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $usedpercent = rand(70,99); 
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
@@ -134,7 +134,14 @@ class MainController extends Controller
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
             $population0[] = $gtx->getInvertStill($stiffPattern[0], $stiffPattern[1]); 
             $individual = count($population0);  
-        }
+        }  elseif ($randomDoing == 7) { // wywrócenie rdzenia
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
+            $usedpercent = rand(70,99);
+     
+            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
+ 
+            $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1], true);
+        } 
 
         $power = $gtx->getPower($population0);
  
