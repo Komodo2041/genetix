@@ -133,14 +133,14 @@ class GenetixDataGenerator
         $change = $diff / $v1;
         $result = 0;
         if ($change <= 1) {
-            $result = 1000000 - $change * 1000000;
+            $result = 100000000 - $change * 100000000;
         }
         return $result;
 
     }
 
     public function getmaxPoints($nrpoints) {
-        return 1000000 * $nrpoints;
+        return 100000000 * $nrpoints;
     }
 
     public function getindyvidual($res, $nr = 10) {
@@ -322,6 +322,26 @@ class GenetixDataGenerator
             $allGeneration[] =  $table;    
        }
        return $allGeneration;
+    }
+
+    public function getInvertStill($stable, $blob) {
+        $table = [];
+        $size = 10;
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        if ($stable[$i][$j][$z] == 1) {
+                            $table[$i][$j][$z] = $blob[$i][$j][$z];
+                        } elseif ($blob[$i][$j][$z] == 1) {
+                            $table[$i][$j][$z] = 0;
+                        } else {
+                            $table[$i][$j][$z] = 1;
+                        }
+                    }
+                }
+            }
+         
+        return $table;
     }
 
 

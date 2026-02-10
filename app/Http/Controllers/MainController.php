@@ -58,8 +58,8 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 4);
-       // $randomDoing = 4;
+        $randomDoing = rand(0, 6);
+       // $randomDoing = 5;
  
         $individual = 10;
         $lvl = $lvl - 1;
@@ -112,20 +112,28 @@ class MainController extends Controller
             $usedpercent = rand(70,99);
      
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
-            /*
-            $num0 = [0,0];
-            $nr = 10;
-            for ($i = 0; $i < $nr; $i++) {
-            for ($j = 0; $j < $nr; $j++) {
-            for ($z = 0; $z < $nr; $z++) {  
-                $m = $stiffPattern[0][$i][$j][$z];
-                $num0[$m]++;
-            }
-            }
-            }    
-            */
+ 
             $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
  
+        } elseif ($randomDoing == 5) { 
+        
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $usedpercent = rand(70,99);
+     
+            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
+ 
+            $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
+
+        } elseif ($randomDoing == 6) {
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
+            $usedpercent = rand(70,99); 
+            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
+            $population0[] = $gtx->getInvertStill($stiffPattern[0], $stiffPattern[1]);
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
+            $usedpercent = rand(70,99); 
+            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
+            $population0[] = $gtx->getInvertStill($stiffPattern[0], $stiffPattern[1]); 
+            $individual = count($population0);  
         }
 
         $power = $gtx->getPower($population0);
@@ -257,10 +265,14 @@ class MainController extends Controller
 
     }
 
-    private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1) {
+    private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1, $obtain = false) {
         $used = [];
         $newcalc = [];
-        $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->get();
+        if (!$obtain) {
+            $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->get();
+        } else {
+            $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('obtainedresult DESC')->get();
+        }
         foreach ($calc AS $c) {
            if (in_array($c->same, $used)) {
             continue;
