@@ -300,7 +300,7 @@ class GenetixDataGenerator
 
 
    
-    public function getStableGeneration($size, $numbers, $stable, $blob, $overturning = false) {
+    public function getStableGeneration($size, $numbers, $stable, $blob ) {
 
        $allGeneration = [];
  
@@ -311,21 +311,8 @@ class GenetixDataGenerator
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
                         if ($stable[$i][$j][$z] == 1) {
-                            
-                            if (!$overturning) {
-                                $table[$i][$j][$z] = $blob[$i][$j][$z];
-                            } else {
-                                $change = rand(0, 1);
-                                if ($change == 1) {
-                                   if ($blob[$i][$j][$z] == 1) {
-                                       $table[$i][$j][$z] = 0;
-                                   } else {
-                                       $table[$i][$j][$z] = 1;
-                                   }
-                                } else {
-                                   $table[$i][$j][$z] = $blob[$i][$j][$z];
-                                }
-                            }
+                            $table[$i][$j][$z] = $blob[$i][$j][$z]; 
+ 
                         } else {
                             $table[$i][$j][$z] = rand(0, 1);
                         } 
