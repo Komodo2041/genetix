@@ -15,6 +15,9 @@ use App\Models\Calculation;
 
 class MainController extends Controller
 {
+
+    public $startPopulation = 800;
+
     public function list(Request $request, MeerDataGenerator $mdg) {
 
         $area = Area::with("calculations")->get();
@@ -55,13 +58,15 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(2, 3);
-      //  $randomDoing = 2;
-
+        $randomDoing = rand(0, 4);
+       // $randomDoing = 4;
+ 
         $individual = 10;
         $lvl = $lvl - 1;
-        if ($lvl == 1) {
-            $population0 = $gtx->getFirstGeneration(10, 1, 400);
+        if ($lvl == 0) {
+            
+            $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
+        
     
         } elseif ($randomDoing == 0 || $lvl <= 3) {
         
@@ -102,11 +107,33 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
             $individual = count($population0);            
+        } elseif ($randomDoing == 4) {
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
+            $usedpercent = rand(70,99);
+     
+            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
+            /*
+            $num0 = [0,0];
+            $nr = 10;
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+            for ($z = 0; $z < $nr; $z++) {  
+                $m = $stiffPattern[0][$i][$j][$z];
+                $num0[$m]++;
+            }
+            }
+            }    
+            */
+            $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
+ 
         }
 
         $power = $gtx->getPower($population0);
  
         $res = $gtx->calcPopulation($population0, $headPoints);
+
+        unset($population0);
+
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $repeatQ = 0;

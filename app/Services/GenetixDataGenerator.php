@@ -255,4 +255,74 @@ class GenetixDataGenerator
         
     }
 
+
+    public function getStiffPattern($calculations, $usedpercent, $nr = 10) {
+        $blobAll = [];
+        $stablePoints = [];
+        $all = [];
+        $count = count($calculations);
+        $diff = 1 - $usedpercent / 100;
+ 
+        foreach ($calculations AS $c) {
+            $data = json_decode($c->data);
+            for ($i = 0; $i < $nr; $i++) {
+                for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        if (isset($all[$i][$j][$z])) {
+                            $all[$i][$j][$z] += $data[$i][$j][$z];
+                        } else {
+                            $all[$i][$j][$z] = $data[$i][$j][$z];
+                        }
+                    }
+                }
+            }            
+        }
+
+       for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) { 
+                   $all[$i][$j][$z] = $all[$i][$j][$z] / $count;
+                   $ch = $all[$i][$j][$z];
+                   $blobAll[$i][$j][$z] = round($ch);
+                   if ($ch - $diff < 0 || $ch + $diff > 1) {
+                      $stablePoints[$i][$j][$z] = 1;
+                   } else {
+                      $stablePoints[$i][$j][$z] = 0;
+                   }
+
+               }
+            }
+       }             
+
+       return [$stablePoints, $blobAll];
+
+    }
+
+
+   
+    public function getStableGeneration($size, $numbers, $stable, $blob) {
+
+       $allGeneration = [];
+ 
+       $max = 1;
+       for ($dist = 0; $dist < $numbers; $dist++) {
+            $table = [];
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        if ($stable[$i][$j][$z] == 1) {
+                            $table[$i][$j][$z] = $blob[$i][$j][$z];
+                        } else {
+                            $table[$i][$j][$z] = rand(0, 1);
+                        } 
+                         
+                    }
+                }
+            }
+            $allGeneration[] =  $table;    
+       }
+       return $allGeneration;
+    }
+
+
 }
