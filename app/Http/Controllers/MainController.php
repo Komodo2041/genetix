@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Area; 
 use App\Models\Calculation; 
- 
+use App\Models\Clones;  
 
 class MainController extends Controller
 {
@@ -60,6 +60,7 @@ class MainController extends Controller
         $population0 = [];
         $randomDoing = rand(0, 8);
         $randomDoing = 8;
+        $clones = ["area_id" => $id];
  
         $individual = 10;
         $lvl = $lvl - 1;
@@ -141,7 +142,12 @@ class MainController extends Controller
             $change = rand(5, 100);
             $res = $gtx->clonePattern($area, 1, $change);
             $population0 = [$area, $res[0]];
-             $individual = count($population0);  
+            $individual = count($population0);  
+
+            $clones["calc_id"] = $calculations[0]->id;
+            $clones["oldresult"] = $calculations[0]->obtainedresult;
+            $clones["change"] = $change;
+
         }  elseif ($randomDoing == 8) { // multiple clone
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
@@ -150,7 +156,11 @@ class MainController extends Controller
             $size = rand(6, 12);
             $res = $gtx->clonePattern($area, $size, $change);
             $population0 = $res;
-            $individual = count($population0);  
+            $individual = count($population0);
+            
+            $clones["calc_id"] = $calculations[0]->id;
+            $clones["oldresult"] = $calculations[0]->obtainedresult;
+            $clones["change"] = $change;     
         }         
 
         $power = $gtx->getPower($population0);
@@ -194,11 +204,15 @@ class MainController extends Controller
         $t4 = microtime(true);
         arsort($usedmodify); 
        
-        $result = $maxQ / $maxPoints; 
-        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result ." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result,
+        $result2 = $maxQ / $maxPoints; 
+        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
+        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
          "usedmod" => json_encode($usedmodify)  ]);
 
+        if ($randomDoing == 7 || $randomDoing == 8) {
+            $clones["result"] = $result2;
+            Clones::create($clones);
+        } 
  
         $additionalresultsmsg = "\n\n";  
         $usedcalculations = [$res[0]['area']];
