@@ -58,8 +58,8 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 6);
-        $randomDoing = 2;
+        $randomDoing = rand(0, 7);
+        $randomDoing = 7;
  
         $individual = 10;
         $lvl = $lvl - 1;
@@ -134,7 +134,13 @@ class MainController extends Controller
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
             $population0[] = $gtx->getInvertStill($stiffPattern[0], $stiffPattern[1]); 
             $individual = count($population0);  
-        }  
+        }  elseif ($randomDoing == 7) { 
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $area = json_decode($calculations[0]->data);
+            $res = $gtx->clonePattern($area, 1, 20);
+            $population0 = [$area, $res[0]];
+        } 
 
         $power = $gtx->getPower($population0);
  

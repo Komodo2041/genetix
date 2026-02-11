@@ -346,4 +346,25 @@ class GenetixDataGenerator
     }
 
 
+    public function clonePattern($data, $size = 10, $change = 20, $nr = 10) {
+  
+        $all = [];   
+
+        for ($i = 0; $i < $size; $i++) {
+            $table = $data;
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 1);
+            if ($table[$x][$y][$z] == 1) {
+               $table[$x][$y][$z] = 0;
+            } else {
+               $table[$x][$y][$z] = 1;
+            }
+            $all[] = $table;
+        }            
+      
+        return $all;
+    }
+
+
 }
