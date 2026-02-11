@@ -140,6 +140,7 @@ class MainController extends Controller
             $area = json_decode($calculations[0]->data);
             $res = $gtx->clonePattern($area, 1, 20);
             $population0 = [$area, $res[0]];
+             $individual = count($population0);  
         } 
 
         $power = $gtx->getPower($population0);
@@ -157,7 +158,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);        
-        while ($repeatQ < 8 && $nrPop < $maxPop) {   
+        while ($repeatQ < 10 && $nrPop < $maxPop) {   
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
@@ -314,6 +315,7 @@ class MainController extends Controller
            $pc = json_decode($c->data);
  
            $calc[] = [
+              'id' => $c->id,
               'level' => $c->level,
               'sum' => $c->obtainedresult,
               'points' => $this->calcpointer( $table, $pc)
