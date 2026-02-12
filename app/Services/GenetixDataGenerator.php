@@ -352,13 +352,15 @@ class GenetixDataGenerator
 
         for ($i = 0; $i < $size; $i++) {
             $table = $data;
-            $x = rand(0, $nr - 1);
-            $y = rand(0, $nr - 1);
-            $z = rand(0, $nr - 1);
-            if ($table[$x][$y][$z] == 1) {
-               $table[$x][$y][$z] = 0;
-            } else {
-               $table[$x][$y][$z] = 1;
+            for ($m = 0; $m < $change; $m++) {
+                $x = rand(0, $nr - 1);
+                $y = rand(0, $nr - 1);
+                $z = rand(0, $nr - 1);
+                if ($table[$x][$y][$z] == 1) {
+                $table[$x][$y][$z] = 0;
+                } else {
+                $table[$x][$y][$z] = 1;
+                }
             }
             $all[] = $table;
         }            

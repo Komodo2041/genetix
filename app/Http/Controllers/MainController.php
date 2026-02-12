@@ -58,8 +58,8 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 8);
-        $randomDoing = 8;
+        $randomDoing = rand(0, 10);
+        $randomDoing = 7;
         $clones = ["area_id" => $id];
  
         $individual = 10;
@@ -150,9 +150,9 @@ class MainController extends Controller
 
         }  elseif ($randomDoing == 8) { // multiple clone
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $area = json_decode($calculations[0]->data);
-            $change = rand(5, 100);
+            $change = rand(1, 50);
             $size = rand(6, 12);
             $res = $gtx->clonePattern($area, $size, $change);
             $population0 = $res;
@@ -161,7 +161,33 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
             $clones["change"] = $change;     
-        }         
+        } elseif ($randomDoing == 9) { // multiple clone 2
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $area = json_decode($calculations[0]->data);
+            $change = rand(50, 100);
+            $size = rand(6, 12);
+            $res = $gtx->clonePattern($area, $size, $change);
+            $population0 = $res;
+            $individual = count($population0);
+            
+            $clones["calc_id"] = $calculations[0]->id;
+            $clones["oldresult"] = $calculations[0]->obtainedresult;
+            $clones["change"] = $change;     
+        } elseif ($randomDoing == 10) { // multiple clone 3
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $area = json_decode($calculations[0]->data);
+            $change = rand(201, 300);
+            
+            $res = $gtx->clonePattern($area, 10, $change);
+            $population0 = $res;
+            $individual = count($population0);
+            
+            $clones["calc_id"] = $calculations[0]->id;
+            $clones["oldresult"] = $calculations[0]->obtainedresult;
+            $clones["change"] = $change;     
+        }          
 
         $power = $gtx->getPower($population0);
  
@@ -174,7 +200,7 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(120);
         $nrPop = 0;
-        $maxPop = 80;
+        $maxPop = 100;
  
         $usedmodify = [];
         $t3 = microtime(true);        
@@ -209,7 +235,7 @@ class MainController extends Controller
         Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
          "usedmod" => json_encode($usedmodify)  ]);
 
-        if ($randomDoing == 7 || $randomDoing == 8) {
+        if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 9) {
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
@@ -217,8 +243,8 @@ class MainController extends Controller
         $additionalresultsmsg = "\n\n";  
         $usedcalculations = [$res[0]['area']];
         for ($i = 1; $i < count($res); $i++) {
-            if (0.99999 * $res[0]['sum'] >= $res[$i]['sum']) {
-               $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i."  \n";
+            if ($result2 * 0.999999  >= $res[$i]['sum']/$maxPoints) {
+               $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($result2 * 0.999999 )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
                break;
             }
             
@@ -231,7 +257,7 @@ class MainController extends Controller
             } 
         } 
 
-       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg);  
+       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result2. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg);  
 
     }
 
