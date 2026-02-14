@@ -14,6 +14,7 @@
          <th>Level</th>
          <th>Wynik</th>
          <th>Liczba Punktów</th>
+         <th></th>
       </tr>
       @foreach ($calco AS $p) 
         <tr>
@@ -21,6 +22,9 @@
             <td>{{$p['level']}}</td>
             <td>{{$p['sum']}}</td>
             <td>{{$p['points']}}</td>
+            <td>
+               <a href="/diamon/add/{{$p['id']}}" >Dodaj diament</a>
+            </td>
         </tr>
       @endforeach
 </table>

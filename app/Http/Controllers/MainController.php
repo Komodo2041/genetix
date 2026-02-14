@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Area; 
 use App\Models\Calculation; 
-use App\Models\Clones;  
+use App\Models\Clones;
+use App\Models\Diamond;
 
 class MainController extends Controller
 {
@@ -58,8 +59,8 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 10);
-        $randomDoing = 7;
+        $randomDoing = rand(0, 9);
+        $randomDoing = 8;
         $clones = ["area_id" => $id];
  
         $individual = 10;
@@ -139,7 +140,7 @@ class MainController extends Controller
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
             $area = json_decode($calculations[0]->data);
-            $change = rand(5, 100);
+            $change = rand(1, 20);
             $res = $gtx->clonePattern($area, 1, $change);
             $population0 = [$area, $res[0]];
             $individual = count($population0);  
@@ -152,7 +153,7 @@ class MainController extends Controller
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $area = json_decode($calculations[0]->data);
-            $change = rand(1, 50);
+            $change = rand(1, 5);
             $size = rand(6, 12);
             $res = $gtx->clonePattern($area, $size, $change);
             $population0 = $res;
@@ -174,19 +175,6 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
             $clones["change"] = $change;     
-        } elseif ($randomDoing == 10) { // multiple clone 3
-
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
-            $area = json_decode($calculations[0]->data);
-            $change = rand(201, 300);
-            
-            $res = $gtx->clonePattern($area, 10, $change);
-            $population0 = $res;
-            $individual = count($population0);
-            
-            $clones["calc_id"] = $calculations[0]->id;
-            $clones["oldresult"] = $calculations[0]->obtainedresult;
-            $clones["change"] = $change;     
         }          
 
         $power = $gtx->getPower($population0);
@@ -200,7 +188,7 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(120);
         $nrPop = 0;
-        $maxPop = 100;
+        $maxPop = 120;
  
         $usedmodify = [];
         $t3 = microtime(true);        
@@ -621,6 +609,15 @@ class MainController extends Controller
 
         }
         return redirect("/")->with('success', 'Szukano takich samych obliczeń. Znaleziono '.count($used)." takich samych obliczeń "); 
+    }
+
+    public function adddiamond($id) {
+       $calc = Calculation::find($id);
+       if (!$calc) {
+          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+       }
+       Diamond::create(["area_id" => $calc->area_id, "calc_id" => $id]);
+       return redirect("/")->with('success',  "Dodano diament"); 
     }
 
 }
