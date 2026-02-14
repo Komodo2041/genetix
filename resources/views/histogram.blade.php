@@ -23,7 +23,7 @@
             <td>{{$l['divlvl']}}</td>
             <td>{{ round(1/ $l['divlvl'])}}</td>
              <td>
-                @if ($key > 1) 
+                @if ($key > 1 && isset($l['toone'])) 
                {{ $l['toone'] }}
                 @endif
              </td>
@@ -42,12 +42,13 @@
          <th>Histogram</th>  
       </tr>
 @foreach ($levels AS $key => $l) 
-   @if ($key > 0)
+   @if ($key > 0 && isset($l["show_histogram"]))
         <tr>
             <td>
                 <h4>{{$key}}</h4>
             </td>
             <td> 
+
                @foreach ($l["show_histogram"] AS $key2 => $value2)
                   {{$key2}} : {{$value2}} <br/>
                @endforeach

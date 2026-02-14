@@ -31,11 +31,11 @@
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a><br/>
                    <br/>
                   @foreach ($a->diamonds AS $d)
-                       <a href="diamond/{{$a->id}}/100/{{$d->id}}"><button>Oblicz Diament {{$d->id}}</button></a><br/>    
+                       <a href="diamond/{{$a->id}}/{{ count($calco[$a->id]) - 1 }}/{{$d->id}}"><button>Oblicz Diament {{$d->id}}</button></a><br/>    
                   @endforeach
 
                   <a href="/area/calc_level2/{{$a->id}}/1">Dokonaj obliczeń obszaru - poziom 1</a><br/>
-
+ 
                   @foreach ($calco[$a->id] AS $c) 
                       @if  ($c['count'] >= 10)
                       <a href="/area/calc_level2/{{$a->id}}/{{$c['level'] + 1}}">Dokonaj obliczeń obszaru - poziom  {{$c["level"] + 1}}</a><br/>

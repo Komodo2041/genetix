@@ -162,7 +162,7 @@ class MainController extends Controller
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $area = json_decode($calculations[0]->data);
-            $change = rand(1, 5);
+            $change = rand(1, 20);
             $size = rand(6, 12);
             $res = $gtx->clonePattern($area, $size, $change);
             $population0 = $res;
@@ -601,6 +601,9 @@ class MainController extends Controller
             $levels[$key]["divlvl"] = 1;
         }
         for ($i = 1; $i <= $maxlevel; $i++) {
+            if (!isset( $levels[$i]) || !isset( $levels[$i - 1])) {
+                continue;
+            }
             $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
             $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
             $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
@@ -655,7 +658,7 @@ class MainController extends Controller
         $calc = Calculation::find($dc->calc_id);
         if (!$calc) {
           return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
-        }        
+        }   
         return $calc;
     }
 
