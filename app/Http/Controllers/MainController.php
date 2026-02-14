@@ -13,7 +13,8 @@ use App\Models\Area;
 use App\Models\Calculation; 
 use App\Models\Clones;
 use App\Models\Diamond;
-
+use App\Models\Diamondcalc;
+ 
 class MainController extends Controller
 {
 
@@ -616,8 +617,9 @@ class MainController extends Controller
        if (!$calc) {
           return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
        }
-       Diamond::create(["area_id" => $calc->area_id, "calc_id" => $id]);
-       return redirect("/")->with('success',  "Dodano diament"); 
+       $d = Diamond::create(["area_id" => $calc->area_id, "calc_id" => $id]);
+       Diamondcalc::create(["calc_id" => $id, "result" => $calc->obtainedresult, "diamond_id" => $d->id ]);
+       return redirect("/")->with('success',  "Dodano diament");
     }
 
 }

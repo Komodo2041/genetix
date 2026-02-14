@@ -23,7 +23,7 @@
             <td>{{$p['sum']}}</td>
             <td>{{$p['points']}}</td>
             <td>
-               <a href="/diamon/add/{{$p['id']}}" >Dodaj diament</a>
+               <a href="/diamon/add/{{$p['id']}}" ><button>Dodaj diament</button></a>
             </td>
         </tr>
       @endforeach
