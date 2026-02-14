@@ -29,6 +29,10 @@
             <td> 
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a><br/>
+                   <br/>
+                  @foreach ($a->diamonds AS $d)
+                       <a href="diamond/{{$a->id}}/100/{{$d->id}}"><button>Oblicz Diament {{$d->id}}</button></a><br/>    
+                  @endforeach
 
                   <a href="/area/calc_level2/{{$a->id}}/1">Dokonaj obliczeń obszaru - poziom 1</a><br/>
 

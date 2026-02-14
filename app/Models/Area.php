@@ -11,6 +11,10 @@ class Area extends Model
 
     public function calculations() {
         return $this->hasMany("App\Models\Calculation", "area_id")->orderBy("level");
-    } 
+    }
+
+    public function diamonds() {
+        return $this->hasMany("App\Models\Diamond", "area_id");
+    }
 
 }

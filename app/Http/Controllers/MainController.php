@@ -50,7 +50,8 @@ class MainController extends Controller
         return view("main", ['area' => $area, 'calco' => $calcoData]);
     }
  
-    public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation) {
+    public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, $dId = null) {
+        
         set_time_limit(8000);
         $area = Area::find($id);
         if (!$area) {
@@ -60,9 +61,16 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
 
         $population0 = [];
-        $randomDoing = rand(0, 9);
-        $randomDoing = 8;
+
+        if (!$dId) {
+            $randomDoing = rand(0, 8);
+        } else {
+            $randomDoing = rand(9, 10);
+            $diamonds = ["diamond_id" => $dId];
+        }
+
         $clones = ["area_id" => $id];
+         
  
         $individual = 10;
         $lvl = $lvl - 1;
@@ -163,20 +171,32 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
             $clones["change"] = $change;     
-        } elseif ($randomDoing == 9) { // multiple clone 2
+        } elseif ($randomDoing == 9) {  // clone
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
-            $area = json_decode($calculations[0]->data);
-            $change = rand(50, 100);
-            $size = rand(6, 12);
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $change = rand(1, 20);
+            $res = $gtx->clonePattern($area, 1, $change);
+            $population0 = [$area, $res[0]];
+            $individual = count($population0);  
+
+            $clones["calc_id"] = $calculations->id;
+            $clones["oldresult"] = $calculations->obtainedresult;
+            $clones["change"] = $change;
+        } elseif ($randomDoing == 10) { // multiple clone
+
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $change = rand(1, 10);
+            $size = 10;
             $res = $gtx->clonePattern($area, $size, $change);
             $population0 = $res;
             $individual = count($population0);
             
-            $clones["calc_id"] = $calculations[0]->id;
-            $clones["oldresult"] = $calculations[0]->obtainedresult;
+            $clones["calc_id"] = $calculations->id;
+            $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;     
-        }          
+        }         
 
         $power = $gtx->getPower($population0);
  
@@ -221,14 +241,19 @@ class MainController extends Controller
        
         $result2 = $maxQ / $maxPoints; 
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
-        Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
+        $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
          "usedmod" => json_encode($usedmodify)  ]);
 
-        if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 9) {
+        if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 9 || $randomDoing == 10 ) {
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
- 
+        if ( $randomDoing == 9 || $randomDoing == 10 ) {
+            $diamonds["result"] = $result2;
+            $diamonds["calc_id"] = $cred->id;
+            Diamondcalc::create($diamonds);
+        }
+
         $additionalresultsmsg = "\n\n";  
         $usedcalculations = [$res[0]['area']];
         for ($i = 1; $i < count($res); $i++) {
@@ -620,6 +645,18 @@ class MainController extends Controller
        $d = Diamond::create(["area_id" => $calc->area_id, "calc_id" => $id]);
        Diamondcalc::create(["calc_id" => $id, "result" => $calc->obtainedresult, "diamond_id" => $d->id ]);
        return redirect("/")->with('success',  "Dodano diament");
+    }
+
+    private function getDiamond($dId) {
+        $dc = Diamondcalc::where("diamond_id", $dId)->orderByRaw("result DESC")->first();
+        if (!$dc) {
+          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+        }
+        $calc = Calculation::find($dc->calc_id);
+        if (!$calc) {
+          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+        }        
+        return $calc;
     }
 
 }
