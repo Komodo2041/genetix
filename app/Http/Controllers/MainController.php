@@ -65,7 +65,8 @@ class MainController extends Controller
         if (!$dId) {
             $randomDoing = rand(0, 8);
         } else {
-            $randomDoing = rand(9, 10);
+            $randomDoing = rand(9, 11);
+        
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -175,7 +176,7 @@ class MainController extends Controller
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $change = rand(1, 20);
+            $change = rand(1, 10);
             $res = $gtx->clonePattern($area, 1, $change);
             $population0 = [$area, $res[0]];
             $individual = count($population0);  
@@ -196,6 +197,15 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;     
+        }  elseif ($randomDoing == 11) {  
+
+            $calculations = $this->getDiamondCalculations($dId);           
+            $population0 = [];  
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $individual = count($population0);
+ 
         }         
 
         $power = $gtx->getPower($population0);
@@ -212,7 +222,7 @@ class MainController extends Controller
         $maxPop = 120;
  
         $usedmodify = [];
-        $t3 = microtime(true);        
+        $t3 = microtime(true);
         while ($repeatQ < 10 && $nrPop < $maxPop) {   
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
             $individual = 10;
@@ -222,6 +232,8 @@ class MainController extends Controller
             $newpopulaton = $gtx->usepower($pop_result[0], $power);
  
             $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+
+            
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
  
             $power = $gtx->getPowerfromarea($res);
@@ -248,7 +260,7 @@ class MainController extends Controller
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
-        if ( $randomDoing == 9 || $randomDoing == 10 ) {
+        if ( $randomDoing == 9 || $randomDoing == 10 || $randomDoing == 11 ) {
             $diamonds["result"] = $result2;
             $diamonds["calc_id"] = $cred->id;
             Diamondcalc::create($diamonds);
@@ -660,6 +672,15 @@ class MainController extends Controller
           return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
         }   
         return $calc;
+    }
+
+    private function getDiamondCalculations($dId) {
+        $dc = Diamondcalc::where("diamond_id", $dId)->orderByRaw("result DESC")->take(10)->get();
+        $calco = [];
+        foreach ($dc AS $d) {
+            $calco[] = $d->calc_id;
+        }
+        return Calculation::whereIn('id', $calco)->get();
     }
 
 }
