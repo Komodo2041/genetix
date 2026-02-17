@@ -66,7 +66,7 @@ class MainController extends Controller
             $randomDoing = rand(0, 8);
             $randomDoing = 6;
         } else {
-            $randomDoing = rand(9, 11);
+            $randomDoing = rand(20, 22);
         
             $diamonds = ["diamond_id" => $dId];
         }
@@ -171,7 +171,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
             $clones["change"] = $change;     
-        } elseif ($randomDoing == 9) {  // clone
+        } elseif ($randomDoing == 20) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -183,7 +183,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;
-        } elseif ($randomDoing == 10) { // multiple clone
+        } elseif ($randomDoing == 21) { // multiple clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -196,7 +196,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;     
-        }  elseif ($randomDoing == 11) {  
+        }  elseif ($randomDoing == 22) {  
 
             $calculations = $this->getDiamondCalculations($dId);           
             $population0 = [];  
