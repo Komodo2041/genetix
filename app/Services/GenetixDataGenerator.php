@@ -392,8 +392,8 @@ class GenetixDataGenerator
         return $table;
     }
 
-    public function getPopulationFromStillTemplate($size, $numbers,  $tempplate, $calc, $change) {
-        $data = json_decode($c->data);
+    public function getPopulationFromStillTemplate($size, $numbers,  $template, $calc, $change) {
+        $data = json_decode($calc->data);
         $res = [];
         for ($i = 0; $i < $numbers; $i++) {
             $table = $data;
