@@ -413,5 +413,54 @@ class GenetixDataGenerator
         return $res;
     }
 
+    public function getStiilPaternXYZ($size) {
+
+        $table = [];
+        $changeOs = rand(0, 2);
+        $defochange = rand(round($size/2), $size - 1);
+
+        $headval = 0;
+        $headval1 = 1;
+        $head = rand(0, 1);
+        if ($head == 1) {
+           $headval = 1;
+           $headval1 = 0;            
+        }
+
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) { 
+                    switch ($changeOs) {
+                        case 0:
+                            if ($i >= $defochange) {
+                               $table[$i][$j][$z] = $headval;
+                            } else {
+                               $table[$i][$j][$z] = $headval1;
+                            }
+                            break;
+                        case 1:
+                           if ($j >= $defochange) {
+                              $table[$i][$j][$z] = $headval;
+                            } else {
+                              $table[$i][$j][$z] = $headval1;
+                            }                            
+                            break;
+                        case 2:
+                           if ($z >= $defochange) {
+                               $table[$i][$j][$z] = $headval;
+                            } else {
+                               $table[$i][$j][$z] = $headval1;
+                            }                              
+                            break;                                                        
+                    }
+                     
+                }
+            }
+        }
+ 
+        return $table;
+ 
+    }
+
 
 }

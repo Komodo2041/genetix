@@ -63,10 +63,11 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 8);
-            $randomDoing = 6;
+            $randomDoing = rand(0, 9);
+            $randomDoing = 9;
         } else {
             $randomDoing = rand(20, 22);
+            $randomDoing = 21;
         
             $diamonds = ["diamond_id" => $dId];
         }
@@ -142,8 +143,9 @@ class MainController extends Controller
             $change = 100;
             $calculations = $this->getCalculationLevel($id, $lvl, 5, 0);
             $tempplate = $gtx->getStiilPatern(10, $change);
-
+ 
             $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
+             
 
         }  elseif ($randomDoing == 7) {  // clone
 
@@ -171,6 +173,19 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
             $clones["change"] = $change;     
+
+        } elseif ($randomDoing == 9) { // xz xy yz change
+
+            $change = 100;
+            $calculations = $this->getCalculationLevel($id, $lvl, 5, 0);
+            $tempplate = $gtx->getStiilPaternXYZ(10);
+ 
+            $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
+ 
+
+
+            /** DIAMOND **/
+
         } elseif ($randomDoing == 20) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
@@ -189,7 +204,7 @@ class MainController extends Controller
             $area = json_decode($calculations->data);
             $change = rand(1, 10);
             $size = 10;
-            $res = $gtx->clonePattern($area, $size, $change);
+            $res = $gtx->clonePattern($area, $this->startPopulation, $change);
             $population0 = $res;
             $individual = count($population0);
             
@@ -255,11 +270,11 @@ class MainController extends Controller
         $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
          "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing ]);
 
-        if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 9 || $randomDoing == 10 ) {
+        if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 20 || $randomDoing == 21 ) {
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
-        if ( $randomDoing == 9 || $randomDoing == 10 || $randomDoing == 11 ) {
+        if ( $randomDoing == 20 || $randomDoing == 21 || $randomDoing == 22 ) {
             $diamonds["result"] = $result2;
             $diamonds["calc_id"] = $cred->id;
             Diamondcalc::create($diamonds);
