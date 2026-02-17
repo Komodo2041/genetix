@@ -368,5 +368,50 @@ class GenetixDataGenerator
         return $all;
     }
 
+    public function getStiilPatern($size, $numbers) {
+
+        $table = [];
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) { 
+                    $table[$i][$j][$z] = 1;
+                }
+            }
+        }
+
+        $n = 0;
+        while ($n <= 100) {
+            $x = rand(0, $size - 1);
+            $y = rand(0, $size - 1);
+            $z = rand(0, $size - 1);
+            if ($table[$x][$y][$z] == 1) {
+                $table[$x][$y][$z] = 0;
+                $n++;
+            }            
+        }
+        return $table;
+    }
+
+    public function getPopulationFromStillTemplate($size, $numbers,  $tempplate, $calc, $change) {
+        $data = json_decode($c->data);
+        $res = [];
+        for ($i = 0; $i < $numbers; $i++) {
+            $table = $data;
+            $to = 0;
+            $many = rand(1, $change);
+            while ($to < $many) {
+                $x = rand(0, $size - 1);
+                $y = rand(0, $size - 1);
+                $z = rand(0, $size - 1);
+                if ($template[$x][$y][$z] == 0) {
+                    $table[$x][$y][$z] = rand(0, 1);
+                    $to++;
+                }
+            }
+            $res[] = $table;
+        }
+        return $res;
+    }
+
 
 }

@@ -64,6 +64,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 8);
+            $randomDoing = 6;
         } else {
             $randomDoing = rand(9, 11);
         
@@ -136,16 +137,14 @@ class MainController extends Controller
  
             $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
 
-        } elseif ($randomDoing == 6) { // inversion
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
-            $usedpercent = rand(70,99); 
-            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
-            $population0[] = $gtx->getInvertStill($stiffPattern[0], $stiffPattern[1]);
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
-            $usedpercent = rand(70,99); 
-            $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);  
-            $population0[] = $gtx->getInvertStill($stiffPattern[0], $stiffPattern[1]); 
-            $individual = count($population0);  
+        } elseif ($randomDoing == 6) { // 10% change
+
+            $change = 100;
+            $calculations = $this->getCalculationLevel($id, $lvl, 5, 0);
+            $tempplate = $gtx->getStiilPatern(10, $change);
+
+            $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
+
         }  elseif ($randomDoing == 7) {  // clone
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
@@ -632,6 +631,8 @@ class MainController extends Controller
 
 
     public function samecalculations() {
+        set_time_limit(600);
+        
         $calculations = Calculation::where("same", null)->orderBy("id", "asc")->get();
         $used = [];
        
