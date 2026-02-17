@@ -253,7 +253,7 @@ class MainController extends Controller
         $result2 = $maxQ / $maxPoints; 
         $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
         $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
-         "usedmod" => json_encode($usedmodify)  ]);
+         "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing ]);
 
         if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 9 || $randomDoing == 10 ) {
             $clones["result"] = $result2;
@@ -277,7 +277,8 @@ class MainController extends Controller
             if ($diff === 0) {
                 $usedcalculations[] = $res[$i]['area'];
                 $result =  $res[$i]['sum'] / $maxPoints;
-                Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result, "nrcalc" => $i + 1 ]);
+                Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, 
+                "obtainedresult" => $result, "nrcalc" => $i + 1, "typecalc" => $randomDoing ]);
                 $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
             } 
         } 
