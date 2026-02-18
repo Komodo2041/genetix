@@ -11,18 +11,20 @@ class MutationData
        $max = count($pop);
        $methods = [ "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6" ];
        $choosemutation = rand(0, 1);
-       if ($choosemutation == 1) {   
-            $methods = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ];   
+       if ($choosemutation == 1) {
+            $methods = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];   
        }
 
-       $choosemutation = rand(0, 12);
-       if ($choosemutation == 5 || $choosemutation == 6 || $choosemutation == 7) {
+       $choosemutation = rand(0, 18);
+       if ( $choosemutation == 10 || $choosemutation == 11) {
+           $methods = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ];   
+       } elseif ( $choosemutation == 12 || $choosemutation == 13) {
           $methods = [ "shufflecolumnXYgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ"];
-       } elseif ($choosemutation == 8 || $choosemutation == 9) {
+       } elseif ($choosemutation == 14 || $choosemutation == 15) {
             $methods = ["goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange"]; 
-       } elseif ($choosemutation == 10 || $choosemutation == 11) {
+       } elseif ($choosemutation == 16 || $choosemutation == 17) {
              $methods = ["shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1"];
-       }  elseif ($choosemutation == 12) {            
+       }  elseif ($choosemutation == 18) {            
             $methods = ["shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9" ];
        }   
 
@@ -820,6 +822,103 @@ class MutationData
     }   
 
 
+    private function clockwiseXYleft($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($i == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$i][$z][$nr - $j - 1];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }      
+
+    private function clockwiseXZleft($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($j == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$z][$j][$nr - $i - 1];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }   
+    
+    private function clockwiseYZleft($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($z == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$j][$nr - $i - 1][$z];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }       
+
+    private function clockwiseXYright($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($i == $pom) {
+                        $pop2[$i][$j][$z] =  $pop[$i][$nr - $z - 1][$j];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }      
+
+    private function clockwiseXZright($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($j == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$nr - 1 - $z][$j][$i];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }   
+    
+    private function clockwiseYZright($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($z == $pom) {
+                        $pop2[$i][$j][$z] = $pop2[$nr - 1 - $j][$i][$z];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }   
+
+
     public function getAllMethod() {
        $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
        $methods2 = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
@@ -827,7 +926,8 @@ class MutationData
        $methods4 = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
        $methods5 = ["shufflecolumnYZgo6", "shufflecolumnXYgo6", "shufflecolumnXZgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6"];
        $methods6 = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ]; 
-       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6);         
+       $methods7 = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];  
+       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6, $methods7);         
               
     }
 
