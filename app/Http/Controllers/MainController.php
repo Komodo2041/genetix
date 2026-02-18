@@ -66,8 +66,8 @@ class MainController extends Controller
             $randomDoing = rand(0, 10);
             $randomDoing = 10;
         } else {
-            $randomDoing = rand(20, 23);
-            $randomDoing = 23;
+            $randomDoing = rand(20, 24);
+            $randomDoing = 24;
         
             $diamonds = ["diamond_id" => $dId];
         }
@@ -232,8 +232,35 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
             $individual = count($population0);
+   
+        } elseif ($randomDoing == 23) { 
+            $calculations = $this->getDiamondCalculations($dId);  
+            $population0 = [];
+            $cr = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $cr[] = "generation";
+            }
+             
+            $res = $mutation->addmutation($population0, $cr);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $population0 = $res[0];
+
+        } elseif ($randomDoing == 24) { 
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $population0 = [];
+            $population0[] = $area;
+            $cr = ["generation"];
  
-        }         
+            $res = $mutation->addmutation($population0, $cr);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $population0 = $res[0];
+
+        }   
+
 
         $power = $gtx->getPower($population0);
  
@@ -288,7 +315,7 @@ class MainController extends Controller
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
-        if ( $randomDoing == 20 || $randomDoing == 21 || $randomDoing == 22 ) {
+        if ( $randomDoing == 20 || $randomDoing == 21 || $randomDoing == 22  || $randomDoing == 23 || $randomDoing == 24 ) {
             $diamonds["result"] = $result2;
             $diamonds["calc_id"] = $cred->id;
             Diamondcalc::create($diamonds);
