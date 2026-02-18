@@ -63,11 +63,11 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 9);
-            $randomDoing = 9;
+            $randomDoing = rand(0, 10);
+            $randomDoing = 10;
         } else {
-            $randomDoing = rand(20, 22);
-            $randomDoing = 21;
+            $randomDoing = rand(20, 23);
+            $randomDoing = 23;
         
             $diamonds = ["diamond_id" => $dId];
         }
@@ -182,7 +182,20 @@ class MainController extends Controller
  
             $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
  
-
+        } elseif ($randomDoing == 10) {  // start with 3 *  mutations
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+            $population0 = [];
+            $cr = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $cr[] = "generation";
+            }
+             
+            $res = $mutation->addmutation($population0, $cr);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $population0 = $res[0];
+ 
 
             /** DIAMOND **/
 
@@ -225,9 +238,9 @@ class MainController extends Controller
         $power = $gtx->getPower($population0);
  
         $res = $gtx->calcPopulation($population0, $headPoints);
-
+ 
         unset($population0);
-
+ 
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $repeatQ = 0;
@@ -239,6 +252,7 @@ class MainController extends Controller
         $t3 = microtime(true);
         while ($repeatQ < 10 && $nrPop < $maxPop) {   
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+        
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
             $pop_result = $cross->createNewPopulation($selectedIndividuals);
