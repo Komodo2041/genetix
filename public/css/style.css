@@ -1,0 +1,23 @@
+table.level {
+    width: 200px;
+    margin-left: 15px;
+    float: left;
+}
+
+table.level td {
+    width: 20px;
+    height: 20px;
+    background: aqua;
+    margin: 0px;
+    padding: 0px;
+    font-size: 7px;
+}
+
+table.level td.red {
+    background: red;
+}
+
+div.totable {
+    width: 100%;
+    float: left;
+}

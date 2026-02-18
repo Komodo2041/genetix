@@ -741,4 +741,17 @@ class MainController extends Controller
         return Calculation::whereIn('id', $calco)->get();
     }
 
+    public function showerros($id) {
+       $calc = Calculation::find($id);
+       if (!$calc) {
+          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+       }
+        $area = Area::find($calc->area_id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        return view("showdiff", ['calc' => json_decode($calc->data), 'area' => json_decode($area->data) ]);
+
+    }
+
 }

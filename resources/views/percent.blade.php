@@ -24,6 +24,8 @@
             <td>{{$p['points']}}</td>
             <td>
                <a href="/diamon/add/{{$p['id']}}" ><button>Dodaj diament</button></a>
+               <a href="/showerror/{{$p['id']}}" ><button>Pokaż różnice</button></a>
+            
             </td>
         </tr>
       @endforeach
