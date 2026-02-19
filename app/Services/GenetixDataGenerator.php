@@ -63,12 +63,12 @@ class GenetixDataGenerator
     public function calcPoints($nrPoints, $area) {
  
        $nr = 10;
-     
-       $zOs = rand(0,10000);
+       // Better Results
+       $zOs = rand(0, 2000);
        $allPoints = [];
        for ($pon = 0; $pon < $nrPoints; $pon++) {
             if ($pon % 3 == 0) {
-                $zOs = rand(0,10000);
+                $zOs = rand(0, 2000);
             }
             $point = ['x' => rand(0,1000), 'y' => rand(0,1000), 'z' => $zOs, 'v' => 0];
            
