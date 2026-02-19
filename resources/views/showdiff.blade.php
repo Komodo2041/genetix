@@ -93,6 +93,51 @@
 
 </div>
 @endforeach
+
+
+<h4>Poziomo 2</h4>
+@foreach ($calc AS $x => $table) 
+<div class="totable">
+   <table class="level">
+   @foreach ($table AS $y => $row)
+      <tr>
+      @foreach ($row AS $z => $val)
+         <td @if ($calc[$x][$z][$y]) class="red" @endif>
+            
+         </td>
+      @endforeach 
+      </tr>
+   @endforeach
+</table>
+
+   <table class="level">
+   @foreach ($table AS $y => $row)
+      <tr>
+      @foreach ($row AS $z => $val)
+         <td @if ($area[$x][$z][$y]) class="red" @endif>
+            
+         </td>
+      @endforeach 
+      </tr>
+   @endforeach
+</table>
+
+   <table class="level">
+   @foreach ($table AS $y => $row)
+      <tr>
+      @foreach ($row AS $z => $val)
+         <td @if ($area[$x][$z][$y] != $calc[$x][$z][$y]) class="red" @endif>
+            
+         </td>
+      @endforeach 
+      </tr>
+   @endforeach
+</table>
+ 
+
+</div>
+@endforeach
+
   
 </div>
 
