@@ -12,11 +12,13 @@ class MutationData
        $methods = [ "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6" ];
        $choosemutation = rand(0, 1);
        if ($choosemutation == 1) {
-            $methods = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];   
+            $methods = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ];   
        }
 
        $choosemutation = rand(0, 18);
-       if ( $choosemutation == 10 || $choosemutation == 11) {
+       if (  $choosemutation == 7 || $choosemutation == 8 || $choosemutation == 9) {
+           $methods = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];  
+       } elseif ( $choosemutation == 10 || $choosemutation == 11) {
            $methods = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ];   
        } elseif ( $choosemutation == 12 || $choosemutation == 13) {
           $methods = [ "shufflecolumnXYgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ"];
@@ -919,6 +921,103 @@ class MutationData
     }   
 
 
+    private function mirrorXY($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($z == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$i][$j][$nr - 1 - $z];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }     
+    
+    private function mirrorXZ($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($j == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$i][$nr - 1 - $j][$z];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }     
+    
+    private function mirrorYZ($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($i == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$nr - 1 - $i][$j][$z];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }
+    
+    
+    private function mirrorXY_d($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($z == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$nr - 1 - $j][$nr - 1 - $i][$z];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }     
+    
+    private function mirrorXZ_d($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($j == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$nr - 1 - $z][$j][10 - 1 -$i];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }     
+    
+    private function mirrorYZ_d($pop, $nr = 10) {
+        $pom = rand(0, $nr - 1);
+        $pop2 = $pop;
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                     if ($i == $pom) {
+                        $pop2[$i][$j][$z] = $pop[$i][$nr - 1 - $z][$nr - 1 - $j];
+                     }
+                }
+            }
+        }   
+        return $pop2;     
+
+    }      
+
     public function getAllMethod() {
        $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
        $methods2 = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
@@ -926,8 +1025,9 @@ class MutationData
        $methods4 = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
        $methods5 = ["shufflecolumnYZgo6", "shufflecolumnXYgo6", "shufflecolumnXZgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6"];
        $methods6 = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ]; 
-       $methods7 = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];  
-       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6, $methods7);         
+       $methods7 = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];
+       $methods8 = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ]; 
+       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6, $methods7, $methods8);         
               
     }
 
