@@ -64,11 +64,11 @@ class GenetixDataGenerator
  
        $nr = 10;
        // Better Results
-       $zOs = rand(0, 200);
+       $zOs = rand(0, 20);
        $allPoints = [];
        for ($pon = 0; $pon < $nrPoints; $pon++) {
             if ($pon % 3 == 0) {
-                $zOs = rand(0, 200);
+                $zOs = rand(0, 20);
             }
             $point = ['x' => rand(0,1000), 'y' => rand(0,1000), 'z' => $zOs, 'v' => 0];
            
@@ -138,14 +138,14 @@ class GenetixDataGenerator
         $change = $diff / $v1;
         $result = 0;
         if ($change <= 1) {
-            $result = 100000000 - $change * 100000000;
+            $result = 10000000000 - $change * 10000000000;
         }
         return $result;
 
     }
 
     public function getmaxPoints($nrpoints) {
-        return 100000000 * $nrpoints;
+        return 10000000000 * $nrpoints;
     }
 
     public function getindyvidual($res, $nr = 10) {

@@ -338,8 +338,12 @@ class MainController extends Controller
         $additionalresultsmsg = "\n\n";  
         $usedcalculations = [$res[0]['area']];
         for ($i = 1; $i < count($res); $i++) {
-            if ($result2 * 0.999999  >= $res[$i]['sum']/$maxPoints) {
-               $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($result2 * 0.999999 )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
+            $condo = $result2 * 0.999999;
+            if ($result2 > 0.999999) {
+                $condo = $result2 * $result2;
+            }
+            if ($condo >= $res[$i]['sum']/$maxPoints) {
+               $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($condo )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
                break;
             }
             
