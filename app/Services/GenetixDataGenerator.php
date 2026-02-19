@@ -63,10 +63,15 @@ class GenetixDataGenerator
     public function calcPoints($nrPoints, $area) {
  
        $nr = 10;
-       $point = ['x' => rand(0,1000), 'y' => rand(0,1000), 'z' => rand(0,10000)];
+     
+       $zOs = rand(0,10000);
        $allPoints = [];
        for ($pon = 0; $pon < $nrPoints; $pon++) {
-            $point = ['x' => rand(0,1000), 'y' => rand(0,1000), 'z' => rand(0,10000), 'v' => 0];
+            if ($pon % 3 == 0) {
+                $zOs = rand(0,10000);
+            }
+            $point = ['x' => rand(0,1000), 'y' => rand(0,1000), 'z' => $zOs, 'v' => 0];
+           
             $allForce = 0;       
             $probeforce = $this->block * $this->probe * $this->G;
             for ($i = 0; $i < $nr; $i++) {
@@ -83,7 +88,7 @@ class GenetixDataGenerator
             $point['v'] = $allForce;
             $allPoints[] = $point;
        }  
-      
+     
        return $allPoints;
     } 
 

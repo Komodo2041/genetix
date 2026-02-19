@@ -780,8 +780,7 @@ class MainController extends Controller
                 }
             }
         }  
-      //  echo "<pre>"; print_r($res); echo "</pre>"; exit();
-
+ 
         return view("showdiff", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2 ]);
 
     }
