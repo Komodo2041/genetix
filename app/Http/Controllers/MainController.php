@@ -197,7 +197,7 @@ class MainController extends Controller
             $population0 = $res[0];
  
 
-            /** DIAMOND **/
+            /*** DIAMOND * **/
 
         } elseif ($randomDoing == 20) {  // diamond - clone
 
@@ -750,7 +750,39 @@ class MainController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        return view("showdiff", ['calc' => json_decode($calc->data), 'area' => json_decode($area->data) ]);
+
+        $res = [];
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            $res[0][$i] = 0;
+            $res[1][$i] = 0;
+            $res[2][$i] = 0;
+        }  
+        $res2 = $res;
+        $data = json_decode($calc->data);
+        $area = json_decode($area->data);
+
+        
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                
+                   if ($data[$i][$j][$z]) {
+                       $res[0][$i]++;
+                       $res[1][$j]++;
+                       $res[2][$z]++;
+                   }
+                   if ($area[$i][$j][$z]) {
+                       $res2[0][$i]++;
+                       $res2[1][$j]++;
+                       $res2[2][$z]++;
+                   }
+                }
+            }
+        }  
+      //  echo "<pre>"; print_r($res); echo "</pre>"; exit();
+
+        return view("showdiff", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2 ]);
 
     }
 

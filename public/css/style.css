@@ -4,6 +4,12 @@ table.level {
     float: left;
 }
 
+table.level-summary {
+    width: 60px;
+    margin-left: 15px;
+    float: left;
+}
+
 table.level td {
     width: 20px;
     height: 20px;
@@ -18,6 +24,11 @@ table.level td.red {
 }
 
 div.totable {
+    width: 100%;
+    float: left;
+}
+
+h4.hpen {
     width: 100%;
     float: left;
 }

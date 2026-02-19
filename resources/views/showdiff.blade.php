@@ -6,7 +6,7 @@
 <h3>Różnice</h3>
 <div class="container">
  
-<h4>Pionowo</h4>
+<h4 class="hpen">Pionowo</h4>
 @foreach ($calc AS $x => $table) 
 <div class="totable">
    <table class="level">
@@ -44,14 +44,24 @@
       </tr>
    @endforeach
 </table>
- 
+
+ <table class="level-summary">
+   <tr>
+      <td>Wynik</td>
+      <td>Wzór</td>
+</tr>  
+   <tr>
+      <td>{{$res[2][$x]}}</td>
+      <td>{{$res2[2][$x]}}</td>
+   </tr>
+ <table>
 
 </div>
 @endforeach
 
 
 
-<h4>Poziomo</h4>
+<h4 class="hpen">Poziomo</h4>
 @foreach ($calc AS $x => $table) 
 <div class="totable">
    <table class="level">
@@ -91,11 +101,22 @@
 </table>
  
 
+ <table class="level-summary">
+   <tr>
+      <td>Wynik</td>
+      <td>Wzór</td>
+</tr>  
+   <tr>
+      <td>{{$res[1][$x]}}</td>
+      <td>{{$res2[1][$x]}}</td>
+   </tr>
+ <table>
+
 </div>
 @endforeach
 
 
-<h4>Poziomo 2</h4>
+<h4 class="hpen">Poziomo 2</h4>
 @foreach ($calc AS $x => $table) 
 <div class="totable">
    <table class="level">
@@ -134,6 +155,16 @@
    @endforeach
 </table>
  
+ <table class="level-summary">
+   <tr>
+      <td>Wynik</td>
+      <td>Wzór</td>
+</tr>  
+   <tr>
+      <td>{{$res[0][$x]}}</td>
+      <td>{{$res2[0][$x]}}</td>
+   </tr>
+ <table>
 
 </div>
 @endforeach
