@@ -63,12 +63,10 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 10);
-            $randomDoing = 10;
+            $randomDoing = rand(0, 11);    
+            $randomDoing = 11;      
         } else {
             $randomDoing = rand(20, 24);
-            $randomDoing = 24;
-        
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -197,8 +195,15 @@ class MainController extends Controller
             $population0 = $res[0];
  
 
-            /*** DIAMOND * **/
+          
+        } elseif ($randomDoing == 11) {
+            
+            $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, true);
+            $area = json_decode($calculations[0]->data);
+            
+           $population0 = $mutation->bigLayerMutation($this->startPopulation, 10, $area);
 
+           /*** DIAMOND * **/
         } elseif ($randomDoing == 20) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
