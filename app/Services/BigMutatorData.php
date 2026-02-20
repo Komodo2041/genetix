@@ -186,4 +186,177 @@ class BigMutatorData
   
     }   
 
+     /* Strip 5x1  */ 
+    public function bigLayerMutationStrip5x1X($numbers, $size, $pop) {
+
+        for ($i = 0; $i < $size; $i++) {
+            $res[$i] = array_fill(0, 20, []);
+        }
+ 
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    $res[$z][ floor($i / 5) * 10 + $j][] = $pop[$i][$j][$z];
+                }
+            }
+        }  
+
+        $result = [$pop];
+ 
+        for ($n = 0; $n < $numbers; $n++) {
+            $used = $res;
+            $table = [];
+            for ($k = 0; $k < $size; $k++) { 
+                for ($g = 0; $g < 20; $g++) {
+                    shuffle($used[$k][$g]);  
+                } 
+            }
+  
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 5) * 10 + $j]);
+                    }
+                }
+            }
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    } 
+
+
+     /* Strip 5x1  */ 
+    public function bigLayerMutationStrip5x1Y($numbers, $size, $pop) {
+
+        for ($i = 0; $i < $size; $i++) {
+            $res[$i] = array_fill(0, 20, []);
+        }
+ 
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    $res[$z][ floor($j / 5) * 10 + $i ][] = $pop[$i][$j][$z];
+                }
+            }
+        }  
+
+        $result = [$pop];
+ 
+        for ($n = 0; $n < $numbers; $n++) {
+            $used = $res;
+            $table = [];
+            for ($k = 0; $k < $size; $k++) { 
+                for ($g = 0; $g < 20; $g++) {
+                    shuffle($used[$k][$g]);  
+                } 
+            }
+  
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
+                    }
+                }
+            }
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    }     
+
+
+     /* Strip 5x1 Random */ 
+    public function bigLayerMutationStripRandom5x1X($numbers, $size, $pop) {
+
+        for ($i = 0; $i < $size; $i++) {
+            $res[$i] = array_fill(0, 20, []);
+        }
+ 
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    $res[$z][ floor($i / 5) * 10 + $j][] = $pop[$i][$j][$z];
+                }
+            }
+        }  
+
+        $result = [$pop];
+        $rand = rand(0, 100);
+
+        for ($n = 0; $n < $numbers; $n++) {
+            $used = $res;
+            $table = [];
+            for ($k = 0; $k < $size; $k++) { 
+                for ($g = 0; $g < 20; $g++) {
+                    $go = rand(0, 100);
+                    if ($go <= $rand) { 
+                       shuffle($used[$k][$g]);  
+                    }
+                } 
+            }
+  
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 5) * 10 + $j]);
+                    }
+                }
+            }
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    } 
+
+
+     /* Strip 1x5 Random */ 
+    public function bigLayerMutationStripRandom5x1Y($numbers, $size, $pop) {
+
+        for ($i = 0; $i < $size; $i++) {
+            $res[$i] = array_fill(0, 20, []);
+        }
+ 
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    $res[$z][ floor($j / 5) * 10 + $i ][] = $pop[$i][$j][$z];
+                }
+            }
+        }  
+
+        $rand = rand(0, 100); 
+        $result = [$pop];
+ 
+        for ($n = 0; $n < $numbers; $n++) {
+            $used = $res;
+            $table = [];
+            for ($k = 0; $k < $size; $k++) { 
+                for ($g = 0; $g < 20; $g++) {
+                    $go = rand(0, 100);
+                    if ($go <= $rand) { 
+                        shuffle($used[$k][$g]);
+                    }
+                } 
+            }
+  
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
+                    }
+                }
+            }
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    }     
+
+
+
 }

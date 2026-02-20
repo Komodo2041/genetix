@@ -68,8 +68,8 @@ class MainController extends Controller
             $randomDoing = rand(0, 11);    
             $randomDoing = 11;      
         } else {
-            $randomDoing = rand(20, 28);
-            $randomDoing = 27;
+            $randomDoing = rand(20, 32);
+            $randomDoing = 28;
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -296,7 +296,35 @@ class MainController extends Controller
             
             $population0 = $bigmutation->bigLayerMutationMiniRandomSquere($this->startPopulation, 10, $area);
  
-        }  
+        } elseif ($randomDoing == 29) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            
+            $population0 = $bigmutation->bigLayerMutationStrip5x1X($this->startPopulation, 10, $area);
+ 
+        }  elseif ($randomDoing == 30) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            
+            $population0 = $bigmutation->bigLayerMutationStrip5x1Y($this->startPopulation, 10, $area);
+ 
+        } elseif ($randomDoing == 31) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            
+            $population0 = $bigmutation->bigLayerMutationStripRandom5x1X($this->startPopulation, 10, $area);
+ 
+        } elseif ($randomDoing == 32) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            
+            $population0 = $bigmutation->bigLayerMutationStripRandom5x1Y($this->startPopulation, 10, $area);
+ 
+        }   
 
  
         $power = $gtx->getPower($population0);
@@ -352,7 +380,7 @@ class MainController extends Controller
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
-        if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28])) {
+        if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])) {
             $diamonds["result"] = $result2;
             $diamonds["calc_id"] = $cred->id;
             Diamondcalc::create($diamonds);
