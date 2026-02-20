@@ -6,6 +6,31 @@ namespace App\Services;
 
 class BigMutatorData
 {
+    
+    public $numbers = 600;
+    public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
+                "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X"];
+
+    public function createNewPopulation($population) {
+       $max = count($population);
+       $res = $population;
+       $mutting = [];
+       $nrmethos = count($this->allMethods);
+
+       for ($i = 0; $i < $this->numbers; $i++) {
+ 
+            $ch = rand(0, $nrmethos-1);
+            $m = $this->allMethods[$ch];
+            $select = rand(0, $max - 1);
+
+            $areas = $this->$m(1, 10, $population[$select]);
+            $res[] = $areas[1];
+            $mutting[] = $m;
+        }
+   
+       return [$res, $mutting];       
+    }   
+
 
     public function bigLayerMutation($numbers, $size, $pop) {
         for ($i = 0; $i < $size; $i++) {
@@ -186,6 +211,8 @@ class BigMutatorData
   
     }   
 
+ 
+
      /* Strip 5x1  */ 
     public function bigLayerMutationStrip5x1X($numbers, $size, $pop) {
 
@@ -225,8 +252,7 @@ class BigMutatorData
         return $result;
   
     } 
-
-
+ 
      /* Strip 5x1  */ 
     public function bigLayerMutationStrip5x1Y($numbers, $size, $pop) {
 
@@ -266,7 +292,7 @@ class BigMutatorData
         return $result;
   
     }     
-
+ 
 
      /* Strip 5x1 Random */ 
     public function bigLayerMutationStripRandom5x1X($numbers, $size, $pop) {

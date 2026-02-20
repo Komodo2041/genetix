@@ -64,11 +64,11 @@ class GenetixDataGenerator
  
        $nr = 10;
        // Better Results
-       $zOs = rand(0, 20);
+       $zOs = rand(0, 100);
        $allPoints = [];
        for ($pon = 0; $pon < $nrPoints; $pon++) {
             if ($pon % 3 == 0) {
-                $zOs = rand(0, 20);
+                $zOs = rand(0, 100);
             }
             $point = ['x' => rand(0,1000), 'y' => rand(0,1000), 'z' => $zOs, 'v' => 0];
            

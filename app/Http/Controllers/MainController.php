@@ -21,6 +21,7 @@ class MainController extends Controller
 {
 
     public $startPopulation = 800;
+    public $useBigMutator = false;
 
     public function list(Request $request, MeerDataGenerator $mdg) {
 
@@ -65,8 +66,8 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 11);    
-            $randomDoing = 11;      
+            $randomDoing = rand(0, 12);    
+            $randomDoing = 12;      
         } else {
             $randomDoing = rand(20, 32);
             $randomDoing = 28;
@@ -205,6 +206,15 @@ class MainController extends Controller
             $area = json_decode($calculations[0]->data);
             
            $population0 = $mutation->bigLayerMutation($this->startPopulation, 10, $area);
+
+        } elseif ($randomDoing == 12) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 10, true);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $this->useBigMutator = true;
 
            /*** DIAMOND * **/
         } elseif ($randomDoing == 20) {  // diamond - clone
@@ -347,12 +357,19 @@ class MainController extends Controller
         
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
-            $pop_result = $cross->createNewPopulation($selectedIndividuals);
- 
-            $newpopulaton = $gtx->usepower($pop_result[0], $power);
- 
-            $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
 
+            if ($this->useBigMutator && $nrPop % 2 == 1 ) {
+
+                $pop_result = $bigmutation->createNewPopulation($selectedIndividuals);
+
+            } else {
+ 
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+    
+                $newpopulaton = $gtx->usepower($pop_result[0], $power);
+    
+                $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+            }
             
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
  
