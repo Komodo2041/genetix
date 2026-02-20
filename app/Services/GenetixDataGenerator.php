@@ -122,12 +122,12 @@ class GenetixDataGenerator
 
     private function calcDist($point, $i, $j, $k) {
 
-       $downx = 50 * $i * 100;
-       $downy = 50 * $j * 100;
-       $downz = 50 * $k * 100;
+       $downx = 50 + $i * 100;
+       $downy = 50 + $j * 100;
+       $downz = 50 + $k * 100;
        $diffx = abs($point['x'] - $downx);
        $diffy = abs($point['y'] - $downy);
-       $diffz = abs($point['z'] - $downz);
+       $diffz = abs($point['z'] + $downz);
        $downDagonal = sqrt($diffx * $diffx + $diffy * $diffy );
        $dist = sqrt($diffz * $diffz + $downDagonal + $downDagonal);
        return $dist;
@@ -138,14 +138,14 @@ class GenetixDataGenerator
         $change = $diff / $v1;
         $result = 0;
         if ($change <= 1) {
-            $result = 10000000000 - $change * 10000000000;
+            $result = 100000000000 - $change * 100000000000;
         }
         return $result;
 
     }
 
     public function getmaxPoints($nrpoints) {
-        return 10000000000 * $nrpoints;
+        return 100000000000 * $nrpoints;
     }
 
     public function getindyvidual($res, $nr = 10) {

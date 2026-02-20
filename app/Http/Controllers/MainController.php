@@ -6,6 +6,8 @@ use App\Services\MeerDataGenerator;
 use App\Services\GenetixDataGenerator;
 use App\Services\CrossingData;
 use App\Services\MutationData; 
+use App\Services\BigMutatorData;
+ 
 
 use Illuminate\Http\Request;
 
@@ -50,7 +52,7 @@ class MainController extends Controller
         return view("main", ['area' => $area, 'calco' => $calcoData]);
     }
  
-    public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, $dId = null) {
+    public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
         set_time_limit(8000);
         $area = Area::find($id);
@@ -270,7 +272,7 @@ class MainController extends Controller
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
             
-            $population0 = $mutation->bigLayerMutation($this->startPopulation, 10, $area);
+            $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
 
            /*** DIAMOND * **/
         } 
