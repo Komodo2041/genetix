@@ -68,8 +68,8 @@ class MainController extends Controller
             $randomDoing = rand(0, 11);    
             $randomDoing = 11;      
         } else {
-            $randomDoing = rand(20, 25);
-            $randomDoing = 25;
+            $randomDoing = rand(20, 26);
+            $randomDoing = 26;
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -273,11 +273,18 @@ class MainController extends Controller
             $area = json_decode($calculations->data);
             
             $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
+ 
+        } elseif ($randomDoing == 26) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            
+            $population0 = $bigmutation->bigLayerMutationMediumSquere($this->startPopulation, 10, $area);
 
            /*** DIAMOND * **/
         } 
 
-
+ 
         $power = $gtx->getPower($population0);
  
         $res = $gtx->calcPopulation($population0, $headPoints);
@@ -331,7 +338,7 @@ class MainController extends Controller
             $clones["result"] = $result2;
             Clones::create($clones);
         } 
-        if ( $randomDoing == 20 || $randomDoing == 21 || $randomDoing == 22  || $randomDoing == 23 || $randomDoing == 24 || $randomDoing == 25 ) {
+        if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26])) {
             $diamonds["result"] = $result2;
             $diamonds["calc_id"] = $cred->id;
             Diamondcalc::create($diamonds);
