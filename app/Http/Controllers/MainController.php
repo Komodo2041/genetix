@@ -67,7 +67,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 12);    
-            $randomDoing = 12;      
+                 
         } else {
             $randomDoing = rand(20, 32);  
             $randomDoing = 28;
@@ -346,8 +346,8 @@ class MainController extends Controller
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
 
-        $maxQ = $res[1]['sum'];
-        $oldQ = $res[1]['sum'];
+        $maxQ2 = $res[1]['sum'];
+        $oldQ2 = $res[1]['sum'];
 
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(120);
@@ -380,13 +380,16 @@ class MainController extends Controller
             $power = $gtx->getPowerfromarea($res);
  
             $maxQ = $res[0]['sum'];
-            if ($maxQ == $oldQ) {
+            $maxQ2 = $res[1]['sum'];
+
+            if ($maxQ == $oldQ && $maxQ2 == $oldQ2) {
                 $repeatQ++; 
             } else {
                 $repeatQ = 0;
             }    
             $power = $gtx->getPowerfromarea($res);
             $oldQ = $maxQ;
+            $oldQ2 = $maxQ2;
             $nrPop++;             
         }
         $t4 = microtime(true);
