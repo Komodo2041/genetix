@@ -218,8 +218,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
             $res[$i] = array_fill(0, 25, []);
         }
-        $rand = rand(0, 100);
-
+ 
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
@@ -235,8 +234,8 @@ class BigMutatorData
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
                 for ($g = 0; $g < 25; $g++) {
-                    $go = rand(0, 20);
-                    if ($go <= $rand) {
+                    $go = rand(0, 100);
+                    if ($go <= 20) {
                        shuffle($used[$k][$g]);
                     }  
                 } 
@@ -398,15 +397,14 @@ class BigMutatorData
         }  
 
         $result = [$pop];
-        $rand = rand(0, 100);
-
+ 
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
                 for ($g = 0; $g < 20; $g++) {
-                    $go = rand(0, 20);
-                    if ($go <= $rand) { 
+                    $go = rand(0, 100);
+                    if ($go <= 20) { 
                        shuffle($used[$k][$g]);  
                     }
                 } 
@@ -486,7 +484,7 @@ class BigMutatorData
             }
         }  
 
-        $rand = rand(0, 100); 
+ 
         $result = [$pop];
  
         for ($n = 0; $n < $numbers; $n++) {
@@ -494,8 +492,8 @@ class BigMutatorData
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
                 for ($g = 0; $g < 20; $g++) {
-                    $go = rand(0, 20);
-                    if ($go <= $rand) { 
+                    $go = rand(0, 100);
+                    if ($go <= 20) { 
                         shuffle($used[$k][$g]);
                     }
                 } 
