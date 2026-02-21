@@ -55,7 +55,7 @@ class MainController extends Controller
  
     public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
-        set_time_limit(8000);
+        set_time_limit(10000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -69,7 +69,7 @@ class MainController extends Controller
             $randomDoing = rand(0, 12);    
             $randomDoing = 12;      
         } else {
-            $randomDoing = rand(20, 32);
+            $randomDoing = rand(20, 32);  
             $randomDoing = 28;
             $diamonds = ["diamond_id" => $dId];
         }
@@ -281,14 +281,14 @@ class MainController extends Controller
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 26) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutationMediumSquere($this->startPopulation, 10, $area);
 
  
@@ -296,35 +296,35 @@ class MainController extends Controller
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutationMiniSquere($this->startPopulation, 10, $area);
  
         }  elseif ($randomDoing == 28) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutationMiniRandomSquere($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 29) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutationStrip5x1X($this->startPopulation, 10, $area);
  
         }  elseif ($randomDoing == 30) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutationStrip5x1Y($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 31) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            
+            $this->useBigMutator = true;
             $population0 = $bigmutation->bigLayerMutationStripRandom5x1X($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 32) {
@@ -333,7 +333,7 @@ class MainController extends Controller
             $area = json_decode($calculations->data);
             
             $population0 = $bigmutation->bigLayerMutationStripRandom5x1Y($this->startPopulation, 10, $area);
- 
+            $this->useBigMutator = true;
         }   
 
  
@@ -345,6 +345,10 @@ class MainController extends Controller
  
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
+
+        $maxQ = $res[1]['sum'];
+        $oldQ = $res[1]['sum'];
+
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints(120);
         $nrPop = 0;
@@ -352,7 +356,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
-        while ($repeatQ < 10 && $nrPop < $maxPop) {   
+        while ($repeatQ < 10 && $nrPop < $maxPop) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             $individual = 10;
@@ -384,7 +388,7 @@ class MainController extends Controller
             $power = $gtx->getPowerfromarea($res);
             $oldQ = $maxQ;
             $nrPop++;             
-        } 
+        }
         $t4 = microtime(true);
         arsort($usedmodify); 
        

@@ -149,10 +149,19 @@ class GenetixDataGenerator
     }
 
     public function getindyvidual($res, $nr = 10) {
+       
         $table = [];
-        for ($i = 0; $i < $nr; $i++) {
-            $table[] = $res[$i]['area'];
-        }
+        $usedres = [];
+        $i = 0;
+        while (count($table) <= $nr && isset($res[$i])) {
+            
+            if (!in_array($res[$i]['sum'], $usedres)) {
+                $table[] = $res[$i]['area'];
+                $usedres[] = $res[$i]['sum'];
+            }
+            $i++; 
+        } 
+ 
         return $table;
     }
 

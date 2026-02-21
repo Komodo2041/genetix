@@ -29,12 +29,12 @@ class CrossingData
           $methods = [    "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz" ];
        }
  
-       $choosecross = rand(0, 11);
-       if ($choosecross == 7 || $choosecross == 8) {
+       $choosecross = rand(0, 15);
+       if ($choosecross == 6 ||$choosecross == 7 || $choosecross == 8) {
           $methods = [ "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
-       }  elseif ($choosecross == 9 || $choosecross == 10) {
+       }  elseif ($choosecross == 10 || $choosecross == 11 || $choosecross == 12) {
            $methods = [ "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz"];
-       }  elseif ($choosecross == 11) {
+       }  elseif ($choosecross == 13 || $choosecross == 14 ||$choosecross == 15) {
                    $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];
        }      
          foreach ($methods AS $m) {
