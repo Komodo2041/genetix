@@ -670,7 +670,7 @@ class MainController extends Controller
         return $res;
     }
 
-    public function mutations(CrossingData $cross, MutationData $mutation) {
+    public function mutations(CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
 
         $calculations = Calculation::wherenull("nrcalc" )->take(10)->orderBy("id", "desc")->get();
         $result = [];
@@ -693,6 +693,7 @@ class MainController extends Controller
         }
         $crossings = $cross->getAllMethod();
         $mutations = $mutation->getAllMethod();
+        $bigmutations = $bigmutation->getAllMethod();
         $nonusedcross = [];
         $nonusedmutations = [];
         foreach ($crossings AS $c) {
@@ -706,7 +707,7 @@ class MainController extends Controller
            }
         }        
         
-        return view("mutations", ['mutations' => $result, "all" => $all, 'cross' => $crossings, 'mutaions' => $mutations, 
+        return view("mutations", ['mutations' => $result, "all" => $all, 'cross' => $crossings, 'mutaions' => $mutations, 'bigmutations' => $bigmutations,
            "nc" => implode(", ", $nonusedcross ), "nm" => implode(", ", $nonusedmutations )   ]);
 
     }

@@ -12,6 +12,10 @@ class BigMutatorData
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
                 "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X"  ];
 
+    public function getAllMethod() {
+        return $this->allMethods;
+    }
+
     public function createNewPopulation($population) {
        $max = count($population);
        $res = $population;

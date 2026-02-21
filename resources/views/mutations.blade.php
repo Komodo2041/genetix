@@ -18,6 +18,7 @@
          <th>Procent</th>
          <th>Krzyżowanie</th>
          <th>Mutacja</th>
+         <th>Duża Mutacja</th>
       </tr>
       @foreach ($mutations AS $key => $value) 
         <tr>
@@ -34,6 +35,13 @@
                   TAK
                @endif 
             </td>
+            <td>
+               @if (in_array($key, $bigmutations))
+                  TAK
+               @endif 
+            </td>
+
+             
         </tr>
       @endforeach
 </table>
