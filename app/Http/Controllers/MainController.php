@@ -198,8 +198,6 @@ class MainController extends Controller
             $res = $mutation->addmutation($res[0], $res[1]);
             $population0 = $res[0];
  
-
-          
         } elseif ($randomDoing == 11) {
             
             $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, true);
@@ -355,6 +353,7 @@ class MainController extends Controller
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
 
+        
         $maxQ2 = $res[1]['sum'];
         $oldQ2 = $res[1]['sum'];
 
@@ -365,7 +364,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
-        while ($repeatQ < 10 && $nrPop < $maxPop) {
+        while ($repeatQ < 12 && $nrPop < $maxPop) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             $individual = 10;
