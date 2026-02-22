@@ -21,7 +21,7 @@ class MainController extends Controller
 {
 
     public $startPopulation = 800;
-    public $useBigMutator = false;
+    public $useBigMutator = 0;
 
     public function list(Request $request, MeerDataGenerator $mdg) {
 
@@ -66,8 +66,8 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 12);    
-            $randomDoing = 12;      
+            $randomDoing = rand(0, 13);    
+            $randomDoing = 13;      
         } else {
             $randomDoing = rand(20, 32);  
             $randomDoing = 28;
@@ -214,7 +214,16 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
+
+        } elseif ($randomDoing == 13) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 10, true);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $this->useBigMutator = 2;
 
            /*** DIAMOND * **/
         } elseif ($randomDoing == 20) {  // diamond - clone
@@ -281,14 +290,14 @@ class MainController extends Controller
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 26) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutationMediumSquere($this->startPopulation, 10, $area);
 
  
@@ -296,35 +305,35 @@ class MainController extends Controller
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutationMiniSquere($this->startPopulation, 10, $area);
  
         }  elseif ($randomDoing == 28) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutationMiniRandomSquere($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 29) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutationStrip5x1X($this->startPopulation, 10, $area);
  
         }  elseif ($randomDoing == 30) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutationStrip5x1Y($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 31) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
             $population0 = $bigmutation->bigLayerMutationStripRandom5x1X($this->startPopulation, 10, $area);
  
         } elseif ($randomDoing == 32) {
@@ -333,7 +342,7 @@ class MainController extends Controller
             $area = json_decode($calculations->data);
             
             $population0 = $bigmutation->bigLayerMutationStripRandom5x1Y($this->startPopulation, 10, $area);
-            $this->useBigMutator = true;
+            $this->useBigMutator = 1;
         }   
 
  
@@ -362,9 +371,9 @@ class MainController extends Controller
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
 
-            if ($this->useBigMutator && $nrPop % 2 == 1 ) {
+            if ($this->useBigMutator > 0  && $nrPop % 2 == 1 ) {
 
-                $pop_result = $bigmutation->createNewPopulation($selectedIndividuals);
+                $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator );
 
             } else {
  

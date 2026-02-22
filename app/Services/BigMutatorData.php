@@ -11,21 +11,31 @@ class BigMutatorData
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
                 "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X"  ];
+    public $halfMethods = [ "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X"];
+
 
     public function getAllMethod() {
         return $this->allMethods;
     }
 
-    public function createNewPopulation($population) {
+    public function createNewPopulation($population, $usem = 1) {
        $max = count($population);
        $res = $population;
        $mutting = [];
-       $nrmethos = count($this->allMethods);
+       if ($usem == 1) {
+           $nrmethos = count($this->allMethods);
+       } else {
+           $nrmethos = count($this->halfMethods);
+       }
 
        for ($i = 0; $i < $this->numbers; $i++) {
  
             $ch = rand(0, $nrmethos-1);
-            $m = $this->allMethods[$ch];
+            if ($usem == 1) {
+               $m = $this->allMethods[$ch];
+            } else {
+               $m = $this->halfMethods[$ch];
+            }
             $select = rand(0, $max - 1);
 
             $areas = $this->$m(1, 10, $population[$select]);
