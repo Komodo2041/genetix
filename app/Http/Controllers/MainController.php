@@ -364,7 +364,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
-        while ($repeatQ < 12 && $nrPop < $maxPop) {
+        while ($repeatQ < 60 && $nrPop < $maxPop) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             $individual = 10;
@@ -884,6 +884,46 @@ class MainController extends Controller
         }  
  
         return view("showdiff", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2 ]);
+
+    }
+
+    public function showring($id) {
+       $calc = Calculation::find($id);
+        if (!$calc) {
+           return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+        }
+        $area = Area::find($calc->area_id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $nr = 10;
+        $res = array_fill(0, floor($nr / 2), 0);
+        $res2 = array_fill(0, floor($nr/ 2), 0);
+        $data = json_decode($calc->data);
+        $area = json_decode($area->data);
+        
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    for ($k =0, $l = $nr = 1; $k < $l; $k++, $l--) {
+                        if ($i == $k || $i == $l || $j == $k || $j == $l) {
+                           if ($data[$i][$j][$z]) {
+                              $res[$k]++;
+                           }
+                           if ($area[$i][$j][$z]) {
+                              $res2[$k]++;
+                           }                           
+                        }
+                    }
+                }
+           }
+        }         
+
+
+        return view("showring", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2 ]);
+
 
     }
 

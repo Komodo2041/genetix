@@ -10,7 +10,8 @@ class BigMutatorData
     public $numbers = 600;
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
-                "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X"  ];
+                "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
+                "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y"  ];
     public $halfMethods = [ "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
                 "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y"];
 

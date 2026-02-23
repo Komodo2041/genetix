@@ -25,7 +25,7 @@
             <td>
                <a href="/diamon/add/{{$p['id']}}" ><button>Dodaj diament</button></a>
                <a href="/showerror/{{$p['id']}}" ><button>Pokaż różnice</button></a>
-            
+               <a href="/showring/{{$p['id']}}" ><button>Sprawdź pierścienie</button></a>
             </td>
         </tr>
       @endforeach
