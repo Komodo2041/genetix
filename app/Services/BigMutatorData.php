@@ -7,15 +7,15 @@ namespace App\Services;
 class BigMutatorData
 {
     
-    public $numbers = 600;
+    public $numbers = 660;
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
                 "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
                 "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y",
-                "bigLayerMutationTemplatePlusRandom" ];
+                "bigLayerMutationTemplatePlusRandom", "bigLayerMutationTSquare3x3xRandom", "bigLayerMutationTSquare2x2xRandom", "bigLayerMutationTSquare4x4xRandom" ];
     public $halfMethods = [ "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
                 "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y", 
-                "bigLayerMutationTemplatePlusRandom"];
+                "bigLayerMutationTemplatePlusRandom", "bigLayerMutationTSquare3x3xRandom", "bigLayerMutationTSquare2x2xRandom", "bigLayerMutationTSquare4x4xRandom"];
 
 
     public function getAllMethod() {
@@ -672,7 +672,7 @@ class BigMutatorData
             $table = $pop;
  
             for ($z = 0; $z < $size; $z++) {
-                $change = rand(1, 5);
+                $change = rand(1, 10);
                 for ($ch = 0; $ch < $change; $ch++) {
                     $x = rand(1, $size-2);
                     $y = rand(1, $size-2);
@@ -694,6 +694,117 @@ class BigMutatorData
   
     }   
 
+     /*  squere 3 x 3 */ 
+    public function bigLayerMutationTSquare3x3xRandom($numbers, $size, $pop) {
+ 
+        $result = [$pop];
+        for ($n = 0; $n < $numbers; $n++) {
+ 
+            $table = $pop;
+ 
+            for ($z = 0; $z < $size; $z++) {
+                $change = rand(1, 10);
+                for ($ch = 0; $ch < $change; $ch++) {
+                    $x = rand(0, $size - 3);
+                    $y = rand(0, $size - 3);
+ 
+                    $used = [];
+                    for ($m = 0; $m < 3; $m++) {
+                        for ($n = 0; $n < 3; $n++) {
+                            $used[] = $pop[$x + $m][$y + $n][$z];
+                        }
+                    }
+               
+                    shuffle($used);
+                    for ($m = 0; $m < 3; $m++) {
+                        for ($n = 0; $n < 3; $n++) {
+                            $table[$x + $m][$y + $n][$z] = array_shift($used);
+                        }
+                    }
+                }
+            }
+ 
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    } 
+ 
+     /*  squere 4 x 4 */ 
+    public function bigLayerMutationTSquare4x4xRandom($numbers, $size, $pop) {
+ 
+        $result = [$pop];
+        for ($n = 0; $n < $numbers; $n++) {
+ 
+            $table = $pop;
+ 
+            for ($z = 0; $z < $size; $z++) {
+                $change = rand(1, 2);
+                for ($ch = 0; $ch < $change; $ch++) {
+                    $x = rand(0, $size - 4);
+                    $y = rand(0, $size - 4);
+ 
+                    $used = [];
+                    for ($m = 0; $m < 4; $m++) {
+                        for ($n = 0; $n < 4; $n++) {
+                            $used[] = $pop[$x + $m][$y + $n][$z];
+                        }
+                    }
+               
+                    shuffle($used);
+                    for ($m = 0; $m < 4; $m++) {
+                        for ($n = 0; $n < 4; $n++) {
+                            $table[$x + $m][$y + $n][$z] = array_shift($used);
+                        }
+                    }
+                }
+            }
+ 
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    } 
+
+
+     /*  squere 2 x 2 */ 
+    public function bigLayerMutationTSquare2x2xRandom($numbers, $size, $pop) {
+ 
+        $result = [$pop];
+        for ($n = 0; $n < $numbers; $n++) {
+ 
+            $table = $pop;
+ 
+            for ($z = 0; $z < $size; $z++) {
+                $change = rand(1, 10);
+                for ($ch = 0; $ch < $change; $ch++) {
+                    $x = rand(0, $size - 2);
+                    $y = rand(0, $size - 2);
+ 
+                    $used = [];
+                    for ($m = 0; $m < 2; $m++) {
+                        for ($n = 0; $n < 2; $n++) {
+                            $used[] = $pop[$x + $m][$y + $n][$z];
+                        }
+                    }
+               
+                    shuffle($used);
+                    for ($m = 0; $m < 2; $m++) {
+                        for ($n = 0; $n < 2; $n++) {
+                            $table[$x + $m][$y + $n][$z] = array_shift($used);
+                        }
+                    }
+                }
+            }
+ 
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    }     
 
 
 }

@@ -207,7 +207,7 @@ class MainController extends Controller
 
         } elseif ($randomDoing == 12) {
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 10, true);  
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
@@ -216,7 +216,7 @@ class MainController extends Controller
 
         } elseif ($randomDoing == 13) {
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 10, true);  
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
@@ -364,7 +364,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
-        while ($repeatQ < 60 && $nrPop < $maxPop) {
+        while ($repeatQ < 30 && $nrPop < $maxPop) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             $individual = 10;
