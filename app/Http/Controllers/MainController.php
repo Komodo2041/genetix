@@ -897,8 +897,8 @@ class MainController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
         $nr = 10;
-        $res = array_fill(0, floor($nr / 2), 0);
-        $res2 = array_fill(0, floor($nr/ 2), 0);
+        $res = array_fill(0, $nr, array_fill(0, floor($nr / 2), 0));
+        $res2 =  array_fill(0, $nr, array_fill(0, floor($nr / 2), 0));
         $data = json_decode($calc->data);
         $area = json_decode($area->data);
         
@@ -907,21 +907,20 @@ class MainController extends Controller
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                    for ($k =0, $l = $nr = 1; $k < $l; $k++, $l--) {
-                        if ($i == $k || $i == $l || $j == $k || $j == $l) {
+                    for ($k =0, $l = $nr - 1; $k < $l; $k++, $l--) {   
+                        if (($i == $k || $i == $l || $j == $k || $j == $l) && ($i >= $k && $i <= $l) && ($j >= $k && $j <= $l) ) {
                            if ($data[$i][$j][$z]) {
-                              $res[$k]++;
+                              $res[$z][$k]++;
                            }
                            if ($area[$i][$j][$z]) {
-                              $res2[$k]++;
+                              $res2[$z][$k]++;
                            }                           
                         }
                     }
                 }
            }
         }         
-
-
+ 
         return view("showring", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2 ]);
 
 

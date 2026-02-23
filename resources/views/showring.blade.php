@@ -50,10 +50,10 @@
       <td>Wynik</td>
       <td>Wzór</td>
 </tr>  
-   @foreach ($res AS $key => $value)
+   @foreach ($res[$x] AS $key => $value)
     <tr>
-        <td>{{ $res[$key] }}</td>
-        <td>{{ $res2[$key] }}</td>
+        <td>{{ $res[$x][$key] }}</td>
+        <td>{{ $res2[$x][$key] }}</td>
     </tr>
    @endforeach
  <table>
