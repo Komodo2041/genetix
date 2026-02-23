@@ -11,9 +11,11 @@ class BigMutatorData
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
                 "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
-                "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y"  ];
+                "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y",
+                "bigLayerMutationTemplatePlusRandom" ];
     public $halfMethods = [ "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
-                "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y"];
+                "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y", 
+                "bigLayerMutationTemplatePlusRandom"];
 
 
     public function getAllMethod() {
@@ -660,7 +662,37 @@ class BigMutatorData
   
     }     
 
+
+     /* +++ */ 
+    public function bigLayerMutationTemplatePlusRandom($numbers, $size, $pop) {
  
+        $result = [$pop];
+        for ($n = 0; $n < $numbers; $n++) {
+ 
+            $table = $pop;
+ 
+            for ($z = 0; $z < $size; $z++) {
+                $change = rand(1, 5);
+                for ($ch = 0; $ch < $change; $ch++) {
+                    $x = rand(1, $size-2);
+                    $y = rand(1, $size-2);
+
+                    $used = [$pop[$x - 1][$y][$z], $pop[$x][$y - 1][$z], $pop[$x][$y][$z], $pop[$x + 1][$y][$z], $pop[$x][$y + 1][$z]];
+                    shuffle($used);
+                    $table[$x - 1][$y][$z] = $used[0];
+                    $table[$x][$y - 1][$z] = $used[1]; 
+                    $table[$x][$y][$z] = $used[2]; 
+                    $table[$x + 1][$y][$z] = $used[3]; 
+                    $table[$x][$y + 1][$z] = $used[4]; 
+                }
+            }
+ 
+            $result[] = $table;
+        }
+
+        return $result;
+  
+    }   
 
 
 
