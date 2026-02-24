@@ -26,7 +26,7 @@ class BigMutatorData
        $max = count($population);
        $res = $population;
        $mutting = [];
-       if ($usem == 1) {
+       if ($usem == 1 || $usem == 0) {
            $nrmethos = count($this->allMethods);
        } else {
            $nrmethos = count($this->halfMethods);

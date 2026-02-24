@@ -55,7 +55,7 @@ class MainController extends Controller
  
     public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
-        set_time_limit(10000);
+        set_time_limit(12000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -66,8 +66,9 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 13);    
-            $randomDoing = 13;      
+            $randomDoing = rand(0, 13); 
+             
+              
         } else {
             $randomDoing = rand(20, 32);  
             $randomDoing = 28;
@@ -364,13 +365,13 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
-        while ($repeatQ < 30 && $nrPop < $maxPop) {
+        while ($repeatQ < 40 && $nrPop < $maxPop) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
 
-            if ($this->useBigMutator > 0  && $nrPop % 2 == 1 ) {
+            if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
 
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator );
 

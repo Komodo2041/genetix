@@ -18,7 +18,7 @@
       @foreach ($area AS $a)
         <tr>
             <td>{{$a->name}}</td>
-            <td>
+            <td style="width:400px;">
               <h4>All: {{$a?->calculations->count()}} </h4> 
               @foreach ($calco[$a->id] AS $c) 
                   Level : {{$c["level"]}} - ALL : {{$c["count"]}}<br/>                  
