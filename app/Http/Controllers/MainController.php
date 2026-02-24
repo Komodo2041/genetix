@@ -545,7 +545,13 @@ class MainController extends Controller
 
  
         $maxlevel = 1;
+        $caclcount = count($area->calculations);
+        $i = 0;
         foreach ($area->calculations AS $c) {
+            $i++;
+           if ($i + 1000 < $caclcount) {
+             continue;
+           }
            $pc = json_decode($c->data);
  
            $calc[] = [
