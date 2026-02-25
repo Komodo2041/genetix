@@ -18,6 +18,20 @@ class LevelStering {
         );
     }
 
+    public function calcarea($id) {
+ 
+        $calco = Calculation::selectRaw(' level, AVG(obtainedresult) as avg')->where("area_id", $id)->groupBy( 'level')->orderBy("level")->get()->toArray();
+        if (empty($calco)) return;
+        
+        foreach ($calco AS $c) {
+           LevelAvg::updateOrCreate(
+            ['area_id' => $id, 'level' => $c['level']],  
+            ['avg' => $c['avg']]
+           );          
+        }
+ 
+    }
+
 }
 
 

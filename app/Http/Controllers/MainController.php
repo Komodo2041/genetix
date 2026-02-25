@@ -951,4 +951,10 @@ class MainController extends Controller
 
     }
 
+   
+    public function calcallavg($id) {
+        $this->ls->calcarea($id);
+        return redirect("/")->with('success',  "Przeliczono średnią dla area ID:".$id); 
+    }
+
 }

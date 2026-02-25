@@ -18,7 +18,6 @@ Route::get('samecalculations',  "App\Http\Controllers\MainController@samecalcula
 Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" );
 
 Route::get('showerror/{id}',  "App\Http\Controllers\MainController@showerros" );
-
 Route::get('showring/{id}',  "App\Http\Controllers\MainController@showring" );
-
+Route::get('calcallavg/{id}',  "App\Http\Controllers\MainController@calcallavg" );
  
