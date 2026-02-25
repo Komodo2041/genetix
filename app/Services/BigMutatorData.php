@@ -12,10 +12,12 @@ class BigMutatorData
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
                 "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
                 "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y",
-                "bigLayerMutationTemplatePlusRandom", "bigLayerMutationTSquare3x3xRandom", "bigLayerMutationTSquare2x2xRandom", "bigLayerMutationTSquare4x4xRandom" ];
+                "bigLayerMutationTemplatePlusRandom", "bigLayerMutationTSquare3x3xRandom", "bigLayerMutationTSquare2x2xRandom", "bigLayerMutationTSquare4x4xRandom",
+                "bigLayerMutationCircle" ];
     public $halfMethods = [ "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
                 "bigLayerMutationMiniVerySmallRandomSquere", "bigLayerMutationStripVerySmallRandom5x1X", "bigLayerMutationStripVerySmallRandom5x1Y", 
-                "bigLayerMutationTemplatePlusRandom", "bigLayerMutationTSquare3x3xRandom", "bigLayerMutationTSquare2x2xRandom", "bigLayerMutationTSquare4x4xRandom"];
+                "bigLayerMutationTemplatePlusRandom", "bigLayerMutationTSquare3x3xRandom", "bigLayerMutationTSquare2x2xRandom", "bigLayerMutationTSquare4x4xRandom", 
+                "bigLayerMutationCircle"];
 
 
     public function getAllMethod() {
@@ -805,6 +807,62 @@ class BigMutatorData
         return $result;
   
     }     
+
+  
+    public function bigLayerMutationCircle($numbers, $size, $pop) {
+      $result = [$pop];
+        for ($n = 0; $n < $numbers; $n++) {
+            $table = $pop;
+
+            for ($z = 0; $z < $size; $z++) {
+                $x = rand(0, $size - 1);
+                $y = rand(0, $size - 1);
+
+                $length = rand(1, floor($size/2));
+                $changePoints = rand(2, 10); 
+                $used = [];
+                $usedp = [];
+                $points = [];
+                for ($i = 0; $i < $changePoints; $i++) {
+                    $diffx = rand(0, $length);
+                    $random = ceil($length / 3);
+                    $diffy = $length - $diffx + rand(-$random, $random);
+                    $up = rand(0, 1);
+                    $le = rand(0, 1);
+                    if ($up == 1) {
+                        $diffy *= -1;
+                    }
+                    if ($le == 1) {
+                        $diffx *= -1;
+                    }
+                    $newx = $x -  $diffx;
+                    $newy = $y - $diffy;
+                    $key = $newx."-".$newy; 
+                    if ($newx >= 0 && $newx < $size &&  $newy >= 0 && $newy < $size && !isset($usedp[$key]) ) {
+                       $p = ['x' => $newx, 'y' => $newy ];
+                       $usedp[] = $key;
+                       $points[] = $p;
+                       $used[] = $pop[$newx][$newy][$z];
+                    } else {
+                       $ch = rand(0,1);
+                       if ($ch == 1) {
+                          $changePoints--;
+                       }
+                    } 
+                }
+                shuffle($used);
+                $d = count($used);
+                for ($l = 0; $l < $d; $l++) {
+                    $newx = $points[$l][$x];
+                    $newy = $points[$l][$y];
+                    $table[$newx][$newy][$z] = array_shift($used);
+                } 
+            }
+            $result[] = $table;
+        }
+
+        return $result;            
+    }
 
 
 }
