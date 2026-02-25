@@ -17,4 +17,8 @@ class Area extends Model
         return $this->hasMany("App\Models\Diamond", "area_id");
     }
 
+    public function levelsavg() {
+        return $this->hasMany("App\Models\LevelAvg", "area_id");
+    }    
+
 }

@@ -8,7 +8,8 @@ use App\Services\CrossingData;
 use App\Services\MutationData; 
 use App\Services\BigMutatorData;
  
-
+use App\Services\LevelStering;
+  
 use Illuminate\Http\Request;
 
 use App\Models\Area; 
@@ -19,6 +20,10 @@ use App\Models\Diamondcalc;
  
 class MainController extends Controller
 {
+
+    public function __construct() {
+        $this->ls = new LevelStering();
+    }
 
     public $startPopulation = 800;
     public $useBigMutator = 0;
@@ -426,7 +431,7 @@ class MainController extends Controller
         $usedcalculations = [$res[0]['area']];
         $other = 0;
         for ($i = 1; $i < count($res); $i++) {
-
+              
             if ($this->maxNumberInCalculation < $other) {
                 break;
             }
@@ -447,10 +452,12 @@ class MainController extends Controller
                 Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, 
                 "obtainedresult" => $result, "nrcalc" => $i + 1, "typecalc" => $randomDoing ]);
                 $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
-                
-                $other++;
+
+                $other++;                
             } 
-        } 
+        }
+
+       $this->ls->calclevel($id, $lvl + 1);
 
        return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result2. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg);  
 
