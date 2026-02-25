@@ -23,6 +23,9 @@ class MainController extends Controller
     public $startPopulation = 800;
     public $useBigMutator = 0;
 
+    public $maxNumberInCalculation = 5;
+
+
     public function list(Request $request, MeerDataGenerator $mdg) {
 
         $area = Area::with("calculations")->get();
@@ -67,7 +70,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 13); 
-             
+             $randomDoing = 13;
               
         } else {
             $randomDoing = rand(20, 32);  
@@ -421,7 +424,13 @@ class MainController extends Controller
 
         $additionalresultsmsg = "\n\n";  
         $usedcalculations = [$res[0]['area']];
+        $other = 0;
         for ($i = 1; $i < count($res); $i++) {
+
+            if ($this->maxNumberInCalculation < $other) {
+                break;
+            }
+
             $condo = $result2 * 0.999999;
             if ($result2 > 0.999999) {
                 $condo = $result2 * $result2;
@@ -438,6 +447,8 @@ class MainController extends Controller
                 Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, 
                 "obtainedresult" => $result, "nrcalc" => $i + 1, "typecalc" => $randomDoing ]);
                 $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
+                
+                $other++;
             } 
         } 
 
