@@ -7,7 +7,7 @@ namespace App\Services;
 class BigMutatorData
 {
     
-    public $numbers = 660;
+    public $numbers = 650;
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
                 "bigLayerMutationMiniSmallRandomSquere", "bigLayerMutationStripSmallRandom5x1Y", "bigLayerMutationStripSmallRandom5x1X", 
@@ -20,28 +20,44 @@ class BigMutatorData
                 "bigLayerMutationCircle"];
 
 
+    public function getIdFunc($name) {
+        $id = 0;
+        foreach ($this->allMethods AS $key => $m) {
+           if ($m == $name) {
+            $id = $key;
+            break;
+           }
+        }
+        return $id;
+    } 
+
     public function getAllMethod() {
         return $this->allMethods;
     }
 
-    public function createNewPopulation($population, $usem = 1) {
+    public function createNewPopulation($population, $usem = 1, $metodo = 0) {
+
        $max = count($population);
        $res = $population;
        $mutting = [];
+       $tablemethods = [];
        if ($usem == 1 || $usem == 0) {
            $nrmethos = count($this->allMethods);
-       } else {
+           $tablemethods = $this->allMethods;
+       } elseif ($usem == 2) {
            $nrmethos = count($this->halfMethods);
+           $tablemethods = $this->halfMethods;
+       } elseif ($usem == 3) {
+          $nrmethos = 1;
+          $tablemethods = [$this->allMethods[$metodo]];
        }
 
        for ($i = 0; $i < $this->numbers; $i++) {
  
-            $ch = rand(0, $nrmethos-1);
-            if ($usem == 1) {
-               $m = $this->allMethods[$ch];
-            } else {
-               $m = $this->halfMethods[$ch];
-            }
+            $ch = rand(0, $nrmethos - 1);
+           
+            $m = $tablemethods[$ch];
+       
             $select = rand(0, $max - 1);
 
             $areas = $this->$m(1, 10, $population[$select]);
@@ -846,7 +862,7 @@ class BigMutatorData
                     } else {
                        $ch = rand(0,1);
                        if ($ch == 1) {
-                          $changePoints--;
+                          $i--;
                        }
                     } 
                 }

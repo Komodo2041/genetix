@@ -27,6 +27,7 @@ class MainController extends Controller
 
     public $startPopulation = 800;
     public $useBigMutator = 0;
+    public $funcMutator = 0;
 
     public $maxNumberInCalculation = 5;
 
@@ -74,8 +75,8 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 13); 
-             $randomDoing = 13;
+            $randomDoing = rand(0, 14); 
+             $randomDoing = 14;
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -233,6 +234,16 @@ class MainController extends Controller
             }
             $this->useBigMutator = 2;
 
+        } elseif ($randomDoing == 14) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $this->useBigMutator = 3;
+            $this->funcMutator = $bigmutation->getIdFunc("bigLayerMutationCircle");
+ 
            /*** DIAMOND * **/
         } elseif ($randomDoing == 20) {  // diamond - clone
 
@@ -389,7 +400,7 @@ class MainController extends Controller
 
             if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
 
-                $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator );
+                $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
 
             } else {
  
