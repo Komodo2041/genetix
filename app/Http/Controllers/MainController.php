@@ -85,7 +85,8 @@ class MainController extends Controller
 
         $clones = ["area_id" => $id];
          
- 
+        $minimumCalc = $this->ls->getminimum($id, $lvl - 1);
+    
         $individual = 10;
         $lvl = $lvl - 1;
         if ($lvl == 0) {
@@ -413,53 +414,60 @@ class MainController extends Controller
         arsort($usedmodify); 
        
         $result2 = $maxQ / $maxPoints; 
-        $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
-        $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
-         "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing ]);
+        if ($result2  > $minimumCalc) {
+            $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
+            $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
+            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing ]);
 
-        if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 20 || $randomDoing == 21 ) {
-            $clones["result"] = $result2;
-            Clones::create($clones);
-        } 
-        if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])) {
-            $diamonds["result"] = $result2;
-            $diamonds["calc_id"] = $cred->id;
-            Diamondcalc::create($diamonds);
-        }
-
-        $additionalresultsmsg = "\n\n";  
-        $usedcalculations = [$res[0]['area']];
-        $other = 0;
-        for ($i = 1; $i < count($res); $i++) {
-              
-            if ($this->maxNumberInCalculation < $other) {
-                break;
-            }
-
-            $condo = $result2 * 0.999999;
-            if ($result2 > 0.999999) {
-                $condo = $result2 * $result2;
-            }
-            if ($condo >= $res[$i]['sum']/$maxPoints) {
-               $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($condo )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
-               break;
-            }
-            
-            $diff = $this->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
-            if ($diff === 0) {
-                $usedcalculations[] = $res[$i]['area'];
-                $result =  $res[$i]['sum'] / $maxPoints;
-                Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, 
-                "obtainedresult" => $result, "nrcalc" => $i + 1, "typecalc" => $randomDoing ]);
-                $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
-
-                $other++;                
+            if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 20 || $randomDoing == 21 ) {
+                $clones["result"] = $result2;
+                Clones::create($clones);
             } 
+            if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])) {
+                $diamonds["result"] = $result2;
+                $diamonds["calc_id"] = $cred->id;
+                Diamondcalc::create($diamonds);
+            }
+       
+            $additionalresultsmsg = "\n\n";  
+            $usedcalculations = [$res[0]['area']];
+            $other = 0;
+            for ($i = 1; $i < count($res); $i++) {
+                
+                if ($this->maxNumberInCalculation < $other) {
+                    break;
+                }
+
+                $condo = $result2 * 0.999999;
+                if ($result2 > 0.999999) {
+                    $condo = $result2 * $result2;
+                }
+                if ($condo >= $res[$i]['sum']/$maxPoints) {
+                $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($condo )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
+                break;
+                }
+                
+                $diff = $this->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
+                if ($diff === 0) {
+                    $usedcalculations[] = $res[$i]['area'];
+                    $result =  $res[$i]['sum'] / $maxPoints;
+                    Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, 
+                    "obtainedresult" => $result, "nrcalc" => $i + 1, "typecalc" => $randomDoing ]);
+                    $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
+
+                    $other++;                
+                } 
+            }
+
+            $this->ls->calclevel($id, $lvl + 1);
+            return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result2. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg); 
+
+        } else {
+            $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
+            return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych ");
         }
 
-       $this->ls->calclevel($id, $lvl + 1);
-
-       return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result2. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg);  
+  
 
     }
 

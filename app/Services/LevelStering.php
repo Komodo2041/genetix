@@ -4,7 +4,7 @@ namespace App\Services;
  
 use App\Models\LevelAvg;
 use App\Models\Calculation; 
-use App\Models\NosaveCalc; 
+use App\Models\NosaveCalc;
  
 
 class LevelStering {
@@ -32,6 +32,31 @@ class LevelStering {
            );          
         }
  
+    }
+
+    public function getminimum($id, $lvl) {
+        if ($lvl == 1) {
+            return 0;
+        }
+        
+        $l = LevelAvg::where("area_id", $id)->where("level", $lvl)->get()->first()->toArray();
+     
+        if (!$l) {
+            return 0;
+        }
+        return $l['avg'] * $l['avg'];
+
+    }
+
+    public function savenocalc($id, $lvl, $res, $min, $type) {
+
+        NosaveCalc::create([
+            'area_id' => $id,
+            'level' => $lvl,
+            'result' => $res,
+            'avginlevel' => $min,
+            'type' => $type
+        ]);
     }
 
 }

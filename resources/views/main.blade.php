@@ -27,7 +27,7 @@
               @endforeach
             </td>
             <td> 
-                  <a href="/calcallavg/{{$a->id}}" ><button>Przelicz śrenie dla poziomów</button></a>
+                  <a href="/calcallavg/{{$a->id}}" ><button>Przelicz średnie dla poziomów</button></a>
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a><br/>
                    <br/>
