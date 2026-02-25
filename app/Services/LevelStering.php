@@ -4,6 +4,8 @@ namespace App\Services;
  
 use App\Models\LevelAvg;
 use App\Models\Calculation; 
+use App\Models\NosaveCalc; 
+ 
 
 class LevelStering {
 
@@ -22,7 +24,7 @@ class LevelStering {
  
         $calco = Calculation::selectRaw(' level, AVG(obtainedresult) as avg')->where("area_id", $id)->groupBy( 'level')->orderBy("level")->get()->toArray();
         if (empty($calco)) return;
-        
+
         foreach ($calco AS $c) {
            LevelAvg::updateOrCreate(
             ['area_id' => $id, 'level' => $c['level']],  
