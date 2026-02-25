@@ -850,14 +850,19 @@ class BigMutatorData
                        }
                     } 
                 }
+ 
                 shuffle($used);
                 $d = count($used);
+
+
+   
                 for ($l = 0; $l < $d; $l++) {
-                    $newx = $points[$l][$x];
-                    $newy = $points[$l][$y];
+ 
+                    $newx = $points[$l]['x'];
+                    $newy = $points[$l]['y'];
                     $table[$newx][$newy][$z] = array_shift($used);
                 } 
-            }
+            } 
             $result[] = $table;
         }
 
