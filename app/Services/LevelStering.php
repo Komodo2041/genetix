@@ -35,12 +35,13 @@ class LevelStering {
     }
 
     public function getminimum($id, $lvl) {
-        if ($lvl == 1) {
+      
+        if ($lvl == 0) {
             return 0;
         }
         
-        $l = LevelAvg::where("area_id", $id)->where("level", $lvl)->get()->first()->toArray();
-     
+        $l = LevelAvg::where("area_id", $id)->where("level", $lvl)->get()->toArray();
+  
         if (!$l) {
             return 0;
         }

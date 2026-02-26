@@ -20,29 +20,34 @@
             <td>{{$a->name}}</td>
             <td style="width:400px;">
               <h4>All: {{$a?->calculations->count()}} </h4> 
-              @foreach ($calco[$a->id] AS $c) 
-                  Level : {{$c["level"]}} - ALL : {{$c["count"]}}<br/>                  
-                  MAX : {{$c["max"]}} <br/>
-                  AVG : {{$c["avg"]}} <br/><br/>
-              @endforeach
+              @if (isset($calco[$a->id]))
+                @foreach ($calco[$a->id] AS $c) 
+                    Level : {{$c["level"]}} - ALL : {{$c["count"]}}<br/>                  
+                    MAX : {{$c["max"]}} <br/>
+                    AVG : {{$c["avg"]}} <br/><br/>
+                @endforeach
+              @endif  
             </td>
             <td> 
                   <a href="/calcallavg/{{$a->id}}" ><button>Przelicz średnie dla poziomów</button></a>
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a><br/>
+                  <a href="/addRiver/{{$a->id}}"><button>Dodaj rzekę</button></a><br/>
+
+                 
                    <br/>
                   @foreach ($a->diamonds AS $d)
                        <a href="diamond/{{$a->id}}/{{ count($calco[$a->id]) - 1 }}/{{$d->id}}"><button>Oblicz Diament {{$d->id}}</button></a>     
                   @endforeach
                   <br/>
                   <a href="/area/calc_level2/{{$a->id}}/1">Dokonaj obliczeń obszaru - poziom 1</a><br/>
- 
-                  @foreach ($calco[$a->id] AS $c) 
-                      @if  ($c['count'] >= 10)
-                      <a href="/area/calc_level2/{{$a->id}}/{{$c['level'] + 1}}">Dokonaj obliczeń obszaru - poziom  {{$c["level"] + 1}}</a><br/>
-                      @endif
-                  @endforeach
- 
+                  @if (isset($calco[$a->id]))
+                    @foreach ($calco[$a->id] AS $c) 
+                        @if  ($c['count'] >= 10)
+                        <a href="/area/calc_level2/{{$a->id}}/{{$c['level'] + 1}}">Dokonaj obliczeń obszaru - poziom  {{$c["level"] + 1}}</a><br/>
+                        @endif
+                    @endforeach
+                  @endif
             </td>
         </tr>
       @endforeach

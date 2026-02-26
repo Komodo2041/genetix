@@ -76,7 +76,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 14); 
-             $randomDoing = 12;
+         
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -981,6 +981,15 @@ class MainController extends Controller
     public function calcallavg($id) {
         $this->ls->calcarea($id);
         return redirect("/")->with('success',  "Przeliczono średnią dla area ID:".$id); 
+    }
+
+    public function addRiver($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        Area::create(["name" => $area->name." - rzeka", "data" => $area->data, "river" => $id ]);
+        return redirect("/")->with('success', 'Utworzono rzekę');
     }
 
 }
