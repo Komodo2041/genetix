@@ -34,7 +34,7 @@ class MainController extends Controller
 
     public function list(Request $request, MeerDataGenerator $mdg) {
 
-        $area = Area::with("calculations")->get();
+        $area = Area::with("calculations")->where("hide", 0)->get();
         
         $calco = Calculation::selectRaw('COUNT(id) AS count, area_id, level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg')->groupBy('area_id', 'level')->orderBy("level")->get()->toArray();
         $calcoData = [];
@@ -990,6 +990,16 @@ class MainController extends Controller
         }
         Area::create(["name" => $area->name." - rzeka", "data" => $area->data, "river" => $id ]);
         return redirect("/")->with('success', 'Utworzono rzekę');
+    }
+
+    public function hide($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $area->hide = 1;
+        $area->save();
+        return redirect("/")->with('success', 'Ukryto obszar');
     }
 
 }

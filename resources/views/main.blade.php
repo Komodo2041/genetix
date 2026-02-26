@@ -31,9 +31,9 @@
             <td> 
                   <a href="/calcallavg/{{$a->id}}" ><button>Przelicz średnie dla poziomów</button></a>
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
-                  <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a><br/>
-                  <a href="/addRiver/{{$a->id}}"><button>Dodaj rzekę</button></a><br/>
-
+                  <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a>&nbsp;
+                  <a href="/addRiver/{{$a->id}}"><button>Dodaj rzekę</button></a>&nbsp;
+                  <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  
                    <br/>
                   @foreach ($a->diamonds AS $d)
