@@ -76,7 +76,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 14); 
-             $randomDoing = 14;
+             $randomDoing = 12;
               
         } else {
             $randomDoing = rand(20, 33);  
