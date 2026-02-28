@@ -93,15 +93,17 @@ class MainController extends Controller
         if ($lvl == 0) {
             
             $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
-        
+            $randomDoing = 0;
     
-        } elseif ($randomDoing == 0 || $lvl <= 3) {
+        } elseif ($randomDoing == 0 || $lvl <= 2) {
         
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
+            $randomDoing = 0;
+
         } elseif ($randomDoing == 1) {
           
             $calculations = $this->getCalculationLevel($id, $lvl, 5); 
@@ -439,6 +441,7 @@ class MainController extends Controller
 
             if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 20 || $randomDoing == 21 ) {
                 $clones["result"] = $result2;
+               print_r($clones); exit();
                 Clones::create($clones);
             } 
             if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33])) {
