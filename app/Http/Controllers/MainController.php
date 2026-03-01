@@ -95,14 +95,14 @@ class MainController extends Controller
             $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
             $randomDoing = 0;
     
-        } elseif ($randomDoing == 0 || $lvl <= 2) {
+        } elseif ($randomDoing == 0 || $lvl == 1) {
         
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
-            $randomDoing = 0;
+            $randomDoing = -1;
 
         } elseif ($randomDoing == 1) {
           
@@ -216,7 +216,9 @@ class MainController extends Controller
             $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, true);
             $area = json_decode($calculations[0]->data);
             
-           $population0 = $mutation->bigLayerMutation($this->startPopulation, 10, $area);
+            $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
+
+           $this->useBigMutator = 1;
 
         } elseif ($randomDoing == 12) {
 
@@ -441,7 +443,7 @@ class MainController extends Controller
 
             if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 20 || $randomDoing == 21 ) {
                 $clones["result"] = $result2;
-               print_r($clones); exit();
+            
                 Clones::create($clones);
             } 
             if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33])) {
@@ -454,18 +456,14 @@ class MainController extends Controller
             $usedcalculations = [$res[0]['area']];
             $other = 0;
             for ($i = 1; $i < count($res); $i++) {
-                
-                if ($this->maxNumberInCalculation < $other - 1) {
-                    break;
-                }
-
+ 
                 $condo = $result2 * 0.999999;
                 if ($result2 > 0.999999) {
                     $condo = $result2 * $result2;
                 }
                 if ($condo >= $res[$i]['sum']/$maxPoints) {
-                $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($condo )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
-                break;
+                    $additionalresultsmsg .= "Przerwano ze względu na słabsze wyniki dla ".$i." potega ".($condo )." resu ".($res[$i]['sum'] / $maxPoints)." \n";
+                    break;
                 }
                 
                 $diff = $this->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
@@ -474,9 +472,12 @@ class MainController extends Controller
                     $result =  $res[$i]['sum'] / $maxPoints;
                     Calculation::create(["result" => $name, "data" => json_encode($res[$i]['area']), "area_id" => $id, "level" => $lvl + 1, 
                     "obtainedresult" => $result, "nrcalc" => $i + 1, "typecalc" => $randomDoing ]);
-                    $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result."\n";
+                    $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result." - (".$other.")  (".$this->maxNumberInCalculation.") \n";
 
-                    $other++;                
+                    $other++;     
+                    if ($this->maxNumberInCalculation < $other) {
+                        break;
+                    }                               
                 } 
             }
 
