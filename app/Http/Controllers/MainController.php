@@ -76,7 +76,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 14); 
-         
+         $randomDoing = 13;
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -475,7 +475,7 @@ class MainController extends Controller
                     $additionalresultsmsg .= "Dodano dodatkowe obliczenie Result : ".$i." Wynik: ".$result." - (".$other.")  (".$this->maxNumberInCalculation.") \n";
 
                     $other++;     
-                    if ($this->maxNumberInCalculation < $other) {
+                    if ($this->maxNumberInCalculation < $other + 1) {
                         break;
                     }                               
                 } 
