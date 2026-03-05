@@ -24,4 +24,7 @@ Route::get('calcallavg/{id}',  "App\Http\Controllers\MainController@calcallavg" 
 Route::get('addRiver/{id}',  "App\Http\Controllers\MainController@addRiver" );
 Route::get('hidearea/{id}',  "App\Http\Controllers\MainController@hide" );
 
+Route::get('pourRiver/{id}',  "App\Http\Controllers\MainController@pourRiver" );
+ 
+
   

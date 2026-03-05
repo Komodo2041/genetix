@@ -1006,4 +1006,29 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Ukryto obszar');
     }
 
+    public function pourRiver($id) {
+        $area = Area::find($id);
+        if (!$area || !$area->river) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area lub nie ma rzeki');
+        }
+
+        $maxArea = Calculation::where("area_id", $id)->max("level");
+        $maxRiver = Calculation::where("area_id", $area->river)->max("level");
+        $maxRiver--;
+
+        $calco = Calculation::where("area_id", $id)->where("level", $maxArea)->get();
+        foreach ($calco AS $c) {
+          Calculation::create([
+             "area_id" => $area->river,
+             "result" => $c->result,
+             "data" => $c->data,
+             "level" => $maxRiver, 
+             "obtainedresult" => $c->obtainedresult,
+             "typecalc" => -2
+          ]);
+        }
+
+        return redirect("/")->with('success', 'Wlano rzekę');
+    }
+
 }
