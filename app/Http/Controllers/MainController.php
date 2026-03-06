@@ -76,7 +76,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 14); 
-         $randomDoing = 13;
+          //  $randomDoing = 13;
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -1028,7 +1028,37 @@ class MainController extends Controller
           ]);
         }
 
+        $this->ls->calcarea($area->river);
         return redirect("/")->with('success', 'Wlano rzekę');
+    }
+
+    public function cloneRiver($id) {
+        $area = Area::find($id);
+        if (!$area || !$area->river) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area lub nie ma rzeki');
+        }
+        $newArea = Area::create([
+            "data" => $area->data,
+            "name" => "Klon: ".$area->name,
+            "river" => $area->river,
+            "hide" => 0
+        ]);
+
+        $calco = Calculation::where("area_id", $id)->get();
+        foreach ($calco AS $c) {
+          Calculation::create([
+             "area_id" => $newArea->id,
+             "result" => $c->result,
+             "data" => $c->data,
+             "level" => $c->level, 
+             "obtainedresult" => $c->obtainedresult,
+             "typecalc" => $c->tyecalc
+          ]);
+        }
+
+        $this->ls->calcarea($newArea->id);
+        return redirect("/")->with('success', 'Sopiowano rzekę');           
+
     }
 
 }
