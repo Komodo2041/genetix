@@ -1052,7 +1052,7 @@ class MainController extends Controller
              "data" => $c->data,
              "level" => $c->level, 
              "obtainedresult" => $c->obtainedresult,
-             "typecalc" => $c->tyecalc
+             "typecalc" => $c->typecalc
           ]);
         }
 
