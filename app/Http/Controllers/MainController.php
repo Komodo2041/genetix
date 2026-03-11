@@ -75,8 +75,8 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 14); 
-          //  $randomDoing = 13;
+            $randomDoing = rand(0, 15); 
+            // $randomDoing = 15;
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -248,6 +248,23 @@ class MainController extends Controller
             $this->useBigMutator = 3;
             $this->funcMutator = $bigmutation->getIdFunc("bigLayerMutationCircle");
  
+        } elseif ($randomDoing == 15) { // Join Rivers
+
+            $calculations = $this->getCalculationMaxBest($id, 2);  
+            $population0 = []; 
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+
+            $areas = Area::where("river", $id)->get();
+            foreach ($areas AS $ar) {
+                $calculations = $this->getCalculationMaxBest($ar->id, 2);
+                foreach ($calculations AS $c) {
+                    $population0[] = json_decode($c->data);
+                }                
+            }
+            $individual = count($population0);
+  
            /*** DIAMOND * **/
         } elseif ($randomDoing == 20) {  // diamond - clone
 
@@ -1060,5 +1077,12 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Sopiowano rzekę');           
 
     }
+
+    public function getCalculationMaxBest($id, $number) {
+
+        return  Calculation::where("area_id", $id)->orderByDesc("obtainedresult" )->limit(max(0, $number))->get();
+ 
+    }
+
 
 }
