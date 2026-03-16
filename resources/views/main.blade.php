@@ -34,6 +34,7 @@
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a>&nbsp;
                   @if (is_null($a->river))
                      <a href="/addRiver/{{$a->id}}"><button>Dodaj rzekę</button></a>&nbsp;
+                     <a href="/showRiver/{{$a->id}}"><button>Pokaż wyniki rzek</button></a>&nbsp;
                   @else
                      <a href="/pourRiver/{{$a->id}}"><button>Wlej rzekę</button></a>&nbsp;
                      <a href="/cloneRiver/{{$a->id}}"><button>Klonuj rzekę</button></a>&nbsp;

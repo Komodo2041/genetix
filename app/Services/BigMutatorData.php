@@ -271,7 +271,7 @@ class BigMutatorData
             for ($k = 0; $k < $size; $k++) { 
                 for ($g = 0; $g < 25; $g++) {
                     $go = rand(0, 100);
-                    if ($go <= 20) {
+                    if ($go <= 15) {
                        shuffle($used[$k][$g]);
                     }  
                 } 
@@ -796,7 +796,7 @@ class BigMutatorData
             $table = $pop;
  
             for ($z = 0; $z < $size; $z++) {
-                $change = rand(1, 10);
+                $change = rand(1, 5);
                 for ($ch = 0; $ch < $change; $ch++) {
                     $x = rand(0, $size - 2);
                     $y = rand(0, $size - 2);

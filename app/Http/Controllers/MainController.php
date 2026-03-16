@@ -76,7 +76,7 @@ class MainController extends Controller
 
         if (!$dId) {
             $randomDoing = rand(0, 15); 
-            // $randomDoing = 15;
+          //  $randomDoing = 13;
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -1084,5 +1084,45 @@ class MainController extends Controller
  
     }
 
+    public function showRiver($id) {
+   
+        $area = Area::find($id);
+        if (!$area ) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area lub nie ma rzeki');
+        }
+
+        $table = json_decode($area->data);        
+        $res = []; 
+        $calculations = $this->getCalculationMaxBest($id, 10);  
+        $population0 = []; 
+        foreach ($calculations AS $c) {
+            $data = json_decode($c->data);
+            $record = [
+                "name" => $area->name,
+                'level' => $c->level,
+                'sum' => $c->obtainedresult,
+                'points' => $this->calcpointer( $table, $data)
+            ];
+            $res[] = $record;
+        }
+
+        $areas = Area::where("river", $id)->get();
+        foreach ($areas AS $ar) {
+            $calculations = $this->getCalculationMaxBest($ar->id, 10);
+            foreach ($calculations AS $c) {
+                $data = json_decode($c->data);
+                $record = [
+                    "name" => $ar->name,
+                    'level' => $c->level,
+                    'sum' => $c->obtainedresult,
+                    'points' => $this->calcpointer( $table, $data)
+                ];
+                $res[] = $record;            
+            }
+        }
+
+        return view("showriver", ['calco' => $res ]);    
+
+    }
 
 }
