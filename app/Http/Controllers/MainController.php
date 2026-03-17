@@ -75,8 +75,9 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-            $randomDoing = rand(0, 15); 
-          //  $randomDoing = 13;
+          //  $randomDoing = rand(0, 15); 
+           // $randomDoing = 15;
+           $randomDoing = rand(9, 13);
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -265,8 +266,28 @@ class MainController extends Controller
             }
             $individual = count($population0);
   
+          
+        } elseif ($randomDoing == 16) { // Join More Rivers 
+
+            $calculations = $this->getCalculationMaxBest($id, 2);  
+            $population0 = []; 
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+
+            $areas = Area::where("river", $id)->get();
+            foreach ($areas AS $ar) {
+                $calculations = $this->getCalculationMaxBest($ar->id, 10);
+                foreach ($calculations AS $c) {
+                    $population0[] = json_decode($c->data);
+                }                
+            }
+            $individual = count($population0);
+  
            /*** DIAMOND * **/
-        } elseif ($randomDoing == 20) {  // diamond - clone
+        }         
+        
+        elseif ($randomDoing == 20) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
