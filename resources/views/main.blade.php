@@ -15,7 +15,7 @@
          <th>Wynik</th>
          <th>Opcje</th>
       </tr>
-      @foreach ($area AS $a)
+      @forelse ($area AS $a)
         <tr>
             <td>{{$a->name}}</td>
             <td style="width:400px;">
@@ -56,7 +56,11 @@
                   @endif
             </td>
         </tr>
-      @endforeach
+        @empty
+        <tr>
+           <td colspan="3">Brak Obszarów do obliczeń</td>
+        </tr>  
+      @endforelse
 </table>
 
      
