@@ -76,8 +76,8 @@ class MainController extends Controller
 
         if (!$dId) {
           //  $randomDoing = rand(0, 15); 
-           // $randomDoing = 15;
-           $randomDoing = rand(9, 13);
+           
+           $randomDoing = rand(9, 16);
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -1041,6 +1041,7 @@ class MainController extends Controller
         }
         $area->hide = 1;
         $area->save();
+        Area::where("river", $id)->update(["hide" => 1]);
         return redirect("/")->with('success', 'Ukryto obszar');
     }
 
