@@ -58,7 +58,7 @@
         </tr>
         @empty
         <tr>
-           <td colspan="3">Brak Obszarów do obliczeń</td>
+           <td colspan="3" class="td_i">Brak Obszarów do obliczeń</td>
         </tr>  
       @endforelse
 </table>

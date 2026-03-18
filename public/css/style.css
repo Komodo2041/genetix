@@ -36,3 +36,11 @@ h4.hpen {
 button {
     margin: 5px;
 }
+
+td.td_i {
+    font-style: italic;
+    color: maroon;
+    text-align: center;
+    background: aqua;
+    border: 2px solid maroon;
+}
