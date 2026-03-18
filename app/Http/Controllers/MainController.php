@@ -434,7 +434,7 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
-        while ($repeatQ < 40 && $nrPop < $maxPop) {
+        while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             $individual = 10;
