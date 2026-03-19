@@ -65,7 +65,12 @@ class MainController extends Controller
                     $res = $mdg->generateprzekladaniecX(10);
                        Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
                        return redirect("/")->with('success', 'Utworzono przekladniec X');
-                    break;                           
+                    break;
+                case "Dodaj przekladaniec Y":
+                    $res = $mdg->generateprzekladaniecY(10);
+                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
+                       return redirect("/")->with('success', 'Utworzono przekladniec Y');
+                    break;                                               
             }
         }
  

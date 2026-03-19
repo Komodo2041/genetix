@@ -80,6 +80,22 @@ class MeerDataGenerator
 
    }   
     
- 
+    public function generateprzekladaniecY($nr) {
+       $zlevel = [];
+       for ($i = 0; $i < $nr; $i++) {
+          $zlevel[$i] = rand(0,1);
+       }
+
+       $table = [];
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) { 
+                   $table[$i][$j][$z] = $zlevel[$j];
+               }
+           }
+       }
+       return ["name" => "Przekladaniec Y sz-".$nr, "data" => $table ];
+
+   }  
 
 }

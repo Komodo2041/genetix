@@ -70,7 +70,8 @@
      <input type="submit" name="action" value="Dodaj test Dno morza" />
      <input type="submit" name="action" value="Dodaj obszar 0 i 1" />
      <input type="submit" name="action" value="Dodaj przekladaniec Z" />
-      
+     <input type="submit" name="action" value="Dodaj przekladaniec X" />
+     <input type="submit" name="action" value="Dodaj przekladaniec Y" />
      </form>  
 </div>
 
