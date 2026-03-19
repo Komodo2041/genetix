@@ -72,6 +72,7 @@
      <input type="submit" name="action" value="Dodaj przekladaniec Z" />
      <input type="submit" name="action" value="Dodaj przekladaniec X" />
      <input type="submit" name="action" value="Dodaj przekladaniec Y" />
+     <input type="submit" name="action" value="Generuj jaskinie" />
      </form>  
 </div>
 

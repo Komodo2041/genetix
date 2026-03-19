@@ -70,7 +70,13 @@ class MainController extends Controller
                     $res = $mdg->generateprzekladaniecY(10);
                        Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
                        return redirect("/")->with('success', 'Utworzono przekladniec Y');
-                    break;                                               
+                    break;
+                case "Generuj jaskinie":
+                    $res = $mdg->generateCave(10);
+                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
+                       return redirect("/")->with('success', 'Utworzono jaskinię');
+                    break;                    
+                     
             }
         }
  
