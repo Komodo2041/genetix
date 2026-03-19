@@ -122,4 +122,28 @@ class MeerDataGenerator
 
     }   
 
+
+   public function generateprze3otherLayerZ($nr) {
+       $zlevel = [];
+       for ($i = 0; $i < $nr; $i++) {
+          $zlevel[$i] = rand(0,2);
+       }
+
+       $table = [];
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) {
+                   if ($zlevel[$z] == 2) {
+                      $table[$i][$j][$z] = rand(0, 1);
+                   } else {
+                      $table[$i][$j][$z] = $zlevel[$z];
+                   }
+               }
+           }
+       }
+       return ["name" => "Przekladaniec Z sz-".$nr, "data" => $table ];
+
+   }
+
+     
 }

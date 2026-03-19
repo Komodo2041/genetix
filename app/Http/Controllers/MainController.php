@@ -76,7 +76,11 @@ class MainController extends Controller
                        Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
                        return redirect("/")->with('success', 'Utworzono jaskinię');
                     break;                    
-                     
+                case "3 różne warstwy Z":
+                    $res = $mdg->generateprze3otherLayerZ(10);
+                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
+                       return redirect("/")->with('success', 'Utworzono 3 warstwy w osi Z');
+                    break;         
             }
         }
  
