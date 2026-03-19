@@ -58,11 +58,28 @@ class MeerDataGenerator
                }
            }
        }
-       return ["name" => "Przekladaniec sz-".$nr, "data" => $table ];
+       return ["name" => "Przekladaniec Z sz-".$nr, "data" => $table ];
 
    }
 
-    
+   public function generateprzekladaniecX($nr) {
+       $zlevel = [];
+       for ($i = 0; $i < $nr; $i++) {
+          $zlevel[$i] = rand(0,1);
+       }
 
+       $table = [];
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) { 
+                   $table[$i][$j][$z] = $zlevel[$i];
+               }
+           }
+       }
+       return ["name" => "Przekladaniec X sz-".$nr, "data" => $table ];
+
+   }   
+    
+ 
 
 }

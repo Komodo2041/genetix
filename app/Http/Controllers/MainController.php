@@ -60,7 +60,12 @@ class MainController extends Controller
                     $res = $mdg->generateprzekladaniecZ(10);
                        Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
                        return redirect("/")->with('success', 'Utworzono przekladniec Z');
-                    break;         
+                    break;
+                case "Dodaj przekladaniec X":
+                    $res = $mdg->generateprzekladaniecX(10);
+                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
+                       return redirect("/")->with('success', 'Utworzono przekladniec X');
+                    break;                           
             }
         }
  
@@ -80,9 +85,9 @@ class MainController extends Controller
         $population0 = [];
 
         if (!$dId) {
-          //  $randomDoing = rand(0, 15); 
+            $randomDoing = rand(0, 16); 
            
-           $randomDoing = rand(9, 16);
+         //  $randomDoing = rand(9, 16);
               
         } else {
             $randomDoing = rand(20, 33);  
