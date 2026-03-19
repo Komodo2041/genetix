@@ -29,8 +29,7 @@ class MeerDataGenerator
     }
 
     public function generate0and1($nr) {
-        
-       $level = rand(0,9);
+ 
        $table = [];
        for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -45,7 +44,23 @@ class MeerDataGenerator
  
 
 
+   public function generateprzekladaniecZ($nr) {
+       $zlevel = [];
+       for ($i = 0; $i < $nr; $i++) {
+          $zlevel[$i] = rand(0,1);
+       }
 
+       $table = [];
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+               for ($z = 0; $z < $nr; $z++) { 
+                   $table[$i][$j][$z] = $zlevel[$z];
+               }
+           }
+       }
+       return ["name" => "Przekladaniec sz-".$nr, "data" => $table ];
+
+   }
 
     
 
