@@ -520,8 +520,8 @@ class MainController extends Controller
             $other = 0;
             for ($i = 1; $i < count($res); $i++) {
  
-                $condo = $result2 * 0.999999;
-                if ($result2 > 0.999999) {
+                $condo = $result2 * 0.99999;
+                if ($result2 > 0.99999) {
                     $condo = $result2 * $result2;
                 }
                 if ($condo >= $res[$i]['sum']/$maxPoints) {
@@ -1171,5 +1171,19 @@ class MainController extends Controller
         return view("showriver", ['calco' => $res ]);    
 
     }
+
+    public function usedmethods($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $calco = Calculation::selectRaw('COUNT(id) AS count,  level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg, typecalc')->where("area_id", $id)
+        ->groupBy( 'level', 'typecalc')->orderBy("level")->get()->toArray();
+        
+        echo "<pre>"; print_r($calco); echo "</pre>"; exit();
+ 
+
+    }
+
 
 }

@@ -12,6 +12,8 @@ Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\
 
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\MainController@percentshow" );
 Route::get('area/histogram/{id}',  "App\Http\Controllers\MainController@histogram" );
+Route::get('area/usedmethods/{id}',  "App\Http\Controllers\MainController@usedmethods" );
+ 
 Route::get('mutations',  "App\Http\Controllers\MainController@mutations" );
 Route::get('samecalculations',  "App\Http\Controllers\MainController@samecalculations" );
 
