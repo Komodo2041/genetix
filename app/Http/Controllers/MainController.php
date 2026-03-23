@@ -1179,9 +1179,8 @@ class MainController extends Controller
         }
         $calco = Calculation::selectRaw('COUNT(id) AS count,  level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg, typecalc')->where("area_id", $id)
         ->groupBy( 'level', 'typecalc')->orderBy("level")->get()->toArray();
-        
-        echo "<pre>"; print_r($calco); echo "</pre>"; exit();
  
+        return view("showselectedpopulation", ['calco' => $calco ]);
 
     }
 
