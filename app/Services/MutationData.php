@@ -12,11 +12,13 @@ class MutationData
        $methods = [ "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6" ];
        $choosemutation = rand(0, 1);
        if ($choosemutation == 1) {
-            $methods = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ];
+            $methods = [ "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2" ];
        }
 
        $choosemutation = rand(0, 18);
-       if (  $choosemutation == 7 || $choosemutation == 8 || $choosemutation == 9) {
+       if ( $choosemutation == 6 || $choosemutation == 7 ) {
+           $methods = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ];
+       } elseif ( $choosemutation == 8 || $choosemutation == 9) {
            $methods = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];  
        } elseif ( $choosemutation == 10 || $choosemutation == 11) {
            $methods = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ];   
@@ -1017,7 +1019,113 @@ class MutationData
         }   
         return $pop2;     
 
-    }      
+    }
+
+     
+    private function changeOneLayerZ($pop, $nr = 10) {
+      
+       $pop2 = $pop;
+
+       $z1 = rand(0, $nr - 1);
+       $z2 = rand(0, $nr - 1);
+
+
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                    if ($z != $z1 && $z != $z2) {
+                       $pop2[$i][$j][$z] = $pop[$i][$j][$z];
+                    } elseif ($z1 == $z) {
+                       $pop2[$i][$j][$z] = $pop[$i][$j][$z2];
+                    } elseif ($z2 == $z) {
+                       $pop2[$i][$j][$z] = $pop[$i][$j][$z1];
+                    }
+                    
+                }
+            }
+       }   
+       return $pop2;  
+ 
+    }
+
+    private function changeOneLayerX($pop, $nr = 10) {
+      
+       $pop2 = $pop;
+
+       $p1 = rand(0, $nr - 1);
+       $p2 = rand(0, $nr - 1);
+
+
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                    if ($i != $p1 && $i != $p2) {
+                       $pop2[$i][$j][$z] = $pop[$i][$j][$z];
+                    } elseif ($p1 == $i) {
+                       $pop2[$i][$j][$z] = $pop[$p2][$j][$z];
+                    } elseif ($p2 == $i) {
+                       $pop2[$i][$j][$z] = $pop[$p1][$j][$z];
+                    }
+                    
+                }
+            }
+       }   
+       return $pop2;  
+ 
+    }
+    
+    private function changeOneLayerY($pop, $nr = 10) {
+      
+       $pop2 = $pop;
+
+       $p1 = rand(0, $nr - 1);
+       $p2 = rand(0, $nr - 1);
+
+
+       for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                    if ($j != $p1 && $j != $p2) {
+                       $pop2[$i][$j][$z] = $pop[$i][$j][$z];
+                    } elseif ($p1 == $j) {
+                       $pop2[$i][$j][$z] = $pop[$i][$p2][$z];
+                    } elseif ($p2 == $j) {
+                       $pop2[$i][$j][$z] = $pop[$i][$p1][$z];
+                    }
+                    
+                }
+            }
+       }   
+       return $pop2;  
+ 
+    }
+
+    private function changeOneLayerZ2($pop, $nr = 10) {
+       $p1 = rand(1, 5);
+       $pop2 = $pop;
+       for ($i = 0; $i < $p1; $i++) {
+          $pop2 = $this->changeOneLayerZ($pop2, $nr);
+       }
+        return $pop2; 
+    }
+
+    private function changeOneLayerX2($pop, $nr = 10) {
+       $p1 = rand(1, 5);
+       $pop2 = $pop;
+       for ($i = 0; $i < $p1; $i++) {
+          $pop2 = $this->changeOneLayerX($pop2, $nr);
+       }
+        return $pop2; 
+    }
+    
+    private function changeOneLayerY2($pop, $nr = 10) {
+       $p1 = rand(1, 5);
+       $pop2 = $pop;
+       for ($i = 0; $i < $p1; $i++) {
+          $pop2 = $this->changeOneLayerY($pop2, $nr);
+       }
+        return $pop2; 
+    }    
 
     public function getAllMethod() {
        $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
@@ -1027,8 +1135,9 @@ class MutationData
        $methods5 = ["shufflecolumnYZgo6", "shufflecolumnXYgo6", "shufflecolumnXZgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6"];
        $methods6 = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ]; 
        $methods7 = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];
-       $methods8 = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ]; 
-       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6, $methods7, $methods8);         
+       $methods8 = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ];
+       $methods9 = [ "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2"]; 
+       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6, $methods7, $methods8, $methods9);         
               
     }
 
