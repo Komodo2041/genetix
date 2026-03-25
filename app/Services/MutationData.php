@@ -5,43 +5,33 @@ namespace App\Services;
 class MutationData
 {
 
-    public $nrmutation = 45;    
+    public $nrmutation = 270;    
+
+    private $mutationList = [
+        "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6",
+        "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d",
+        "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright",
+        "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4",
+        "shufflecolumnXYgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ",
+        "goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange",
+        "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
+        "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
+        "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2"
+    ];
 
     public function addmutation($pop, $crossing) {
+
        $max = count($pop);
-       $methods = [ "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6" ];
-       $choosemutation = rand(0, 1);
-       if ($choosemutation == 1) {
-            $methods = [ "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2" ];
-       }
+       $nrmed = count($this->mutationList) - 1;
 
-       $choosemutation = rand(0, 18);
-       if ( $choosemutation == 6 || $choosemutation == 7 ) {
-           $methods = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ];
-       } elseif ( $choosemutation == 8 || $choosemutation == 9) {
-           $methods = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];  
-       } elseif ( $choosemutation == 10 || $choosemutation == 11) {
-           $methods = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ];   
-       } elseif ( $choosemutation == 12 || $choosemutation == 13) {
-          $methods = [ "shufflecolumnXYgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ"];
-       } elseif ($choosemutation == 14 || $choosemutation == 15) {
-            $methods = ["goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange"]; 
-       } elseif ($choosemutation == 16 || $choosemutation == 17) {
-             $methods = ["shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1"];
-       }  elseif ($choosemutation == 18) {            
-            $methods = ["shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9" ];
-       }   
-
-
-       foreach ($methods AS $m) {
-          for ($i = 0; $i < $this->nrmutation; $i++) {
-            $go = rand(0, $max - 1); 
+       for ($i = 0; $i < $this->nrmutation; $i++) {
+            $go = rand(0, $max - 1);
+            $m = $this->mutationList[rand(0, $nrmed)];   
             $area = $this->$m($pop[$go]);
             $pop[] = $area;
             $crossing[] = $m;
-          }
        }
-       
+ 
        return [$pop, $crossing];
     }
  
@@ -1128,17 +1118,7 @@ class MutationData
     }    
 
     public function getAllMethod() {
-       $methods = ["goup1x1", "godown1x1", "goupanddown1x1", "changecolumnXY" , "changecolumnXZ" , "changecolumnYZ" ];
-       $methods2 = [ "shufflecolumnXY" , "shufflecolumnXZ" , "shufflecolumnYZ", "changeRand4x4", "changeRand9x9", "changeRand16x16" ];
-       $methods3 = [ "neighbourchange10" ,  "neighbourchange5" ,   "neighbourchange",  "shuffleRand4x4", "shuffleRand9x9", "shuffleRand16x16" ];
-       $methods4 = [ "exchangecolumnXY" , "exchangecolumnXZ" , "exchangecolumnYZ", "exchangefarcolumnXY" , "exchangefarcolumnXZ" , "exchangefarcolumnYZ" ];
-       $methods5 = ["shufflecolumnYZgo6", "shufflecolumnXYgo6", "shufflecolumnXZgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6"];
-       $methods6 = [ "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4" ]; 
-       $methods7 = [ "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright" ];
-       $methods8 = [ "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d" ];
-       $methods9 = [ "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2"]; 
-       return array_merge($methods, $methods2, $methods3, $methods4, $methods5, $methods6, $methods7, $methods8, $methods9);         
-              
+       return $this->mutationList;       
     }
 
 }
