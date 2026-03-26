@@ -31,6 +31,28 @@ class MainController extends Controller
 
     public $maxNumberInCalculation = 5;
 
+    private $populationName = [
+       0 => "Generation 0",
+       -1 => "10 from level down",
+       1 => "5 down, 5 more down",
+       2 => "2 differene",
+       3 => "2 more different",
+       4 => "Stable Pattern",
+       5 => "Stable Pattern bext results",
+       6 => "Change Still Template",
+       7 => "Clone",
+       8 => "Multiple Clone",
+       9 => "Pattern XYZ",
+       10 => "3 mutation First",
+       11 => "2 * bigLayerMutation",
+       12 => "useBigMutator - 1",
+       13 => "useBigMutator - 2",
+       14 => "bigLayerMutationCircle - 3",
+       15 => "Join River",
+       16 => "Join more River",
+     
+    ];
+
 
     public function list(Request $request, MeerDataGenerator $mdg) {
 
@@ -1178,9 +1200,9 @@ class MainController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
         $calco = Calculation::selectRaw('COUNT(id) AS count,  level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg, typecalc')->where("area_id", $id)
-        ->groupBy( 'level', 'typecalc')->orderBy("level")->get()->toArray();
+        ->groupBy( 'level', 'typecalc')->orderBy("level", "asc")->orderBy("avg", "desc")->get()->toArray();
  
-        return view("showselectedpopulation", ['calco' => $calco ]);
+        return view("showselectedpopulation", ['calco' => $calco, "names" => $this->populationName ]);
 
     }
 
