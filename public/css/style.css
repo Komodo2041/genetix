@@ -44,3 +44,8 @@ td.td_i {
     background: aqua;
     border: 2px solid maroon;
 }
+
+#formarea input {
+    width: 250px;
+    margin: 10px;
+}

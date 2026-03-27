@@ -66,7 +66,7 @@
 </table>
 
      
-   <form action="" method="Post">
+   <form action="" id="formarea" method="Post">
      @csrf
      <input type="hidden" value="1" name="save" />
      <input type="submit" name="action" value="Dodaj test Dno morza" />
