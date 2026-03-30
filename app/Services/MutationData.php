@@ -16,7 +16,8 @@ class MutationData
         "goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange",
         "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
-        "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2"
+        "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
+        "jointwopointsZ", "dividepointsZ"
     ];
 
     public function addmutation($pop, $crossing) {
@@ -1116,6 +1117,63 @@ class MutationData
        }
         return $pop2; 
     }    
+
+    private function jointwopointsZ($pop, $nr = 10) {
+        $min = 1;
+        $pop2 = $pop;
+        $point1 = $this->searchPoint(1, $pop, $nr, $min);
+        $point2 = $this->searchPoint(1, $pop, $nr, $min);
+        if ($point1 == false || $point2 == false) {
+            return $pop2;
+        }
+        $point3 = $this->searchPoint(0, $pop, min($point1['z'], $point2['z']), 1);
+         
+        if ($point3 == false ) {
+           return $pop2;
+        }
+        $pop2[$point1['x']][$point1['y']][$point1['z']] = 0;
+        $pop2[$point2['x']][$point2['y']][$point2['z']] = 0;
+        $pop2[$point3['x']][$point3['y']][$point3['z']] = 1;
+        return $pop2;
+    }
+
+    private function dividepointsZ($pop, $nr = 10) {
+        $min = 0;
+        $pop2 = $pop;
+        $point1 = $this->searchPoint(1, $pop, $nr, $min);
+        if ($point1 == false ) {
+           return $pop2;
+        }        
+        $point2 = $this->searchPoint(0, $pop, $nr, $point1['z']);
+        $point3 = $this->searchPoint(0, $pop, $nr, $point1['z']);
+      
+        if ($point2 == false || $point3 == false ) {
+           return $pop2;
+        }
+        $pop2[$point1['x']][$point1['y']][$point1['z']] = 0;
+        $pop2[$point2['x']][$point2['y']][$point2['z']] = 1;
+        $pop2[$point3['x']][$point3['y']][$point3['z']] = 1;
+        return $pop2;
+    }
+ 
+
+    private function searchPoint($found, $pop, $max, $min) {
+        $try = 0;
+        $point = false; 
+        while ($try < 20) {
+            $x = rand(0, $max - 1);
+            $y = rand(0, $max - 1);
+            $z = rand($min, $max - 1);
+            if ($pop[$x][$y][$z] == $found) {
+               $point = ['x' => $x, 'y' => $y, 'z' => $z]; 
+               break;
+            }
+            $try++;
+        }
+        return $point;
+    }
+
+
 
     public function getAllMethod() {
        return $this->mutationList;       
