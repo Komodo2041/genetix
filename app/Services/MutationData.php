@@ -17,7 +17,7 @@ class MutationData
         "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
-        "jointwopointsZ", "dividepointsZ"
+        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5"
     ];
 
     public function addmutation($pop, $crossing) {
@@ -1173,7 +1173,23 @@ class MutationData
         return $point;
     }
 
+    private function jointwopointsZ5($pop, $nr = 10) {
+       $p1 = rand(1, 8);
+       $pop2 = $pop;
+       for ($i = 0; $i < $p1; $i++) {
+          $pop2 = $this->jointwopointsZ($pop2, $nr);
+       }
+        return $pop2; 
+    }
 
+    private function dividepointsZ5($pop, $nr = 10) {
+       $p1 = rand(1, 8);
+       $pop2 = $pop;
+       for ($i = 0; $i < $p1; $i++) {
+          $pop2 = $this->dividepointsZ($pop2, $nr);
+       }
+        return $pop2; 
+    }
 
     public function getAllMethod() {
        return $this->mutationList;       
