@@ -19,6 +19,10 @@ class Area extends Model
 
     public function levelsavg() {
         return $this->hasMany("App\Models\LevelAvg", "area_id");
-    }    
+    }
+
+    public function mutationmatrix() {
+        return $this->hasMany("App\Models\Matrix", "area_id");
+    }       
 
 }

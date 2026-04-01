@@ -17,6 +17,7 @@ use App\Models\Calculation;
 use App\Models\Clones;
 use App\Models\Diamond;
 use App\Models\Diamondcalc;
+use App\Models\Matrix;
  
 class MainController extends Controller
 {
@@ -1217,6 +1218,10 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
  
+        if (!$bestResult) {
+            return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+        }
+
         $mresults = [];
         foreach ($mutations AS $key => $method) {
             $population0 = [];
@@ -1230,8 +1235,10 @@ class MainController extends Controller
             $res = $gtx->calcPopulation($population0, $headPoints);
             unset($population0);
             
+            $sum = 0;
+            $all = 0;
             foreach ($res AS $key2 => $calc) {
-        
+                
                 if ($key2 == 0) {
                     continue;
                 }
@@ -1241,17 +1248,27 @@ class MainController extends Controller
                 } else {
                     $result[1]++;
                 }
+                $sum += $calc['sum'];
+                $all++;
             }
             $mresults[] = [
                "key" => $key,
                "name" => $method,
-               "res" => $result
+               "res" => $result,
+               'calc' => ($sum / $all) / $res[0]['sum']
             ];
            
         }
- echo "<pre>"; print_r($mresults); echo "</pre>";
-  exit();
- 
+  
+        Matrix::where("area_id", $id)->delete();
+        foreach ($mresults AS $res) {
+            $all = $res['res'][0] + $res['res'][1];
+            $c = $res['res'][0] / $all;
+            Matrix::create(["area_id" => $id, "key" => $res['key'], "name" => $res['name'], "result" => $c, "calc" => $res['calc']]);
+        }
+
+        return redirect("/")->with('success', 'Obliczono matrycę mutacji dla area: '.$id); 
+
     }
 
 }
