@@ -17,7 +17,7 @@ class MutationData
         "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
-        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5"
+        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingLayers"
     ];
 
     public function addmutation($pop, $crossing) {
@@ -1189,6 +1189,33 @@ class MutationData
           $pop2 = $this->dividepointsZ($pop2, $nr);
        }
         return $pop2; 
+    }
+
+    private function mixingLayers($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 2);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom1 || $z == $pom1 + 1 ) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pom1 || $z == $pom1 + 1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
     }
 
     public function getAllMethod() {
