@@ -20,14 +20,18 @@ class MutationData
         "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingLayers"
     ];
 
-    public function addmutation($pop, $crossing) {
+    public function addmutation($pop, $crossing, $method = NULL) {
 
        $max = count($pop);
-       $nrmed = count($this->mutationList) - 1;
+       $mutationList = $this->mutationList;
+       if ($method) {
+            $mutationList = [$method];
+       }
+       $nrmed = count($mutationList) - 1;
 
        for ($i = 0; $i < $this->nrmutation; $i++) {
             $go = rand(0, $max - 1);
-            $m = $this->mutationList[rand(0, $nrmed)];   
+            $m = $mutationList[rand(0, $nrmed)];   
             $area = $this->$m($pop[$go]);
             $pop[] = $area;
             $crossing[] = $m;

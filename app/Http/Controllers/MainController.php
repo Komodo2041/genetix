@@ -1206,5 +1206,52 @@ class MainController extends Controller
 
     }
 
+    public function calcMatrix($id, MutationData $mutation, GenetixDataGenerator $gtx) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        set_time_limit(12000);
+        $mutations = $mutation->getAllMethod();  
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints(120, $table);
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
+ 
+        $mresults = [];
+        foreach ($mutations AS $key => $method) {
+            $population0 = [];
+            $result = [0, 0];
+          
+            $cr[] = "generation";
+            $population0[] = json_decode($bestResult[0]->data);
+            
+            $res = $mutation->addmutation($population0, $cr, $method);   
+            $population0 = $res[0];
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            unset($population0);
+            
+            foreach ($res AS $key2 => $calc) {
+        
+                if ($key2 == 0) {
+                    continue;
+                }
+                
+                if ($calc['sum'] > $res[0]['sum']) {
+                    $result[0]++;
+                } else {
+                    $result[1]++;
+                }
+            }
+            $mresults[] = [
+               "key" => $key,
+               "name" => $method,
+               "res" => $result
+            ];
+           
+        }
+ echo "<pre>"; print_r($mresults); echo "</pre>";
+  exit();
+ 
+    }
 
 }

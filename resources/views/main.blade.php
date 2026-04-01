@@ -41,6 +41,9 @@
                      <a href="/pourRiver/{{$a->id}}"><button>Wlej rzekę</button></a>&nbsp;
                      <a href="/cloneRiver/{{$a->id}}"><button>Klonuj rzekę</button></a>&nbsp;
                   @endif
+
+                  <a href="/calcMatrix/{{$a->id}}"><button>Aktualizuj Matryce Mutacji</button></a>&nbsp;
+
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  
                    <br/>
