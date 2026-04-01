@@ -43,6 +43,7 @@
                   @endif
 
                   <a href="/calcMatrix/{{$a->id}}"><button>Aktualizuj Matryce Mutacji</button></a>&nbsp;
+                  <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  

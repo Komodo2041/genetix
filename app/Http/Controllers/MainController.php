@@ -1271,4 +1271,13 @@ class MainController extends Controller
 
     }
 
+    public function showMatrix($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $matrix = Matrix::where("area_id", $id)->orderBy("calc", "DESC")->get();
+        return view("showmatrix", ['matrix' => $matrix ]);
+    }
+
 }
