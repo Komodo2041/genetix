@@ -1275,7 +1275,7 @@ class MainController extends Controller
            
         }
   
-        Matrix::where("area_id", $id)->delete();
+        Matrix::where("area_id", $id)->update(["hide" => 1]);
         foreach ($mresults AS $res) {
             $all = $res['res'][0] + $res['res'][1];
             $c = $res['res'][0] / $all;
@@ -1291,7 +1291,7 @@ class MainController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $matrix = Matrix::where("area_id", $id)->orderBy("calc", "DESC")->get();
+        $matrix = Matrix::where("area_id", $id)->where("hide", 0)->orderBy("calc", "DESC")->get();
         return view("showmatrix", ['matrix' => $matrix ]);
     }
 
