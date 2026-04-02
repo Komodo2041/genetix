@@ -1232,23 +1232,33 @@ class MainController extends Controller
             
             $res = $mutation->addmutation($population0, $cr, $method);   
             $population0 = $res[0];
-            $res = $gtx->calcPopulation($population0, $headPoints);
+            $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
+             
             unset($population0);
             
             $sum = 0;
             $all = 0;
             $same = 0;
+
+            $oldMaxResult = 0;
+            foreach ($res AS $key2 => $calc) {
+                 if ($calc['howitwascreated'] == "generation") {
+                    $oldMaxResult = $calc['sum'];
+                    break;
+                 }
+            }
+ 
             foreach ($res AS $key2 => $calc) {
                 
-                if ($key2 == 0) {
+                if ($calc['howitwascreated'] == "generation") {
                     continue;
                 }
                 
-                if ($calc['sum'] > $res[0]['sum']) {
+                if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
                 } else {
                     $result[1]++;
-                    if ($calc['sum'] == $res[0]['sum']) {
+                    if ($calc['sum'] == $oldMaxResult) {
                        $same++;
                     }
                 }
