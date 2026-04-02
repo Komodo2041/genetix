@@ -31,7 +31,10 @@ Route::get('cloneRiver/{id}',  "App\Http\Controllers\MainController@cloneRiver" 
 
 Route::get('showRiver/{id}',  "App\Http\Controllers\MainController@showRiver" ); 
 Route::get('calcMatrix/{id}',  "App\Http\Controllers\MainController@calcMatrix" ); 
-Route::get('showMatrix/{id}',  "App\Http\Controllers\MainController@showMatrix" ); 
+Route::get('showMatrix/{id}',  "App\Http\Controllers\MainController@showMatrix" );
+
+Route::get('turn_matrix/{id}',  "App\Http\Controllers\MainController@turnMatrix" ); 
+Route::get('turnoff_matrix/{id}',  "App\Http\Controllers\MainController@turnoffMatrix" ); 
  
  
  

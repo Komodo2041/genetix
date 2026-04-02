@@ -45,6 +45,12 @@
                   <a href="/calcMatrix/{{$a->id}}"><button>Aktualizuj Matryce Mutacji</button></a>&nbsp;
                   <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
 
+                  @if ($a->matrixtribe == 0) 
+                     <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a><br/>
+                  @else   
+                     <a href="/turnoff_matrix/{{$a->id}}"><button>Wyłącz uzywanie matrycy</button></a><br/>
+                  @endif   
+
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  
                    <br/>

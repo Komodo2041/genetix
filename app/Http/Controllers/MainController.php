@@ -119,8 +119,17 @@ class MainController extends Controller
         }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints(120, $table);
-
         $population0 = [];
+
+
+        if ($area->matrixtribe) {
+           $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->get()->pluck("name")->toArray();
+            
+           if ($methods) {
+               $mutation->changeMutationList($methods);
+           }
+        }
+ 
 
         if (!$dId) {
             $randomDoing = rand(0, 16); 
@@ -1291,8 +1300,18 @@ class MainController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $matrix = Matrix::where("area_id", $id)->where("hide", 0)->orderBy("calc", "DESC")->get();
+        $matrix = Matrix::where("area_id", $id)->where("hide", 0)->orderBy("result", "DESC")->get();
         return view("showmatrix", ['matrix' => $matrix ]);
     }
+
+    public function turnMatrix($id) {
+        Area::where("id", $id)->update(["matrixtribe" => 1]);
+        return redirect("/")->with('success', 'Włączono matrycę mutacji dla area: '.$id); 
+    }
+
+    public function turnoffMatrix($id) {
+        Area::where("id", $id)->update(["matrixtribe" => 0]);
+        return redirect("/")->with('success', 'Wyłączono matrycę mutacji dla area: '.$id);         
+    }    
 
 }

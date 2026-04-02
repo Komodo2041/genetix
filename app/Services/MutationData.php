@@ -1226,4 +1226,8 @@ class MutationData
        return $this->mutationList;       
     }
 
+    public function changeMutationList($methods) {
+        $this->mutationList = $methods;
+    }
+
 }
