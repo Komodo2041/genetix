@@ -1237,6 +1237,7 @@ class MainController extends Controller
             
             $sum = 0;
             $all = 0;
+            $same = 0;
             foreach ($res AS $key2 => $calc) {
                 
                 if ($key2 == 0) {
@@ -1247,6 +1248,9 @@ class MainController extends Controller
                     $result[0]++;
                 } else {
                     $result[1]++;
+                    if ($calc['sum'] == $res[0]['sum']) {
+                       $same++;
+                    }
                 }
                 $sum += $calc['sum'];
                 $all++;
@@ -1255,6 +1259,7 @@ class MainController extends Controller
                "key" => $key,
                "name" => $method,
                "res" => $result,
+               "same" => $same,
                'calc' => ($sum / $all) / $res[0]['sum']
             ];
            
@@ -1264,7 +1269,7 @@ class MainController extends Controller
         foreach ($mresults AS $res) {
             $all = $res['res'][0] + $res['res'][1];
             $c = $res['res'][0] / $all;
-            Matrix::create(["area_id" => $id, "key" => $res['key'], "name" => $res['name'], "result" => $c, "calc" => $res['calc']]);
+            Matrix::create(["area_id" => $id, "key" => $res['key'], "name" => $res['name'], "result" => $c, "calc" => $res['calc'], "same" => $res['same']]);
         }
 
         return redirect("/")->with('success', 'Obliczono matrycę mutacji dla area: '.$id); 
