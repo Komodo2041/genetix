@@ -1241,28 +1241,30 @@ class MainController extends Controller
             $population0 = [];
             $result = [0, 0];
           
-            $cr[] = "generation";
+            $cr = ["generation"];
             $population0[] = json_decode($bestResult[0]->data);
-            
+     
             $res = $mutation->addmutation($population0, $cr, $method);   
             $population0 = $res[0];
             $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
+
              
-            unset($population0);
             
             $sum = 0;
             $all = 0;
             $same = 0;
 
             $oldMaxResult = 0;
+ 
             foreach ($res AS $key2 => $calc) {
                  if ($calc['howitwascreated'] == "generation") {
                     $oldMaxResult = $calc['sum'];
                     break;
                  }
+                 
             }
  
-            foreach ($res AS $key2 => $calc) {
+            foreach ($res AS $key3 => $calc) {
                 
                 if ($calc['howitwascreated'] == "generation") {
                     continue;
@@ -1278,7 +1280,7 @@ class MainController extends Controller
                 }
                 $sum += $calc['sum'];
                 $all++;
-            }  
+            }
             $mresults[] = [
                "key" => $key,
                "name" => $method,
@@ -1287,7 +1289,7 @@ class MainController extends Controller
                'calc' => ($sum / $all) / $oldMaxResult
             ];
            
-        }  
+        }
   
         Matrix::where("area_id", $id)->update(["hide" => 1]);
         foreach ($mresults AS $res) {
