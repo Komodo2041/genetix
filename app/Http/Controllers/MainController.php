@@ -52,7 +52,8 @@ class MainController extends Controller
        14 => "bigLayerMutationCircle - 3",
        15 => "Join River",
        16 => "Join more River",
-     
+       17 => "Use Waga small",
+       18 => "Use Waga Bigg",
     ];
 
 
@@ -135,7 +136,7 @@ class MainController extends Controller
         if (!$dId) {
             $randomDoing = rand(0, 16); 
            
-         //  $randomDoing = rand(9, 16);
+            $randomDoing = rand(17, 18);
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -342,9 +343,29 @@ class MainController extends Controller
             }
             $individual = count($population0);
   
-           /*** DIAMOND * **/
-        }         
-        
+            
+        }    elseif ($randomDoing == 17 || $randomDoing == 18) {
+            $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderBy("obtainedresult", "DESC")->first();
+            if (!$bestResult) {
+                return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+            }
+            $wg = Waga::where("calculation_id", $bestResult->id)->first();
+            $dataBest = json_decode($bestResult->data);
+            if (!$wg) { 
+                $wdiff = $this->getdiffwaga($dataBest, $headPoints, $id, $bestResult->id, $gtx);
+            } else {
+                $wdiff = json_decode($wg->data);
+            }
+            
+            if ($randomDoing == 17) {
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.1); 
+            } else {
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.5); 
+            }
+              
+            $individual = count($population0);  
+            /*** DIAMOND * **/
+        }
         elseif ($randomDoing == 20) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
@@ -1323,7 +1344,7 @@ class MainController extends Controller
     }
 
     public function createweighingscale($id, GenetixDataGenerator $gtx) {
-        set_time_limit(1800);
+        set_time_limit(3600);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -1347,13 +1368,15 @@ class MainController extends Controller
         $diff = 0.4;
         $points = 0;
         $step = 0;
-        while ($points < 100 && $step < 16) {
-             $weightDiffo = $gtx->getWeightScale($data, $headPoints, 10, $diff);
+        $size = 10;
+        $maxpoints = round(0.1 * $size * $size * $size);
+        while ($points < $maxpoints && $step < 50) {
+             $weightDiffo = $gtx->getWeightScale($data, $headPoints, $size, $diff);
              $step++;
-             $points = $gtx->calcpointinarea($weightDiffo, 10);
-             $diff = $diff / 2; 
+             $points = $gtx->calcpointinarea($weightDiffo, $size);
+             $diff = $diff / 1.25; 
         }
- 
+  
         Waga::create(["data" => json_encode($weightDiffo), "area_id" => $areaId, "calculation_id" => $cId ]); 
 
         return $weightDiffo;        

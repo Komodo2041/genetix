@@ -514,7 +514,7 @@ class GenetixDataGenerator
        for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    if ($data[$i][$j][$z]) {
+                    if ($data[$i][$j][$z] == 1) {
                         $sum++;
                     }
                     
@@ -524,5 +524,47 @@ class GenetixDataGenerator
        return $sum;
     }
 
+
+    public function createPopulation0FromWaga($nr, $data, $wg, $pr) {
+        $points = $this->calcpointinarea($wg, 10);
+        $changePoints = round($pr * $points);
+        $res = [];
+        $size = 10;
+
+        $pom = [];
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($wg[$i][$j][$z] == 1) {
+                        $pom[] = [
+                           'i' => $i,
+                           'j' => $j,
+                           'z' => $z
+                        ];
+                    }
+                    
+                }
+            }
+        }        
+ 
+        shuffle($pom);
+ 
+        for ($i = 0; $i < $nr; $i++) {
+            shuffle($pom);
+            $new = $data;
+            for ($j = 0; $j < $changePoints; $j++) {
+                $x = $pom[$j]['i'];
+                $y = $pom[$j]['j'];
+                $z = $pom[$j]['z'];
+                if ($new[$x][$y][$z] == 1) {
+                   $new[$x][$y][$z] = 0;
+                } else {
+                   $new[$x][$y][$z] = 1;  
+                }
+            }
+            $res[] = $new;
+        }
+        return $res;
+    }
 
 }
