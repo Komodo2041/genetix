@@ -22,6 +22,7 @@ Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" 
 Route::get('showerror/{id}',  "App\Http\Controllers\MainController@showerros" );
 Route::get('showring/{id}',  "App\Http\Controllers\MainController@showring" );
 Route::get('calcallavg/{id}',  "App\Http\Controllers\MainController@calcallavg" );
+ 
 
 Route::get('addRiver/{id}',  "App\Http\Controllers\MainController@addRiver" );
 Route::get('hidearea/{id}',  "App\Http\Controllers\MainController@hide" );
@@ -29,8 +30,11 @@ Route::get('hidearea/{id}',  "App\Http\Controllers\MainController@hide" );
 Route::get('pourRiver/{id}',  "App\Http\Controllers\MainController@pourRiver" );
 Route::get('cloneRiver/{id}',  "App\Http\Controllers\MainController@cloneRiver" );
 
-Route::get('showRiver/{id}',  "App\Http\Controllers\MainController@showRiver" ); 
-Route::get('calcMatrix/{id}',  "App\Http\Controllers\MainController@calcMatrix" ); 
+Route::get('showRiver/{id}',  "App\Http\Controllers\MainController@showRiver" );
+ 
+Route::get('calcMatrix/{id}',  "App\Http\Controllers\MainController@calcMatrix" );
+Route::get('calcMatrix/{id}/{nrM}',  "App\Http\Controllers\MainController@calcMatrix" ); 
+
 Route::get('showMatrix/{id}',  "App\Http\Controllers\MainController@showMatrix" );
 
 Route::get('turn_matrix/{id}',  "App\Http\Controllers\MainController@turnMatrix" ); 

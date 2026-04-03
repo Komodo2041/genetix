@@ -1216,11 +1216,16 @@ class MainController extends Controller
 
     }
 
-    public function calcMatrix($id, MutationData $mutation, GenetixDataGenerator $gtx) {
+    public function calcMatrix($id,  MutationData $mutation, GenetixDataGenerator $gtx, $nrM = null) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
+ 
+        if ($nrM) {
+            $mutation->setNrMutation($nrM);
+        }
+
         set_time_limit(12000);
         $mutations = $mutation->getAllMethod();  
         $table = json_decode($area->data);
@@ -1273,16 +1278,16 @@ class MainController extends Controller
                 }
                 $sum += $calc['sum'];
                 $all++;
-            }
+            }  
             $mresults[] = [
                "key" => $key,
                "name" => $method,
                "res" => $result,
                "same" => $same,
-               'calc' => ($sum / $all) / $res[0]['sum']
+               'calc' => ($sum / $all) / $oldMaxResult
             ];
            
-        }
+        }  
   
         Matrix::where("area_id", $id)->update(["hide" => 1]);
         foreach ($mresults AS $res) {
@@ -1295,13 +1300,13 @@ class MainController extends Controller
 
     }
 
-    public function showMatrix($id) {
+    public function showMatrix($id ) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
         $matrix = Matrix::where("area_id", $id)->where("hide", 0)->orderBy("result", "DESC")->get();
-        return view("showmatrix", ['matrix' => $matrix ]);
+        return view("showmatrix", ['matrix' => $matrix, 'area' => $area]);
     }
 
     public function turnMatrix($id) {

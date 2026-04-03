@@ -3,6 +3,8 @@
 
 <a href="/"><button>Strona główna</button></a><br/>
 
+<a href="/calcMatrix/{{$area->id}}/5"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji</button></a>&nbsp;
+
 <h3>Matryca Mutacji</h3>
 <div class="container">
  

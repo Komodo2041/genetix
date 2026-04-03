@@ -1230,4 +1230,8 @@ class MutationData
         $this->mutationList = $methods;
     }
 
+    public function setNrMutation($nr) {
+        $this->nrmutation = $nr;
+    }
+
 }
