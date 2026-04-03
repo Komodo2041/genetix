@@ -18,6 +18,7 @@ use App\Models\Clones;
 use App\Models\Diamond;
 use App\Models\Diamondcalc;
 use App\Models\Matrix;
+use App\Models\Waga;
  
 class MainController extends Controller
 {
@@ -1319,6 +1320,43 @@ class MainController extends Controller
     public function turnoffMatrix($id) {
         Area::where("id", $id)->update(["matrixtribe" => 0]);
         return redirect("/")->with('success', 'Wyłączono matrycę mutacji dla area: '.$id);         
-    }    
+    }
+
+    public function createweighingscale($id, GenetixDataGenerator $gtx) {
+        set_time_limit(1800);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->first();
+        if (!$bestResult) {
+            return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+        }
+        $data = json_decode($bestResult->data);
+ 
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints(120, $table);
+  
+        $this->getdiffwaga($data, $headPoints, $id, $bestResult->id, $gtx);
+        return redirect("/")->with('success', 'Obliczono wagę dla area: '.$id);   
+
+    }
+
+    private function getdiffwaga($data, $headPoints, $areaId, $cId, $gtx) {
+        $weightDiffo = [];
+        $diff = 0.4;
+        $points = 0;
+        $step = 0;
+        while ($points < 100 && $step < 16) {
+             $weightDiffo = $gtx->getWeightScale($data, $headPoints, 10, $diff);
+             $step++;
+             $points = $gtx->calcpointinarea($weightDiffo, 10);
+             $diff = $diff / 2; 
+        }
+ 
+        Waga::create(["data" => json_encode($weightDiffo), "area_id" => $areaId, "calculation_id" => $cId ]); 
+
+        return $weightDiffo;        
+    }
 
 }

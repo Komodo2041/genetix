@@ -46,10 +46,13 @@
                   <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
 
                   @if ($a->matrixtribe == 0) 
-                     <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a><br/>
+                     <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a>  
                   @else   
-                     <a href="/turnoff_matrix/{{$a->id}}"><button>Wyłącz uzywanie matrycy</button></a><br/>
+                     <a href="/turnoff_matrix/{{$a->id}}"><button class="secondary">Wyłącz uzywanie matrycy</button></a> 
                   @endif   
+
+                  <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
+
 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  

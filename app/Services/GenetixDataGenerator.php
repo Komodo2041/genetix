@@ -476,5 +476,53 @@ class GenetixDataGenerator
  
     }
 
+    public function getWeightScale($data, $headPoints, $size = 10, $diff = 0.01) {
+
+        $res = [];
+        $pointsIndividual = $this->calcIndividualPoints($data, $headPoints);
+        $max = $this->calcAreaPoints($pointsIndividual);
+ 
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) { 
+                     
+                   $checked = $data;
+                   if ($data[$i][$j][$z] == 1) { 
+                       $checked[$i][$j][$z] = 1 - $diff;
+                   } else {
+                       $checked[$i][$j][$z] = 0 + $diff;
+                   }
+
+                    $pointsIndividual = $this->calcIndividualPoints($checked, $headPoints);
+                    $result = $this->calcAreaPoints($pointsIndividual);
+                    if ($result > $max) {
+                        $res[$i][$j][$z] = 1;
+                    } else {
+                        $res[$i][$j][$z] = 0;
+                    }
+
+                }
+            }
+        }
+
+        return $res;
+
+    }
+
+    public function calcpointinarea($data, $size = 10) {
+        $sum = 0;
+       for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($data[$i][$j][$z]) {
+                        $sum++;
+                    }
+                    
+                }
+            }
+       }
+       return $sum;
+    }
+
 
 }
