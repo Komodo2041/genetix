@@ -346,7 +346,7 @@ class MainController extends Controller
   
             
         }  elseif ($randomDoing == 17 || $randomDoing == 18 || $randomDoing == 19) {
-            $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderBy("obtainedresult", "DESC")->first();
+            $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
             if (!$bestResult) {
                 return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
             }

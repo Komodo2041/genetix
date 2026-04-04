@@ -5,7 +5,7 @@ namespace App\Services;
 class CrossingData
 {
 
-    public $nrcrossing = 70;
+    public $nrcrossing = 490;
 
     /**
      * nonused method "cutting_xyz"
@@ -16,40 +16,30 @@ class CrossingData
     public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4"];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
+    public $methods = ["updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
+        "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0",
+        "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz",
+        "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
+        "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz",
+        "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"
+    ];
+
     public function createNewPopulation($population) {
        $max = count($population);
        $res = [];
        $crossing = [];
-     
-       $methods = [ "updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX" ];
-       $choosecross = rand(0, 2);
-       if ($choosecross == 1) {
-          $methods = [ "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0" ];
-       } elseif ($choosecross == 2) {
-          $methods = [    "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz" ];
-       }
+       $nrmethod = count($this->methods);
  
-       $choosecross = rand(0, 15);
-       if ($choosecross == 6 ||$choosecross == 7 || $choosecross == 8) {
-          $methods = [ "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom"  ];
-       }  elseif ($choosecross == 10 || $choosecross == 11 || $choosecross == 12) {
-           $methods = [ "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz"];
-       }  elseif ($choosecross == 13 || $choosecross == 14 ||$choosecross == 15) {
-                   $methods = [  "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"  ];
-       }      
-         foreach ($methods AS $m) {
-          if (count($population) < 10) { 
+       for ($i = 0; $i < $this->nrcrossing; $i++) {
+            $m = $this->methods[round(0, $nrmethod - 1)];
+            if (count($population) < 10) { 
               if (in_array($m, $this->multipleCrossings)) {
                   $m = $this->bestCrossing[rand(0, count($this->bestCrossing) - 1)];
               }
-          }
-
-          for ($i = 0; $i < $this->nrcrossing; $i++) {
- 
+            }            
             $area = $this->$m($population, $max);
             $res[] = $area;
-            $crossing[] = $m;
-          }
+            $crossing[] = $m; 
        }
        return [$res, $crossing];
 
@@ -1073,14 +1063,7 @@ class CrossingData
     }     
 
     public function getAllMethod() {
-       $methods = ["random50", "updown", "leftright", "leftright2", "tassingx", "tassingy", "tassingz", "cutting_xy", "cutting_xz", "cutting_yz", "cutting_xyz"];
-       $methods2 = [  "joinwith0", "joinwith1",  "chessboard_xy", "chessboard_xz", "chessboard_yz", "chessboardradom_xy", "chessboardrandom_xz", "chessboardrandom_yz",   
-                  "usedblockhalfhalf", "usedblockhalfhalfrandom", "chessboardrandom_xyz" ];
-       $methods3 = ["squerInSquere5AxZ", "squerInSquere6AxX", "squerInSquere6AxY", "squerInSquere6AxZ", "squerInSquere7AxX", "squerInSquere7AxY", "squerInSquere7AxZ"];
-       $methods4 = [ "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", "squerInSquere7AxX", "joinwith0" ];
-       $methods5 = [ "layersin2xyz",  "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" ];
-        return array_merge($methods, $methods2, $methods3, $methods4, $methods5);          
-              
+        return $this->methods;       
     }
 
 }
