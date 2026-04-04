@@ -55,6 +55,7 @@ class MainController extends Controller
        17 => "Use Waga small",
        18 => "Use Waga Bigg",
        19 => "Use Waga mini",
+       20 => "Calculating mutation matrix",
     ];
 
 
@@ -360,15 +361,15 @@ class MainController extends Controller
             
             $power = $gtx->getPower([$dataBest]);
             if ($randomDoing == 17) {
-               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.2); 
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.15); 
             } elseif ($randomDoing == 18)  {
-               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.5); 
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.33);
             } elseif ($randomDoing == 19)  {
-               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.05); 
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.03); 
             }
             $population0 = $gtx->usepower($population0, $power);
             $population0[] = $dataBest;
-            
+
             $individual = count($population0);  
             
         }  /*** DIAMOND * **/
@@ -461,15 +462,11 @@ class MainController extends Controller
 
  
         $power = $gtx->getPower($population0);
- 
         $res = $gtx->calcPopulation($population0, $headPoints);
- 
         unset($population0);
  
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
-
-        
         $maxQ2 = $res[1]['sum'];
         $oldQ2 = $res[1]['sum'];
 
@@ -491,18 +488,13 @@ class MainController extends Controller
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
 
             } else {
- 
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);
-    
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
-    
                 $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
             }
             
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
- 
             $power = $gtx->getPowerfromarea($res);
- 
             $maxQ = $res[0]['sum'];
             $maxQ2 = $res[1]['sum'];
 
@@ -1247,8 +1239,7 @@ class MainController extends Controller
                  if ($calc['howitwascreated'] == "generation") {
                     $oldMaxResult = $calc['sum'];
                     break;
-                 }
-                 
+                 } 
             }
  
             foreach ($res AS $key3 => $calc) {
@@ -1259,6 +1250,12 @@ class MainController extends Controller
                 
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
+                    if ($oldMaxResult * 1.01 < $calc['sum']) {
+                        echo $calc['sum'] / oldMaxResult; echo " -  -  ";   
+                        $maxPoints = $gtx->getmaxPoints(120);
+                        Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
+                        "level" => $bestResult[0]->level, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 20  ]);                      
+                    }
                 } else {
                     $result[1]++;
                     if ($calc['sum'] == $oldMaxResult) {
@@ -1277,7 +1274,7 @@ class MainController extends Controller
             ];
            
         }
-  
+ 
         Matrix::where("area_id", $id)->update(["hide" => 1]);
         foreach ($mresults AS $res) {
             $all = $res['res'][0] + $res['res'][1];
