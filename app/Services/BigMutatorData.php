@@ -885,5 +885,9 @@ class BigMutatorData
         return $result;            
     }
 
+    public function getRandomMethod() {
+        $nr = count($this->allMethods);
+        return $this->allMethods[rand(0, $nr - 1)];
+    }
 
 }

@@ -140,8 +140,8 @@ class MainController extends Controller
             $randomDoing = rand(17, 19);
               
         } else {
-            $randomDoing = rand(20, 33);  
-            $randomDoing = 33;
+            $randomDoing = rand(30, 37);  
+          //  $randomDoing = 33;
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -367,10 +367,12 @@ class MainController extends Controller
                $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.05); 
             }
             $population0 = $gtx->usepower($population0, $power);
+            $population0[] = $dataBest;
+            
             $individual = count($population0);  
-            /*** DIAMOND * **/
-        }
-        elseif ($randomDoing == 20) {  // diamond - clone
+            
+        }  /*** DIAMOND * **/
+        elseif ($randomDoing == 30) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -382,7 +384,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;
-        } elseif ($randomDoing == 21) { // multiple clone
+        } elseif ($randomDoing == 31) { // multiple clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -395,7 +397,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;     
-        }  elseif ($randomDoing == 22) {  
+        }  elseif ($randomDoing == 32) {  
 
             $calculations = $this->getDiamondCalculations($dId);           
             $population0 = [];  
@@ -404,7 +406,7 @@ class MainController extends Controller
             }
             $individual = count($population0);
    
-        } elseif ($randomDoing == 23) { 
+        } elseif ($randomDoing == 33) { 
             $calculations = $this->getDiamondCalculations($dId);  
             $population0 = [];
             $cr = [];
@@ -418,7 +420,7 @@ class MainController extends Controller
             $res = $mutation->addmutation($res[0], $res[1]);
             $population0 = $res[0];
 
-        } elseif ($randomDoing == 24) { 
+        } elseif ($randomDoing == 34) { 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
             $population0 = [];
@@ -430,71 +432,32 @@ class MainController extends Controller
             $res = $mutation->addmutation($res[0], $res[1]);
             $population0 = $res[0];
 
-        } elseif ($randomDoing == 25) {
+        } elseif ($randomDoing == 35) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
             $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
+            $bigmethod = $bigmutation->getRandomMethod();
+            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
  
-        } elseif ($randomDoing == 26) {
+        } elseif ($randomDoing == 36) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutationMediumSquere($this->startPopulation, 10, $area);
+            $this->useBigMutator = 2;
+            $bigmethod = $bigmutation->getRandomMethod();
+            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
 
- 
-        }  elseif ($randomDoing == 27) {
+        } elseif ($randomDoing == 37) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutationMiniSquere($this->startPopulation, 10, $area);
- 
-        }  elseif ($randomDoing == 28) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutationMiniRandomSquere($this->startPopulation, 10, $area);
- 
-        } elseif ($randomDoing == 29) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutationStrip5x1X($this->startPopulation, 10, $area);
- 
-        }  elseif ($randomDoing == 30) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutationStrip5x1Y($this->startPopulation, 10, $area);
- 
-        } elseif ($randomDoing == 31) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $population0 = $bigmutation->bigLayerMutationStripRandom5x1X($this->startPopulation, 10, $area);
- 
-        } elseif ($randomDoing == 32) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            
-            $population0 = $bigmutation->bigLayerMutationStripRandom5x1Y($this->startPopulation, 10, $area);
-            $this->useBigMutator = 1;
-        } elseif ($randomDoing == 33) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            
-            $population0 = $bigmutation->bigLayerMutationCircle($this->startPopulation, 10, $area);
-            $this->useBigMutator = 1;
-        }  
+            $this->useBigMutator = 3;
+            $bigmethod = $bigmutation->getRandomMethod();
+            $this->funcMutator = $bigmutation->getIdFunc($bigmethod);
+            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
+
+        }   
 
  
         $power = $gtx->getPower($population0);
@@ -562,12 +525,12 @@ class MainController extends Controller
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
             "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop ]);
 
-            if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 20 || $randomDoing == 21 ) {
+            if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 30 || $randomDoing == 31 ) {
                 $clones["result"] = $result2;
             
                 Clones::create($clones);
             } 
-            if ( in_array($randomDoing, [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33])) {
+            if ( in_array($randomDoing, [30, 31, 32, 33, 34, 35, 36, 37])) {
                 $diamonds["result"] = $result2;
                 $diamonds["calc_id"] = $cred->id;
                 Diamondcalc::create($diamonds);
@@ -609,9 +572,7 @@ class MainController extends Controller
             $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
             return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych ");
         }
-
-  
-
+ 
     }
 
     private function getmostdifferent($calculations, $nr) {
