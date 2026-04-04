@@ -54,6 +54,7 @@ class MainController extends Controller
        16 => "Join more River",
        17 => "Use Waga small",
        18 => "Use Waga Bigg",
+       19 => "Use Waga mini",
     ];
 
 
@@ -134,9 +135,9 @@ class MainController extends Controller
  
 
         if (!$dId) {
-            $randomDoing = rand(0, 16); 
+           // $randomDoing = rand(0, 16); 
            
-            $randomDoing = rand(17, 18);
+            $randomDoing = rand(17, 19);
               
         } else {
             $randomDoing = rand(20, 33);  
@@ -344,7 +345,7 @@ class MainController extends Controller
             $individual = count($population0);
   
             
-        }    elseif ($randomDoing == 17 || $randomDoing == 18) {
+        }  elseif ($randomDoing == 17 || $randomDoing == 18 || $randomDoing == 19) {
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderBy("obtainedresult", "DESC")->first();
             if (!$bestResult) {
                 return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
@@ -357,12 +358,15 @@ class MainController extends Controller
                 $wdiff = json_decode($wg->data);
             }
             
+            $power = $gtx->getPower([$dataBest]);
             if ($randomDoing == 17) {
-               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.1); 
-            } else {
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.2); 
+            } elseif ($randomDoing == 18)  {
                $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.5); 
+            } elseif ($randomDoing == 19)  {
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.05); 
             }
-              
+            $population0 = $gtx->usepower($population0, $power);
             $individual = count($population0);  
             /*** DIAMOND * **/
         }
@@ -1374,7 +1378,7 @@ class MainController extends Controller
              $weightDiffo = $gtx->getWeightScale($data, $headPoints, $size, $diff);
              $step++;
              $points = $gtx->calcpointinarea($weightDiffo, $size);
-             $diff = $diff / 1.25; 
+             $diff = $diff / 1.3; 
         }
   
         Waga::create(["data" => json_encode($weightDiffo), "area_id" => $areaId, "calculation_id" => $cId ]); 

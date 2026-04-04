@@ -547,8 +547,6 @@ class GenetixDataGenerator
             }
         }        
  
-        shuffle($pom);
- 
         for ($i = 0; $i < $nr; $i++) {
             shuffle($pom);
             $new = $data;
@@ -557,13 +555,15 @@ class GenetixDataGenerator
                 $y = $pom[$j]['j'];
                 $z = $pom[$j]['z'];
                 if ($new[$x][$y][$z] == 1) {
-                   $new[$x][$y][$z] = 0;
+                   $new[$x][$y][$z] = 0; 
                 } else {
-                   $new[$x][$y][$z] = 1;  
+                   $new[$x][$y][$z] = 1;
                 }
             }
             $res[] = $new;
         }
+
+       
         return $res;
     }
 
