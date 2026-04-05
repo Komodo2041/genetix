@@ -52,10 +52,11 @@ class MainController extends Controller
        14 => "bigLayerMutationCircle - 3",
        15 => "Join River",
        16 => "Join more River",
-       17 => "Use Waga small",
+       17 => "Use Waga Small",
        18 => "Use Waga Bigg",
-       19 => "Use Waga mini",
-       20 => "Calculating mutation matrix",
+       19 => "Use Waga Mini",
+       20 => "Use Waga Very Mini",
+       21 => "Calculating mutation matrix",
     ];
 
 
@@ -136,9 +137,9 @@ class MainController extends Controller
  
 
         if (!$dId) {
-           // $randomDoing = rand(0, 16); 
+            $randomDoing = rand(0, 20); 
            
-            $randomDoing = rand(17, 19);
+           // $randomDoing = rand(17, 20);
               
         } else {
             $randomDoing = rand(30, 37);  
@@ -346,7 +347,7 @@ class MainController extends Controller
             $individual = count($population0);
   
             
-        }  elseif ($randomDoing == 17 || $randomDoing == 18 || $randomDoing == 19) {
+        }  elseif ($randomDoing == 17 || $randomDoing == 18 || $randomDoing == 19 || $randomDoing == 20) {
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
             if (!$bestResult) {
                 return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
@@ -361,11 +362,13 @@ class MainController extends Controller
             
             $power = $gtx->getPower([$dataBest]);
             if ($randomDoing == 17) {
-               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.15); 
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.10); 
             } elseif ($randomDoing == 18)  {
-               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.33);
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.25);
             } elseif ($randomDoing == 19)  {
                $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.03); 
+            } elseif ($randomDoing == 20)  {
+               $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.01); 
             }
             $population0 = $gtx->usepower($population0, $power);
             $population0[] = $dataBest;
@@ -1254,7 +1257,7 @@ class MainController extends Controller
                         echo $calc['sum'] / oldMaxResult; echo " -  -  ";   
                         $maxPoints = $gtx->getmaxPoints(120);
                         Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
-                        "level" => $bestResult[0]->level, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 20  ]);                      
+                        "level" => $bestResult[0]->level, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);                      
                     }
                 } else {
                     $result[1]++;
