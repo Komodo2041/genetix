@@ -51,13 +51,19 @@ class LevelStering {
 
     public function savenocalc($id, $lvl, $res, $min, $type) {
 
-        NosaveCalc::create([
+        $nc = NosaveCalc::create([
             'area_id' => $id,
             'level' => $lvl,
             'result' => $res,
             'avginlevel' => $min,
             'type' => $type
         ]);
+
+        return [LevelAvg::where("avg", "<", $res)->orderBy("avg", "DESC")->first()->lvl, $nc->id];
+    }
+
+    public function saveCalco($cID, $nc) {
+
     }
 
 }

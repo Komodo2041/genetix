@@ -57,6 +57,7 @@ class MainController extends Controller
        19 => "Use Waga Mini",
        20 => "Use Waga Very Mini",
        21 => "Calculating mutation matrix",
+       22 => "Paratrooper"
     ];
 
 
@@ -139,7 +140,7 @@ class MainController extends Controller
         if (!$dId) {
             $randomDoing = rand(0, 20); 
            
-           // $randomDoing = rand(17, 20);
+            $randomDoing = rand(17, 20);
               
         } else {
             $randomDoing = rand(30, 37);  
@@ -564,7 +565,13 @@ class MainController extends Controller
             return redirect("/")->with('success', 'Dokonano obliczeń dla obszaru '.$id." Wynik: ". $result2. " Level: ".($lvl + 1). " Wynik w pokoleniu : ".$nrPop. $additionalresultsmsg); 
 
         } else {
-            $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
+            $lvlReso = $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
+            if ($lvlReso[0] > 0) {
+                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0], "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
+                 "obtainedresult" => $result2, "typecalc" => 22 ]);
+                $this->ls->saveCalco($calco->id, $lvlReso[1]); 
+            }
+            print_r($lvlReso); exit();
             return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych ");
         }
  
