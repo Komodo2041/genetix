@@ -571,6 +571,7 @@ class MainController extends Controller
                  "obtainedresult" => $result2, "typecalc" => 22 ]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
+            // TEST
             print_r($lvlReso); exit();
             return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych ");
         }

@@ -17,7 +17,8 @@ class MutationData
         "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
-        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingLayers"
+        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingLayers",
+        "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY"
     ];
 
     public function addmutation($pop, $crossing, $method = NULL) {
@@ -1221,6 +1222,87 @@ class MutationData
         return $pop;
 
     }
+
+    private function mixingVerticalLayersX($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($i == $pom1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
+    }    
+
+    private function mixingVerticalLayersY($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($j == $pom1) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($j == $pom1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
+    } 
+
+    private function mixingVerticalLayersZ($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom1) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pom1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
+    }     
 
     public function getAllMethod() {
        return $this->mutationList;       
