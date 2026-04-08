@@ -17,9 +17,13 @@ class MutationData
         "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
-        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingLayers",
+        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
         "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY"
     ];
+
+    public function setNumerMutation($nr) {
+        $this->nrmutation = $nr;
+    }
 
     public function addmutation($pop, $crossing, $method = NULL) {
 
@@ -1196,7 +1200,7 @@ class MutationData
         return $pop2; 
     }
 
-    private function mixingLayers($pop, $nr = 10) {
+    private function mixingZLayers($pop, $nr = 10) {
         $pom1 = rand(0, $nr - 2);
         $used = [];
 

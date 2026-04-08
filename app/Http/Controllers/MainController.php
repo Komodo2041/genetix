@@ -57,7 +57,8 @@ class MainController extends Controller
        19 => "Use Waga Mini",
        20 => "Use Waga Very Mini",
        21 => "Calculating mutation matrix",
-       22 => "Paratrooper"
+       22 => "Paratrooper",
+       23 => "Use Only Mutations"
     ];
 
 
@@ -119,6 +120,8 @@ class MainController extends Controller
     public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
         set_time_limit(12000);
+        $useonlyMutation = 0;
+
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -138,10 +141,14 @@ class MainController extends Controller
  
 
         if (!$dId) {
-            $randomDoing = rand(0, 20); 
-           
-            $randomDoing = rand(17, 20);
-              
+            $randomDoing = rand(0, 21);
+
+            $randomDoing = 21;
+
+            if ($randomDoing > 20) {
+                $randomDoing += 2;
+            } 
+       
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
@@ -261,7 +268,7 @@ class MainController extends Controller
  
             $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
  
-        } elseif ($randomDoing == 10) {  // start with 3 *  mutations
+        } elseif ($randomDoing == 10 || $randomDoing == 23) {  // start with 3 *  mutations
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             $cr = [];
@@ -274,6 +281,10 @@ class MainController extends Controller
             $res = $mutation->addmutation($res[0], $res[1]);
             $res = $mutation->addmutation($res[0], $res[1]);
             $population0 = $res[0];
+
+            if ($randomDoing == 23) {
+                $useonlyMutation = 1;
+            }
  
         } elseif ($randomDoing == 11) {
             
@@ -376,7 +387,8 @@ class MainController extends Controller
 
             $individual = count($population0);  
             
-        }  /*** DIAMOND * **/
+        } 
+         /*** DIAMOND * **/
         elseif ($randomDoing == 30) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
@@ -491,10 +503,15 @@ class MainController extends Controller
 
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
 
-            } else {
+            } elseif ($useonlyMutation == 0) {
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+            } elseif ($useonlyMutation == 1) {
+                
+                $mutation->setNumerMutation($this->startPopulation);
+                $pop_result = $mutation->addmutation($selectedIndividuals, []);
+ 
             }
             
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
