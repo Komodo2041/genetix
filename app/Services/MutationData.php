@@ -19,7 +19,7 @@ class MutationData
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
         "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
         "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers",
-        "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3"
+        "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7"
     ];
 
     public function setNumerMutation($nr) {
@@ -1431,7 +1431,42 @@ class MutationData
         }          
         return $pop;     
 
-    }      
+    }
+    
+    private function shuffleRand7x7x7($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 7);
+        $pom2 = rand(0, $nr - 7);
+        $pom3 = rand(0, $nr - 7);
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 6 )
+                          && ($j >= $pom2 && $j <= $pom2 + 6 )
+                          && ($z >= $pom3 && $z <= $pom3 + 6 )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 6 )
+                          && ($j >= $pom2 && $j <= $pom2 + 6 )
+                          && ($z >= $pom3 && $z <= $pom3 + 6 )) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }     
  
     private function shufflecolumnXY_3x3($pop, $nr = 10) {
         $pom1 = rand(1, $nr - 2);
