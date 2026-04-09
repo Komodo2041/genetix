@@ -1266,6 +1266,7 @@ class MainController extends Controller
             $sum = 0;
             $all = 0;
             $same = 0;
+            $max = 0;
 
             $oldMaxResult = 0;
  
@@ -1281,7 +1282,9 @@ class MainController extends Controller
                 if ($calc['howitwascreated'] == "generation") {
                     continue;
                 }
-                
+                if ($max < $calc['sum']) {
+                    $max = $calc['sum'];
+                }
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
                     if ($oldMaxResult * 1.01 < $calc['sum']) {
@@ -1304,6 +1307,7 @@ class MainController extends Controller
                "name" => $method,
                "res" => $result,
                "same" => $same,
+               "max" => $max / $oldMaxResult,
                'calc' => ($sum / $all) / $oldMaxResult
             ];
            
@@ -1313,7 +1317,7 @@ class MainController extends Controller
         foreach ($mresults AS $res) {
             $all = $res['res'][0] + $res['res'][1];
             $c = $res['res'][0] / $all;
-            Matrix::create(["area_id" => $id, "key" => $res['key'], "name" => $res['name'], "result" => $c, "calc" => $res['calc'], "same" => $res['same']]);
+            Matrix::create(["area_id" => $id, "key" => $res['key'], "name" => $res['name'], "result" => $c, "calc" => $res['calc'], "same" => $res['same'], "max" => $res['max']]);
         }
 
         return redirect("/")->with('success', 'Obliczono matrycę mutacji dla area: '.$id); 

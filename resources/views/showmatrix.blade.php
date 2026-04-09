@@ -13,14 +13,16 @@
         <th>Mutacja</th>
         <th>Lepsze wyniki</th>
         <th>Takie same wyniki</th>
-        <th>AVG</th> 
+        <th>AVG</th>
+        <th>MAX</th>  
     </tr>  
 @forelse ($matrix AS $m)
      <tr>
         <td>{{$m['name']}}</td>
         <td>{{$m['result']}}</td>
         <td>{{$m['same']}}</td>
-        <td>{{$m['calc']}}</td> 
+        <td>{{$m['calc']}}</td>
+        <td>{{$m['max']}}</td> 
     </tr>    
 @empty
    <tr>
