@@ -143,7 +143,7 @@ class MainController extends Controller
         if (!$dId) {
             $randomDoing = rand(0, 21);
 
-            $randomDoing = 21;
+          //  $randomDoing = 21;
 
             if ($randomDoing > 20) {
                 $randomDoing += 2;

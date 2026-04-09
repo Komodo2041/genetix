@@ -18,7 +18,7 @@ class MutationData
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
         "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
-        "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY"
+        "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers"
     ];
 
     public function setNumerMutation($nr) {
@@ -1306,7 +1306,62 @@ class MutationData
         }
         return $pop;
 
-    }     
+    }
+    
+    private function mixingXLayers($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 2);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 || $i == $pom1 + 1 ) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($i == $pom1 || $i == $pom1 + 1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
+    }    
+
+    private function mixingYLayers($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 2);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($j == $pom1 || $j == $pom1 + 1 ) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($j == $pom1 || $j == $pom1 + 1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
+    } 
+
 
     public function getAllMethod() {
        return $this->mutationList;       
