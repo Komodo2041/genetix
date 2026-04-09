@@ -19,6 +19,8 @@ use App\Models\Diamond;
 use App\Models\Diamondcalc;
 use App\Models\Matrix;
 use App\Models\Waga;
+
+ 
  
 class MainController extends Controller
 {
@@ -63,7 +65,7 @@ class MainController extends Controller
 
 
     public function list(Request $request, MeerDataGenerator $mdg) {
-
+ 
         $area = Area::with("calculations")->where("hide", 0)->get();
         
         $calco = Calculation::selectRaw('COUNT(id) AS count, area_id, level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg')->groupBy('area_id', 'level')->orderBy("level")->get()->toArray();

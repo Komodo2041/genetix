@@ -59,7 +59,7 @@ class LevelStering {
             'type' => $type
         ]);
 
-        return [LevelAvg::where("avg", "<", $res)->orderBy("avg", "DESC")->first()->lvl, $nc->id];
+        return [ LevelAvg::where("avg", "<", $res)->where("area_id", $id)->orderBy("avg", "DESC")->toArray()["level"], $nc->id];
     }
 
     public function saveCalco($cID, $nc) {
