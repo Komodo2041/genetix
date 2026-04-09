@@ -18,7 +18,8 @@ class MutationData
         "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
         "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
-        "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers"
+        "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers",
+        "shuffleRand6x6x6", "shuffleRand5x5x5"
     ];
 
     public function setNumerMutation($nr) {
@@ -1361,6 +1362,77 @@ class MutationData
         return $pop;
 
     } 
+
+    private function shuffleRand5x5x5($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 5);
+        $pom2 = rand(0, $nr - 5);
+        $pom3 = rand(0, $nr - 5);
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i == $pom1 && $i <= $pom1 + 4 )
+                          && ($j == $pom2 && $j <= $pom2 + 4 )
+                          && ($z == $pom3 && $z <= $pom3 + 4 )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i == $pom1 && $i <= $pom1 + 4 )
+                          && ($j == $pom2 && $j <= $pom2 + 4 )
+                          && ($z == $pom3 && $z <= $pom3 + 4 )) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shuffleRand6x6x6($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 6);
+        $pom2 = rand(0, $nr - 6);
+        $pom3 = rand(0, $nr - 6);
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i == $pom1 && $i <= $pom1 + 5 )
+                          && ($j == $pom2 && $j <= $pom2 + 5 )
+                          && ($z == $pom3 && $z <= $pom3 + 5 )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i == $pom1 && $i <= $pom1 + 5 )
+                          && ($j == $pom2 && $j <= $pom2 + 5 )
+                          && ($z == $pom3 && $z <= $pom3 + 5 )) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }      
+
 
 
     public function getAllMethod() {
