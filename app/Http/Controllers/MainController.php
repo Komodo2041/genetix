@@ -133,9 +133,13 @@ class MainController extends Controller
         $population0 = [];
 
 
-        if ($area->matrixtribe) {
-           $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->get()->pluck("name")->toArray();
-            
+        if ($area->matrixtribe > 0) {
+            if ($area->matrixtribe == 1) {
+               $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->get()->pluck("name")->toArray();
+            } else {
+               $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->take(10)->get()->pluck("name")->toArray();
+            }
+ 
            if ($methods) {
                $mutation->changeMutationList($methods);
            }
@@ -1334,6 +1338,12 @@ class MainController extends Controller
         Area::where("id", $id)->update(["matrixtribe" => 0]);
         return redirect("/")->with('success', 'Wyłączono matrycę mutacji dla area: '.$id);         
     }
+
+    public function turnoff2Matrix($id) {
+        Area::where("id", $id)->update(["matrixtribe" => 2]);
+        return redirect("/")->with('success', 'Wyłączono inny tryb matrycy: '.$id);         
+    }    
+     
 
     public function createweighingscale($id, GenetixDataGenerator $gtx) {
         set_time_limit(3600);

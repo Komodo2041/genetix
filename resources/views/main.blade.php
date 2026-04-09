@@ -47,8 +47,10 @@
 
                   @if ($a->matrixtribe == 0) 
                      <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a>  
-                  @else   
-                     <a href="/turnoff_matrix/{{$a->id}}"><button class="secondary">Wyłącz uzywanie matrycy</button></a> 
+                  @else ($a->matrixtribe == 2)   
+                     <a href="/turnoff_matrix/{{$a->id}}"><button class="secondary">Wyłącz uzywanie matrycy</button></a>
+                  @else ($a->matrixtribe == 1)   
+                     <a href="/turnoff2_matrix/{{$a->id}}"><button>Włącz matrycę tylko dla najlepszych mutacji</button></a>                      
                   @endif   
 
                   <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
