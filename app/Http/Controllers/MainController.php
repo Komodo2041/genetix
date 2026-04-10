@@ -145,7 +145,6 @@ class MainController extends Controller
            }
         }
  
-
         if (!$dId) {
             $randomDoing = rand(0, 21);
 
@@ -1287,7 +1286,7 @@ class MainController extends Controller
                 }
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
-                    if ($oldMaxResult * 1.01 < $calc['sum']) {
+                    if ($oldMaxResult * 1.000001 < $calc['sum']) {
                         echo $calc['sum'] / oldMaxResult; echo " -  -  ";   
                         $maxPoints = $gtx->getmaxPoints(120);
                         Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
@@ -1338,12 +1337,12 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Włączono matrycę mutacji dla area: '.$id); 
     }
 
-    public function turnoffMatrix($id) {
+    public function turnoffMatrix($id) { 
         Area::where("id", $id)->update(["matrixtribe" => 0]);
         return redirect("/")->with('success', 'Wyłączono matrycę mutacji dla area: '.$id);         
     }
 
-    public function turnoff2Matrix($id) {
+    public function turnofftwoMatrix($id) { 
         Area::where("id", $id)->update(["matrixtribe" => 2]);
         return redirect("/")->with('success', 'Wyłączono inny tryb matrycy: '.$id);         
     }    

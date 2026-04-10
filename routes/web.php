@@ -39,7 +39,7 @@ Route::get('showMatrix/{id}',  "App\Http\Controllers\MainController@showMatrix" 
 
 Route::get('turn_matrix/{id}',  "App\Http\Controllers\MainController@turnMatrix" ); 
 Route::get('turnoff_matrix/{id}',  "App\Http\Controllers\MainController@turnoffMatrix" ); 
-Route::get('turnoff2_matrix/{id}',  "App\Http\Controllers\MainController@turnoffMatrix" ); 
+Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\MainController@turnofftwoMatrix" ); 
  
 
 Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@createweighingscale" );

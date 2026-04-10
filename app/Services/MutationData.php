@@ -19,7 +19,8 @@ class MutationData
         "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
         "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
         "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers",
-        "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7"
+        "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7",
+        "exchangefarcolumnXYMultiple"
     ];
 
     public function setNumerMutation($nr) {
@@ -1551,6 +1552,16 @@ class MutationData
         return $pop;     
 
     }      
+
+    private function exchangefarcolumnXYMultiple($pop, $nr = 10) {
+       $p1 = rand(2, 8);
+       $pop2 = $pop;
+       for ($i = 0; $i < $p1; $i++) {
+          $pop2 = $this->exchangefarcolumnXY($pop2, $nr);
+       }
+        return $pop2;
+
+    }
 
 
     public function getAllMethod() {
