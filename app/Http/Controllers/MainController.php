@@ -161,7 +161,8 @@ class MainController extends Controller
         }
 
         $clones = ["area_id" => $id];
-         
+        $usedcalc = [];  
+
         $minimumCalc = $this->ls->getminimum($id, $lvl - 1);
     
         $individual = 10;
@@ -177,6 +178,7 @@ class MainController extends Controller
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
             }
             $randomDoing = -1;
 
@@ -186,11 +188,13 @@ class MainController extends Controller
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
             }
             $ix = rand(1, $lvl-1);
             $calculations = Calculation::where("area_id", $id)->where("level", $ix)->take(5)->orderByRaw('RAND()')->get();
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
             }               
         } elseif ($randomDoing == 2) {
              
@@ -199,6 +203,7 @@ class MainController extends Controller
             $mostdifferent = $this->getmostdifferent($calculations, 2);  
             foreach ($mostdifferent AS $c) {
                 $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
             }
             $individual = 2;
                 
@@ -210,6 +215,7 @@ class MainController extends Controller
             $mostdifferent = $this->getmostdifferent($calculations, $number);  
             foreach ($mostdifferent AS $c) {
                 $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
             }
             $individual = count($population0);            
         } elseif ($randomDoing == 4) {
@@ -280,6 +286,7 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $cr[] = "generation";
+                $usedcalc[] = $c->id;
             }
              
             $res = $mutation->addmutation($population0, $cr);
@@ -295,7 +302,7 @@ class MainController extends Controller
             
             $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, true);
             $area = json_decode($calculations[0]->data);
-            
+            $usedcalc[] = $calculations[0]->id;
             $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
 
            $this->useBigMutator = 1;
@@ -305,6 +312,7 @@ class MainController extends Controller
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
+                $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
             $this->useBigMutator = 1;
@@ -314,6 +322,7 @@ class MainController extends Controller
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
+                $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
             $this->useBigMutator = 2;
@@ -323,6 +332,7 @@ class MainController extends Controller
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
+                $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
             $this->useBigMutator = 3;
@@ -333,6 +343,7 @@ class MainController extends Controller
             $calculations = $this->getCalculationMaxBest($id, 2);  
             $population0 = []; 
             foreach ($calculations AS $c) {
+                $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
 
@@ -481,6 +492,9 @@ class MainController extends Controller
 
         }   
 
+        if ($usedcalc) {
+            Calculation::whereIn(id, $usedcalc)->increment('calculation');
+        }
  
         $power = $gtx->getPower($population0);
         $res = $gtx->calcPopulation($population0, $headPoints);
@@ -1287,7 +1301,7 @@ class MainController extends Controller
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
                     if ($oldMaxResult * 1.000001 < $calc['sum']) {
-                        echo $calc['sum'] / oldMaxResult; echo " -  -  ";   
+                           
                         $maxPoints = $gtx->getmaxPoints(120);
                         Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
                         "level" => $bestResult[0]->level, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);                      
