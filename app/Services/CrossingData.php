@@ -1067,6 +1067,10 @@ class CrossingData
         return $this->methods;       
     }
 
+    public function setNr($nr) {
+        $this->nrcrossing = $nr;
+    }
+
 }
 
  

@@ -20,6 +20,8 @@ use App\Models\Diamondcalc;
 use App\Models\Matrix;
 use App\Models\Waga;
 
+use App\Models\CrossMatrix;
+ 
  
  
 class MainController extends Controller
@@ -1253,7 +1255,7 @@ class MainController extends Controller
 
     }
 
-    public function calcMatrix($id,  MutationData $mutation, GenetixDataGenerator $gtx, $nrM = null) {
+    public function calcMatrix($id, MutationData $mutation, GenetixDataGenerator $gtx, $nrM = null) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -1284,9 +1286,7 @@ class MainController extends Controller
             $res = $mutation->addmutation($population0, $cr, $method);   
             $population0 = $res[0];
             $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
-
-             
-            
+ 
             $sum = 0;
             $all = 0;
             $same = 0;
@@ -1411,5 +1411,49 @@ class MainController extends Controller
 
         return $weightDiffo;        
     }
+
+    private function calcCrossMatrix($id, CrossingData $cross, GenetixDataGenerator $gtx,) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+ 
+        if ($nrM) {
+            $cross->setNr($nrM);
+        }
+
+        set_time_limit(12000);
+        $crossings = $cross->getAllMethod();  
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints(120, $table);
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(10)->get();
+ 
+        if (!$bestResult || count($bestResult) < 10) {
+            return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+        }
+        $population0 = [];
+        foreach ( $bestResult AS $c) {
+            $population0[] = json_decode($c->data);
+        }
+       
+        $headCalc = $gtx->calcPopulation($population0, $headPoints);
+        $min = 0;
+        $max = 0;
+        foreach ($headCalc AS $c) {
+           if ($c['sum'] > $max) {
+              $max = $c['sum'];
+           }
+           if ($min == 0) {
+              $min = $c['sum'];
+           }
+           if ($c['sum'] < $min) {
+              $min = $c['sum'];
+           }           
+        }
+        print_r($min); echo " "; print_r($max);
+        exit();
+        
+    }
+
 
 }

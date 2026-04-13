@@ -45,6 +45,8 @@
                   <a href="/calcMatrix/{{$a->id}}"><button>Aktualizuj Matryce Mutacji</button></a>&nbsp;
                   <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
 
+                  <a href="/calcCrossMatrix/{{$a->id}}"><button>Oblicz Matryce Krzyżowań</button></a>&nbsp;
+
                   @if ($a->matrixtribe == 0) 
                      <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a>  
                   @elseif ($a->matrixtribe == 2)   
