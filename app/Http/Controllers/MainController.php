@@ -146,7 +146,7 @@ class MainController extends Controller
         }
  
         if (!$dId) {
-            $randomDoing = rand(0, 21);
+            $randomDoing = rand(0, 22);
 
           //  $randomDoing = 21;
 
@@ -228,7 +228,7 @@ class MainController extends Controller
  
         } elseif ($randomDoing == 5) { 
         
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, 1);
             $usedpercent = rand(70,99);
      
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
@@ -246,7 +246,7 @@ class MainController extends Controller
 
         }  elseif ($randomDoing == 7) {  // clone
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, true);
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, 1);
             $area = json_decode($calculations[0]->data);
             $change = rand(1, 20);
             $res = $gtx->clonePattern($area, 1, $change);
@@ -300,7 +300,7 @@ class MainController extends Controller
  
         } elseif ($randomDoing == 11) {
             
-            $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, true);
+            $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, 1);
             $area = json_decode($calculations[0]->data);
             $usedcalc[] = $calculations[0]->id;
             $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
@@ -403,7 +403,16 @@ class MainController extends Controller
 
             $individual = count($population0);  
             
-        } 
+        } elseif ($randomDoing == 24) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 10, 1, 2);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
+            }
+
+        }
          /*** DIAMOND * **/
         elseif ($randomDoing == 30) {  // diamond - clone
 
@@ -493,7 +502,7 @@ class MainController extends Controller
         }   
 
         if ($usedcalc) {
-            Calculation::whereIn(id, $usedcalc)->increment('calculation');
+            Calculation::whereIn('id', $usedcalc)->increment('calculation');
         }
  
         $power = $gtx->getPower($population0);
@@ -675,13 +684,15 @@ class MainController extends Controller
 
     }
 
-    private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1, $obtain = false) {
+    private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1, $obtain = 0) {
         $used = [];
         $newcalc = [];
-        if (!$obtain) {
+        if ($obtain == 0) {
             $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->get();
-        } else {
+        } elseif ($obtain == 1) {
             $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('obtainedresult DESC')->get();
+        } elseif ($obtain == 2) {
+            $calc = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('calculation ASC')->get();
         }
         foreach ($calc AS $c) {
            if (in_array($c->same, $used)) {
