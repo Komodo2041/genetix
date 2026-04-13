@@ -24,7 +24,10 @@ class CrossingData
         "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"
     ];
 
-    public function createNewPopulation($population) {
+    public function createNewPopulation($population, $cr = null) {
+       if ($cr) {
+           $this->methods = [$cr];
+       } 
        $max = count($population);
        $res = [];
        $crossing = [];

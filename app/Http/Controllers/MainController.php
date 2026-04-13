@@ -62,7 +62,9 @@ class MainController extends Controller
        20 => "Use Waga Very Mini",
        21 => "Calculating mutation matrix",
        22 => "Paratrooper",
-       23 => "Use Only Mutations"
+       23 => "Use Only Mutations",
+       24 => "Use non used calculations",
+       25 => "Calculating crossing matrix",
     ];
 
 
@@ -523,6 +525,8 @@ class MainController extends Controller
  
         $usedmodify = [];
         $t3 = microtime(true);
+          // HEAD LOOP
+
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
@@ -561,6 +565,7 @@ class MainController extends Controller
         }
         $t4 = microtime(true);
         arsort($usedmodify); 
+       
        
         $result2 = $maxQ / $maxPoints; 
         if ($result2  > $minimumCalc) {
@@ -1293,7 +1298,8 @@ class MainController extends Controller
             $max = 0;
 
             $oldMaxResult = 0;
- 
+            $maxPoints = $gtx->getmaxPoints(120);
+
             foreach ($res AS $key2 => $calc) {
                  if ($calc['howitwascreated'] == "generation") {
                     $oldMaxResult = $calc['sum'];
@@ -1313,7 +1319,7 @@ class MainController extends Controller
                     $result[0]++;
                     if ($oldMaxResult * 1.000001 < $calc['sum']) {
                            
-                        $maxPoints = $gtx->getmaxPoints(120);
+                       
                         Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
                         "level" => $bestResult[0]->level, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);                      
                     }
@@ -1412,7 +1418,7 @@ class MainController extends Controller
         return $weightDiffo;        
     }
 
-    private function calcCrossMatrix($id, CrossingData $cross, GenetixDataGenerator $gtx,) {
+    public function calcCrossMatrix($id, CrossingData $cross, GenetixDataGenerator $gtx, $nrM = null) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -1428,6 +1434,9 @@ class MainController extends Controller
         $headPoints = $gtx->calcPoints(120, $table);
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(10)->get();
  
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+        print_r($lvlmax); exit(); 
+
         if (!$bestResult || count($bestResult) < 10) {
             return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
         }
@@ -1450,10 +1459,54 @@ class MainController extends Controller
               $min = $c['sum'];
            }           
         }
-        print_r($min); echo " "; print_r($max);
-        exit();
-        
-    }
+        $maxPoints = $gtx->getmaxPoints(120);
+        $mresults = [];
+        foreach ($crossings AS $cr) {
+            $pop_result = $cross->createNewPopulation($selectedIndividuals, $cr);
+            $all = count($pop_result[0]);
+            $res = $gtx->calcPopulation($pop_result[0], $headPoints);
+            $record = [0, 0, 0];
+            $mmax = 0;
+            foreach ($res AS $row) {
+                if ($row['sum'] < $min) {
+                   $record[0]++;
+                } elseif ($row['sum'] < $max) {
+                   $record[1]++;
+                } else {
+                   $record[2]++;
+                }
+                if ($row['sum'] > $mmax) {
+                    $mmax = $row['sum'];
+                }
+            }
+            $mresults[] = [ 
+               "name" => $cr,
+               "area_id" => $id,
+               "bad_result" => ($record[0] / $all),
+               "middle_result" => ($record[1] / $all),                
+               "best_result" => ($record[2] / $all),
+               "max" => $mmax / $max,  
+            ];
+            
+           if ($max * 1.000001 < $row['sum']) {
+                Calculation::create(["result" => "Wynik dzięki krzyżowaniu ".$cr, "data" => json_encode($row['area']), "area_id" => $id, 
+                "level" => $lvlmax, "obtainedresult" => $row['sum'] / $maxPoints,  "typecalc" => 25  ]);                      
+            }            
 
+        }
+
+        CrossMatrix::where("area_id", $id)->update(["hide" => 1]);
+ 
+        foreach ($mresults AS $res) {
+ 
+            CrossMatrix::create(["area_id" => $id, "name" => $res['name'], "max" => $res['max'],
+               "bad_result" => $res['bad_result'], "middle_result" => $res['middle_result'], "best_result" => $res['best_result'] ]);
+               
+        }
+
+        return redirect("/")->with('success', 'Obliczono matrycę krzyżowań dla area: '.$id); 
+
+    }
+ 
 
 }
