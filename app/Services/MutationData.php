@@ -1822,8 +1822,8 @@ class MutationData
                 for ($z = 0; $z < $nr; $z++) {
 
                      if (($i == $pom1 || $i == $pom1 + 7 )
-                          || ($j == $pom2 && $j == $pom2 + 7 )
-                          || ($z == $pom3 && $z == $pom3 + 7 )) {
+                          || ($j == $pom2 || $j == $pom2 + 7 )
+                          || ($z == $pom3 || $z == $pom3 + 7 )) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1834,9 +1834,9 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 && $i == $pom1 + 7 )
-                          || ($j == $pom2 && $j == $pom2 + 7 )
-                          || ($z == $pom3 && $z == $pom3 + 7 )) {
+                     if (($i == $pom1 || $i == $pom1 + 7 )
+                          || ($j == $pom2 || $j == $pom2 + 7 )
+                          || ($z == $pom3 || $z == $pom3 + 7 )) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1858,8 +1858,8 @@ class MutationData
                 for ($z = 0; $z < $nr; $z++) {
 
                      if (($i == $pom1 || $i == $pom1 + 4 )
-                          || ($j == $pom2 && $j == $pom2 + 4 )
-                          || ($z == $pom3 && $z == $pom3 + 4 )) {
+                          || ($j == $pom2 || $j == $pom2 + 4 )
+                          || ($z == $pom3 || $z == $pom3 + 4 )) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1870,9 +1870,9 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 && $i == $pom1 + 4 )
-                          || ($j == $pom2 && $j == $pom2 + 4 )
-                          || ($z == $pom3 && $z == $pom3 + 4 )) {
+                     if (($i == $pom1 || $i == $pom1 + 4 )
+                          || ($j == $pom2 || $j == $pom2 + 4 )
+                          || ($z == $pom3 || $z == $pom3 + 4 )) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1893,8 +1893,8 @@ class MutationData
                 for ($z = 0; $z < $nr; $z++) {
 
                      if (($i == $pom1 || $i == $pom1 + 3 )
-                          || ($j == $pom2 && $j == $pom2 + 3 )
-                          || ($z == $pom3 && $z == $pom3 + 3 )) {
+                          || ($j == $pom2 || $j == $pom2 + 3 )
+                          || ($z == $pom3 || $z == $pom3 + 3 )) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1905,9 +1905,9 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 && $i == $pom1 + 3 )
-                          || ($j == $pom2 && $j == $pom2 + 3 )
-                          || ($z == $pom3 && $z == $pom3 + 3 )) {
+                     if (($i == $pom1 || $i == $pom1 + 3 )
+                          || ($j == $pom2 || $j == $pom2 + 3 )
+                          || ($z == $pom3 || $z == $pom3 + 3 )) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1928,8 +1928,8 @@ class MutationData
                 for ($z = 0; $z < $nr; $z++) {
 
                      if (($i == $pom1 || $i == $pom1 + 2 )
-                          || ($j == $pom2 && $j == $pom2 + 2 )
-                          || ($z == $pom3 && $z == $pom3 + 2 )) {
+                          || ($j == $pom2 || $j == $pom2 + 2 )
+                          || ($z == $pom3 || $z == $pom3 + 2 )) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1940,9 +1940,9 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 && $i == $pom1 + 2 )
-                          || ($j == $pom2 && $j == $pom2 + 2 )
-                          || ($z == $pom3 && $z == $pom3 + 2 )) {
+                     if (($i == $pom1 || $i == $pom1 + 2 )
+                          || ($j == $pom2 || $j == $pom2 + 2 )
+                          || ($z == $pom3 || $z == $pom3 + 2 )) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }

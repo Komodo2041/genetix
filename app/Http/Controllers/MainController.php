@@ -1513,7 +1513,7 @@ class MainController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy("best_result", "DESC")->get();
+        $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy("max", "DESC")->get();
         return view("showcrossmatrix", ['matrix' => $matrix, 'area' => $area]);
     }    
 
