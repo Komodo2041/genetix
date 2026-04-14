@@ -21,7 +21,8 @@ class CrossingData
         "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz",
         "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
         "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz",
-        "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy"
+        "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy",
+        "joinwith_0or1_random", "joinwith_0or1_random2"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1066,6 +1067,49 @@ class CrossingData
         return $table;
     }     
 
+    private function joinwith_0or1_random($population, $max, $nr = 10, $maxstere = 1) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $table = [];
+
+        $stere = [];
+        for ($i =0; $i < $nr; $i++) {
+            $stere = rand(0, $maxstere);
+        }
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($stere[$z] == 0) {
+                        if ($one[$i][$j][$z] == 1 && $two[$i][$j][$z] == 1) {
+                        $table[$i][$j][$z] = 1;
+                        } else {
+                        $table[$i][$j][$z] = 0;
+                        }
+                    } elseif ($stere[$z] == 1) {
+                        if ($one[$i][$j][$z] == 1 || $two[$i][$j][$z] == 1) {
+                        $table[$i][$j][$z] = 1;
+                        } else {
+                        $table[$i][$j][$z] = 0;
+                        }                        
+                    } elseif ($stere[$z] == 2) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } elseif ($stere[$z] == 3) {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function joinwith_0or1_random2($population, $max, $nr = 10) {
+        return $this->joinwith_0or1_random($population, $max, $nr, 3);
+    }
+
+    
     public function getAllMethod() {
         return $this->methods;       
     }
