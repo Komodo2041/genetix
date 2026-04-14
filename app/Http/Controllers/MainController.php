@@ -1435,7 +1435,6 @@ class MainController extends Controller
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(10)->get();
  
         $lvlmax = Calculation::where("area_id", $id)->max("level");
-        print_r($lvlmax); exit(); 
 
         if (!$bestResult || count($bestResult) < 10) {
             return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
@@ -1462,7 +1461,7 @@ class MainController extends Controller
         $maxPoints = $gtx->getmaxPoints(120);
         $mresults = [];
         foreach ($crossings AS $cr) {
-            $pop_result = $cross->createNewPopulation($selectedIndividuals, $cr);
+            $pop_result = $cross->createNewPopulation($population0, $cr);
             $all = count($pop_result[0]);
             $res = $gtx->calcPopulation($pop_result[0], $headPoints);
             $record = [0, 0, 0];
@@ -1475,9 +1474,14 @@ class MainController extends Controller
                 } else {
                    $record[2]++;
                 }
-                if ($row['sum'] > $mmax) {
+                if ($row['sum'] >= $mmax) {
                     $mmax = $row['sum'];
                 }
+
+                if ($max * 1.000001 < $row['sum']) {
+                        Calculation::create(["result" => "Wynik dzięki krzyżowaniu ".$cr, "data" => json_encode($row['area']), "area_id" => $id, 
+                        "level" => $lvlmax, "obtainedresult" => $row['sum'] / $maxPoints,  "typecalc" => 25  ]);                      
+                }                 
             }
             $mresults[] = [ 
                "name" => $cr,
@@ -1487,12 +1491,7 @@ class MainController extends Controller
                "best_result" => ($record[2] / $all),
                "max" => $mmax / $max,  
             ];
-            
-           if ($max * 1.000001 < $row['sum']) {
-                Calculation::create(["result" => "Wynik dzięki krzyżowaniu ".$cr, "data" => json_encode($row['area']), "area_id" => $id, 
-                "level" => $lvlmax, "obtainedresult" => $row['sum'] / $maxPoints,  "typecalc" => 25  ]);                      
-            }            
-
+ 
         }
 
         CrossMatrix::where("area_id", $id)->update(["hide" => 1]);
@@ -1508,5 +1507,15 @@ class MainController extends Controller
 
     }
  
+
+    public function showCrossMatrix($id ) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy("best_result", "DESC")->get();
+        return view("showcrossmatrix", ['matrix' => $matrix, 'area' => $area]);
+    }    
+
 
 }

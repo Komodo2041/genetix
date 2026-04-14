@@ -45,6 +45,6 @@ Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\MainController@turno
 Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@createweighingscale" );
  
 Route::get('calcCrossMatrix/{id}',  "App\Http\Controllers\MainController@calcCrossMatrix" );
- 
+Route::get('calcCrossMatrix/{id}',  "App\Http\Controllers\MainController@calcCrossMatrix" ); 
  
   

@@ -46,6 +46,7 @@
                   <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
 
                   <a href="/calcCrossMatrix/{{$a->id}}"><button>Oblicz Matryce Krzyżowań</button></a>&nbsp;
+                  <a href="/showCrossMatrix/{{$a->id}}"><button>Pokaż Matryce Krzyżowań</button></a>&nbsp;
 
                   @if ($a->matrixtribe == 0) 
                      <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a>  
