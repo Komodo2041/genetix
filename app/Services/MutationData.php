@@ -21,7 +21,7 @@ class MutationData
         "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers",
         "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7", "exchangefarcolumnXYMultiple",
         "shuffleRand6x6x2_X", "shuffleRand6x6x2_Y", "shuffleRand6x6x2_Z", "shuffleRand6x6x3_X", "shuffleRand6x6x3_Y", "shuffleRand6x6x3_Z",
-        "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7"
+        "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines"
     ];
 
     public function setNumerMutation($nr) {
@@ -1775,19 +1775,22 @@ class MutationData
         return $pop;
     }
  
-    private function shuffleRandBorder7x7x7($pop, $nr = 10) {
-        $pom1 = rand(0, $nr - 7);
-        $pom2 = rand(0, $nr - 7);
-        $pom3 = rand(0, $nr - 7);
+    private function shuffleRand6Lines($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, $nr - 1);
+        $pom4 = rand(0, $nr - 1);
+        $pom5 = rand(0, $nr - 1);
+        $pom6 = rand(0, $nr - 1);        
          $used = [];
 
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 6 )
-                          || ($j == $pom2 && $j == $pom2 + 6 )
-                          || ($z == $pom3 && $z == $pom3 + 6 )) {
+                     if (($i == $pom1 || $i == $pom4 )
+                          || ($j == $pom2 || $j == $pom5 )
+                          || ($z == $pom3 || $z == $pom6 )) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1798,9 +1801,9 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 && $i == $pom1 + 6 )
-                          || ($j == $pom2 && $j == $pom2 + 6 )
-                          || ($z == $pom3 && $z == $pom3 + 6 )) {
+                     if (($i == $pom1 || $i == $pom4 )
+                          || ($j == $pom2 || $j == $pom5 )
+                          || ($z == $pom3 || $z == $pom6 )) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1809,8 +1812,7 @@ class MutationData
         return $pop;     
 
     }
-
-
+ 
     private function shuffleRandBorder8x8x8($pop, $nr = 10) {
         $pom1 = rand(0, $nr - 8);
         $pom2 = rand(0, $nr - 8);
@@ -1821,9 +1823,14 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 7 )
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 7) && ($i >= $pom3 && $i <= $pom3 + 7) && 
+                               ($j >= $pom1 && $j <= $pom1 + 7) && ($j >= $pom3 && $j <= $pom3 + 7) && 
+                               ($z >= $pom1 && $z <= $pom1 + 7) && ($z >= $pom2 && $z <= $pom2 + 7));
+
+
+                     if ((($i == $pom1 || $i == $pom1 + 7 )
                           || ($j == $pom2 || $j == $pom2 + 7 )
-                          || ($z == $pom3 || $z == $pom3 + 7 )) {
+                          || ($z == $pom3 || $z == $pom3 + 7 )) && $cond) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1834,9 +1841,13 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 7 )
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 7) && ($i >= $pom3 && $i <= $pom3 + 7) && 
+                               ($j >= $pom1 && $j <= $pom1 + 7) && ($j >= $pom3 && $j <= $pom3 + 7) && 
+                               ($z >= $pom1 && $z <= $pom1 + 7) && ($z >= $pom2 && $z <= $pom2 + 7));
+
+                     if ((($i == $pom1 || $i == $pom1 + 7 )
                           || ($j == $pom2 || $j == $pom2 + 7 )
-                          || ($z == $pom3 || $z == $pom3 + 7 )) {
+                          || ($z == $pom3 || $z == $pom3 + 7 )) && $cond) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1844,22 +1855,25 @@ class MutationData
         }          
         return $pop;     
 
-    }      
- 
-
-    private function shuffleRandBorder6x6x6($pop, $nr = 10) {
-        $pom1 = rand(0, $nr - 5);
-        $pom2 = rand(0, $nr - 5);
-        $pom3 = rand(0, $nr - 5);
+    }
+    
+    private function shuffleRandBorder7x7x7($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 7);
+        $pom2 = rand(0, $nr - 7);
+        $pom3 = rand(0, $nr - 7);
          $used = [];
 
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 4 )
-                          || ($j == $pom2 || $j == $pom2 + 4 )
-                          || ($z == $pom3 || $z == $pom3 + 4 )) {
+                   $cond = (($i >= $pom2 && $i <= $pom2 + 6) && ($i >= $pom3 && $i <= $pom3 + 6) && 
+                               ($j >= $pom1 && $j <= $pom1 + 6) && ($j >= $pom3 && $j <= $pom3 + 6) && 
+                               ($z >= $pom1 && $z <= $pom1 + 6) && ($z >= $pom2 && $z <= $pom2 + 6));
+
+                     if ((($i == $pom1 || $i == $pom1 + 6 )
+                          || ($j == $pom2 || $j == $pom2 + 6 )
+                          || ($z == $pom3 || $z == $pom3 + 6 )) && $cond) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1870,9 +1884,58 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 4 )
-                          || ($j == $pom2 || $j == $pom2 + 4 )
-                          || ($z == $pom3 || $z == $pom3 + 4 )) {
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 6) && ($i >= $pom3 && $i <= $pom3 + 6) && 
+                               ($j >= $pom1 && $j <= $pom1 + 6) && ($j >= $pom3 && $j <= $pom3 + 6) && 
+                               ($z >= $pom1 && $z <= $pom1 + 6) && ($z >= $pom2 && $z <= $pom2 + 6));
+
+                     if ((($i == $pom1 || $i == $pom1 + 6 )
+                          || ($j == $pom2 || $j == $pom2 + 6 )
+                          || ($z == $pom3 || $z == $pom3 + 6 )) && $cond) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }    
+
+ 
+
+    private function shuffleRandBorder6x6x6($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 6);
+        $pom2 = rand(0, $nr - 6);
+        $pom3 = rand(0, $nr - 6);
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 5) && ($i >= $pom3 && $i <= $pom3 + 5) && 
+                               ($j >= $pom1 && $j <= $pom1 + 5) && ($j >= $pom3 && $j <= $pom3 + 5) && 
+                               ($z >= $pom1 && $z <= $pom1 + 5) && ($z >= $pom2 && $z <= $pom2 + 5));
+
+                     if ((($i == $pom1 || $i == $pom1 + 5 )
+                          || ($j == $pom2 || $j == $pom2 + 5 )
+                          || ($z == $pom3 || $z == $pom3 + 5 )) && $cond) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 5) && ($i >= $pom3 && $i <= $pom3 + 5) && 
+                               ($j >= $pom1 && $j <= $pom1 + 5) && ($j >= $pom3 && $j <= $pom3 + 5) && 
+                               ($z >= $pom1 && $z <= $pom1 + 5) && ($z >= $pom2 && $z <= $pom2 + 5));
+
+                     if ((($i == $pom1 || $i == $pom1 + 5 )
+                          || ($j == $pom2 || $j == $pom2 + 5 )
+                          || ($z == $pom3 || $z == $pom3 + 5 )) && $cond) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1883,18 +1946,22 @@ class MutationData
     }
      
     private function shuffleRandBorder5x5x5($pop, $nr = 10) {
-        $pom1 = rand(0, $nr - 4);
-        $pom2 = rand(0, $nr - 4);
-        $pom3 = rand(0, $nr - 4);
+        $pom1 = rand(0, $nr - 5);
+        $pom2 = rand(0, $nr - 5);
+        $pom3 = rand(0, $nr - 5);
          $used = [];
 
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 3 )
-                          || ($j == $pom2 || $j == $pom2 + 3 )
-                          || ($z == $pom3 || $z == $pom3 + 3 )) {
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 4) && ($i >= $pom3 && $i <= $pom3 + 4) && 
+                               ($j >= $pom1 && $j <= $pom1 + 4) && ($j >= $pom3 && $j <= $pom3 + 4) && 
+                               ($z >= $pom1 && $z <= $pom1 + 4) && ($z >= $pom2 && $z <= $pom2 + 4));
+
+                     if ((($i == $pom1 || $i == $pom1 + 4 )
+                          || ($j == $pom2 || $j == $pom2 + 4 )
+                          || ($z == $pom3 || $z == $pom3 + 4 )) && $cond) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1905,9 +1972,13 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 3 )
-                          || ($j == $pom2 || $j == $pom2 + 3 )
-                          || ($z == $pom3 || $z == $pom3 + 3 )) {
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 4) && ($i >= $pom3 && $i <= $pom3 + 4) && 
+                               ($j >= $pom1 && $j <= $pom1 + 4) && ($j >= $pom3 && $j <= $pom3 + 4) && 
+                               ($z >= $pom1 && $z <= $pom1 + 4) && ($z >= $pom2 && $z <= $pom2 + 4));
+
+                     if ((($i == $pom1 || $i == $pom1 + 4 )
+                          || ($j == $pom2 || $j == $pom2 + 4 )
+                          || ($z == $pom3 || $z == $pom3 + 4 )) && $cond) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
@@ -1918,18 +1989,22 @@ class MutationData
     }       
 
     private function shuffleRandBorder4x4x4($pop, $nr = 10) {
-        $pom1 = rand(0, $nr - 3);
-        $pom2 = rand(0, $nr - 3);
-        $pom3 = rand(0, $nr - 3);
+        $pom1 = rand(0, $nr - 4);
+        $pom2 = rand(0, $nr - 4);
+        $pom3 = rand(0, $nr - 4);
          $used = [];
 
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 2 )
-                          || ($j == $pom2 || $j == $pom2 + 2 )
-                          || ($z == $pom3 || $z == $pom3 + 2 )) {
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 3) && ($i >= $pom3 && $i <= $pom3 + 3) && 
+                               ($j >= $pom1 && $j <= $pom1 + 3) && ($j >= $pom3 && $j <= $pom3 + 3) && 
+                               ($z >= $pom1 && $z <= $pom1 + 3) && ($z >= $pom2 && $z <= $pom2 + 3));
+
+                     if ((($i == $pom1 || $i == $pom1 + 3 )
+                          || ($j == $pom2 || $j == $pom2 + 3 )
+                          || ($z == $pom3 || $z == $pom3 + 3 )) && $cond) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -1940,9 +2015,13 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if (($i == $pom1 || $i == $pom1 + 2 )
-                          || ($j == $pom2 || $j == $pom2 + 2 )
-                          || ($z == $pom3 || $z == $pom3 + 2 )) {
+                   $cond = ( ($i >= $pom2 && $i <= $pom2 + 3) && ($i >= $pom3 && $i <= $pom3 + 3) && 
+                               ($j >= $pom1 && $j <= $pom1 + 3) && ($j >= $pom3 && $j <= $pom3 + 3) && 
+                               ($z >= $pom1 && $z <= $pom1 + 3) && ($z >= $pom2 && $z <= $pom2 + 3));
+
+                     if ((($i == $pom1 || $i == $pom1 + 3 )
+                          || ($j == $pom2 || $j == $pom2 + 3 )
+                          || ($z == $pom3 || $z == $pom3 + 3 )) && $cond) {
                          $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
