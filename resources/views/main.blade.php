@@ -49,12 +49,20 @@
                   <a href="/showCrossMatrix/{{$a->id}}"><button>Pokaż Matryce Krzyżowań</button></a>&nbsp;
 
                   @if ($a->matrixtribe == 0) 
-                     <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy</button></a>  
+                     <a href="/turn_matrix/{{$a->id}}"><button>Włącz używany matrycy mutacji</button></a>  
                   @elseif ($a->matrixtribe == 2)   
-                     <a href="/turnoff_matrix/{{$a->id}}"><button class="secondary">Wyłącz uzywanie matrycy</button></a>
+                     <a href="/turnoff_matrix/{{$a->id}}"><button class="secondary">Wyłącz uzywanie matrycy mutacji</button></a>
                   @else ($a->matrixtribe == 1)   
                      <a href="/turnofftwo_matrix/{{$a->id}}"><button>Włącz matrycę tylko dla najlepszych mutacji</button></a>                      
                   @endif   
+                  &nbsp; ||  &nbsp;
+                  @if ($a->matrixcross == 0) 
+                     <a href="/setmatrixcross/{{$a->id}}/1"><button>Włącz używany matrycy krzyżowań</button></a>  
+                  @elseif ($a->matrixcross == 2)   
+                     <a href="/setmatrixcross/{{$a->id}}/0"><button class="secondary">Wyłącz uzywanie matrycy krzyżowań</button></a>
+                  @else ($a->matrixcross == 1)   
+                     <a href="/setmatrixcross/{{$a->id}}/2"><button>Włącz matrycę tylko dla najlepszych krzyżowań</button></a>                      
+                  @endif 
 
                   <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
 

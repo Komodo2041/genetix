@@ -158,6 +158,19 @@ class MainController extends Controller
                $mutation->changeMutationList($methods);
            }
         }
+
+        if ($area->matrixcross > 0) {
+            if ($area->matrixcross == 1) {
+               $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->get()->pluck("name")->toArray();
+            } else {
+               $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->take(10)->get()->pluck("name")->toArray();
+            }
+ 
+           if ($methods) {
+               $cross->changeMethodList($methods);
+           }
+        }
+
  
         if (!$dId) {
             
@@ -1549,6 +1562,11 @@ class MainController extends Controller
         $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy("max", "DESC")->get();
         return view("showcrossmatrix", ['matrix' => $matrix, 'area' => $area]);
     }    
+
+    public function setmatrixcross($id, $val) {
+        Area::where("id", $id)->update(["matrixcross" => $val]);
+        return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
+    }
 
 
 }

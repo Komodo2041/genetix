@@ -1135,6 +1135,10 @@ class CrossingData
         return $res;
     }
 
+    public function changeMethodList($methods) {
+        $this->methods = $methods;
+    }    
+
 }
 
  
