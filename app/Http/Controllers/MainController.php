@@ -151,7 +151,7 @@ class MainController extends Controller
             if ($area->matrixtribe == 1) {
                $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->get()->pluck("name")->toArray();
             } else {
-               $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->take(10)->get()->pluck("name")->toArray();
+               $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->orderBy("result", "DESC")->take(10)->get()->pluck("name")->toArray();
             }
  
            if ($methods) {
@@ -161,9 +161,9 @@ class MainController extends Controller
 
         if ($area->matrixcross > 0) {
             if ($area->matrixcross == 1) {
-               $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->get()->pluck("name")->toArray();
+               $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->get()->pluck("name")->toArray(); 
             } else {
-               $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->take(10)->get()->pluck("name")->toArray();
+               $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->orderBy("max", "DESC")->take(10)->get()->pluck("name")->toArray();
             }
  
            if ($methods) {
@@ -175,7 +175,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-        $randomDoing = 26;
+        $randomDoing = 27;
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
