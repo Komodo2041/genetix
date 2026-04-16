@@ -60,13 +60,23 @@ class MainController extends Controller
        18 => "Use Waga Bigg",
        19 => "Use Waga Mini",
        20 => "Use Waga Very Mini",
-       21 => "Calculating mutation matrix",
-       22 => "Paratrooper",
+       21 => "Calculating mutation matrix", // X
+       22 => "Paratrooper", // X
        23 => "Use Only Mutations",
        24 => "Use non used calculations",
-       25 => "Calculating crossing matrix",
+       25 => "Calculating crossing matrix", // X
+       26 => "Use blob 6",
+       27 => "Use blob 3 to first generation",
     ];
 
+
+    private function getRandomDoing() {
+         $randomDoing = -1;
+         while (in_array($randomDoing, [-1, 21, 22, 25])) {
+             $randomDoing = rand(0, 27);
+         }
+        return $randomDoing; 
+    }
 
     public function list(Request $request, MeerDataGenerator $mdg) {
  
@@ -150,14 +160,9 @@ class MainController extends Controller
         }
  
         if (!$dId) {
-            $randomDoing = rand(0, 22);
-
-          //  $randomDoing = 21;
-
-            if ($randomDoing > 20) {
-                $randomDoing += 2;
-            } 
-       
+            
+            $randomDoing = $this->getRandomDoing();
+        
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
