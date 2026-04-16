@@ -13,7 +13,7 @@ class CrossingData
      * 
      */
 
-    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4"];
+    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6" ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
     public $methods = ["updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
@@ -1116,6 +1116,23 @@ class CrossingData
 
     public function setNr($nr) {
         $this->nrcrossing = $nr;
+    }
+
+    public function goThrough($populations, $method) {
+        $size = 7;
+        if ($method == "blob3random") {
+            $size = 4;
+        }
+        $chunks = array_chunk($populations, $size);
+        $all = count($chunks);
+        $res = [];
+        for ($i = 0; $i < $all; $i++) {
+            if (count($chunks[$i]) < $size) {
+                continue;
+            }
+            $res[] = $this->$method($chunks[$i], $size);
+        }
+        return $res;
     }
 
 }

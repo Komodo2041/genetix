@@ -65,8 +65,8 @@ class MainController extends Controller
        23 => "Use Only Mutations",
        24 => "Use non used calculations",
        25 => "Calculating crossing matrix", // X
-       26 => "Use blob 6",
-       27 => "Use blob 3 to first generation",
+       26 => "Use blob 6 Random to first generation",
+       27 => "Use blob 3 Random to first generation",
     ];
 
 
@@ -162,7 +162,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-        
+        $randomDoing = 26;
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
@@ -421,7 +421,31 @@ class MainController extends Controller
                 $usedcalc[] = $c->id;
             }
 
+        } elseif ($randomDoing == 26) {
+
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
+    
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+ 
+            $population0 = $cross->goThrough($population0, "blob6random");
+            
+            $individual = count($population0);  
+        } elseif ($randomDoing == 27) {
+
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $population0 = $cross->goThrough($population0, "blob3random");
+            $individual = count($population0);  
         }
+
+
+
          /*** DIAMOND * **/
         elseif ($randomDoing == 30) {  // diamond - clone
 
@@ -509,6 +533,10 @@ class MainController extends Controller
             $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
 
         }   
+
+        if (count($population0) == 0) {
+            return redirect("/")->with('error', "Pojawił się brak populacji dla random : ".$randomDoing);
+        }
 
         if ($usedcalc) {
             Calculation::whereIn('id', $usedcalc)->increment('calculation');
