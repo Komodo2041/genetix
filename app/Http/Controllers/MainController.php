@@ -233,7 +233,7 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
             }
-            $individual = 2;
+            
                 
         } elseif ($randomDoing == 3) {
          
@@ -245,7 +245,7 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
             }
-            $individual = count($population0);            
+                  
         } elseif ($randomDoing == 4) {
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $usedpercent = rand(70,99);
@@ -279,7 +279,7 @@ class MainController extends Controller
             $change = rand(1, 20);
             $res = $gtx->clonePattern($area, 1, $change);
             $population0 = [$area, $res[0]];
-            $individual = count($population0);  
+            
 
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
@@ -293,7 +293,7 @@ class MainController extends Controller
             $size = rand(6, 12);
             $res = $gtx->clonePattern($area, $size, $change);
             $population0 = $res;
-            $individual = count($population0);
+           
             
             $clones["calc_id"] = $calculations[0]->id;
             $clones["oldresult"] = $calculations[0]->obtainedresult;
@@ -382,8 +382,7 @@ class MainController extends Controller
                     $population0[] = json_decode($c->data);
                 }                
             }
-            $individual = count($population0);
-  
+ 
           
         } elseif ($randomDoing == 16) { // Join More Rivers 
 
@@ -399,8 +398,7 @@ class MainController extends Controller
                 foreach ($calculations AS $c) {
                     $population0[] = json_decode($c->data);
                 }                
-            }
-            $individual = count($population0);
+            } 
   
             
         }  elseif ($randomDoing == 17 || $randomDoing == 18 || $randomDoing == 19 || $randomDoing == 20) {
@@ -428,8 +426,7 @@ class MainController extends Controller
             }
             $population0 = $gtx->usepower($population0, $power);
             $population0[] = $dataBest;
-
-            $individual = count($population0);  
+ 
             
         } elseif ($randomDoing == 24) {
 
@@ -450,8 +447,7 @@ class MainController extends Controller
             }
  
             $population0 = $cross->goThrough($population0, "blob6random");
-            
-            $individual = count($population0);  
+ 
         } elseif ($randomDoing == 27) {
 
             $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
@@ -460,7 +456,7 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
             $population0 = $cross->goThrough($population0, "blob3random");
-            $individual = count($population0);
+
 
         } elseif ($randomDoing == 28) {
 
@@ -471,107 +467,26 @@ class MainController extends Controller
                 $usedcalc[] = $c->id;
             }
             $this->addpopulation = 1;
-            $individual = count($population0);
+        
             $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->additionalPopulationSize)->get();
             foreach ($calculations AS $c) {
                 $additionalPopulation[] = json_decode($c->data);
             }            
  
-        }
+        }  elseif ($randomDoing >= 30 && $randomDoing <= 37) {
 
-
-
-         /*** DIAMOND * **/
-        elseif ($randomDoing == 30) {  // diamond - clone
-
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $change = rand(1, 10);
-            $res = $gtx->clonePattern($area, 1, $change);
-            $population0 = [$area, $res[0]];
-            $individual = count($population0);  
-
-            $clones["calc_id"] = $calculations->id;
-            $clones["oldresult"] = $calculations->obtainedresult;
-            $clones["change"] = $change;
-        } elseif ($randomDoing == 31) { // multiple clone
-
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $change = rand(1, 10);
-            $size = 10;
-            $res = $gtx->clonePattern($area, $this->startPopulation, $change);
-            $population0 = $res;
-            $individual = count($population0);
-            
-            $clones["calc_id"] = $calculations->id;
-            $clones["oldresult"] = $calculations->obtainedresult;
-            $clones["change"] = $change;     
-        }  elseif ($randomDoing == 32) {  
-
-            $calculations = $this->getDiamondCalculations($dId);           
-            $population0 = [];  
-            foreach ($calculations AS $c) {
-                $population0[] = json_decode($c->data);
-            }
-            $individual = count($population0);
-   
-        } elseif ($randomDoing == 33) { 
-            $calculations = $this->getDiamondCalculations($dId);  
-            $population0 = [];
-            $cr = [];
-            foreach ($calculations AS $c) {
-                $population0[] = json_decode($c->data);
-                $cr[] = "generation";
-            }
-             
-            $res = $mutation->addmutation($population0, $cr);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $res = $mutation->addmutation($res[0], $res[1]);
+            $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
             $population0 = $res[0];
+            $clones = $res[1];
+        } 
 
-        } elseif ($randomDoing == 34) { 
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $population0 = [];
-            $population0[] = $area;
-            $cr = ["generation"];
  
-            $res = $mutation->addmutation($population0, $cr);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $population0 = $res[0];
-
-        } elseif ($randomDoing == 35) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $bigmethod = $bigmutation->getRandomMethod();
-            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
- 
-        } elseif ($randomDoing == 36) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 2;
-            $bigmethod = $bigmutation->getRandomMethod();
-            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
-
-        } elseif ($randomDoing == 37) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 3;
-            $bigmethod = $bigmutation->getRandomMethod();
-            $this->funcMutator = $bigmutation->getIdFunc($bigmethod);
-            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
-
-        }   
 
         if (count($population0) == 0) {
             return redirect("/")->with('error', "Pojawił się brak populacji dla random : ".$randomDoing);
         }
+
+        $individual = count($population0);
 
         if ($usedcalc) {
             Calculation::whereIn('id', $usedcalc)->increment('calculation');
@@ -1606,5 +1521,100 @@ class MainController extends Controller
         }
         echo "OK"; exit();
     }
+    
+
+    private function stereDiaomond($randomDoing, $mutation, $bigmutation) {
+ 
+        if ($randomDoing == 30) {  // diamond - clone
+
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $change = rand(1, 10);
+            $res = $gtx->clonePattern($area, 1, $change);
+            $population0 = [$area, $res[0]];
+         
+
+            $clones["calc_id"] = $calculations->id;
+            $clones["oldresult"] = $calculations->obtainedresult;
+            $clones["change"] = $change;
+        } elseif ($randomDoing == 31) { // multiple clone
+
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $change = rand(1, 10);
+            $size = 10;
+            $res = $gtx->clonePattern($area, $this->startPopulation, $change);
+            $population0 = $res;
+         
+            
+            $clones["calc_id"] = $calculations->id;
+            $clones["oldresult"] = $calculations->obtainedresult;
+            $clones["change"] = $change;     
+        }  elseif ($randomDoing == 32) {  
+
+            $calculations = $this->getDiamondCalculations($dId);           
+            $population0 = [];  
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+       
+   
+        } elseif ($randomDoing == 33) { 
+            $calculations = $this->getDiamondCalculations($dId);  
+            $population0 = [];
+            $cr = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $cr[] = "generation";
+            }
+             
+            $res = $mutation->addmutation($population0, $cr);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $population0 = $res[0];
+
+        } elseif ($randomDoing == 34) { 
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $population0 = [];
+            $population0[] = $area;
+            $cr = ["generation"];
+ 
+            $res = $mutation->addmutation($population0, $cr);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $res = $mutation->addmutation($res[0], $res[1]);
+            $population0 = $res[0];
+
+        } elseif ($randomDoing == 35) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $this->useBigMutator = 1;
+            $bigmethod = $bigmutation->getRandomMethod();
+            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
+ 
+        } elseif ($randomDoing == 36) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $this->useBigMutator = 2;
+            $bigmethod = $bigmutation->getRandomMethod();
+            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
+
+        } elseif ($randomDoing == 37) {
+            
+            $calculations = $this->getDiamond($dId);
+            $area = json_decode($calculations->data);
+            $this->useBigMutator = 3;
+            $bigmethod = $bigmutation->getRandomMethod();
+            $this->funcMutator = $bigmutation->getIdFunc($bigmethod);
+            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
+
+        }   
+
+        return [$population0, $clones];
+
+    }
+
 
 }
