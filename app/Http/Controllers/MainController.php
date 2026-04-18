@@ -133,9 +133,9 @@ class MainController extends Controller
         return view("main", ['area' => $area, 'calco' => $calcoData]);
     }
  
-    public function calcarea_level($id, $lvl, Request $request, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
+    public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
-        set_time_limit(12000);
+        set_time_limit(10000);
         $useonlyMutation = 0;
 
         $area = Area::find($id);
@@ -175,7 +175,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-        $randomDoing = 27;
+            $randomDoing = 16;
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
@@ -189,7 +189,7 @@ class MainController extends Controller
     
         $individual = 10;
         $lvl = $lvl - 1;
-        if ($lvl == 0) {
+        if ($lvl <= 0 ) {
             
             $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
             $randomDoing = 0;
@@ -1568,5 +1568,16 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
     }
 
+    public function calcareamoretimes($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
+        set_time_limit(36000);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        for ($i = 0; $i < 4; $i++) {
+            $this->calcarea_level($id, $lvl,  $gtx, $cross, $mutation, $bigmutation);
+        }
+        echo "OK"; exit();
+    }
 
 }

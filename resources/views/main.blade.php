@@ -104,6 +104,14 @@
      <input type="submit" name="action" value="3 różne warstwy Z" />
       
      </form>  
+
+     <br/><br/><br/><br/> 
+     Uruchomienie 4 razy:
+     @forelse ($area AS $a)
+        <a href="/calcareamoretimes/{{$a->id}}/1" ><button>{{$a->name}}</button></a>
+     @empty 
+      -
+     @endforelse
 </div>
 
 @endsection('content')
