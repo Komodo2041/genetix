@@ -37,6 +37,9 @@ class MainController extends Controller
 
     public $maxNumberInCalculation = 5;
 
+    public $addpopulation = 0;
+    public $additionalPopulationSize = 20;
+
     private $populationName = [
        0 => "Generation 0",
        -1 => "10 from level down",
@@ -67,6 +70,7 @@ class MainController extends Controller
        25 => "Calculating crossing matrix", // X
        26 => "Use blob 6 Random to first generation",
        27 => "Use blob 3 Random to first generation",
+       28 => "Elevent Different",
     ];
 
 
@@ -175,7 +179,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = 16;
+            $randomDoing = 28;
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
@@ -189,6 +193,8 @@ class MainController extends Controller
     
         $individual = 10;
         $lvl = $lvl - 1;
+        $additionalPopulation = [];
+
         if ($lvl <= 0 ) {
             
             $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
@@ -454,7 +460,23 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
             $population0 = $cross->goThrough($population0, "blob3random");
-            $individual = count($population0);  
+            $individual = count($population0);
+
+        } elseif ($randomDoing == 28) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
+            }
+            $this->addpopulation = 1;
+            $individual = count($population0);
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->additionalPopulationSize)->get();
+            foreach ($calculations AS $c) {
+                $additionalPopulation[] = json_decode($c->data);
+            }            
+ 
         }
 
 
@@ -579,6 +601,11 @@ class MainController extends Controller
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
 
+            if ($this->addpopulation) {
+                $new = additionalPopulation[rand(0, $this->additionalPopulationSize - 1)];
+                $selectedIndividuals[] = $new;
+            }
+ 
             if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
 
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
