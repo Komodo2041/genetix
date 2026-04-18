@@ -71,13 +71,14 @@ class MainController extends Controller
        26 => "Use blob 6 Random to first generation",
        27 => "Use blob 3 Random to first generation",
        28 => "Elevent Different",
+       29 => "Use Random50 to first generation",
     ];
 
 
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, [-1, 21, 22, 25])) {
-             $randomDoing = rand(0, 27);
+             $randomDoing = rand(0, 29);
          }
         return $randomDoing; 
     }
@@ -179,7 +180,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = 28;
+            $randomDoing = rand(28, 29);
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
@@ -472,6 +473,15 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $additionalPopulation[] = json_decode($c->data);
             }            
+ 
+        }  elseif ($randomDoing == 29) {
+
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $population0 = $cross->goThrough($population0, "random50");
  
         }  elseif ($randomDoing >= 30 && $randomDoing <= 37) {
 

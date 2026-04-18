@@ -1122,6 +1122,8 @@ class CrossingData
         $size = 7;
         if ($method == "blob3random") {
             $size = 4;
+        } elseif ($method == "random50") {
+            $size = 2;
         }
         $chunks = array_chunk($populations, $size);
         $all = count($chunks);
