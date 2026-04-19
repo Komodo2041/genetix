@@ -16,7 +16,7 @@ class CalcController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
-        $calculations = Calculation::wherenull("info" )->orderBy("id", "desc")->get();
+        $calculations = Calculation::wherenotnull("info" )->where("info", "!=", "")->orderBy("id", "desc")->get();
 
         return view("calcres", ['area' => $area, 'calco' => $calculations]);
     }
@@ -27,9 +27,9 @@ class CalcController extends Controller
         if (!$calc) {
             return redirect("/")->with('error', 'Nie znaleziono podanego obliczenia');
         }
-
-        $res = json_decode($calc['info']);
-
+        $area = Area::find($calc->area_id);
+        $res = json_decode($calc['info'], true);
+ 
         return view("progresscalc", ['area' => $area, 'res' => $res ]);
     }
 

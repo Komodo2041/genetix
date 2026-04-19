@@ -54,5 +54,5 @@ Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainControll
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
  
-Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcControllerr@showprocess" );  
+Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );  
  

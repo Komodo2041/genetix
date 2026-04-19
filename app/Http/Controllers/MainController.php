@@ -533,6 +533,7 @@ class MainController extends Controller
             if ($this->addpopulation) {
                 $new = additionalPopulation[rand(0, $this->additionalPopulationSize - 1)];
                 $selectedIndividuals[] = $new;
+                 
             }
  
             if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
@@ -564,7 +565,7 @@ class MainController extends Controller
 
             $info[] = [
                "pop" => $nrPop,
-               "diff" => $oldQ / $maxQ
+               "diff" => $maxQ / $oldQ
             ];
 
             $oldQ = $res[0]['sum'];
