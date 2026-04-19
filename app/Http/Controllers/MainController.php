@@ -180,7 +180,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(28, 29);
+           // $randomDoing = rand(28, 29);
+
         } else {
             $randomDoing = rand(30, 37);  
           //  $randomDoing = 33;
@@ -481,7 +482,9 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
-            $population0 = $cross->goThrough($population0, "random50");
+            while (count($population0) > 80) {
+                $population0 = $cross->goThrough($population0, "random50");
+            }
  
         }  elseif ($randomDoing >= 30 && $randomDoing <= 37) {
 
@@ -1278,6 +1281,8 @@ class MainController extends Controller
             return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
         }
 
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+
         $mresults = [];
         foreach ($mutations AS $key => $method) {
             $population0 = [];
@@ -1319,7 +1324,7 @@ class MainController extends Controller
                            
                        
                         Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
-                        "level" => $bestResult[0]->level, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);                      
+                        "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);                      
                     }
                 } else {
                     $result[1]++;
@@ -1520,14 +1525,23 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
     }
 
-    public function calcareamoretimes($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
+    public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
         set_time_limit(36000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
+
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+        if (!$lvlmax) {
+            $lvlmax = 1;
+        }
+        if ($trybe == 1) {
+            $lvlmax = rand(1, $lvlmax);
+        }
+
         for ($i = 0; $i < 4; $i++) {
-            $this->calcarea_level($id, $lvl,  $gtx, $cross, $mutation, $bigmutation);
+            $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
         }
         echo "OK"; exit();
     }

@@ -49,7 +49,7 @@ Route::get('showCrossMatrix/{id}',  "App\Http\Controllers\MainController@showCro
 
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\MainController@setmatrixcross" ); 
  
-Route::get('calcareamoretimes/{id}/{lvl}',  "App\Http\Controllers\MainController@calcareamoretimes" ); 
+Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" ); 
  
  
   

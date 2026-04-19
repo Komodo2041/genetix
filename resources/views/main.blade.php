@@ -108,7 +108,7 @@
      <br/><br/><br/><br/> 
      Uruchomienie 4 razy:
      @forelse ($area AS $a)
-        <a href="/calcareamoretimes/{{$a->id}}/1" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
+        <a href="/calcareamoretimes/{{$a->id}}/0" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
       -
      @endforelse
