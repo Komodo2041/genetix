@@ -20,4 +20,18 @@ class CalcController extends Controller
 
         return view("calcres", ['area' => $area, 'calco' => $calculations]);
     }
+
+    public function showprocess($id) {
+
+        $calc = Calculation::find($id);
+        if (!$calc) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obliczenia');
+        }
+
+        $res = json_decode($calc['info']);
+
+        return view("progresscalc", ['area' => $area, 'res' => $res ]);
+    }
+
+
 }

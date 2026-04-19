@@ -21,7 +21,7 @@
             <td>{{$p['level']}}</td>
             <td>{{$p['obtainedresult']}}</td> 
             <td>
-               <a href="/calculating-/{{$p['id']}}" ><button>Dodaj diament</button></a>           
+               <a href="/calculating/progress/{{$p['id']}}" ><button>Pokaż postęp</button></a>           
             </td>
         </tr>
       @endforeach

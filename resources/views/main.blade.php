@@ -65,7 +65,7 @@
                   @endif 
 
                   <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
-
+                  <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a><br/>
 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  
