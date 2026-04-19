@@ -519,6 +519,7 @@ class MainController extends Controller
         $nrPop = 0;
         $maxPop = 120;
  
+        $info = [];
         $usedmodify = [];
         $t3 = microtime(true);
           // HEAD LOOP
@@ -560,8 +561,14 @@ class MainController extends Controller
                 $repeatQ = 0;
             }    
             $power = $gtx->getPowerfromarea($res);
-            $oldQ = $maxQ;
-            $oldQ2 = $maxQ2;
+
+            $info[] = [
+               "pop" => $nrPop,
+               "diff" => $oldQ / $maxQ
+            ];
+
+            $oldQ = $res[0]['sum'];
+            $oldQ2 = $res[1]['sum'];
             $nrPop++;             
         }
         $t4 = microtime(true);
@@ -572,7 +579,7 @@ class MainController extends Controller
         if ($result2  > $minimumCalc) {
             $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
-            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop ]);
+            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info) ]);
 
             if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 30 || $randomDoing == 31 ) {
                 $clones["result"] = $result2;
