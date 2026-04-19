@@ -4,8 +4,6 @@
 <h3>Powierzchnie do sprawdzania</h3>
 
 <a href="/mutations"><button>Mutacje - Krzyżowania</button></a> 
-<a href="/samecalculations"><button>Znajdź podobne obliczenia</button></a><br/>
-
  
 <div class="container">
     
@@ -63,6 +61,8 @@
                   @else ($a->matrixcross == 1)   
                      <a href="/setmatrixcross/{{$a->id}}/2"><button>Włącz matrycę tylko dla najlepszych krzyżowań</button></a>                      
                   @endif 
+
+                  <a href="/samecalculations/{{$a->id}}"><button>Znajdź podobne obliczenia</button></a><br/>
 
                   <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
                   <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a><br/>

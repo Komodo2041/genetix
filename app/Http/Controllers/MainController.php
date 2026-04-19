@@ -992,23 +992,29 @@ class MainController extends Controller
     }
 
 
-    public function samecalculations() {
-        set_time_limit(600);
+    public function samecalculations($id) {
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        set_time_limit(3600);
         
-        $calculations = Calculation::where("same", null)->orderBy("id", "asc")->get();
+        $calculations = Calculation::where("area_id", $id)->where("same", null)->orderBy("id", "asc")->get();
         $used = [];
        
         foreach ($calculations AS $c) {
             if (in_array($c->id, $used)) {
                 continue;                    
             }            
-            $samecalculations = Calculation::where("data", $c->data)->where("id", "!=", $c->id)->get();
+            $samecalculations = Calculation::where("area_id", $id)->where("data", $c->data)->where("id", "!=", $c->id)->get();
              
             if ($samecalculations->count() > 0) {
                 foreach ($samecalculations AS $same) {
                     $used[] = $same->id;
                 }
-                Calculation::where("data", $c->data)->update(["same" => $c->id]);
+                Calculation::where("area_id", $id)->where("data", $c->data)->update(["same" => $c->id]);
             }
 
         }

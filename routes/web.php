@@ -15,7 +15,7 @@ Route::get('area/histogram/{id}',  "App\Http\Controllers\MainController@histogra
 Route::get('area/usedmethods/{id}',  "App\Http\Controllers\MainController@usedmethods" );
  
 Route::get('mutations',  "App\Http\Controllers\MainController@mutations" );
-Route::get('samecalculations',  "App\Http\Controllers\MainController@samecalculations" );
+Route::get('samecalculations/{id}',  "App\Http\Controllers\MainController@samecalculations" );
 
 Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" );
 
