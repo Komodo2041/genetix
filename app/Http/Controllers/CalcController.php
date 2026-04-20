@@ -16,7 +16,7 @@ class CalcController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
-        $calculations = Calculation::wherenotnull("info" )->where("info", "!=", "")->orderBy("id", "desc")->get();
+        $calculations = Calculation::wherenotnull("info" )->where("info", "!=", "")->where("area_id", $id)->orderBy("id", "desc")->get();
 
         return view("calcres", ['area' => $area, 'calco' => $calculations]);
     }

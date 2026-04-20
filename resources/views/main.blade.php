@@ -15,7 +15,7 @@
       </tr>
       @forelse ($area AS $a)
         <tr>
-            <td>{{$a->name}}</td>
+            <td><b>{{$a->id}}</b> {{$a->name}}</td>
             <td style="width:400px;">
               <h4>All: {{$a?->calculations->count()}} </h4> 
               @if (isset($calco[$a->id]))
