@@ -106,12 +106,22 @@
      </form>  
 
      <br/><br/><br/><br/> 
+     Tryb 0:
      Uruchomienie 4 razy:
      @forelse ($area AS $a)
         <a href="/calcareamoretimes/{{$a->id}}/0" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
       -
      @endforelse
+
+     <br/><br/> 
+     Tryb 1:
+     Uruchomienie 4 razy:
+     @forelse ($area AS $a)
+        <a href="/calcareamoretimes/{{$a->id}}/1" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
+     @empty 
+      -
+     @endforelse     
 </div>
 
 @endsection('content')
