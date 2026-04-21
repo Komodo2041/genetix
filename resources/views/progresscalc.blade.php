@@ -5,6 +5,9 @@
 <a href="/calculations/{{$area->id}}"><button>Obliczenia dla Area ID {{$area->id}}</button></a><br/>
 
 <h3>Obliczenia dla {{$area->name}} - {{$area->id}}</h3>
+@if ($calc->progress)
+    <h4>Postęp całkowity: <b>{{$calc->progress}}</b> ({{ log(2, $calc->progress) }})</h4>
+@endif
 <div class="container">
  
    <table>

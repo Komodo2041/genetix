@@ -30,7 +30,7 @@ class CalcController extends Controller
         $area = Area::find($calc->area_id);
         $res = json_decode($calc['info'], true);
  
-        return view("progresscalc", ['area' => $area, 'res' => $res ]);
+        return view("progresscalc", ['area' => $area, 'res' => $res, 'calc' => $calc ]);
     }
 
 

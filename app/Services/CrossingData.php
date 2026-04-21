@@ -13,7 +13,7 @@ class CrossingData
      * 
      */
 
-    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6" ];
+    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4" ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
     public $methods = ["updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
