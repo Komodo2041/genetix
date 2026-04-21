@@ -523,12 +523,21 @@ class MainController extends Controller
  
         $info = [];
         $usedmodify = [];
+
+        $bestArea = $res[0]['area'];
+        $usebestArea = 0;
+
         $t3 = microtime(true);
           // HEAD LOOP
 
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
+            if ($usebestArea == 1) {
+                $selectedIndividuals[] = $bestArea;
+                $usebestArea = 0;
+            }
+
             $individual = 10;
             $gtx->choosemodify($res, 10, $usedmodify);
 
@@ -556,7 +565,7 @@ class MainController extends Controller
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
             $power = $gtx->getPowerfromarea($res);
             $maxQ = $res[0]['sum'];
-            $maxQ2 = $res[1]['sum'];
+            $maxQ2 = $res[1]['sum']; 
 
             if ($maxQ == $oldQ && $maxQ2 == $oldQ2) {
                 $repeatQ++; 
@@ -565,9 +574,16 @@ class MainController extends Controller
             }    
             $power = $gtx->getPowerfromarea($res);
 
+            $diff = $maxQ / $oldQ;
+            if ($diff < 1) {
+                $diff = -1;
+                $usebestArea = 1;
+            } else {
+                $bestArea = $res[0]['area'];
+            }
             $info[] = [
                "pop" => $nrPop,
-               "diff" => $maxQ / $oldQ
+               "diff" => $diff
             ];
 
             $oldQ = $res[0]['sum'];
