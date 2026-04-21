@@ -40,6 +40,8 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
+    public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
+
     private $populationName = [
        0 => "Generation 0",
        -1 => "10 from level down",
@@ -183,7 +185,8 @@ class MainController extends Controller
            // $randomDoing = rand(28, 29);
 
         } else {
-            $randomDoing = rand(30, 37);  
+            $nrDiamond = count($this->diamondCrossing);
+            $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
           //  $randomDoing = 33;
             $diamonds = ["diamond_id" => $dId];
         }
@@ -486,7 +489,7 @@ class MainController extends Controller
                 $population0 = $cross->goThrough($population0, "random50");
             }
  
-        }  elseif ($randomDoing >= 30 && $randomDoing <= 37) {
+        }  elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
             $population0 = $res[0];
@@ -1587,7 +1590,7 @@ class MainController extends Controller
 
     private function stereDiaomond($randomDoing, $mutation, $bigmutation) {
  
-        if ($randomDoing == 30) {  // diamond - clone
+        if ($randomDoing == 130) {  // diamond - clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -1599,7 +1602,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;
-        } elseif ($randomDoing == 31) { // multiple clone
+        } elseif ($randomDoing == 131) { // multiple clone
 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -1612,7 +1615,7 @@ class MainController extends Controller
             $clones["calc_id"] = $calculations->id;
             $clones["oldresult"] = $calculations->obtainedresult;
             $clones["change"] = $change;     
-        }  elseif ($randomDoing == 32) {  
+        }  elseif ($randomDoing == 132) {  
 
             $calculations = $this->getDiamondCalculations($dId);           
             $population0 = [];  
@@ -1621,7 +1624,7 @@ class MainController extends Controller
             }
        
    
-        } elseif ($randomDoing == 33) { 
+        } elseif ($randomDoing == 133) { 
             $calculations = $this->getDiamondCalculations($dId);  
             $population0 = [];
             $cr = [];
@@ -1635,7 +1638,7 @@ class MainController extends Controller
             $res = $mutation->addmutation($res[0], $res[1]);
             $population0 = $res[0];
 
-        } elseif ($randomDoing == 34) { 
+        } elseif ($randomDoing == 134) { 
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
             $population0 = [];
@@ -1647,7 +1650,7 @@ class MainController extends Controller
             $res = $mutation->addmutation($res[0], $res[1]);
             $population0 = $res[0];
 
-        } elseif ($randomDoing == 35) {
+        } elseif ($randomDoing == 135) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -1655,7 +1658,7 @@ class MainController extends Controller
             $bigmethod = $bigmutation->getRandomMethod();
             $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
  
-        } elseif ($randomDoing == 36) {
+        } elseif ($randomDoing == 136) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
@@ -1663,7 +1666,7 @@ class MainController extends Controller
             $bigmethod = $bigmutation->getRandomMethod();
             $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
 
-        } elseif ($randomDoing == 37) {
+        } elseif ($randomDoing == 137) {
             
             $calculations = $this->getDiamond($dId);
             $area = json_decode($calculations->data);
