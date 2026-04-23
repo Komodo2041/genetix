@@ -13,7 +13,7 @@ class CrossingData
      * 
      */
 
-    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4" ];
+    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4", "useavgojoindiffe" ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
     public $methods = ["updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
@@ -22,7 +22,7 @@ class CrossingData
         "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
         "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz",
         "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy",
-        "joinwith_0or1_random", "joinwith_0or1_random2"
+        "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1136,6 +1136,70 @@ class CrossingData
         }
         return $res;
     }
+
+    public function useavgojoindiffe($population, $max, $nr = 10) {
+        $avgArea = $this->getAvgArea($population, $max, $nr);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $res = [];
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] != $avgArea[$i][$j][$z]) {
+                        $res[$i][$j][$z] = $one[$i][$j][$z];
+                    } elseif ($two[$i][$j][$z] != $avgArea[$i][$j][$z]) {
+                        $res[$i][$j][$z] = $two[$i][$j][$z];
+                    } else {
+                        $res[$i][$j][$z] = $avgArea[$i][$j][$z];
+                    }
+                }
+            }
+        }                
+        return $res; 
+ 
+    }
+
+    private function getAvgArea($population, $max, $nr) {
+        $res = [];
+        $table = [];
+   
+        for ($m = 0; $m < $max; $m++) {
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        if ($population[$m][$i][$j][$z] == 1) {
+                            if (isset($res[$i][$j][$z])) {
+                                $res[$i][$j][$z]++;
+                            } else {
+                                $res[$i][$j][$z] = 1;
+                            }
+                        } else {
+                           if (!isset($res[$i][$j][$z])) {
+                               $res[$i][$j][$z] = 0;
+                           }
+                        }
+                    }
+                }
+            } 
+        }  
+        
+        $half = ceil($max / 2);  
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                   if ($res[$i][$j][$z] >= $half) {
+                      $table[$i][$j][$z] = 1;
+                   } else {
+                      $table[$i][$j][$z] = 0;
+                   }
+                }
+            }
+        }                   
+        return $table;      
+    }
+  
 
     public function changeMethodList($methods) {
         $this->methods = $methods;

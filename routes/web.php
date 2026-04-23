@@ -46,7 +46,7 @@ Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@cre
  
 Route::get('calcCrossMatrix/{id}',  "App\Http\Controllers\MainController@calcCrossMatrix" );
 Route::get('showCrossMatrix/{id}',  "App\Http\Controllers\MainController@showCrossMatrix" ); 
-Route::get('calcCrossMatrix//{id}/{nrM}',  "App\Http\Controllers\MainController@calcCrossMatrix" ); 
+Route::get('calcCrossMatrix/{id}/{nrM}',  "App\Http\Controllers\MainController@calcCrossMatrix" ); 
 
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\MainController@setmatrixcross" ); 
 Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" );
