@@ -39,6 +39,7 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
+    public $halstep = 2;
 
     public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -74,12 +75,13 @@ class MainController extends Controller
        27 => "Use blob 3 Random to first generation",
        28 => "Elevent Different",
        29 => "Use Random50 to first generation",
+       30 => "Half Results" // X
     ];
 
 
     private function getRandomDoing() {
          $randomDoing = -1;
-         while (in_array($randomDoing, [-1, 21, 22, 25])) {
+         while (in_array($randomDoing, [-1, 21, 22, 25, 30])) {
              $randomDoing = rand(0, 29);
          }
         return $randomDoing; 
@@ -143,6 +145,7 @@ class MainController extends Controller
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
         set_time_limit(10000);
+        $halfStep = $this->getSteps(120);
         $useonlyMutation = 0;
 
         $area = Area::find($id);
@@ -591,6 +594,12 @@ class MainController extends Controller
 
             $oldQ = $res[0]['sum'];
             $oldQ2 = $res[1]['sum'];
+
+            if (in_array($nrPop, $halfStep)) {
+                Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $res[0]['sum'],
+                           "typecalc" => 30, "population" => $nrPop  ]);                
+            } 
+
             $nrPop++;             
         }
         $last = $res[0]['sum'];
@@ -1472,7 +1481,7 @@ class MainController extends Controller
         $crossings = $cross->getAllMethod();  
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints(120, $table);
-        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(10)->get();
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(20)->get();
  
         $lvlmax = Calculation::where("area_id", $id)->max("level");
 
@@ -1681,5 +1690,18 @@ class MainController extends Controller
 
     }
 
+
+    private function getSteps($nr) {
+
+       $step = floor($this->halstep);
+       $res = [];
+       $nem  = 0;
+       while ($nem + $step < $nr) {
+           $nem += $step;
+           $res[] = $nem;
+       }
+       return $res;
+   
+    }
 
 }
