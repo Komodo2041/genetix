@@ -1357,9 +1357,9 @@ class MainController extends Controller
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
                     if ($oldMaxResult * 1.000001 < $calc['sum']) {
-                           
-                       if (Calculation::where("area_id", $id)->where("data", json_decode($calc['area']))->count() == 0) {
-                            Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => json_encode($calc['area']), "area_id" => $id, 
+                       $je = json_encode($calc['area']);                       
+                       if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
+                            Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
                             "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);
                        }                    
                     }
@@ -1519,10 +1519,10 @@ class MainController extends Controller
                 }
 
                 if ($max * 1.000001 < $row['sum']) {
-
-                        if (Calculation::where("area_id", $id)->where("data", json_decode($row['area']))->count() == 0) {
+                        $je = json_encode($row['area']);
+                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
                 
-                            Calculation::create(["result" => "Wynik dzięki krzyżowaniu ".$cr, "data" => json_encode($row['area']), "area_id" => $id, 
+                            Calculation::create(["result" => "Wynik dzięki krzyżowaniu ".$cr, "data" => $je, "area_id" => $id, 
                             "level" => $lvlmax, "obtainedresult" => $row['sum'] / $maxPoints,  "typecalc" => 25  ]);
                         }                  
                 }                 

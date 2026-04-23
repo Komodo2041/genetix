@@ -22,7 +22,7 @@ class CrossingData
         "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
         "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz",
         "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy",
-        "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe"
+        "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1159,6 +1159,33 @@ class CrossingData
         return $res; 
  
     }
+
+    public function useavgojoindiffeRandom($population, $max, $nr = 10) {
+        $avgArea = $this->getAvgArea($population, $max, $nr);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $res = [];
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+ 
+                    $rand = rand(0, 100);
+
+                    if ($one[$i][$j][$z] != $avgArea[$i][$j][$z] && $rand > 50) {
+                        $res[$i][$j][$z] = $one[$i][$j][$z];
+                    } elseif ($two[$i][$j][$z] != $avgArea[$i][$j][$z] && $rand > 50) {
+                        $res[$i][$j][$z] = $two[$i][$j][$z];
+                    } else {
+                        $res[$i][$j][$z] = $avgArea[$i][$j][$z];
+                    }
+                }
+            }
+        }                
+        return $res; 
+ 
+    }
+
 
     private function getAvgArea($population, $max, $nr) {
         $res = [];
