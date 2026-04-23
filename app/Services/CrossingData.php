@@ -22,7 +22,8 @@ class CrossingData
         "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
         "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz",
         "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy",
-        "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom"
+        "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom",
+        "rand6x6x6", "rand5x5x5", "rand7x7x7"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1227,6 +1228,91 @@ class CrossingData
         return $table;      
     }
   
+    private function rand5x5x5($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];    
+        $pom1 = rand(0, $nr - 5);
+        $pom2 = rand(0, $nr - 5);
+        $pom3 = rand(0, $nr - 5);
+         $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 4 )
+                          && ($j >= $pom2 && $j <= $pom2 + 4 )
+                          && ($z >= $pom3 && $z <= $pom3 + 4 )) {
+                           $res[$i][$j][$z] = $one[$i][$j][$z];
+                     } else {
+                         $res[$i][$j][$z] = $two[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+         
+        return $res;     
+
+    }
+
+    private function rand6x6x6($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];          
+        $pom1 = rand(0, $nr - 6);
+        $pom2 = rand(0, $nr - 6);
+        $pom3 = rand(0, $nr - 6);
+         $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 5 )
+                          && ($j >= $pom2 && $j <= $pom2 + 5 )
+                          && ($z >= $pom3 && $z <= $pom3 + 5 )) {
+                           $res[$i][$j][$z] = $one[$i][$j][$z];
+                     } else {
+                         $res[$i][$j][$z] = $two[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+         
+        return $res;     
+
+    }
+    
+    private function rand7x7x7($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];          
+        $pom1 = rand(0, $nr - 7);
+        $pom2 = rand(0, $nr - 7);
+        $pom3 = rand(0, $nr - 7);
+         $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 6 )
+                          && ($j >= $pom2 && $j <= $pom2 + 6 )
+                          && ($z >= $pom3 && $z <= $pom3 + 6 )) {
+                          $res[$i][$j][$z] = $one[$i][$j][$z];
+                     } else {
+                        $res[$i][$j][$z] = $two[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+         
+        return $res;     
+
+    }     
+
 
     public function changeMethodList($methods) {
         $this->methods = $methods;

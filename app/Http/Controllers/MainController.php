@@ -39,7 +39,7 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $halstep = 2;
+    public $Numhalstep = 2;
 
     public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -596,7 +596,7 @@ class MainController extends Controller
             $oldQ2 = $res[1]['sum'];
 
             if (in_array($nrPop, $halfStep)) {
-                Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $res[0]['sum'],
+                Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $res[0]['sum'] / $maxPoints,
                            "typecalc" => 30, "population" => $nrPop  ]);                
             } 
 
@@ -1693,7 +1693,7 @@ class MainController extends Controller
 
     private function getSteps($nr) {
 
-       $step = floor($this->halstep);
+       $step = floor($nr / $this->Numhalstep);
        $res = [];
        $nem  = 0;
        while ($nem + $step < $nr) {
