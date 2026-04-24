@@ -31,6 +31,7 @@ class MainController extends Controller
         $this->ls = new LevelStering();
     }
 
+    public $nrMaxPopulation = 120;
     public $startPopulation = 800;
     public $useBigMutator = 0;
     public $funcMutator = 0;
@@ -145,7 +146,7 @@ class MainController extends Controller
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
         set_time_limit(10000);
-        $halfStep = $this->getSteps(120);
+        $halfStep = $this->getSteps($this->nrMaxPopulation);
         $useonlyMutation = 0;
 
         $area = Area::find($id);
@@ -153,7 +154,7 @@ class MainController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
         $table = json_decode($area->data);
-        $headPoints = $gtx->calcPoints(120, $table);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
         $population0 = [];
 
 
@@ -523,9 +524,9 @@ class MainController extends Controller
         $first = $res[0]['sum'];
 
         $repeatQ = 0;
-        $maxPoints = $gtx->getmaxPoints(120);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $nrPop = 0;
-        $maxPop = 120;
+        $maxPop = $this->nrMaxPopulation;
  
         $info = [];
         $usedmodify = [];
@@ -1319,7 +1320,7 @@ class MainController extends Controller
         set_time_limit(12000);
         $mutations = $mutation->getAllMethod();  
         $table = json_decode($area->data);
-        $headPoints = $gtx->calcPoints(120, $table);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
  
         if (!$bestResult) {
@@ -1346,7 +1347,7 @@ class MainController extends Controller
             $max = 0;
 
             $oldMaxResult = 0;
-            $maxPoints = $gtx->getmaxPoints(120);
+            $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
 
             foreach ($res AS $key2 => $calc) {
                  if ($calc['howitwascreated'] == "generation") {
@@ -1441,7 +1442,7 @@ class MainController extends Controller
         $data = json_decode($bestResult->data);
  
         $table = json_decode($area->data);
-        $headPoints = $gtx->calcPoints(120, $table);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
   
         $this->getdiffwaga($data, $headPoints, $id, $bestResult->id, $gtx);
         return redirect("/")->with('success', 'Obliczono wagę dla area: '.$id);   
@@ -1480,7 +1481,7 @@ class MainController extends Controller
         set_time_limit(12000);
         $crossings = $cross->getAllMethod();  
         $table = json_decode($area->data);
-        $headPoints = $gtx->calcPoints(120, $table);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(20)->get();
  
         $lvlmax = Calculation::where("area_id", $id)->max("level");
@@ -1507,7 +1508,7 @@ class MainController extends Controller
               $min = $c['sum'];
            }           
         }
-        $maxPoints = $gtx->getmaxPoints(120);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $mresults = [];
         foreach ($crossings AS $cr) {
             $pop_result = $cross->createNewPopulation($population0, $cr);
