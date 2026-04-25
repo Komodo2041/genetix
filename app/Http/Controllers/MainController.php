@@ -32,6 +32,7 @@ class MainController extends Controller
     }
 
     public $nrMaxPopulation = 120;
+
     public $startPopulation = 800;
     public $useBigMutator = 0;
     public $funcMutator = 0;
@@ -40,7 +41,7 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 2;
+    public $Numhalstep = 2; // 2
 
     public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -79,10 +80,11 @@ class MainController extends Controller
        30 => "Half Results" // X
     ];
 
+    private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
     private function getRandomDoing() {
          $randomDoing = -1;
-         while (in_array($randomDoing, [-1, 21, 22, 25, 30])) {
+         while (in_array($randomDoing, $this->noSelectingPopulation)) {
              $randomDoing = rand(0, 29);
          }
         return $randomDoing; 
@@ -145,7 +147,7 @@ class MainController extends Controller
  
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
-        set_time_limit(10000);
+        set_time_limit(40000);
         $halfStep = $this->getSteps($this->nrMaxPopulation);
         $useonlyMutation = 0;
 
@@ -507,6 +509,9 @@ class MainController extends Controller
         }
 
         $individual = count($population0);
+        if ($individual > 10) {
+            $individual = 10;
+        }
 
         if ($usedcalc) {
             Calculation::whereIn('id', $usedcalc)->increment('calculation');
@@ -549,7 +554,7 @@ class MainController extends Controller
             $gtx->choosemodify($res, 10, $usedmodify);
 
             if ($this->addpopulation) {
-                $new = additionalPopulation[rand(0, $this->additionalPopulationSize - 1)];
+                $new = $additionalPopulation[rand(0, count($additionalPopulation) - 1)];
                 $selectedIndividuals[] = $new;
                  
             }
@@ -1588,7 +1593,12 @@ class MainController extends Controller
             $lvlmax = 1;
         }
         if ($trybe == 1) {
-            $lvlmax = rand(1, $lvlmax);
+            if ($lvlmax > 5) {
+                $lvlmax = rand($lvlmax - 3, $lvlmax);
+            } else {
+                $lvlmax = rand(1, $lvlmax);
+            }
+             
         }
 
         for ($i = 0; $i < 4; $i++) {
