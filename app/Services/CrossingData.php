@@ -23,7 +23,8 @@ class CrossingData
         "tassingx",  "chessboardradom_xy", "leftright", "leftright2", "random50", "usedblockhalfhalf", "chessboardrandom_yz",
         "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy",
         "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom",
-        "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9"
+        "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9",
+        "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1437,7 +1438,173 @@ class CrossingData
             }
         }
         return $table;
+    }
+
+    private function rand4x4x4Multiple($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $m = rand(2, 7);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $res = $one; 
+ 
+        for ($x = 0; $x < $m; $x++) {
+
+            $pom1 = rand(0, $nr - 4);
+            $pom2 = rand(0, $nr - 4);
+            $pom3 = rand(0, $nr - 4);
+
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+
+                        if (($i >= $pom1 && $i <= $pom1 + 3 )
+                            && ($j >= $pom2 && $j <= $pom2 + 3 )
+                            && ($z >= $pom3 && $z <= $pom3 + 3 )) {
+                            $res[$i][$j][$z] = $two[$i][$j][$z];
+                        } 
+                    }
+                }
+            }   
+        }
+         
+        return $res;     
+
+    }
+
+    private function rand5x5x5Multiple($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $m = rand(2, 5);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $res = $one; 
+ 
+        for ($x = 0; $x < $m; $x++) {
+
+            $pom1 = rand(0, $nr - 5);
+            $pom2 = rand(0, $nr - 5);
+            $pom3 = rand(0, $nr - 5);
+
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+
+                        if (($i >= $pom1 && $i <= $pom1 + 4 )
+                            && ($j >= $pom2 && $j <= $pom2 + 4 )
+                            && ($z >= $pom3 && $z <= $pom3 + 4 )) {
+                            $res[$i][$j][$z] = $two[$i][$j][$z];
+                        } 
+                    }
+                }
+            }   
+        }
+         
+        return $res;     
+
     }    
+
+    private function rand6x6x6Multiple($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $m = rand(2, 3);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $res = $one; 
+ 
+        for ($x = 0; $x < $m; $x++) {
+
+            $pom1 = rand(0, $nr - 6);
+            $pom2 = rand(0, $nr - 6);
+            $pom3 = rand(0, $nr - 6);
+
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+
+                        if (($i >= $pom1 && $i <= $pom1 + 5 )
+                            && ($j >= $pom2 && $j <= $pom2 + 5 )
+                            && ($z >= $pom3 && $z <= $pom3 + 5 )) {
+                            $res[$i][$j][$z] = $two[$i][$j][$z];
+                        } 
+                    }
+                }
+            }   
+        }
+         
+        return $res;     
+
+    }
+
+    private function rand7x7x7Multiple($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $m = 2;
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $res = $one; 
+ 
+        for ($x = 0; $x < $m; $x++) {
+
+            $pom1 = rand(0, $nr - 7);
+            $pom2 = rand(0, $nr - 7);
+            $pom3 = rand(0, $nr - 7);
+
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+
+                        if (($i >= $pom1 && $i <= $pom1 + 6 )
+                            && ($j >= $pom2 && $j <= $pom2 + 6 )
+                            && ($z >= $pom3 && $z <= $pom3 + 6 )) {
+                            $res[$i][$j][$z] = $two[$i][$j][$z];
+                        } 
+                    }
+                }
+            }   
+        }
+         
+        return $res;     
+
+    }
+
+    private function rand8x8x8Multiple($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $m = 2;
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $res = $one; 
+ 
+        for ($x = 0; $x < $m; $x++) {
+
+            $pom1 = rand(0, $nr - 8);
+            $pom2 = rand(0, $nr - 8);
+            $pom3 = rand(0, $nr - 8);
+
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+
+                        if (($i >= $pom1 && $i <= $pom1 + 7 )
+                            && ($j >= $pom2 && $j <= $pom2 + 7 )
+                            && ($z >= $pom3 && $z <= $pom3 + 7 )) {
+                            $res[$i][$j][$z] = $two[$i][$j][$z];
+                        } 
+                    }
+                }
+            }   
+        }
+         
+        return $res;     
+
+    }     
+
 
     public function changeMethodList($methods) {
         $this->methods = $methods;

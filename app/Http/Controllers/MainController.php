@@ -41,7 +41,9 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 2; // 2
+    public $Numhalstep = 5; // 2
+    public $maxPopulation = 600; 
+
 
     public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -531,7 +533,7 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $nrPop = 0;
-        $maxPop = $this->nrMaxPopulation;
+        $maxPop = $this->maxPopulation;
  
         $info = [];
         $usedmodify = [];
