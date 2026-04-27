@@ -42,10 +42,12 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 2; // 2
-    public $maxPopulation = 120; 
+    private $maxPopulation = 120;
+
+    private $saveCrosMutationMatrix = 1.000001;
 
 
-    public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
+    private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
     private $populationName = [
        0 => "Generation 0",
@@ -1391,7 +1393,7 @@ class MainController extends Controller
                 }
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
-                    if ($oldMaxResult * 1.000001 < $calc['sum']) {
+                    if ($oldMaxResult * $this->saveCrosMutationMatrix < $calc['sum']) {
                        $je = json_encode($calc['area']);                       
                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
                             Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
@@ -1553,7 +1555,7 @@ class MainController extends Controller
                     $mmax = $row['sum'];
                 }
 
-                if ($max * 1.000001 < $row['sum']) {
+                if ($max * $this->saveCrosMutationMatrix < $row['sum']) {
                         $je = json_encode($row['area']);
                         if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
                 
