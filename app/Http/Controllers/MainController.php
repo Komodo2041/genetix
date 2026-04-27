@@ -545,8 +545,12 @@ class MainController extends Controller
         $t3 = microtime(true);
           // HEAD LOOP
          
+        $individual = 10;  
 
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
+
+             $individual = 10;  
+
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             if ($usebestArea == 1) {
@@ -554,7 +558,7 @@ class MainController extends Controller
                 $usebestArea = 0;
             }
 
-            $individual = 10;
+       
             $gtx->choosemodify($res, 10, $usedmodify);
 
             if ($this->addpopulation) {
@@ -598,7 +602,7 @@ class MainController extends Controller
                 $bestArea = $res[0]['area'];
             }
  
-            $nrBetter - $this->calcBetter($oldQ, $res);
+            $nrBetter = $this->calcBetter($oldQ, $res);
 
             $oldQ = $res[0]['sum'];
             $oldQ2 = $res[1]['sum'];

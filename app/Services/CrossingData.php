@@ -24,7 +24,8 @@ class CrossingData
         "joinwith0", "joinwith1",  "cutting_xy", "cutting_xz", "cutting_yz", "chessboardrandom_xyz", "tassingy",
         "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom",
         "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9",
-        "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple"
+        "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
+        "blockRandomXY", "blockRandomYZ", "blockRandomXZ"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1604,6 +1605,172 @@ class CrossingData
         return $res;     
 
     }     
+
+    private function blockRandomXY($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $pom = [];
+        $pom2 = [];
+        for ($i = 0; $i < $nr; $i++) {
+            $pom[] = rand(0, 3);
+            $pom2[] = rand(0, $nr - 1);
+        }
+        $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                      switch($pom[$z]) {
+                         case 0:
+                               if ($i < $pom2[$z]) {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               }
+                            break;
+                         case 1:
+                               if ($i < $pom2[$z]) {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               }                            
+                            break;
+                         case 2:
+                               if ($j < $pom2[$z]) {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               }                            
+                            break;                                                        
+                         case 3:
+                               if ($j < $pom2[$z]) {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               }                              
+                            break;  
+                      }
+ 
+                }
+            }
+        }  
+
+        return $res;
+
+    }
+ 
+
+    private function blockRandomXZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $pom = [];
+        $pom2 = [];
+        for ($i = 0; $i < $nr; $i++) {
+            $pom[] = rand(0, 3);
+            $pom2[] = rand(0, $nr - 1);
+        }
+        $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                      switch($pom[$j]) {
+                         case 0:
+                               if ($i < $pom2[$j]) {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               }
+                            break;
+                         case 1:
+                               if ($i < $pom2[$j]) {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               }                            
+                            break;
+                         case 2:
+                               if ($z < $pom2[$j]) {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               }                            
+                            break;                                                        
+                         case 3:
+                               if ($z < $pom2[$j]) {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               }                              
+                            break;  
+                      }
+ 
+                }
+            }
+        }  
+
+        return $res;
+
+    }    
+
+    private function blockRandomYZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+        $pom = [];
+        $pom2 = [];
+        for ($i = 0; $i < $nr; $i++) {
+            $pom[] = rand(0, 3);
+            $pom2[] = rand(0, $nr - 1);
+        }
+        $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                      switch($pom[$i]) {
+                         case 0:
+                               if ($j < $pom2[$i]) {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               }
+                            break;
+                         case 1:
+                               if ($j < $pom2[$i]) {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               }                            
+                            break;
+                         case 2:
+                               if ($z < $pom2[$i]) {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               }                            
+                            break;                                                        
+                         case 3:
+                               if ($z < $pom2[$i]) {
+                                  $res[$i][$j][$z] = $two[$i][$j][$z];
+                               } else {
+                                  $res[$i][$j][$z] = $one[$i][$j][$z];
+                               }                              
+                            break;  
+                      }
+ 
+                }
+            }
+        }  
+
+        return $res;
+
+    }  
 
 
     public function changeMethodList($methods) {
