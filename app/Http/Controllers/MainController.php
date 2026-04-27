@@ -41,8 +41,8 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 5; // 2
-    public $maxPopulation = 600; 
+    public $Numhalstep = 2; // 2
+    public $maxPopulation = 120; 
 
 
     public $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
@@ -150,7 +150,7 @@ class MainController extends Controller
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
         
         set_time_limit(40000);
-        $halfStep = $this->getSteps($this->nrMaxPopulation);
+        $halfStep = $this->getSteps($this->maxPopulation);
         $useonlyMutation = 0;
 
         $area = Area::find($id);
@@ -540,9 +540,11 @@ class MainController extends Controller
 
         $bestArea = $res[0]['area'];
         $usebestArea = 0;
+        $nrBetter = 0;
 
         $t3 = microtime(true);
           // HEAD LOOP
+         
 
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
@@ -595,13 +597,18 @@ class MainController extends Controller
             } else {
                 $bestArea = $res[0]['area'];
             }
-            $info[] = [
-               "pop" => $nrPop,
-               "diff" => $diff
-            ];
+ 
+            $nrBetter - $this->calcBetter($oldQ, $res);
 
             $oldQ = $res[0]['sum'];
             $oldQ2 = $res[1]['sum'];
+ 
+
+            $info[] = [
+               "pop" => $nrPop,
+               "diff" => $diff,
+               'calc' => $nrBetter
+            ];
 
             if (in_array($nrPop, $halfStep)) {
                 Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $res[0]['sum'] / $maxPoints,
@@ -1715,6 +1722,18 @@ class MainController extends Controller
        }
        return $res;
    
+    }
+
+    private function calcBetter($sum, $res) {
+        $result = 0;
+        foreach ($res AS $rekord) {
+            if ($rekord['sum'] > $sum) {
+                $result++;
+            } else {
+                break;
+            }
+        }
+        return $result;
     }
 
 }

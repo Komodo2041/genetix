@@ -14,18 +14,24 @@
       <tr>
          <th>Nr Pop</th>
          <th>Level</th>
-         <th>Logarytm</th> 
+         <th>Logarytm</th>
+         <th>Lepsze wyniki</th>
       </tr>
       @foreach ($res AS $p) 
         <tr>
             <td>#{{$p['pop']}}</td>
             <td>{{$p['diff']}}</td> 
-            <td> @if ($p['diff'] != 1)
+            <td> @if ($p['diff'] != 1 && $p['diff'] > 0)
                    {{ log(2, $p['diff']) }}
                 @else
                    -
                 @endif
             </td>
+            <td>
+               @if ($p['calc'])
+                  {{$p['calc']}}
+               @endif
+            </td>   
         </tr>
       @endforeach
 </table>
