@@ -48,6 +48,8 @@ Route::get('calcCrossMatrix/{id}',  "App\Http\Controllers\MainController@calcCro
 Route::get('showCrossMatrix/{id}',  "App\Http\Controllers\MainController@showCrossMatrix" ); 
 Route::get('calcCrossMatrix/{id}/{nrM}',  "App\Http\Controllers\MainController@calcCrossMatrix" ); 
 
+Route::get('changeFlex/{id}/{tr}',  "App\Http\Controllers\MainController@changeFlex" );
+ 
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\MainController@setmatrixcross" ); 
 Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" );
 

@@ -65,7 +65,13 @@
                   <a href="/samecalculations/{{$a->id}}"><button>Znajdź podobne obliczenia</button></a><br/>
 
                   <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
-                  <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a><br/>
+                  <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a>
+                  @if ($a->flex == 0) 
+                     <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>
+                  @else
+                     <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br/>
+                  @endif
+  
 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                  

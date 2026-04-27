@@ -548,9 +548,7 @@ class MainController extends Controller
         $individual = 10;  
 
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
-
-             $individual = 10;  
-
+ 
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             if ($usebestArea == 1) {
@@ -603,6 +601,15 @@ class MainController extends Controller
             }
  
             $nrBetter = $this->calcBetter($oldQ, $res);
+
+            if ($area->flex == 1) {
+                $individual = $nrBetter;
+                if ($individual < 4) {
+                    $individual = 10; 
+                }
+            } else {
+                $individual = 10; 
+            }
 
             $oldQ = $res[0]['sum'];
             $oldQ2 = $res[1]['sum'];
@@ -1738,6 +1745,11 @@ class MainController extends Controller
             }
         }
         return $result;
+    }
+
+    public function changeFlex($id, $tr) {
+        Area::where("id", $id)->update(["flex" => $tr]);
+        return redirect("/")->with('success', 'Włączono Flex dla: '.$id." VAL: ".$tr);         
     }
 
 }
