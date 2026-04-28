@@ -192,7 +192,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           // $randomDoing = rand(28, 29);
+            $randomDoing = rand(15, 16);
 
         } else {
             $nrDiamond = count($this->diamondCrossing);

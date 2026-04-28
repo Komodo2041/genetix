@@ -30,6 +30,8 @@
             <td>
                @if ($p['calc'])
                   {{$p['calc']}}
+               @else
+                   0   
                @endif
             </td>   
         </tr>

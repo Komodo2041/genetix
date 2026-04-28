@@ -21,7 +21,8 @@ class MutationData
         "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers",
         "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7", "exchangefarcolumnXYMultiple",
         "shuffleRand6x6x2_X", "shuffleRand6x6x2_Y", "shuffleRand6x6x2_Z", "shuffleRand6x6x3_X", "shuffleRand6x6x3_Y", "shuffleRand6x6x3_Z",
-        "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines"
+        "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines",
+        "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple"
     ];
 
     public function setNumerMutation($nr) {
@@ -2031,6 +2032,79 @@ class MutationData
 
     } 
 
+
+    private function shuffleRand4x4x4($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 4);
+        $pom2 = rand(0, $nr - 4);
+        $pom3 = rand(0, $nr - 4);
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 3 )
+                          && ($j >= $pom2 && $j <= $pom2 + 3 )
+                          && ($z >= $pom3 && $z <= $pom3 + 3 )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + 3 )
+                          && ($j >= $pom2 && $j <= $pom2 + 3 )
+                          && ($z >= $pom3 && $z <= $pom3 + 3 )) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+ 
+    private function shuffleRand4x4x4Multiple($pop, $nr = 10) {
+        $rand = rand(2, 4);
+        for ($i = 2; $i < $rand; $i++) {
+            $pop = $this->shuffleRand4x4x4($pop, $nr);
+        }         
+        return $pop;     
+
+    }
+
+    private function shuffleRand5x5x5Multiple($pop, $nr = 10) {
+        $rand = rand(2, 3);
+        for ($i = 2; $i < $rand; $i++) {
+            $pop = $this->shuffleRand5x5x5($pop, $nr);
+        }         
+        return $pop;     
+
+    }    
+
+    private function shuffleRand6x6x6Multiple($pop, $nr = 10) {
+        $rand = rand(2, 3);
+        for ($i = 2; $i < $rand; $i++) {
+            $pop = $this->shuffleRand6x6x6($pop, $nr);
+        }         
+        return $pop;     
+
+    } 
+
+    private function shuffleRand9x9Multiple($pop, $nr = 10) {
+        $rand = rand(2, 6);
+        for ($i = 2; $i < $rand; $i++) {
+            $pop = $this->shuffleRand9x9($pop, $nr);
+        }         
+        return $pop;     
+
+    } 
+
+  
 
     public function getAllMethod() {
        return $this->mutationList;       
