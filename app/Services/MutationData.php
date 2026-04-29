@@ -22,7 +22,8 @@ class MutationData
         "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7", "exchangefarcolumnXYMultiple",
         "shuffleRand6x6x2_X", "shuffleRand6x6x2_Y", "shuffleRand6x6x2_Z", "shuffleRand6x6x3_X", "shuffleRand6x6x3_Y", "shuffleRand6x6x3_Z",
         "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines",
-        "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple"
+        "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple",
+        "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times"
     ];
 
     public function setNumerMutation($nr) {
@@ -2070,16 +2071,17 @@ class MutationData
  
     private function shuffleRand4x4x4Multiple($pop, $nr = 10) {
         $rand = rand(2, 4);
-        for ($i = 2; $i < $rand; $i++) {
-            $pop = $this->shuffleRand4x4x4($pop, $nr);
+        $res = $pop;
+        for ($i = 2; $i <= $rand; $i++) {
+            $res = $this->shuffleRand4x4x4($res, $nr);
         }         
-        return $pop;     
+        return $res;     
 
     }
 
     private function shuffleRand5x5x5Multiple($pop, $nr = 10) {
         $rand = rand(2, 3);
-        for ($i = 2; $i < $rand; $i++) {
+        for ($i = 2; $i <= $rand; $i++) {
             $pop = $this->shuffleRand5x5x5($pop, $nr);
         }         
         return $pop;     
@@ -2088,7 +2090,7 @@ class MutationData
 
     private function shuffleRand6x6x6Multiple($pop, $nr = 10) {
         $rand = rand(2, 3);
-        for ($i = 2; $i < $rand; $i++) {
+        for ($i = 2; $i <= $rand; $i++) {
             $pop = $this->shuffleRand6x6x6($pop, $nr);
         }         
         return $pop;     
@@ -2097,14 +2099,41 @@ class MutationData
 
     private function shuffleRand9x9Multiple($pop, $nr = 10) {
         $rand = rand(2, 6);
-        for ($i = 2; $i < $rand; $i++) {
+        for ($i = 2; $i <= $rand; $i++) {
             $pop = $this->shuffleRand9x9($pop, $nr);
         }         
         return $pop;     
 
     } 
+ 
+    private function shufflecolumnYZgo6Multiple($pop, $nr = 10) {
+        $rand = rand(2, 6);
+        for ($i = 2; $i <= $rand; $i++) {
+            $pop = $this->shufflecolumnYZgo6($pop, $nr);
+        }         
+        return $pop;     
 
-  
+    } 
+
+    private function shufflecolumnXZgo6Multiple($pop, $nr = 10) {
+        $rand = rand(2, 6);
+        for ($i = 2; $i <= $rand; $i++) {
+            $pop = $this->shufflecolumnXZgo6($pop, $nr);
+        }         
+        return $pop;     
+
+    }     
+
+    private function mixingZLayers3Times($pop, $nr = 10) {
+       
+        for ($i = 0; $i < 3; $i++) {
+            $pop = $this->mixingZLayers($pop, $nr);
+        }         
+        return $pop;     
+
+    }  
+
+   
 
     public function getAllMethod() {
        return $this->mutationList;       

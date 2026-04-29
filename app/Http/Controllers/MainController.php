@@ -41,8 +41,8 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 2; // 2
-    private $maxPopulation = 120;
+    public $Numhalstep = 6; // 2
+    private $maxPopulation = 360;
 
     private $saveCrosMutationMatrix = 1.000001;
 
@@ -192,7 +192,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(15, 16);
+           // $randomDoing = rand(15, 16);
 
         } else {
             $nrDiamond = count($this->diamondCrossing);
