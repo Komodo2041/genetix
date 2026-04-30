@@ -72,3 +72,7 @@ td.td_i {
     border-radius: 0.25rem;
     margin: 1rem 0;
 }
+
+td.showdata {
+    font-size: 14px;
+}

@@ -12,7 +12,13 @@ class PowerController extends Controller
 {
     public function showmatrix($size) {
 
-        return view("powermatrix", ['size' => $size ]);
+        $power = null;
+        $data = PowerMatrix::where("size", $size)->first();
+        if ($data) {
+           $power = json_decode($data->data);
+        }
+
+        return view("powermatrix", ['size' => $size, "power" => $power ]);
 
     }
 
