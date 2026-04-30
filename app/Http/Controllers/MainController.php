@@ -88,6 +88,7 @@ class MainController extends Controller
        31 => "Set one Layer X",
        32 => "Set one Layer Y",
        33 => "Set one Layer Z",
+       34 => "Create population - use power"
     ];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
@@ -507,7 +508,7 @@ class MainController extends Controller
                 $population0 = $cross->goThrough($population0, "random50");
             }
  
-        } elseif ($randomDoing == 31 || $randomDoing == 32 || $randomDoing == 33) { 
+        } elseif ($randomDoing == 31 || $randomDoing == 32 || $randomDoing == 33 || $randomDoing == 34) { 
         
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
           
@@ -523,10 +524,12 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->SetLayer($dataBest, 2, 10);
             } elseif ($randomDoing == 33) {
                 $pattern = $this->helperMatrix->SetLayer($dataBest, 3, 10);
+            } elseif ($randomDoing == 34) {
+                $pattern = $this->helperMatrix->getZeroTable(10);
             }
         
             $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power);
-            $population0[] = $dataBest;
+            // $population0[] = $dataBest;
        
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
