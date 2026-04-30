@@ -9,6 +9,8 @@ use App\Services\MutationData;
 use App\Services\BigMutatorData;
  
 use App\Services\LevelStering;
+use App\Services\MatrixHelper;
+  
   
 use Illuminate\Http\Request;
 
@@ -29,6 +31,7 @@ class MainController extends Controller
 
     public function __construct() {
         $this->ls = new LevelStering();
+        $this->helperMatrix = new MatrixHelper();
     }
 
     public $nrMaxPopulation = 120;
@@ -41,8 +44,8 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 10; // 2
-    private $maxPopulation = 600;
+    public $Numhalstep = 2; // 2
+    private $maxPopulation = 120;
 
     private $saveCrosMutationMatrix = 1.000001;
 
@@ -81,7 +84,10 @@ class MainController extends Controller
        27 => "Use blob 3 Random to first generation",
        28 => "Elevent Different",
        29 => "Use Random50 to first generation",
-       30 => "Half Results" // X
+       30 => "Half Results", // X
+       31 => "Set one Layer X",
+       32 => "Set one Layer Y",
+       33 => "Set one Layer Z",
     ];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
@@ -161,6 +167,8 @@ class MainController extends Controller
         }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+        $gtx->setPowerMatrixSize(10);  
+ 
         $population0 = [];
 
 
@@ -192,7 +200,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           // $randomDoing = rand(15, 16);
+            $randomDoing = rand(31, 33);
 
         } else {
             $nrDiamond = count($this->diamondCrossing);
@@ -499,7 +507,28 @@ class MainController extends Controller
                 $population0 = $cross->goThrough($population0, "random50");
             }
  
-        }  elseif ( in_array($randomDoing, $this->diamondCrossing)) {
+        } elseif ($randomDoing == 31 || $randomDoing == 32 || $randomDoing == 33) { 
+        
+            $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
+          
+            if (!$bestResult) {
+                return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+            } 
+            $dataBest = json_decode($bestResult->data); 
+            $power = $gtx->getPower([$dataBest]);
+            $pattern = $dataBest;
+            if ($randomDoing == 31) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10);
+            } elseif ($randomDoing == 32) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 2, 10);
+            } elseif ($randomDoing == 33) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 3, 10);
+            }
+        
+            $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power);
+            $population0[] = $dataBest;
+       
+        } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
             $population0 = $res[0];
@@ -529,9 +558,9 @@ class MainController extends Controller
         $oldQ = $res[0]['sum'];
         $maxQ2 = $res[1]['sum'];
         $oldQ2 = $res[1]['sum'];
-
+ 
         $first = $res[0]['sum'];
-
+ 
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $nrPop = 0;
@@ -550,7 +579,7 @@ class MainController extends Controller
         $individual = 10;  
 
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
- 
+ echo count($res); echo " ";
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             if ($usebestArea == 1) {
@@ -572,9 +601,11 @@ class MainController extends Controller
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
 
             } elseif ($useonlyMutation == 0) {
+
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+
             } elseif ($useonlyMutation == 1) {
                 
                 $mutation->setNumerMutation($this->startPopulation);
@@ -592,8 +623,7 @@ class MainController extends Controller
             } else {
                 $repeatQ = 0;
             }    
-            $power = $gtx->getPowerfromarea($res);
-
+ 
             $diff = $maxQ / $oldQ;
             if ($diff < 1) {
                 $diff = -1;
@@ -641,12 +671,12 @@ class MainController extends Controller
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
             "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first ]);
 
-            if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 30 || $randomDoing == 31 ) {
+            if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 130 || $randomDoing == 131 ) {
                 $clones["result"] = $result2;
             
                 Clones::create($clones);
             } 
-            if ( in_array($randomDoing, [30, 31, 32, 33, 34, 35, 36, 37])) {
+            if ( in_array($randomDoing, $this->diamondCrossing)) {
                 $diamonds["result"] = $result2;
                 $diamonds["calc_id"] = $cred->id;
                 Diamondcalc::create($diamonds);
@@ -1726,6 +1756,9 @@ class MainController extends Controller
 
     private function getSteps($nr) {
 
+       if ($this->Numhalstep <= 1) {
+          return [];
+       }
        $step = floor($nr / $this->Numhalstep);
        $res = [];
        $nem  = 0;

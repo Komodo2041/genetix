@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
- 
+ use App\Models\PowerMatrix; 
 
 class GenetixDataGenerator
 {
@@ -11,6 +11,7 @@ class GenetixDataGenerator
     public $probe = 10000;
     public $block = 1e6;
 
+    private $pm = [];
 
     public function getFirstGeneration($size, $max, $numbers) {
 
@@ -189,10 +190,13 @@ class GenetixDataGenerator
     public function calcpowerone($area) {
         $sum = 0;
         $nr = 10;
+ 
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                for ($z = 0; $z < $nr; $z++) {
-                    $sum += $area[$i][$j][$z];
+                    if ($area[$i][$j][$z]) {
+                        $sum += $this->pm[$i][$j][$z];
+                    }
                  }
              }
          }
@@ -204,12 +208,14 @@ class GenetixDataGenerator
        $res = [];
        foreach ($newpopulaton AS $area) {
            $p = $this->calcpowerone($area);
+           
            $diff = $p - $power;
+          
            $abs = abs($diff);
-           if ($abs <= 10) {
+           if ($abs <= 6) {
               $res[] = $area;
            } else {
-              $change = $abs + rand(-5, 5);
+              $change = $abs + rand(-3, 3);
 
               if ($diff < 0) {
                  $area = $this->addpower($area, $change);
@@ -225,32 +231,47 @@ class GenetixDataGenerator
     }
 
     private function addpower($pop, $change, $nr = 10) {
-        for ($n = 0; $n <= $change; $n++ ) {
-            $x = rand(0, $nr - 1);
-            $y = rand(0, $nr - 1);
-            $z = rand(0, $nr - 1);
-            if ($pop[$x][$y][$z] > 0) {
-               $n--;
-            } else {
-                $pop[$x][$y][$z] = 0;
-            }
  
+        $n = 0;
+        while (0 < $change && $n < 1000) {
+
+           $x = rand(0, $nr - 1);
+           $y = rand(0, $nr - 1);
+           $z = rand(0, $nr - 1);
+           if ($pop[$x][$y][$z] > 0) {
+              $n--;
+           } else {
+              $pm = $this->pm[$x][$y][$z];
+              if ($change - $pm > -0.5) {
+                 $pop[$x][$y][$z] = 1;
+                 $change -= $pm;
+              }
+           }
+           $n++;
         }
+
         return $pop;
     }
 
     private function removepower($pop, $change, $nr = 10) {
-        for ($n = 0; $n <= $change; $n++ ) {
-            $x = rand(0, $nr - 1);
-            $y = rand(0, $nr - 1);
-            $z = rand(0, $nr - 1);
-            if ($pop[$x][$y][$z] > 0) {
-               $pop[$x][$y][$z] = 0;
-            } else {
-               $n--;
-            }
- 
+        $n = 0;
+        while (0 < $change && $n < 1000) {
+
+           $x = rand(0, $nr - 1);
+           $y = rand(0, $nr - 1);
+           $z = rand(0, $nr - 1);
+           if ($pop[$x][$y][$z] > 0) {
+              $pm = $this->pm[$x][$y][$z];
+              if ($change - $pm > -0.5) {
+                 $pop[$x][$y][$z] = 0;
+                 $change -= $pm;
+              }
+           } else {
+              $n--;
+           }
+           $n++;
         }
+
         return $pop;
     }
 
@@ -602,7 +623,38 @@ class GenetixDataGenerator
         }           
  
        return $res;
-    } 
+    }
+
+
+    public function setPowerMatrixSize($size) {
+
+       $data = PowerMatrix::where("size", $size)->first();
+       if ($data) {
+          $table = json_decode($data->data);
+       } else {
+            for ($i = 0; $i < $nr; $i++) {
+                for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        $table[$i][$j][$z] = 1;
+                    }
+                }
+            }             
+       }
+       
+       $this->pm = $table;
+ 
+    }
+
+    public function generatePopinPower($nr, $pattern, $power) {
+
+       $res = [];
+       $pop = [];
+       for ($i =0; $i < $nr; $i++) {
+          $pop[] = $pattern;
+       }
+       $res = $this->usepower($pop, $power);
+       return $res; 
+    }
 
 
 }
