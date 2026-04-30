@@ -4,7 +4,9 @@
 <h3>Powierzchnie do sprawdzania</h3>
 
 <a href="/mutations"><button>Mutacje - Krzyżowania</button></a> 
- 
+<a href="/powermatrix/10"><button>Pokaz Matryce siły - size 10</button></a>  
+
+
 <div class="container">
     
    <table>

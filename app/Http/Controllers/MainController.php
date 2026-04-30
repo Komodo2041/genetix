@@ -41,8 +41,8 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 6; // 2
-    private $maxPopulation = 360;
+    public $Numhalstep = 10; // 2
+    private $maxPopulation = 600;
 
     private $saveCrosMutationMatrix = 1.000001;
 

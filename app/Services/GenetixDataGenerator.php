@@ -567,4 +567,42 @@ class GenetixDataGenerator
         return $res;
     }
 
+
+    public function calcPowerPoints( $area, $nr) {
+ 
+       $allPoints = [];   
+       $point = ['x' => floor($nr * 100 / 2), 'y' => floor($nr * 100 / 2), 'z' => 50 ];
+      
+       $probeforce = $this->block * $this->probe * $this->G;
+       $allForce = [];
+       $res = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $dist = $this->calcDist($point, $i, $j, $z);
+                    $force = $probeforce * $area[$i][$j][$z];
+                    $force = $force / ($dist * $dist);
+                        
+                    $allPoints[$i][$j][$z] = $force;
+                    $allForce[] = $force;
+                }
+            }
+        }
+
+        sort($allForce);
+        $middle = $allForce[floor(count($allForce) / 2)];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $res[$i][$j][$z] = $allPoints[$i][$j][$z] / $middle;
+                }
+           }
+        }           
+ 
+       return $res;
+    } 
+
+
 }

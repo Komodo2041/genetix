@@ -55,6 +55,9 @@ Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainControll
 
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
+Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );
+
+Route::get('powermatrix/{size}',  "App\Http\Controllers\PowerController@showmatrix" );
+Route::get('calcpowermatrix/{size}',  "App\Http\Controllers\PowerController@calcpowermatrix" ); 
  
-Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );  
  
