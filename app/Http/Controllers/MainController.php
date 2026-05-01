@@ -1464,13 +1464,23 @@ class MainController extends Controller
 
     }
 
-    public function showMatrix($id ) {
+    public function showMatrix($id, Request $request) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $matrix = Matrix::where("area_id", $id)->where("hide", 0)->orderBy("result", "DESC")->get();
-        return view("showmatrix", ['matrix' => $matrix, 'area' => $area]);
+
+        $order = $request->input('order');
+        $desc = $request->input('desc');
+        if (!$order) {
+            $order = "result";
+        }
+        if (!$desc) {
+            $desc = "DESC";
+        }
+
+        $matrix = Matrix::where("area_id", $id)->where("hide", 0)->orderBy($order, $desc)->get();
+        return view("showmatrix", ['matrix' => $matrix, 'area' => $area, "order" => $order, "desc" => $desc]);
     }
 
     public function turnMatrix($id) {

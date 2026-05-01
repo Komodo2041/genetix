@@ -10,11 +10,42 @@
  
   <table>
      <tr>
-        <th>Mutacja</th>
-        <th>Lepsze wyniki</th>
-        <th>Takie same wyniki</th>
-        <th>AVG</th>
-        <th>MAX</th>  
+        <th>
+            @if ($order == "name" && $desc == "DESC")
+               <a class="asc" href="/showMatrix/{{$area->id}}/?order=name&desc=ASC">Mutacja</a>
+            @else
+               <a class="desc" href="/showMatrix/{{$area->id}}/?order=name&desc=DESC">Mutacja</a>
+            @endif             
+             
+        </th>
+        <th>
+            @if ($order == "result" && $desc == "DESC")
+               <a class="asc" href="/showMatrix/{{$area->id}}/?order=result&desc=ASC">Lepsze wyniki</a>
+            @else
+               <a class="desc" href="/showMatrix/{{$area->id}}/?order=result&desc=DESC">Lepsze wyniki</a>
+            @endif                           
+        </th>
+        <th>
+            @if ($order == "same" && $desc == "DESC")
+               <a class="asc" href="/showMatrix/{{$area->id}}/?order=same&desc=ASC">Takie same wyniki</a>
+            @else
+               <a class="desc" href="/showMatrix/{{$area->id}}/?order=same&desc=DESC">Takie same wyniki</a>
+            @endif
+        </th>
+        <th>
+            @if ($order == "calc" && $desc == "DESC")
+               <a class="asc" href="/showMatrix/{{$area->id}}/?order=calc&desc=ASC">AVG</a>
+            @else
+               <a class="desc" href="/showMatrix/{{$area->id}}/?order=calc&desc=DESC">AVG</a>
+            @endif
+        </th>
+        <th>
+            @if ($order == "max" && $desc == "DESC")
+               <a class="asc" href="/showMatrix/{{$area->id}}/?order=max&desc=ASC">MAX</a>
+            @else
+               <a class="desc" href="/showMatrix/{{$area->id}}/?order=max&desc=DESC">MAX</a>
+            @endif
+        </th>  
     </tr>  
 @forelse ($matrix AS $m)
      <tr>
