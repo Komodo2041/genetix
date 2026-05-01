@@ -45,7 +45,7 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 0; // 2
-    private $maxPopulation = 60;
+    private $maxPopulation = 120;
 
     private $saveCrosMutationMatrix = 1.000001;
 
@@ -88,7 +88,9 @@ class MainController extends Controller
        31 => "Set one Layer X",
        32 => "Set one Layer Y",
        33 => "Set one Layer Z",
-       34 => "Create population - use power"
+       34 => "Create population - use power",
+       35 => "Generate population From 50% power ",
+       36 => "Generate population From 75% power ",
     ];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
@@ -508,7 +510,7 @@ class MainController extends Controller
                 $population0 = $cross->goThrough($population0, "random50");
             }
  
-        } elseif ($randomDoing == 31 || $randomDoing == 32 || $randomDoing == 33 || $randomDoing == 34) { 
+        } elseif ($randomDoing == 31 || $randomDoing == 32 || $randomDoing == 33 || $randomDoing == 34 || $randomDoing == 35 || $randomDoing == 36) { 
         
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
           
@@ -526,10 +528,17 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->SetLayer($dataBest, 3, 10);
             } elseif ($randomDoing == 34) {
                 $pattern = $this->helperMatrix->getZeroTable(10);
+            } elseif ($randomDoing == 35) {
+                $newpower = $power * 0.5;
+                $pattern = $gtx->usepower([$dataBest], $newpower, 2);
+                $pattern = $pattern[0];                
+            } elseif ($randomDoing == 36) {
+                $newpower = $power * 0.75;
+                $pattern = $gtx->usepower([$dataBest], $newpower, 2);
+                $pattern = $pattern[0];
             }
         
-           // $usepowerDetails = rand(1, 5);
-            $usepowerDetails = 5;
+            $usepowerDetails = rand(1, 5);
             $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power, $usepowerDetails);
             $population0[] = $dataBest;
        
