@@ -91,14 +91,19 @@ class MainController extends Controller
        34 => "Create population - use power",
        35 => "Generate population From 50% power ",
        36 => "Generate population From 75% power ",
+       37 => "Generate population From 90% power ",
+       38 => "Power Up Some Poitns ",
+       39 => "Power Down Some Points ",
     ];
+
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 34);
+             $randomDoing = rand(0, 39);
          }
         return $randomDoing; 
     }
@@ -510,7 +515,7 @@ class MainController extends Controller
                 $population0 = $cross->goThrough($population0, "random50");
             }
  
-        } elseif ($randomDoing == 31 || $randomDoing == 32 || $randomDoing == 33 || $randomDoing == 34 || $randomDoing == 35 || $randomDoing == 36) { 
+        } elseif ( in_array($randomDoing, $this->selectUsingPower)) { 
         
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
           
@@ -536,6 +541,14 @@ class MainController extends Controller
                 $newpower = $power * 0.75;
                 $pattern = $gtx->usepower([$dataBest], $newpower, 2);
                 $pattern = $pattern[0];
+            } elseif ($randomDoing == 37) {
+                $newpower = $power * 0.9;
+                $pattern = $gtx->usepower([$dataBest], $newpower, 2);
+                $pattern = $pattern[0];
+            } elseif ($randomDoing == 38) {
+                $pattern = $this->helperMatrix->upSomePoint($dataBest);
+            } elseif ($randomDoing == 39) {
+                $pattern = $this->helperMatrix->downSomePoint($dataBest);
             }
         
             $usepowerDetails = rand(1, 5);
@@ -614,7 +627,7 @@ class MainController extends Controller
             if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
 
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
-
+ 
             } elseif ($useonlyMutation == 0) {
 
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);

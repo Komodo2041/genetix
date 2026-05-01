@@ -9,8 +9,7 @@ class MatrixHelper {
 
         $res = $data;
         $pom = rand(0, $size - 1);
- $pom = 5;
-
+ 
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                for ($z = 0; $z < $size; $z++) {
@@ -51,5 +50,36 @@ class MatrixHelper {
         return $table; 
     }
 
+    public function upSomePoint($data) {
+       $nr = rand(2, 4);
+       $n = 0;
+       while ($nr > 0 && $n < 100) {
+          $x = rand(0, $size - 1);
+          $y = rand(0, $size - 1);
+          $z = rand(0, $size - 1);
+          if ($data[$x][$y][$z] == 0) {
+              $data[$x][$y][$z] = 1;
+              $nr--;
+          } 
+          $n++;
+       }
+       return $data;
+    }
+
+    public function downSomePoint($data) {
+       $nr = rand(2, 4);
+       $n = 0;
+       while ($nr > 0 && $n < 100) {
+          $x = rand(0, $size - 1);
+          $y = rand(0, $size - 1);
+          $z = rand(0, $size - 1);
+          if ($data[$x][$y][$z] == 1) {
+              $data[$x][$y][$z] = 0;
+              $nr--;
+          } 
+          $n++;
+       }
+       return $data;
+    }
 
 }
