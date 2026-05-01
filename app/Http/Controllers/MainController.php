@@ -627,7 +627,9 @@ class MainController extends Controller
             if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
 
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
- 
+                $newpopulaton = $gtx->usepower($pop_result[0], $power);
+                $pop_result[0] = $newpopulaton;
+                
             } elseif ($useonlyMutation == 0) {
 
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);
@@ -638,7 +640,8 @@ class MainController extends Controller
                 
                 $mutation->setNumerMutation($this->startPopulation);
                 $pop_result = $mutation->addmutation($selectedIndividuals, []);
- 
+                $newpopulaton = $gtx->usepower($pop_result[0], $power);
+                $pop_result[0] = $newpopulaton;
             }
             
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
