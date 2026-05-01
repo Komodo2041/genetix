@@ -38,12 +38,12 @@ class MatrixHelper {
 
     }
 
-    public function getZeroTable($size) {
+    public function getZeroTable($size, $val = 0) {
         $table = [];
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                for ($z = 0; $z < $size; $z++) {
-                   $table[$i][$j][$z] = 0;
+                   $table[$i][$j][$z] = $val;
                }
            }
         }

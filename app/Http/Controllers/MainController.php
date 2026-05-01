@@ -88,22 +88,24 @@ class MainController extends Controller
        31 => "Set one Layer X",
        32 => "Set one Layer Y",
        33 => "Set one Layer Z",
-       34 => "Create population - use power",
+       34 => "Create population - use power empty",
        35 => "Generate population From 50% power ",
        36 => "Generate population From 75% power ",
        37 => "Generate population From 90% power ",
        38 => "Power Up Some Poitns ",
        39 => "Power Down Some Points ",
+       40 => "Create population - use power Full"
     ];
 
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39];
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40];
+    private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 39);
+             $randomDoing = rand(0, 40);
          }
         return $randomDoing; 
     }
@@ -208,8 +210,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           // $randomDoing = rand(33, 34);
-           $randomDoing = 33;
+            $randomDoing = rand(35, 40);
+          // $randomDoing = 33;
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -432,7 +434,7 @@ class MainController extends Controller
             } 
   
             
-        }  elseif ($randomDoing == 17 || $randomDoing == 18 || $randomDoing == 19 || $randomDoing == 20) {
+        }  elseif ( in_array($randomDoing, $this->wagaSelecting)) {
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
             if (!$bestResult) {
                 return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
@@ -549,6 +551,8 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->upSomePoint($dataBest);
             } elseif ($randomDoing == 39) {
                 $pattern = $this->helperMatrix->downSomePoint($dataBest);
+            } elseif ($randomDoing == 40) {
+                $pattern = $this->helperMatrix->getZeroTable(10, 1);
             }
         
             $usepowerDetails = rand(1, 5);
