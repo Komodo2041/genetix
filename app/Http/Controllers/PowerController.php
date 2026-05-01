@@ -6,7 +6,9 @@ use App\Services\GenetixDataGenerator;
 
 use Illuminate\Http\Request;
 
-use App\Models\PowerMatrix; 
+use App\Models\PowerMatrix;
+use App\Models\Area;
+use App\Models\Calculation;  
 
 class PowerController extends Controller
 {
@@ -41,4 +43,44 @@ class PowerController extends Controller
  
        return redirect("/")->with('success', 'Obliczone Matrycę siły dla size '.$size);  
     }
+
+    public function showpower($id, GenetixDataGenerator $gtx) {
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $gtx->setPowerMatrixSize(10);
+
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+        $res = [];
+
+        $pattern = json_decode($area->data);
+        $power = $gtx->calcpowerone($pattern);
+        $lvlinfo = []; 
+
+        for ($i = 1; $i <= $lvlmax; $i++) {
+            $calc = Calculation::where("area_id", $id)->where("level", $i)->inRandomOrder()->take(10)->get();
+            $sum = 0;
+            $nr = 0;
+            foreach ($calc AS $c) {
+                $data = json_decode($c->data);
+                $p = $gtx->calcpowerone($data);
+                $abs = abs($p - $power);
+                $sum += $abs;
+                $nr++;
+                $res[$i][] = [
+                   "power" => $p,
+                   "result" => $c->obtainedresult,
+                   "diff" => $abs 
+                ];
+            }
+            $lvlinfo[$i] = $sum/$nr;
+        }
+ 
+
+        return view("showpower", ['res' => $res, "power" => $power, "area" => $area, "lvlinfo" => $lvlinfo]);
+
+    }
+
 }

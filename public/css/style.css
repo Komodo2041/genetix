@@ -85,3 +85,8 @@ a.desc {
     color:
         gray
 }
+
+p.backo {
+    background: #dcdcdc;
+    padding: 10px;
+}

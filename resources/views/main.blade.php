@@ -68,6 +68,9 @@
 
                   <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
                   <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a>
+
+                  <a href="/showpower/{{$a->id}}"><button>Pokaż obliczenia matrycy siły</button></a>
+
                   @if ($a->flex == 0) 
                      <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>
                   @else
