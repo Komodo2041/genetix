@@ -76,3 +76,12 @@ td.td_i {
 td.showdata {
     font-size: 14px;
 }
+
+a.asc {
+    color: maroon;
+}
+
+a.desc {
+    color:
+        gray
+}

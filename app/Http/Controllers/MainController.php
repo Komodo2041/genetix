@@ -44,8 +44,8 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 2; // 2
-    private $maxPopulation = 120;
+    public $Numhalstep = 0; // 2
+    private $maxPopulation = 60;
 
     private $saveCrosMutationMatrix = 1.000001;
 
@@ -201,8 +201,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(31, 33);
-
+           // $randomDoing = rand(33, 34);
+           $randomDoing = 33;
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -529,7 +529,7 @@ class MainController extends Controller
             }
         
             $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power);
-            // $population0[] = $dataBest;
+            $population0[] = $dataBest;
        
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
@@ -582,7 +582,7 @@ class MainController extends Controller
         $individual = 10;  
 
         while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
- echo count($res); echo " ";
+ 
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
             if ($usebestArea == 1) {
@@ -1622,13 +1622,23 @@ class MainController extends Controller
     }
  
 
-    public function showCrossMatrix($id ) {
+    public function showCrossMatrix($id, Request $request) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy("max", "DESC")->get();
-        return view("showcrossmatrix", ['matrix' => $matrix, 'area' => $area]);
+
+        $order = $request->input('order');
+        $desc = $request->input('desc');
+        if (!$order) {
+            $order = "max";
+        }
+        if (!$desc) {
+            $desc = "DESC";
+        }
+
+        $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy($order, $desc)->get();
+        return view("showcrossmatrix", ['matrix' => $matrix, 'area' => $area, "order" => $order, "desc" => $desc]);
     }    
 
     public function setmatrixcross($id, $val) {
@@ -1656,7 +1666,7 @@ class MainController extends Controller
              
         }
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
         }
         echo "OK"; exit();

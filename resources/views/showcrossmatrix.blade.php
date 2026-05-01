@@ -10,11 +10,41 @@
  
   <table>
      <tr>
-        <th>Krzyżowanie</th>
-        <th>Bad</th>
-        <th>Middle</th>
-        <th>Result</th>
-        <th>MAX</th>  
+        <th>
+            @if ($order == "name" && $desc == "DESC")
+               <a class="asc" href="/showCrossMatrix/{{$area->id}}/?order=name&desc=ASC">Krzyżowanie</a>
+            @else
+               <a class="desc" href="/showCrossMatrix/{{$area->id}}/?order=name&desc=DESC">Krzyżowanie</a>
+            @endif 
+        </th>
+        <th>
+            @if ($order == "bad_result" && $desc == "DESC")
+               <a class="asc" href="/showCrossMatrix/{{$area->id}}/?order=bad_result&desc=ASC">Bad</a>
+            @else
+               <a class="desc" href="/showCrossMatrix/{{$area->id}}/?order=bad_result&desc=DESC">Bad</a>
+            @endif 
+        </th>
+        <th>
+            @if ($order == "middle_result" && $desc == "DESC")
+               <a class="asc" href="/showCrossMatrix/{{$area->id}}/?order=middle_result&desc=ASC">Middle</a>
+            @else
+               <a class="desc" href="/showCrossMatrix/{{$area->id}}/?order=middle_result&desc=DESC">Middle</a>
+            @endif 
+        </th>
+        <th>
+            @if ($order == "best_result" && $desc == "DESC")
+               <a class="asc" href="/showCrossMatrix/{{$area->id}}/?order=best_result&desc=ASC">Best</a>
+            @else
+               <a class="desc" href="/showCrossMatrix/{{$area->id}}/?order=best_result&desc=DESC">Best</a>
+            @endif
+        </th>
+        <th>
+            @if ($order == "max" && $desc == "DESC")
+               <a class="asc" href="/showCrossMatrix/{{$area->id}}/?order=max&desc=ASC">MAX</a>
+            @else
+               <a class="desc" href="/showCrossMatrix/{{$area->id}}/?order=max&desc=DESC">MAX</a>
+            @endif
+        </th>  
     </tr>  
 @forelse ($matrix AS $m)
      <tr>
