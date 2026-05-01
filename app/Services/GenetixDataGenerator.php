@@ -203,24 +203,30 @@ class GenetixDataGenerator
          return $sum;         
     }
  
-    public function usepower($newpopulaton, $power) {
+    public function usepower($newpopulaton, $power, $ug = 1) {
+
+       $size = 10;
 
        $res = [];
+       $diffUg = $this->getUg($ug);
+       $minus = ($diffUg * 1000) / 2;
+       
+ 
        foreach ($newpopulaton AS $area) {
            $p = $this->calcpowerone($area);
            
-           $diff = $p - $power;
-          
+           $diff = $p - $power;          
            $abs = abs($diff);
-           if ($abs <= 6) {
+
+           if ($abs <= $diffUg) {
               $res[] = $area;
            } else {
-              $change = $abs + rand(-3, 3);
-
+              $change = $abs + rand(-1 * $minus, $minus) / 1000;
+ 
               if ($diff < 0) {
-                 $area = $this->addpower($area, $change);
+                 $area = $this->addpower($area, $change, $size, $ug);
               } else {
-                 $area = $this->removepower($area, $change);
+                 $area = $this->removepower($area, $change, $size, $ug);
               }
               $res[] = $area;
            }
@@ -230,39 +236,67 @@ class GenetixDataGenerator
        return $res; 
     }
 
-    private function addpower($pop, $change, $nr = 10) {
- 
-        $n = 0;
-        while (0 < $change && $n < 1000) {
+    private function getUg($ug) {
+        switch ($ug) {
+            case 1:
+                return 6;
+                break;
+            case 2:
+                return 2;
+                break;
+            case 3:
+                return 0.5;
+                break;
+            case 4:
+                return 0.1;
+                break;
+            case 5:
+                return 0.03;
+                break;                                                              
+        }
+    }
 
+    private function addpower($pop, $change, $nr = 10, $ug = 1) {
+ 
+        $diffUg = $this->getUg($ug);
+        $m = $diffUg / 10;
+        $n = 0;
+         
+        while ($m < $change && $n < 1000) {
+ 
            $x = rand(0, $nr - 1);
            $y = rand(0, $nr - 1);
            $z = rand(0, $nr - 1);
-           if ($pop[$x][$y][$z] > 0) {
+           if ($pop[$x][$y][$z] > 0) { 
               $n--;
            } else {
               $pm = $this->pm[$x][$y][$z];
-              if ($change - $pm > -0.5) {
+     
+              if ( $change - $pm >= -1 * $m) {
                  $pop[$x][$y][$z] = 1;
                  $change -= $pm;
-              }
+              }  
            }
            $n++;
         }
-
+ 
         return $pop;
     }
 
-    private function removepower($pop, $change, $nr = 10) {
+    private function removepower($pop, $change, $nr = 10, $ug = 1) {
+
+        $diffUg = $this->getUg($ug);
+        $m = $diffUg / 10;
+         
         $n = 0;
-        while (0 < $change && $n < 1000) {
+        while ($m < $change && $n < 1000) {
 
            $x = rand(0, $nr - 1);
            $y = rand(0, $nr - 1);
            $z = rand(0, $nr - 1);
            if ($pop[$x][$y][$z] > 0) {
               $pm = $this->pm[$x][$y][$z];
-              if ($change - $pm > -0.5) {
+              if ($change - $pm > -1 * $m) {
                  $pop[$x][$y][$z] = 0;
                  $change -= $pm;
               }
@@ -645,14 +679,14 @@ class GenetixDataGenerator
  
     }
 
-    public function generatePopinPower($nr, $pattern, $power) {
+    public function generatePopinPower($nr, $pattern, $power, $ug = 1) {
 
        $res = [];
        $pop = [];
        for ($i =0; $i < $nr; $i++) {
           $pop[] = $pattern;
        }
-       $res = $this->usepower($pop, $power);
+       $res = $this->usepower($pop, $power, $ug);
        return $res; 
     }
 

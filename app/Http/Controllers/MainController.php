@@ -96,7 +96,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 29);
+             $randomDoing = rand(0, 34);
          }
         return $randomDoing; 
     }
@@ -206,7 +206,7 @@ class MainController extends Controller
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
-          //  $randomDoing = 33;
+       
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -528,7 +528,9 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->getZeroTable(10);
             }
         
-            $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power);
+           // $usepowerDetails = rand(1, 5);
+            $usepowerDetails = 5;
+            $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power, $usepowerDetails);
             $population0[] = $dataBest;
        
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
@@ -557,6 +559,7 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
+
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $maxQ2 = $res[1]['sum'];
