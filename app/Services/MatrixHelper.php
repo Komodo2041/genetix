@@ -5,7 +5,7 @@ namespace App\Services;
  
 class MatrixHelper {
 
-    public function SetLayer($data, $tryb, $size) {
+    public function SetLayer($data, $tryb, $size, $value = 1, $percent = 50) {
 
         $res = $data;
         $pom = rand(0, $size - 1);
@@ -13,20 +13,28 @@ class MatrixHelper {
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                for ($z = 0; $z < $size; $z++) {
+
+                    if ($percent < 100) {
+                        $r = rand(0, 100);
+                        if ($r < $percent) {
+                            continue;
+                        }
+                    }
+
                     switch ($tryb) {
                        case 1:
                            if ($i == $pom) {
-                              $res[$i][$j][$z] = 1;
+                              $res[$i][$j][$z] = $value;
                            }
                         break;
                        case 2:
                            if ($j == $pom) {
-                              $res[$i][$j][$z] = 1;
+                              $res[$i][$j][$z] = $value;
                            }                        
                         break;
                        case 3:
                            if ($z == $pom) {
-                              $res[$i][$j][$z] = 1;
+                              $res[$i][$j][$z] = $value;
                            }                        
                         break;                                                
                     }
@@ -50,7 +58,7 @@ class MatrixHelper {
         return $table; 
     }
 
-    public function upSomePoint($data) {
+    public function upSomePoint($data, $size = 10) {
        $nr = rand(2, 4);
        $n = 0;
        while ($nr > 0 && $n < 100) {
@@ -66,7 +74,7 @@ class MatrixHelper {
        return $data;
     }
 
-    public function downSomePoint($data) {
+    public function downSomePoint($data, $size = 10) {
        $nr = rand(2, 4);
        $n = 0;
        while ($nr > 0 && $n < 100) {

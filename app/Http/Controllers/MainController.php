@@ -45,7 +45,7 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 0; // 2
-    private $maxPopulation = 120;
+    private $maxPopulation = 60;
 
     private $saveCrosMutationMatrix = 1.000001;
 
@@ -85,19 +85,29 @@ class MainController extends Controller
        28 => "Elevent Different",
        29 => "Use Random50 to first generation",
        30 => "Half Results", // X
-       31 => "Set one Layer X",
-       32 => "Set one Layer Y",
-       33 => "Set one Layer Z",
+       31 => "Set one Layer X (1) 100%",
+       32 => "Set one Layer Y (1) 100%",
+       33 => "Set one Layer Z (1) 100%",
        34 => "Create population - use power empty",
        35 => "Generate population From 50% power ",
        36 => "Generate population From 75% power ",
        37 => "Generate population From 90% power ",
        38 => "Power Up Some Poitns ",
        39 => "Power Down Some Points ",
-       40 => "Create population - use power Full"
+       40 => "Create population - use power Full",
+       41 => "Generate population From 95% power ",
+       42 => "Set one Layer X (0) 100%",
+       43 => "Set one Layer Y (0) 100%",
+       44 => "Set one Layer Z (0) 100%",
+       45 => "Set one Layer X (1) 50%",
+       46 => "Set one Layer Y (1) 50%",
+       47 => "Set one Layer Z (1) 50%",
+       48 => "Set one Layer X (0) 50%",
+       49 => "Set one Layer Y (0) 50%",
+       50 => "Set one Layer Z (0) 50%"                 
     ];
 
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40];
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
     private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
@@ -105,7 +115,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 40);
+             $randomDoing = rand(0, 50);
          }
         return $randomDoing; 
     }
@@ -210,8 +220,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(35, 40);
-          // $randomDoing = 33;
+            $randomDoing = rand(41, 50);
+             
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -553,8 +563,30 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->downSomePoint($dataBest);
             } elseif ($randomDoing == 40) {
                 $pattern = $this->helperMatrix->getZeroTable(10, 1);
+            } elseif ($randomDoing == 41) {
+                $newpower = $power * 0.95;
+                $pattern = $gtx->usepower([$dataBest], $newpower, 2);
+                $pattern = $pattern[0];
+            } elseif ($randomDoing == 42) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0);
+            } elseif ($randomDoing == 43) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0);
+            } elseif ($randomDoing == 44) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0);
+            } elseif ($randomDoing == 45) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 1, 50);
+            } elseif ($randomDoing == 46) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 1, 50);
+            } elseif ($randomDoing == 47) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 1, 50);
+            } elseif ($randomDoing == 48) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0, 50);
+            } elseif ($randomDoing == 49) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0, 50);
+            } elseif ($randomDoing == 50) {
+                $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0, 50);
             }
-        
+    
             $usepowerDetails = rand(1, 5);
             $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power, $usepowerDetails);
             $population0[] = $dataBest;
@@ -585,7 +617,6 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
-
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $maxQ2 = $res[1]['sum'];
@@ -1708,7 +1739,7 @@ class MainController extends Controller
              
         }
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
         }
         echo "OK"; exit();
