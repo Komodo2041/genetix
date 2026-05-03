@@ -45,10 +45,10 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 0; // 2
-    private $maxPopulation = 20;
+    private $maxPopulation = 30;
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 30;
+    private $nrTimes = 8;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -104,10 +104,13 @@ class MainController extends Controller
        47 => "Set one Layer Z (1) 50%",
        48 => "Set one Layer X (0) 50%",
        49 => "Set one Layer Y (0) 50%",
-       50 => "Set one Layer Z (0) 50%"                 
+       50 => "Set one Layer Z (0) 50%",
+       51 => " zero the lower 3 layers",
+       52 => " zero the lower layers", 
+       53 => " zero the big lower layers"                  
     ];
 
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53];
     private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
@@ -221,7 +224,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
           //  $randomDoing = rand(41, 50);
-             $randomDoing = rand(1, 11);
+             $randomDoing = rand(51, 53);
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -585,6 +588,12 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0, 50);
             } elseif ($randomDoing == 50) {
                 $pattern = $this->helperMatrix->SetLayer($dataBest, 1, 10, 0, 50);
+            } elseif ($randomDoing == 51) {
+                $pattern = $this->helperMatrix->ZeroLayer($dataBest, 1, 10);
+            } elseif ($randomDoing == 52) {
+                $pattern = $this->helperMatrix->ZeroLayer($dataBest, 2, 10);
+            } elseif ($randomDoing == 53) {
+                $pattern = $this->helperMatrix->ZeroLayer($dataBest, 3, 10);
             }
     
             $usepowerDetails = rand(1, 5);

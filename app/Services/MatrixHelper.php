@@ -90,4 +90,34 @@ class MatrixHelper {
        return $data;
     }
 
+    public function ZeroLayer($data, $tryb, $size) {
+
+       $res = $data;
+       $pom = 0;
+       switch ($tryb) {
+          case 1: 
+            $pom = $size - 3;
+            break;
+          case 2:
+            $pom = rand(floor($size/2), $size - 1);
+            break;
+          case 3:
+            $pom = rand(3, floor($size/2) + 1);
+            break;              
+       }
+ 
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+               for ($z = 0; $z < $size; $z++) {
+                   if ($z >= $pom) {
+                       $res[$i][$j][$z] = 0;
+                   }
+               }
+            }
+        }
+        
+        return $res;
+
+    }
+
 }
