@@ -111,14 +111,35 @@ class MainController extends Controller
     ];
 
     private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53];
+    private $selectUsingPowerBottomLayerZero = [51, 52, 53];
+
     private $wagaSelecting = [17, 18, 19, 20];
+    private $normalSelecting = [0, 1, 2, 3, 10, 28, 24];
+
+    private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
+    private $biglayerSelecting = [11, 12, 13, 14];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
+
+    private $randomDoingTrybe = 0;
 
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 50);
+             $randomDoing = rand(0, 53);
+             if ($this->randomDoingTrybe  == 1) {
+                 $randomDoing = rand(31, 53);
+             } elseif ($this->randomDoingTrybe  == 2) {
+                if (!in_array($randomDoing, $this->normalSelecting)) {
+                    $randomDoing = -1;
+                }                   
+             } elseif ($this->randomDoingTrybe  == 3) {
+                $randomDoing = rand(51, 53);             
+             } elseif ($this->randomDoingTrybe  == 4) { // NO WAGA
+                if (in_array($randomDoing, $this->wagaSelecting)) {
+                    $randomDoing = -1;
+                }              
+             }     
          }
         return $randomDoing; 
     }
