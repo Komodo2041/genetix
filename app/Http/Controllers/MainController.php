@@ -45,10 +45,10 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 0; // 2
-    private $maxPopulation = 60;
+    private $maxPopulation = 20;
 
     private $saveCrosMutationMatrix = 1.000001;
-
+    private $nrTimes = 30;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -172,7 +172,7 @@ class MainController extends Controller
             }
         }
  
-        return view("main", ['area' => $area, 'calco' => $calcoData]);
+        return view("main", ['area' => $area, 'calco' => $calcoData, "nrTimes" => $this->nrTimes]);
     }
  
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
@@ -220,8 +220,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(41, 50);
-             
+          //  $randomDoing = rand(41, 50);
+             $randomDoing = rand(1, 11);
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -318,10 +318,10 @@ class MainController extends Controller
         }  elseif ($randomDoing == 7) {  // clone
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, 1);
-            $area = json_decode($calculations[0]->data);
+            $area2 = json_decode($calculations[0]->data);
             $change = rand(1, 20);
-            $res = $gtx->clonePattern($area, 1, $change);
-            $population0 = [$area, $res[0]];
+            $res = $gtx->clonePattern($area2, 1, $change);
+            $population0 = [$area2, $res[0]];
             
 
             $clones["calc_id"] = $calculations[0]->id;
@@ -331,10 +331,10 @@ class MainController extends Controller
         }  elseif ($randomDoing == 8) { // multiple clone
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
-            $area = json_decode($calculations[0]->data);
+            $area2 = json_decode($calculations[0]->data);
             $change = rand(1, 20);
             $size = rand(6, 12);
-            $res = $gtx->clonePattern($area, $size, $change);
+            $res = $gtx->clonePattern($area2, $size, $change);
             $population0 = $res;
            
             
@@ -372,9 +372,9 @@ class MainController extends Controller
         } elseif ($randomDoing == 11) {
             
             $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, 1);
-            $area = json_decode($calculations[0]->data);
+            $area2 = json_decode($calculations[0]->data);
             $usedcalc[] = $calculations[0]->id;
-            $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area);
+            $population0 = $bigmutation->bigLayerMutation($this->startPopulation, 10, $area2);
 
            $this->useBigMutator = 1;
 
@@ -617,6 +617,13 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
+/*        
+        echo $randomDoing." <br/>";
+        foreach ($res AS $r) {
+           echo $r['sum']." <br/>";
+        }
+exit(); */
+
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
         $maxQ2 = $res[1]['sum'];
@@ -787,8 +794,7 @@ class MainController extends Controller
                  "obtainedresult" => $result2, "typecalc" => 22 ]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
-            // TEST
-            print_r($lvlReso); exit();
+  
             return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych ");
         }
  
@@ -1739,7 +1745,7 @@ class MainController extends Controller
              
         }
 
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < $this->nrTimes; $i++) {
             $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
         }
         echo "OK"; exit();

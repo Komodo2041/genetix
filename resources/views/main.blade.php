@@ -117,7 +117,7 @@
      </form>  
 
      <br/><br/><br/><br/> 
-     <b>Tryb 0:</b> Uruchomienie 4 razy:
+     <b>Tryb 0:</b> Uruchomienie {{$nrTimes}} razy:
      @forelse ($area AS $a)
         <a href="/calcareamoretimes/{{$a->id}}/0" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
@@ -125,7 +125,7 @@
      @endforelse
 
      <br/><br/> 
-     <b>Tryb 1:</b> Uruchomienie 4 razy:
+     <b>Tryb 1:</b> Uruchomienie {{$nrTimes}} razy:
      @forelse ($area AS $a)
         <a href="/calcareamoretimes/{{$a->id}}/1" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
