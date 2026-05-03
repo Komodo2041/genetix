@@ -25,7 +25,7 @@ class CrossingData
         "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom",
         "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9",
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
-        "blockRandomXY", "blockRandomYZ", "blockRandomXZ"
+        "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -140,7 +140,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $zlevel = rand(1, $max - 1);
+        $zlevel = rand(1, $nr - 1);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -161,7 +161,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $xlevel = rand(1, $max - 1);
+        $xlevel = rand(1, $nr - 1);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -183,7 +183,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $ylevel = rand(1, $max - 1);
+        $ylevel = rand(1, $nr - 1);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -205,7 +205,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $level = rand(3, $max * 2 - 3);
+        $level = rand(3, $nr * 2 - 3);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -227,7 +227,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $level = rand(3, $max * 2 - 3);
+        $level = rand(3, $nr * 2 - 3);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -249,7 +249,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $level = rand(3, $max * 2 - 3);
+        $level = rand(3, $nr * 2 - 3);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -271,7 +271,7 @@ class CrossingData
         $randNumbers = $this->getRand($max);
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];
-        $level = rand(5, $max * 3 - 5);
+        $level = rand(5, $nr * 3 - 5);
         $table = [];
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -1770,7 +1770,79 @@ class CrossingData
 
         return $res;
 
-    }  
+    }
+ 
+    private function updwownup_Z($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $zlevel = rand(1, $nr - 2);
+        $zlevel2 = rand($zlevel, $nr - 2);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z >= $zlevel && $z <= $zlevel2 ) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function updwownup_Y($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $zlevel = rand(1, $nr - 2);
+        $zlevel2 = rand($zlevel, $nr - 2);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($j >= $zlevel && $j <= $zlevel2 ) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+    
+    private function updwownup_X($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];
+
+        $zlevel = rand(1, $nr - 2);
+        $zlevel2 = rand($zlevel, $nr - 2);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($i >= $zlevel && $i <= $zlevel2 ) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }     
 
 
     public function changeMethodList($methods) {
