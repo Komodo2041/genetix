@@ -689,7 +689,6 @@ exit(); */
         
             if ($usebestArea == 1) {
                 $selectedIndividuals[] = $bestArea;
-                $usebestArea = 0;
             }
 
        
@@ -721,6 +720,12 @@ exit(); */
                 $pop_result[0] = $newpopulaton;
             }
             
+            if ($usebestArea == 1) {
+                $pop_result[0][] = $bestArea;
+                $usebestArea = 0;
+                $pop_result[1][] = "Used best Area";
+            }
+
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
             $power = $gtx->getPowerfromarea($res);
             $maxQ = $res[0]['sum'];
@@ -737,7 +742,9 @@ exit(); */
                 $diff = -1;
                 $usebestArea = 1;
             } else {
+                
                 $bestArea = $res[0]['area'];
+              
             }
  
             $nrBetter = $this->calcBetter($oldQ, $res);
@@ -750,7 +757,7 @@ exit(); */
             } else {
                 $individual = 10; 
             }
-
+            
             $oldQ = $res[0]['sum'];
             $oldQ2 = $res[1]['sum'];
  
