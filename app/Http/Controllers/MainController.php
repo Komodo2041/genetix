@@ -45,10 +45,10 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 0; // 2
-    private $maxPopulation = 30;
+    private $maxPopulation = 60;
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 9;
+    private $nrTimes = 6;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -105,12 +105,12 @@ class MainController extends Controller
        48 => "Set one Layer X (0) 50%",
        49 => "Set one Layer Y (0) 50%",
        50 => "Set one Layer Z (0) 50%",
-       51 => " zero the lower 3 layers",
-       52 => " zero the lower layers", 
-       53 => " zero the big lower layers",
-       54 => " zero the lower 3 layers (50%)",
-       55 => " zero the lower layers (50%)", 
-       56 => " zero the big lower layers (50%) "                     
+       51 => "Zero the lower 3 layers",
+       52 => "Zero the lower layers", 
+       53 => "Zero the big lower layers",
+       54 => "Zero the lower 3 layers (50%)",
+       55 => "Zero the lower layers (50%)", 
+       56 => "Zero the big lower layers (50%) "                     
     ];
 
     private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56];
@@ -118,7 +118,7 @@ class MainController extends Controller
     private $selectUsingPowerNoBestData = 1;
 
  
-    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28]; // 28
+    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28];
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14];
@@ -262,7 +262,8 @@ class MainController extends Controller
         $usedcalc = [];  
 
         $minimumCalc = $this->ls->getminimum($id, $lvl - 1);
-    
+        $minimumCalc2 = $this->ls->getminimum($id, $lvl - 1, 1);
+
         $individual = 10;
         $lvl = $lvl - 1;
         $additionalPopulation = [];
@@ -777,8 +778,12 @@ exit(); */
             ];
 
             if (in_array($nrPop, $halfStep)) {
-                Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $res[0]['sum'] / $maxPoints,
-                           "typecalc" => 30, "population" => $nrPop  ]);                
+                 
+                $halfreso = $res[0]['sum'] / $maxPoints;
+                if ($halfreso >= $minimumCalc2) {
+                    Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $halfreso / $maxPoints,
+                           "typecalc" => 30, "population" => $nrPop  ]);   
+                }                        
             } 
 
             $nrPop++;             

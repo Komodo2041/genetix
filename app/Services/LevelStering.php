@@ -34,7 +34,7 @@ class LevelStering {
  
     }
 
-    public function getminimum($id, $lvl) {
+    public function getminimum($id, $lvl, $t = 0) {
       
         if ($lvl == 0) {
             return 0;
@@ -45,8 +45,12 @@ class LevelStering {
         if (!$l) {
             return 0;
         }
-        $res = (1 - $l[0]['avg']) / 3;
-   
+
+        $res = (1 - $l[0]['avg']) / 4;
+        if ($t == 1) {
+           $res = (1 - $l[0]['avg']) / 3;
+        }
+
         return $l[0]['avg'] - $res;
 
     }
