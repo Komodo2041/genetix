@@ -7,7 +7,7 @@
 <h4>Power: {{$power}}</h4>    
 
 @foreach ($res AS $lvl => $record)
-   <p class="backo">Level :  {{$lvl}} -  Diff {{$lvlinfo[$lvl]}}</p>
+   <p class="backo">Level :  {{$lvl}} -  Diff {{$lvlinfo[$lvl]['diff']}}  - AVG {{$lvlinfo[$lvl]['avg']}} | DIFFAVG: {{$lvlinfo[$lvl]['diffavg']}} </p>
    <table>
        <tr>
            <th>Result</th>
@@ -24,5 +24,17 @@
 </table>
 @endforeach
  
+<table>
+
+<h4>Levele</h4>
+@foreach ($res AS $lvl => $record)
+     <tr>
+         <td>{{$lvl}}</td>
+         <td>{{$lvlinfo[$lvl]['diff']}}</td>
+     </tr>
+ 
+@endforeach
+</table>
+
 
 @endsection('content')

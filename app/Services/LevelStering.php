@@ -46,6 +46,7 @@ class LevelStering {
             return 0;
         }
         $res = (1 - $l[0]['avg']) / 3;
+   
         return $l[0]['avg'] - $res;
 
     }

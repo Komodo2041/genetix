@@ -60,22 +60,29 @@ class PowerController extends Controller
         $lvlinfo = []; 
 
         for ($i = 1; $i <= $lvlmax; $i++) {
-            $calc = Calculation::where("area_id", $id)->where("level", $i)->inRandomOrder()->take(10)->get();
+            $calc = Calculation::where("area_id", $id)->where("level", $i)->inRandomOrder()->take(20)->get();
             $sum = 0;
             $nr = 0;
+            $all = 0;
             foreach ($calc AS $c) {
                 $data = json_decode($c->data);
                 $p = $gtx->calcpowerone($data);
                 $abs = abs($p - $power);
                 $sum += $abs;
+                $all += $p;
+                 
                 $nr++;
+                $avg = $all / $nr;
                 $res[$i][] = [
                    "power" => $p,
                    "result" => $c->obtainedresult,
-                   "diff" => $abs 
+                   "diff" => $abs,
+                   "avg" => $avg
                 ];
             }
-            $lvlinfo[$i] = $sum/$nr;
+            $lvlinfo[$i]['diff'] = $sum / $nr;
+            $lvlinfo[$i]['avg'] = $all / $nr;
+            $lvlinfo[$i]['diffavg'] = abs($lvlinfo[$i]['avg'] - $power);
         }
  
 
