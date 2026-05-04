@@ -115,7 +115,7 @@ class MainController extends Controller
     private $selectUsingPowerNoBestData = 1;
 
  
-    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24]; // 28
+    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28]; // 28
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14];
@@ -124,7 +124,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
 
-    private $randomDoingTrybe = 4;
+    private $randomDoingTrybe = 2;
 
     private function getRandomDoing() {
          $randomDoing = -1;
@@ -247,8 +247,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           //  $randomDoing = rand(41, 50);
-           //  $randomDoing = rand(51, 53);
+            $randomDoing = 28; 
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  

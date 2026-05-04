@@ -25,7 +25,8 @@ class CrossingData
         "joinwith_0or1_random", "joinwith_0or1_random2", "useavgojoindiffe", "useavgojoindiffeRandom",
         "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9",
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
-        "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X"
+        "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X",
+        "sandwich_Y", "sandwich_X", "sandwich_Z"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1844,6 +1845,80 @@ class CrossingData
         return $table;
     }     
 
+    private function sandwich_Z($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < $nr; $k++) {
+            $pom[] = rand(0, 1);
+        }        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 1) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+
+    private function sandwich_X($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < $nr; $k++) {
+            $pom[] = rand(0, 1);
+        }        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$i] == 1) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }
+    
+    private function sandwich_Y($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        for ($k =0; $k < $nr; $k++) {
+            $pom[] = rand(0, 1);
+        }        
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$j] == 1) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+
+                }
+            }
+        }
+        return $table;
+    }    
 
     public function changeMethodList($methods) {
         $this->methods = $methods;
