@@ -48,7 +48,7 @@ class MainController extends Controller
     private $maxPopulation = 30;
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 8;
+    private $nrTimes = 16;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -112,29 +112,32 @@ class MainController extends Controller
 
     private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53];
     private $selectUsingPowerBottomLayerZero = [51, 52, 53];
+    private $selectUsingPowerNoBestData = 1;
 
-    private $wagaSelecting = [17, 18, 19, 20];
-    private $normalSelecting = [0, 1, 2, 3, 10, 28, 24];
+ 
+    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24]; // 28
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14];
+    private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
-    private $randomDoingTrybe = 0;
+
+    private $randomDoingTrybe = 4;
 
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
              $randomDoing = rand(0, 53);
              if ($this->randomDoingTrybe  == 1) {
-                 $randomDoing = rand(31, 53);
-             } elseif ($this->randomDoingTrybe  == 2) {
+                 $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
+             } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
                 if (!in_array($randomDoing, $this->normalSelecting)) {
                     $randomDoing = -1;
                 }                   
              } elseif ($this->randomDoingTrybe  == 3) {
-                $randomDoing = rand(51, 53);             
+                $randomDoing = rand(min($this->selectUsingPowerBottomLayerZero), max($this->selectUsingPowerBottomLayerZero));             
              } elseif ($this->randomDoingTrybe  == 4) { // NO WAGA
                 if (in_array($randomDoing, $this->wagaSelecting)) {
                     $randomDoing = -1;
@@ -244,8 +247,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-          //  $randomDoing = rand(41, 50);
-             $randomDoing = rand(51, 53);
+           //  $randomDoing = rand(41, 50);
+           //  $randomDoing = rand(51, 53);
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -619,7 +622,9 @@ class MainController extends Controller
     
             $usepowerDetails = rand(1, 5);
             $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power, $usepowerDetails);
-            $population0[] = $dataBest;
+            if ($this->selectUsingPowerNoBestData == 0) {
+                $population0[] = $dataBest;
+            }
        
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
