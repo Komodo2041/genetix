@@ -784,7 +784,7 @@ exit(); */
         if ($result2  > $minimumCalc) {
             $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
-            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first ]);
+            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first, "start" => $first / $maxPoints]);
 
             if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 130 || $randomDoing == 131 ) {
                 $clones["result"] = $result2;
