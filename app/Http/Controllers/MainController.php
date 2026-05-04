@@ -48,7 +48,7 @@ class MainController extends Controller
     private $maxPopulation = 30;
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 16;
+    private $nrTimes = 9;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -107,11 +107,14 @@ class MainController extends Controller
        50 => "Set one Layer Z (0) 50%",
        51 => " zero the lower 3 layers",
        52 => " zero the lower layers", 
-       53 => " zero the big lower layers"                  
+       53 => " zero the big lower layers",
+       54 => " zero the lower 3 layers (50%)",
+       55 => " zero the lower layers (50%)", 
+       56 => " zero the big lower layers (50%) "                     
     ];
 
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53];
-    private $selectUsingPowerBottomLayerZero = [51, 52, 53];
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56];
+    private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56];
     private $selectUsingPowerNoBestData = 1;
 
  
@@ -124,7 +127,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
 
-    private $randomDoingTrybe = 2;
+    private $randomDoingTrybe = 3;
 
     private function getRandomDoing() {
          $randomDoing = -1;
@@ -617,6 +620,12 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->ZeroLayer($dataBest, 2, 10);
             } elseif ($randomDoing == 53) {
                 $pattern = $this->helperMatrix->ZeroLayer($dataBest, 3, 10);
+            } elseif ($randomDoing == 54) {
+                $pattern = $this->helperMatrix->ZeroLayer($dataBest, 1, 10, 50);
+            } elseif ($randomDoing == 55) {
+                $pattern = $this->helperMatrix->ZeroLayer($dataBest, 2, 10, 50);
+            } elseif ($randomDoing == 56) {
+                $pattern = $this->helperMatrix->ZeroLayer($dataBest, 3, 10, 50);
             }
     
             $usepowerDetails = rand(1, 5);

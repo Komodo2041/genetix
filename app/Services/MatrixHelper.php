@@ -90,7 +90,7 @@ class MatrixHelper {
        return $data;
     }
 
-    public function ZeroLayer($data, $tryb, $size) {
+    public function ZeroLayer($data, $tryb, $size, $percent = 50) {
 
        $res = $data;
        $pom = 0;
@@ -109,6 +109,14 @@ class MatrixHelper {
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                for ($z = 0; $z < $size; $z++) {
+
+                    if ($percent < 100) {
+                        $r = rand(0, 100);
+                        if ($r < $percent) {
+                            continue;
+                        }
+                    }
+
                    if ($z >= $pom) {
                        $res[$i][$j][$z] = 0;
                    }
