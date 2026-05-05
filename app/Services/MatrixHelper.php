@@ -162,5 +162,32 @@ class MatrixHelper {
 
     }
 
+    public function zeroBlock($data, $size, $block) {
+
+        $res = $data;
+
+        $max = $size - $block - 1;
+        $pom1 = rand(0, $max);
+        $pom2 = rand(0, $max);
+        $pom3 = rand(0, $max);
+
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+               for ($z = 0; $z < $size; $z++) {
+
+                     if (($i >= $pom1 && $i <= $pom1 + $block - 1 )
+                          && ($j >= $pom2 && $j <= $pom2 + $block - 1 )
+                          && ($z >= $pom3 && $z <= $pom3 + $block - 1 )) {
+                           $res[$i][$j][$z] = 0;
+                     } 
+               }
+           }
+        }       
+
+
+        return $res;
+
+    }
+
 
 }

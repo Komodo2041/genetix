@@ -98,7 +98,9 @@ class MainController extends Controller
        57 => "Up 3 layers", 
        58 => "Small up layers", 
        59 => "Big Up layers",
-
+       60 => "Zero 4x4x4",
+       61 => "Zero 5x5x5",
+       62 => "Zero 6x6x6",
     ];
 
     public $nrMaxPopulation = 120;
@@ -119,8 +121,8 @@ class MainController extends Controller
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
  
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
-    private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59];
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
+    private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
     private $selectUsingPowerNoBestData = 1;
 
  
@@ -649,6 +651,12 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->UpLayers($dataBest, 2, 10);
             } elseif ($randomDoing == 59) {
                 $pattern = $this->helperMatrix->UpLayers($dataBest, 3, 10);
+            } elseif ($randomDoing == 60) {
+                $pattern = $this->helperMatrix->zeroBlock($dataBest, 10, 4);
+            } elseif ($randomDoing == 61) {
+                $pattern = $this->helperMatrix->zeroBlock($dataBest, 10, 5);
+            } elseif ($randomDoing == 62) {
+                $pattern = $this->helperMatrix->zeroBlock($dataBest, 10, 6);
             }
     
             $usepowerDetails = rand(1, 5);
@@ -1964,7 +1972,7 @@ class MainController extends Controller
         $lvlmax = Calculation::where("area_id", $id)->max("level");
 
         $this->usingPower = 1;
-        $this->$this->randomDoingTrybe = 1;
+        $this->randomDoingTrybe = 1;
         $this->selectUsingPowerNoBestData = 0;
 
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
@@ -1995,7 +2003,7 @@ class MainController extends Controller
             $avg = $sum / $nr;
             PowerSelect::create([
                 "area_id" => $id,
-                "lvl" => $lvl,
+                "lvl" => $lvlmax,
                 "max" => $max / $maxPoints,
                 "avg" => $avg / $maxPoints,
                 "more" => $more,
