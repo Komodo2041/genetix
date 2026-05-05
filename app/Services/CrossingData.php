@@ -887,7 +887,7 @@ class CrossingData
 
   
     private function layersinz2($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }        
@@ -913,7 +913,7 @@ class CrossingData
     }
 
     private function layersinx2($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }        
@@ -938,7 +938,7 @@ class CrossingData
     }
  
     private function layersinj2($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }        
@@ -963,7 +963,7 @@ class CrossingData
     }
 
     private function layersinz4($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 4; $k++) {
             $pom[] = $randNumbers[$k];
         }        
@@ -988,7 +988,7 @@ class CrossingData
     }
  
     private function layersinx4($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 4; $k++) {
             $pom[] = $randNumbers[$k];
         }        
@@ -1013,7 +1013,7 @@ class CrossingData
     }
 
     private function layersinj4($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 4; $k++) {
             $pom[] = $randNumbers[$k];
         }        
@@ -1039,15 +1039,15 @@ class CrossingData
 
  
     private function layersin2xyz($population, $max, $nr = 10) {
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 2; $k++) {
             $pom[] = $randNumbers[$k];
         }
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 2; $k++) {
             $pom1[] = $randNumbers[$k];
         }    
-        $randNumbers = $this->getRand($max);
+        $randNumbers = $this->getRand($nr);
         for ($k =0; $k < 2; $k++) {
             $pom2[] = $randNumbers[$k];
         }                            

@@ -44,11 +44,11 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 0; // 2
+    public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 6;
+    private $nrTimes = 8;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
@@ -110,11 +110,14 @@ class MainController extends Controller
        53 => "Zero the big lower layers",
        54 => "Zero the lower 3 layers (50%)",
        55 => "Zero the lower layers (50%)", 
-       56 => "Zero the big lower layers (50%) "                     
+       56 => "Zero the big lower layers (50%) ",
+       57 => "Up 3 layers", 
+       58 => "Small up layers", 
+       59 => "Big Up layers",                   
     ];
 
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56];
-    private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56];
+    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
+    private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59];
     private $selectUsingPowerNoBestData = 1;
 
  
@@ -127,7 +130,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30];
 
 
-    private $randomDoingTrybe = 3;
+    private $randomDoingTrybe = 4;
 
     private function getRandomDoing() {
          $randomDoing = -1;
@@ -250,7 +253,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           // $randomDoing = 28; 
+           // $randomDoing = rand(57, 59);
+    
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -553,10 +557,18 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
+
+            $power = $gtx->getPower($population0);
+           
+
             while (count($population0) > 80) {
                 $population0 = $cross->goThrough($population0, "random50");
             }
  
+
+            $population0 = $gtx->usepower($population0, $power);
+
+
         } elseif ( in_array($randomDoing, $this->selectUsingPower)) { 
         
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
@@ -627,6 +639,12 @@ class MainController extends Controller
                 $pattern = $this->helperMatrix->ZeroLayer($dataBest, 2, 10, 50);
             } elseif ($randomDoing == 56) {
                 $pattern = $this->helperMatrix->ZeroLayer($dataBest, 3, 10, 50);
+            } elseif ($randomDoing == 57) {
+                $pattern = $this->helperMatrix->UpLayers($dataBest, 1, 10);
+            } elseif ($randomDoing == 58) {
+                $pattern = $this->helperMatrix->UpLayers($dataBest, 2, 10);
+            } elseif ($randomDoing == 59) {
+                $pattern = $this->helperMatrix->UpLayers($dataBest, 3, 10);
             }
     
             $usepowerDetails = rand(1, 5);
@@ -661,12 +679,13 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
-/*        
-        echo $randomDoing." <br/>";
+        
+        /* echo $randomDoing." <br/>";
         foreach ($res AS $r) {
            echo $r['sum']." <br/>";
         }
-exit(); */
+        exit(); */
+ 
 
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
@@ -781,7 +800,7 @@ exit(); */
                  
                 $halfreso = $res[0]['sum'] / $maxPoints;
                 if ($halfreso >= $minimumCalc2) {
-                    Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $halfreso / $maxPoints,
+                    Calculation::create(["result" => "Wynik pośredni ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $halfreso,
                            "typecalc" => 30, "population" => $nrPop  ]);   
                 }                        
             } 
@@ -1713,7 +1732,7 @@ exit(); */
             foreach ($res AS $row) {
                 if ($row['sum'] < $min) {
                    $record[0]++;
-                } elseif ($row['sum'] < $max) {
+                } elseif ($row['sum'] <= $max) {
                    $record[1]++;
                 } else {
                    $record[2]++;

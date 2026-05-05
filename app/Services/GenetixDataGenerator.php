@@ -174,7 +174,7 @@ class GenetixDataGenerator
         for ($n = 0; $n < $nr; $n++) { 
            $sum += $this->calcpowerone($population0[$n]);
         }
-        return round($sum/$nr);      
+        return  $sum/$nr;      
     }
 
     public function getPowerfromarea($population0, $nr = 10) {
@@ -183,7 +183,7 @@ class GenetixDataGenerator
         for ($n = 0; $n < $nr; $n++) { 
            $sum += $this->calcpowerone($population0[$n]['area']);
         }
-        return round($sum/$nr);      
+        return $sum/$nr;      
     }    
      
 

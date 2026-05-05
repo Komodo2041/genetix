@@ -128,4 +128,39 @@ class MatrixHelper {
 
     }
 
+    public function UpLayers($data, $tryb = 1,  $size = 10) {
+
+       $res = $data;
+       $pom = 0;
+       switch ($tryb) {
+          case 1: 
+            $pom = $size - 3;
+            break;
+          case 2:
+            $pom = rand(floor($size/2), $size - 1);
+            break;
+          case 3:
+            $pom = rand(0, floor($size/2) + 1);
+            break;              
+       }
+
+        for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+               for ($z = 0; $z < $size; $z++) {
+
+                  if ($z == $size - 1) {
+                      $res[$i][$j][$z] = 0;
+                  } elseif ($pom >= $z) {
+                      $res[$i][$j][$z] = $data[$i][$j][$z + 1];
+                  } else {
+                      $res[$i][$j][$z] = $data[$i][$j][$z];
+                  }
+               }
+           }
+        }       
+        return $res;
+
+    }
+
+
 }
