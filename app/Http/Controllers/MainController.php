@@ -1976,6 +1976,7 @@ class MainController extends Controller
         $this->selectUsingPowerNoBestData = 0;
 
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $maxPoints2 = $this->ls->getminimum($id, $lvlmax);
 
         for ($i = 0; $i < $this->maxPopulation; $i++) {
             $result = $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
@@ -1983,12 +1984,13 @@ class MainController extends Controller
             $best = $result[1];
             $selectId = $result[2];
             $checked = $best->obtainedresult * $maxPoints;
- 
+            $checked2 = $best->obtainedresult * $maxPoints2;
 
             $max = 0;
             $sum = 0;
             $nr = 0;
             $more = 0;
+            $more2 = 0;
             foreach ($res AS $r) {
                 $sum += $r['sum'];
                 if ($r['sum'] > $max) {
@@ -1997,6 +1999,9 @@ class MainController extends Controller
                 if ($r['sum'] >= $checked) {
                     $more++;
                 }
+                if ($r['sum'] >= $checked2) {
+                    $more2++;
+                }                
                 $nr++; 
 
             }
@@ -2007,6 +2012,7 @@ class MainController extends Controller
                 "max" => $max / $maxPoints,
                 "avg" => $avg / $maxPoints,
                 "more" => $more,
+                "more2" => $more2,
                 "selectId" => $selectId
             ]);            
  
