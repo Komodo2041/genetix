@@ -97,7 +97,8 @@ class MainController extends Controller
        56 => "Zero the big lower layers (50%) ",
        57 => "Up 3 layers", 
        58 => "Small up layers", 
-       59 => "Big Up layers",                   
+       59 => "Big Up layers",
+
     ];
 
     public $nrMaxPopulation = 120;
@@ -684,7 +685,7 @@ class MainController extends Controller
  
  
         if ($this->usingPower == 1) {
-            return [$res, $bestResult];
+            return [$res, $bestResult, $randomDoing];
         }
  
 
@@ -1972,6 +1973,7 @@ class MainController extends Controller
             $result = $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
             $res = $result[0];
             $best = $result[1];
+            $selectId = $result[2];
             $checked = $best->obtainedresult * $maxPoints;
  
 
@@ -1996,7 +1998,8 @@ class MainController extends Controller
                 "lvl" => $lvl,
                 "max" => $max / $maxPoints,
                 "avg" => $avg / $maxPoints,
-                "more" => $more
+                "more" => $more,
+                "selectId" => $selectId
             ]);            
  
         }
