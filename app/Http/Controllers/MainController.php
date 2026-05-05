@@ -101,7 +101,8 @@ class MainController extends Controller
        60 => "Zero 4x4x4",
        61 => "Zero 5x5x5",
        62 => "Zero 6x6x6",
-       63 => "Calculating powerMatrix" // X
+       63 => "Calculating powerMatrix", // X
+       64 => "Use 10 Calculating powerMatrix Together"
     ];
 
     public $nrMaxPopulation = 120;
@@ -127,7 +128,7 @@ class MainController extends Controller
     private $selectUsingPowerNoBestData = 1;
 
  
-    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28];
+    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28 ];
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14];
@@ -666,6 +667,20 @@ class MainController extends Controller
                 $population0[] = $dataBest;
             }
        
+        } elseif ($randomDoing == 64) {
+        
+            $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->where("typecalc", 63)->orderByRaw('RAND()')->take(10)->get();
+            if (!$calculation) {
+                $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+                $randomDoing = -1;
+            }
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
+            }
+
+
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
