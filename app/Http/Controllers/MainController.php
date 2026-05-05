@@ -22,8 +22,10 @@ use App\Models\Diamondcalc;
 use App\Models\Matrix;
 use App\Models\Waga;
 
-use App\Models\CrossMatrix;
  
+
+use App\Models\CrossMatrix;
+use App\Models\PowerSelect; 
  
  
 class MainController extends Controller
@@ -33,24 +35,6 @@ class MainController extends Controller
         $this->ls = new LevelStering();
         $this->helperMatrix = new MatrixHelper();
     }
-
-    public $nrMaxPopulation = 120;
-
-    public $startPopulation = 800;
-    public $useBigMutator = 0;
-    public $funcMutator = 0;
-
-    public $maxNumberInCalculation = 5;
-
-    public $addpopulation = 0;
-    public $additionalPopulationSize = 20;
-    public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
-
-    private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 8;
-
-    private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
 
     private $populationName = [
        0 => "Generation 0",
@@ -116,6 +100,24 @@ class MainController extends Controller
        59 => "Big Up layers",                   
     ];
 
+    public $nrMaxPopulation = 120;
+
+    public $startPopulation = 800;
+    public $useBigMutator = 0;
+    public $funcMutator = 0;
+
+    public $maxNumberInCalculation = 5;
+
+    public $addpopulation = 0;
+    public $additionalPopulationSize = 20;
+    public $Numhalstep = 2; // 2
+    private $maxPopulation = 60;
+
+    private $saveCrosMutationMatrix = 1.000001;
+    private $nrTimes = 8;
+
+    private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
+ 
     private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
     private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59];
     private $selectUsingPowerNoBestData = 1;
@@ -131,6 +133,7 @@ class MainController extends Controller
 
 
     private $randomDoingTrybe = 4;
+    private $usingPower = 0;
 
     private function getRandomDoing() {
          $randomDoing = -1;
@@ -679,12 +682,10 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
-        
-        /* echo $randomDoing." <br/>";
-        foreach ($res AS $r) {
-           echo $r['sum']." <br/>";
+ 
+        if ($this->usingPower == 1) {
+            return [$res, $bestResult];
         }
-        exit(); */
  
 
         $maxQ = $res[0]['sum'];
@@ -1951,6 +1952,58 @@ class MainController extends Controller
     public function changeFlex($id, $tr) {
         Area::where("id", $id)->update(["flex" => $tr]);
         return redirect("/")->with('success', 'Włączono Flex dla: '.$id." VAL: ".$tr);         
+    }
+
+    public function calcAllPowerSelect($id, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
+        set_time_limit(36000);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+
+        $this->usingPower = 1;
+        $this->$this->randomDoingTrybe = 1;
+        $this->selectUsingPowerNoBestData = 0;
+
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+
+        for ($i = 0; $i < $this->maxPopulation; $i++) {
+            $result = $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
+            $res = $result[0];
+            $best = $result[1];
+            $checked = $best->obtainedresult * $maxPoints;
+ 
+
+            $max = 0;
+            $sum = 0;
+            $nr = 0;
+            $more = 0;
+            foreach ($res AS $r) {
+                $sum += $r['sum'];
+                if ($r['sum'] > $max) {
+                    $max = $r['sum'];
+                }
+                if ($r['sum'] >= $checked) {
+                    $more++;
+                }
+                $nr++; 
+
+            }
+            $avg = $sum / $nr;
+            PowerSelect::create([
+                "area_id" => $id,
+                "lvl" => $lvl,
+                "max" => $max / $maxPoints,
+                "avg" => $avg / $maxPoints,
+                "more" => $more
+            ]);            
+ 
+        }
+         
+       return redirect("/")->with('success', " Obliczono wybór populacji przez użycie matrycy siły ");  
+
+
     }
 
 }

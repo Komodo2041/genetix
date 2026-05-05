@@ -70,6 +70,7 @@
                   <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a>
 
                   <a href="/showpower/{{$a->id}}"><button>Pokaż obliczenia matrycy siły</button></a>
+                  <a href="/calcAllPowerSelect/{{$a->id}}"><button>Oblicz metody wyboru na podstawie siły</button></a>
 
                   @if ($a->flex == 0) 
                      <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>

@@ -61,6 +61,8 @@ Route::get('powermatrix/{size}',  "App\Http\Controllers\PowerController@showmatr
 Route::get('calcpowermatrix/{size}',  "App\Http\Controllers\PowerController@calcpowermatrix" ); 
  
 Route::get('showpower/{id}',  "App\Http\Controllers\PowerController@showpower" ); 
+Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\MainController@calcAllPowerSelect" ); 
+ 
  
 
  
