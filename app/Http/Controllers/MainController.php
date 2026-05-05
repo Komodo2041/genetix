@@ -101,6 +101,7 @@ class MainController extends Controller
        60 => "Zero 4x4x4",
        61 => "Zero 5x5x5",
        62 => "Zero 6x6x6",
+       63 => "Calculating powerMatrix" // X
     ];
 
     public $nrMaxPopulation = 120;
@@ -132,7 +133,7 @@ class MainController extends Controller
     private $biglayerSelecting = [11, 12, 13, 14];
     private $wagaSelecting = [17, 18, 19, 20];
 
-    private $noSelectingPopulation = [-1, 21, 22, 25, 30];
+    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
     private $randomDoingTrybe = 4;
@@ -1976,7 +1977,7 @@ class MainController extends Controller
         $this->selectUsingPowerNoBestData = 0;
 
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
-        $maxPoints2 = $this->ls->getminimum($id, $lvlmax);
+        $maxPoints2 = $this->ls->getminimum($id, $lvlmax, 1);
 
         for ($i = 0; $i < $this->maxPopulation; $i++) {
             $result = $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
@@ -1984,7 +1985,7 @@ class MainController extends Controller
             $best = $result[1];
             $selectId = $result[2];
             $checked = $best->obtainedresult * $maxPoints;
-            $checked2 = $best->obtainedresult * $maxPoints2;
+            $checked2 =  $maxPoints2  * $maxPoints;
 
             $max = 0;
             $sum = 0;
@@ -1998,6 +1999,10 @@ class MainController extends Controller
                 }
                 if ($r['sum'] >= $checked) {
                     $more++;
+
+                    Calculation::create(["result" => "Calculating powerMatrix", "data" => json_encode($r['area']), "area_id" => $id, "level" => $lvlmax, 
+                            "obtainedresult" => $r['sum'] / $maxPoints, "typecalc" => 63 ]);
+
                 }
                 if ($r['sum'] >= $checked2) {
                     $more2++;

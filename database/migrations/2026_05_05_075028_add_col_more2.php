@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('powerselect', function (Blueprint $table) {
-            //
+            $table->integer("more2")->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('powerselect', function (Blueprint $table) {
-            //
+            $table->dropColumn("more2");
         });
     }
 };

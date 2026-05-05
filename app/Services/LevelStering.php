@@ -43,7 +43,10 @@ class LevelStering {
         $l = LevelAvg::where("area_id", $id)->where("level", $lvl)->get()->toArray();
   
         if (!$l) {
-            return 0;
+            $l = LevelAvg::where("area_id", $id)->where("level", $lvl - 1)->get()->toArray();
+            if (!$l) {
+                return 0;
+            }
         }
 
         $res = (1 - $l[0]['avg']) / 4;
