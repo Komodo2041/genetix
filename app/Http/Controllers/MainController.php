@@ -2028,4 +2028,23 @@ class MainController extends Controller
 
     }
 
+    public function showPowerSelect($id, Request $request) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+      
+        $order = $request->input('order');
+        $desc = $request->input('desc');
+        if (!$order) {
+            $order = "max";
+        }
+        if (!$desc) {
+            $desc = "DESC";
+        }
+
+        $calco = PowerSelect::selectRaw('SUM(more) AS more, MAX(max) as max, AVG(avg) as avg, selectId')->where("area_id", $id)->groupBy('selectId')->orderBy($order, $desc)->get()->toArray();
+        return view("showpowerselect", ['calco' => $calco, 'area' => $area, "order" => $order, "desc" => $desc, "pname" => $this->populationName]);
+    }
+
 }

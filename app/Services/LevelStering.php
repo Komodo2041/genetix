@@ -47,6 +47,8 @@ class LevelStering {
             if (!$l) {
                 return 0;
             }
+            $res = (1 - $l[0]['avg']) / 20;
+            return $l[0]['avg'] + $res;
         }
 
         $res = (1 - $l[0]['avg']) / 4;
@@ -72,7 +74,7 @@ class LevelStering {
     }
 
     public function saveCalco($cID, $nc) {
-
+       // ?
     }
 
 }

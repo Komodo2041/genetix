@@ -32,7 +32,7 @@
                   <a href="/calcallavg/{{$a->id}}" ><button>Przelicz średnie dla poziomów</button></a>
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a>&nbsp;
-                  <a href="/area/usedmethods/{{$a->id}}"><button>Początkowe populacje</button></a>&nbsp;
+                  <a href="/area/usedmethods/{{$a->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
 
                   @if (is_null($a->river))
                      <a href="/addRiver/{{$a->id}}"><button>Dodaj rzekę</button></a>&nbsp;
@@ -70,7 +70,10 @@
                   <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a>
 
                   <a href="/showpower/{{$a->id}}"><button>Pokaż obliczenia matrycy siły</button></a>
-                  <a href="/calcAllPowerSelect/{{$a->id}}"><button>Oblicz metody wyboru na podstawie siły</button></a>
+                  <a href="/calcAllPowerSelect/{{$a->id}}"><button>Oblicz wybór na podstawie siły</button></a>
+                  <a href="/showPowerSelect/{{$a->id}}"><button>Pokaż wybór na podstawie siły</button></a>
+ 
+
 
                   @if ($a->flex == 0) 
                      <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>
