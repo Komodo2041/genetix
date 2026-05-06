@@ -119,7 +119,7 @@ class MainController extends Controller
     private $maxPopulation = 60;
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 8;
+    private $nrTimes = 4;
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
  
@@ -138,6 +138,8 @@ class MainController extends Controller
 
 
     private $randomDoingTrybe = 4;
+
+
     private $usingPower = 0;
 
     private function getRandomDoing() {
@@ -262,7 +264,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
            // $randomDoing = rand(57, 59);
-    
+          //  $randomDoing = 64;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -670,7 +672,7 @@ class MainController extends Controller
         } elseif ($randomDoing == 64) {
         
             $calculations = Calculation::where("area_id", $id)->where("level", $lvl)->where("typecalc", 63)->orderByRaw('RAND()')->take(10)->get();
-            if (!$calculation) {
+            if (!$calculations) {
                 $calculations = $this->getCalculationLevel($id, $lvl, 10);  
                 $randomDoing = -1;
             }
