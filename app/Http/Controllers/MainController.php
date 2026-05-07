@@ -424,7 +424,7 @@ class MainController extends Controller
 
            $this->useBigMutator = 1;
 
-        } elseif ($randomDoing == 12) {
+        } elseif ($randomDoing == 12 || $randomDoing == 13 || $randomDoing == 14) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
@@ -432,30 +432,15 @@ class MainController extends Controller
                 $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
-            $this->useBigMutator = 1;
-
-        } elseif ($randomDoing == 13) {
-
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
-            foreach ($calculations AS $c) {
-                $usedcalc[] = $c->id;
-                $population0[] = json_decode($c->data);
+            if ($randomDoing == 12) {
+               $this->useBigMutator = 1;
+            } elseif ($randomDoing == 13) {
+               $this->useBigMutator = 2;
+            } elseif ($randomDoing == 14) {
+                $this->useBigMutator = 3;
+                $this->funcMutator = $bigmutation->getIdFunc("bigLayerMutationCircle");                
             }
-            $this->useBigMutator = 2;
-
-        } elseif ($randomDoing == 14) {
-
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
-            foreach ($calculations AS $c) {
-                $usedcalc[] = $c->id;
-                $population0[] = json_decode($c->data);
-            }
-            $this->useBigMutator = 3;
-            $this->funcMutator = $bigmutation->getIdFunc("bigLayerMutationCircle");
- 
-        } elseif ($randomDoing == 15) { // Join Rivers
+        }  elseif ($randomDoing == 15) { // Join Rivers
 
             $calculations = $this->getCalculationMaxBest($id, 2);  
             $population0 = []; 
