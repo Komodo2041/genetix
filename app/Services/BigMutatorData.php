@@ -7,6 +7,8 @@ namespace App\Services;
 class BigMutatorData
 {
     
+    private $percent = 100;
+
     public $numbers = 650;
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
@@ -88,6 +90,9 @@ class BigMutatorData
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
+                if ($this->noChangeZ()) {
+                    continue;
+                }                
                 shuffle($used[$k]); 
             }
   
@@ -134,7 +139,10 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }                  
                 for ($g = 0; $g < 4; $g++) {
                     shuffle($used[$k][$g]);  
                 } 
@@ -183,7 +191,10 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }                  
                 for ($g = 0; $g < 25; $g++) {
                     shuffle($used[$k][$g]);  
                 } 
@@ -225,7 +236,11 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }
                 for ($g = 0; $g < 25; $g++) {
                     $go = rand(0, 100);
                     if ($go <= $rand) {
@@ -268,7 +283,10 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }                
                 for ($g = 0; $g < 25; $g++) {
                     $go = rand(0, 100);
                     if ($go <= 15) {
@@ -312,10 +330,15 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }
+              
                 for ($g = 0; $g < 20; $g++) {
                     shuffle($used[$k][$g]);  
-                } 
+                 } 
+               
             }
   
             for ($i = 0; $i < $size; $i++) {
@@ -352,10 +375,14 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }
                 for ($g = 0; $g < 20; $g++) {
-                    shuffle($used[$k][$g]);  
+                   shuffle($used[$k][$g]);  
                 } 
+      
             }
   
             for ($i = 0; $i < $size; $i++) {
@@ -395,6 +422,11 @@ class BigMutatorData
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
+    
+                if ($this->noChangeZ()) {
+                    continue;
+                }
+
                 for ($g = 0; $g < 20; $g++) {
                     $go = rand(0, 100);
                     if ($go <= $rand) { 
@@ -437,10 +469,13 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }
                 for ($g = 0; $g < 20; $g++) {
                     $go = rand(0, 100);
-                    if ($go <= 20) { 
+                    if ($go <= 20 ) { 
                        shuffle($used[$k][$g]);  
                     }
                 } 
@@ -482,7 +517,10 @@ class BigMutatorData
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+            for ($k = 0; $k < $size; $k++) {
+                if ($this->noChangeZ()) {
+                    continue;
+                }
                 for ($g = 0; $g < 20; $g++) {
                     $go = rand(0, 100);
                     if ($go <= $rand) { 
@@ -527,6 +565,10 @@ class BigMutatorData
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }           
                 for ($g = 0; $g < 20; $g++) {
                     $go = rand(0, 100);
                     if ($go <= 20) { 
@@ -535,7 +577,8 @@ class BigMutatorData
                 } 
             }
   
-            for ($i = 0; $i < $size; $i++) {
+            for ($i = 0; $i < $size; $i++) { 
+            
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
                         $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
@@ -571,9 +614,12 @@ class BigMutatorData
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
+                if ($this->noChangeZ()) {
+                    continue;
+                }
                 for ($g = 0; $g < 20; $g++) {
                     $go = rand(0, 100);
-                    if ($go <= 10) { 
+                    if ($go <= 10 ) { 
                         shuffle($used[$k][$g]);
                     }
                 } 
@@ -614,9 +660,13 @@ class BigMutatorData
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }   
                 for ($g = 0; $g < 20; $g++) {
                     $go = rand(0, 100);
-                    if ($go <= 10) { 
+                    if ($go <= 10 ) { 
                        shuffle($used[$k][$g]);  
                     }
                 } 
@@ -658,6 +708,10 @@ class BigMutatorData
             $used = $res;
             $table = [];
             for ($k = 0; $k < $size; $k++) { 
+ 
+                if ($this->noChangeZ()) {
+                    continue;
+                }
                 for ($g = 0; $g < 25; $g++) {
                     $go = rand(0, 100);
                     if ($go <= 10) {
@@ -690,6 +744,11 @@ class BigMutatorData
             $table = $pop;
  
             for ($z = 0; $z < $size; $z++) {
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }            
+
                 $change = rand(1, 10);
                 for ($ch = 0; $ch < $change; $ch++) {
                     $x = rand(1, $size-2);
@@ -721,6 +780,11 @@ class BigMutatorData
             $table = $pop;
  
             for ($z = 0; $z < $size; $z++) {
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }
+
                 $change = rand(1, 10);
                 for ($ch = 0; $ch < $change; $ch++) {
                     $x = rand(0, $size - 3);
@@ -758,6 +822,11 @@ class BigMutatorData
             $table = $pop;
  
             for ($z = 0; $z < $size; $z++) {
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }
+
                 $change = rand(1, 2);
                 for ($ch = 0; $ch < $change; $ch++) {
                     $x = rand(0, $size - 4);
@@ -796,6 +865,11 @@ class BigMutatorData
             $table = $pop;
  
             for ($z = 0; $z < $size; $z++) {
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }            
+
                 $change = rand(1, 5);
                 for ($ch = 0; $ch < $change; $ch++) {
                     $x = rand(0, $size - 2);
@@ -831,6 +905,11 @@ class BigMutatorData
             $table = $pop;
 
             for ($z = 0; $z < $size; $z++) {
+
+                if ($this->noChangeZ()) {
+                    continue;
+                }
+
                 $x = rand(0, $size - 1);
                 $y = rand(0, $size - 1);
 
@@ -888,6 +967,21 @@ class BigMutatorData
     public function getRandomMethod() {
         $nr = count($this->allMethods);
         return $this->allMethods[rand(0, $nr - 1)];
+    }
+
+    public function setPercent($p) {
+        $this->percent = $p;
+    }
+
+    private function noChangeZ() {
+        if ($this->percent == 100) {
+            return 0;
+        }
+        $r = rand(0, 100);
+        if ($r < $this->percent) {
+            return 0;
+        }
+        return 1;
     }
 
 }

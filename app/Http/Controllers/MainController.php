@@ -102,7 +102,15 @@ class MainController extends Controller
        61 => "Zero 5x5x5",
        62 => "Zero 6x6x6",
        63 => "Calculating powerMatrix", // X
-       64 => "Use 10 Calculating powerMatrix Together"
+       64 => "Use 10 Calculating powerMatrix Together",
+       65 => "useBigMutator - 1 - Part Layer Z - (70%)",
+       66 => "useBigMutator - 2 - Part Layer Z - (70%)", 
+       67 => "useBigMutator - 1 - Part Layer Z - (40%)", 
+       68 => "useBigMutator - 2 - Part Layer Z - (40%)", 
+       69 => "useBigMutator - 1 - Part Layer Z - (20%)",
+       70 => "useBigMutator - 2 - Part Layer Z - (20%)", 
+       71 => "useBigMutator - 1 - Part Layer Z - (10%)",
+       72 => "useBigMutator - 2 - Part Layer Z - (10%)" 
     ];
 
     public $nrMaxPopulation = 120;
@@ -117,7 +125,7 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
     public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
-    private $nrTimes = 4;
+    private $nrTimes = 6;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -133,15 +141,15 @@ class MainController extends Controller
     private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28 ];
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
-    private $biglayerSelecting = [11, 12, 13, 14];
-    private $biglayerSelectingShort = [12, 13, 14];
+    private $biglayerSelecting = [11, 12, 13, 14, 62, 65, 66, 67, 68, 69, 70, 71, 72];
+    private $biglayerSelectingShort = [12, 13, 14, 62, 65, 66, 67, 68, 69, 70, 71, 72];
 
     private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 4;
+    private $randomDoingTrybe = 5;
 
 
     private $usingPower = 0;
@@ -149,7 +157,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 53);
+             $randomDoing = rand(0, 72);
              if ($this->randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
              } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
@@ -162,7 +170,11 @@ class MainController extends Controller
                 if (in_array($randomDoing, $this->wagaSelecting)) {
                     $randomDoing = -1;
                 }              
-             }     
+             } elseif ($this->randomDoingTrybe == 5) {
+                if (!in_array($randomDoing, $this->biglayerSelecting)) {
+                    $randomDoing = -1;
+                } 
+             }    
          }
         return $randomDoing; 
     }
@@ -267,7 +279,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(26, 27);
+           // $randomDoing = rand(26, 27);
           //  $randomDoing = 64;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
@@ -434,14 +446,25 @@ class MainController extends Controller
                 $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
-            if ($randomDoing == 12) {
+            if ($randomDoing == 12 || $randomDoing == 65 || $randomDoing == 67 || $randomDoing == 69 || $randomDoing == 71) {
                $this->useBigMutator = 1;
-            } elseif ($randomDoing == 13) {
+            } elseif ($randomDoing == 13 || $randomDoing == 66 || $randomDoing == 68 || $randomDoing == 70 || $randomDoing == 72) {
                $this->useBigMutator = 2;
             } elseif ($randomDoing == 14) {
                 $this->useBigMutator = 3;
                 $this->funcMutator = $bigmutation->getIdFunc("bigLayerMutationCircle");                
             }
+
+            if ($randomDoing == 65 || $randomDoing == 66) {
+                $bigmutation->setPercent(70);
+            } elseif ($randomDoing == 67 || $randomDoing == 68) {
+                $bigmutation->setPercent(40);
+            } elseif ($randomDoing == 69 || $randomDoing == 70) {
+                $bigmutation->setPercent(20);
+            } elseif ($randomDoing == 71 || $randomDoing == 72) {
+                $bigmutation->setPercent(10);
+            }
+
         }  elseif ($randomDoing == 15) { // Join Rivers
 
             $calculations = $this->getCalculationMaxBest($id, 2);  
