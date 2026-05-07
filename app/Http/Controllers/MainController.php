@@ -116,7 +116,7 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 120;
+    private $maxPopulation = 60;
     private $nrTimes = 4;
 
 
@@ -1544,6 +1544,10 @@ class MainController extends Controller
         $mutations = $mutation->getAllMethod();  
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+
+        $gtx->setPowerMatrixSize(10);  
+        $power = $gtx->getPower([$table]);
+
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
  
         if (!$bestResult) {
@@ -1561,7 +1565,7 @@ class MainController extends Controller
             $population0[] = json_decode($bestResult[0]->data);
      
             $res = $mutation->addmutation($population0, $cr, $method);   
-            $population0 = $res[0];
+            $population0 = $gtx->usepower($res[0], $power);
             $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
  
             $sum = 0;
