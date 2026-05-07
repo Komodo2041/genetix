@@ -26,7 +26,7 @@ class CrossingData
         "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9",
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
         "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X",
-        "sandwich_Y", "sandwich_X", "sandwich_Z"
+        "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1079,7 +1079,18 @@ class CrossingData
 
         $stere = [];
         for ($i =0; $i < $nr; $i++) {
-            $stere[] = rand(0, $maxstere);
+            if ($maxstere == 4 || $maxstere == 5) {
+                $stere[] = 2;
+            } else {
+                $stere[] = rand(0, $maxstere);
+            }
+            
+        }
+ 
+        if ($maxstere == 4) {
+            $stere[rand(0, count($stere) - 1)] = 0;
+        } elseif ($maxstere == 5) {
+            $stere[rand(0, count($stere) - 1)] = 1;
         }
 
         for ($i = 0; $i < $nr; $i++) {
@@ -1112,6 +1123,14 @@ class CrossingData
     private function joinwith_0or1_random2($population, $max, $nr = 10) {
         return $this->joinwith_0or1_random($population, $max, $nr, 3);
     }
+
+    private function joinwith_one_join1($population, $max, $nr = 10) {
+        return $this->joinwith_0or1_random($population, $max, $nr, 4);
+    }
+    
+    private function joinwith_one_join0($population, $max, $nr = 10) {
+        return $this->joinwith_0or1_random($population, $max, $nr, 5);
+    }    
 
     
     public function getAllMethod() {

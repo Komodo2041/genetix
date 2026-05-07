@@ -10,7 +10,7 @@
  
   <table>
      <tr>
- 
+        <th>LVL</th> 
         <th>
             @if ($order == "selectId" && $desc == "DESC")
                <a class="asc" href="/showPowerSelect/{{$area->id}}/?order=selectId&desc=ASC">Nazwa</a>
@@ -43,6 +43,7 @@
     </tr>  
 @forelse ($calco AS $c)
      <tr>
+        <td>{{$c['lvl']}}</td>
         <td> {{$pname[$c['selectId']]}}  </td>
         <td>{{$c['avg']}}</td>
         <td>{{$c['max']}}</td>

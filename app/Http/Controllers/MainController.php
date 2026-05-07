@@ -2074,7 +2074,8 @@ class MainController extends Controller
             $desc = "DESC";
         }
 
-        $calco = PowerSelect::selectRaw('SUM(more) AS more, MAX(max) as max, AVG(avg) as avg, selectId')->where("area_id", $id)->groupBy('selectId')->orderBy($order, $desc)->get()->toArray();
+        $calco = PowerSelect::selectRaw('SUM(more) AS more, MAX(max) as max, AVG(avg) as avg, selectId, lvl')->where("area_id", $id)->groupBy('selectId', 'lvl')->orderBy("lvl", "DESC")->orderBy($order, $desc)->get()->toArray();
+ 
         return view("showpowerselect", ['calco' => $calco, 'area' => $area, "order" => $order, "desc" => $desc, "pname" => $this->populationName]);
     }
 
