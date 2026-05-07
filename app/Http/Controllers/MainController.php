@@ -265,7 +265,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           // $randomDoing = rand(57, 59);
+            $randomDoing = rand(26, 27);
           //  $randomDoing = 64;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
@@ -519,8 +519,9 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
- 
+            $power = $gtx->getPower($population0);
             $population0 = $cross->goThrough($population0, "blob6random");
+            $population0 = $gtx->usepower($population0, $power);
  
         } elseif ($randomDoing == 27) {
 
@@ -529,8 +530,9 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
+            $power = $gtx->getPower($population0);
             $population0 = $cross->goThrough($population0, "blob3random");
-
+            $population0 = $gtx->usepower($population0, $power);
 
         } elseif ($randomDoing == 28) {
 
@@ -555,14 +557,10 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
 
-            $power = $gtx->getPower($population0);
-           
-
+            $power = $gtx->getPower($population0); 
             while (count($population0) > 80) {
                 $population0 = $cross->goThrough($population0, "random50");
-            }
- 
-
+            } 
             $population0 = $gtx->usepower($population0, $power);
 
 
@@ -696,7 +694,14 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
- 
+        /*
+        echo $randomDoing."<br/>";
+        foreach ($res AS $r) {
+            echo $r['sum']."</br>";
+        }
+        exit(); */
+
+
         if ($this->usingPower == 1) {
             return [$res, $bestResult, $randomDoing];
         }
