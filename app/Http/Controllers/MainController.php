@@ -1736,7 +1736,8 @@ class MainController extends Controller
         foreach ( $bestResult AS $c) {
             $population0[] = json_decode($c->data);
         }
-       
+        $gtx->setPowerMatrixSize(10);  
+        $power = $gtx->getPower($population0);
         $headCalc = $gtx->calcPopulation($population0, $headPoints);
         $min = 0;
         $max = 0;
@@ -1752,10 +1753,15 @@ class MainController extends Controller
            }           
         }
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        
+
         $mresults = [];
         foreach ($crossings AS $cr) {
             $pop_result = $cross->createNewPopulation($population0, $cr);
             $all = count($pop_result[0]);
+
+            $pop_result[0] = $gtx->usepower($pop_result[0], $power);
+
             $res = $gtx->calcPopulation($pop_result[0], $headPoints);
             $record = [0, 0, 0];
             $mmax = 0;
