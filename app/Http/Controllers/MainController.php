@@ -116,10 +116,12 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
+    private $maxPopulation = 120;
+    private $nrTimes = 4;
+
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $nrTimes = 4;
+   
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
  
@@ -277,7 +279,7 @@ class MainController extends Controller
 
         $minimumCalc = $this->ls->getminimum($id, $lvl - 1);
         $minimumCalc2 = $this->ls->getminimum($id, $lvl - 1, 1);
-
+ 
         $individual = 10;
         $lvl = $lvl - 1;
         $additionalPopulation = [];
@@ -1838,6 +1840,16 @@ class MainController extends Controller
         if (!$lvlmax) {
             $lvlmax = 1;
         }
+
+        if ($trybe == 2) {
+            $count = Calculation::where("area_id", $id)->where("level", $lvlmax)->count();
+            if ($count < 100) {
+                $trybe = 1;
+            } else {
+                $lvlmax++;
+            }
+        }
+
         if ($trybe == 1) {
             if ($lvlmax > 5) {
                 $lvlmax = rand($lvlmax - 3, $lvlmax);
@@ -1845,6 +1857,8 @@ class MainController extends Controller
                 $lvlmax = rand(1, $lvlmax);
             }
              
+        } elseif ($trybe == 2) {
+
         }
 
         for ($i = 0; $i < $this->nrTimes; $i++) {

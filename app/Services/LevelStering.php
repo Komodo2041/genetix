@@ -40,10 +40,11 @@ class LevelStering {
             return 0;
         }
         
-        $l = LevelAvg::where("area_id", $id)->where("level", $lvl)->get()->toArray();
-  
+        $l = LevelAvg::where("area_id", $id)->where("level", $lvl + 1)->get()->toArray();
+   
         if (!$l) {
-            $l = LevelAvg::where("area_id", $id)->where("level", $lvl - 1)->get()->toArray();
+            $l = LevelAvg::where("area_id", $id)->where("level", $lvl )->get()->toArray();
+            
             if (!$l) {
                 return 0;
             }

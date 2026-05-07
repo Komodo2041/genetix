@@ -134,7 +134,16 @@
         <a href="/calcareamoretimes/{{$a->id}}/1" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
       -
-     @endforelse     
+     @endforelse
+
+     <br/><br/> 
+     <b>Tryb 2:</b> Uruchomienie {{$nrTimes}} razy:
+     @forelse ($area AS $a)
+        <a href="/calcareamoretimes/{{$a->id}}/2" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
+     @empty 
+      -
+     @endforelse
+
 </div>
 
 @endsection('content')
