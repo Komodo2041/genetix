@@ -134,6 +134,8 @@ class MainController extends Controller
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14];
+    private $biglayerSelectingShort = [12, 13, 14];
+
     private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
@@ -424,7 +426,7 @@ class MainController extends Controller
 
            $this->useBigMutator = 1;
 
-        } elseif ($randomDoing == 12 || $randomDoing == 13 || $randomDoing == 14) {
+        } elseif ( in_array($randomDoing, $this->biglayerSelectingShort)) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
