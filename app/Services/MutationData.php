@@ -23,7 +23,7 @@ class MutationData
         "shuffleRand6x6x2_X", "shuffleRand6x6x2_Y", "shuffleRand6x6x2_Z", "shuffleRand6x6x3_X", "shuffleRand6x6x3_Y", "shuffleRand6x6x3_Z",
         "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines",
         "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple",
-        "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times"
+        "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer"
     ];
 
     public function setNumerMutation($nr) {
@@ -2132,8 +2132,34 @@ class MutationData
         return $pop;     
 
     }  
+ 
+    private function godownInOneLayer($pop, $nr = 10) {
+ 
+       $z = rand(0, $nr - 1);
+       $nr = rand(2, 10);
+       for ($i = 0; $i < $nr; $i++) {
+           $x = rand(0, $nr - 1);
+           $y = rand(0, $nr - 1);
+           $pop[$x][$y][$z] = 0;
+       }
+ 
+ 
+       return  $pop;
+    }   
 
-   
+    private function goupInOneLayer($pop, $nr = 10) {
+ 
+       $z = rand(0, $nr - 1);
+       $nr = rand(2, 10);
+       for ($i = 0; $i < $nr; $i++) {
+           $x = rand(0, $nr - 1);
+           $y = rand(0, $nr - 1);
+           $pop[$x][$y][$z] = 1;
+       }
+ 
+ 
+       return  $pop;
+    } 
 
     public function getAllMethod() {
        return $this->mutationList;       

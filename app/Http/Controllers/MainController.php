@@ -123,8 +123,9 @@ class MainController extends Controller
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
-    public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
+
+    public $Numhalstep = 3; // 2
+    private $maxPopulation = 90;
     private $nrTimes = 6;
 
 
@@ -141,15 +142,15 @@ class MainController extends Controller
     private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28 ];
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
-    private $biglayerSelecting = [11, 12, 13, 14, 62, 65, 66, 67, 68, 69, 70, 71, 72];
-    private $biglayerSelectingShort = [12, 13, 14, 62, 65, 66, 67, 68, 69, 70, 71, 72];
+    private $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
+    private $biglayerSelectingShort = [12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
 
     private $wagaSelecting = [17, 18, 19, 20];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 5;
+    private $randomDoingTrybe = 2;
 
 
     private $usingPower = 0;
