@@ -26,7 +26,8 @@ class CrossingData
         "rand6x6x6", "rand5x5x5", "rand7x7x7", "random90", "random75", "rand4x4x4", "rand8x8x8", "rand9x9x9",
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
         "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X",
-        "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0"
+        "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0", "get5x5x1Multiple",  "get4x4x1Multiple",
+        "get3x3x1Multiple40", "get3x3x1Multiple"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -1937,7 +1938,100 @@ class CrossingData
             }
         }
         return $table;
-    }    
+    }
+
+    private function get5x5x1Multiple($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        for ($m = 0; $m < $multiple; $m++) {
+            $z = rand(0, $nr - 1);
+            $x = rand(0, $nr - 5);
+            $y = rand(0, $nr - 5);
+            for ($i = 0; $i < 5; $i++) {
+               for ($j = 0; $j < 5; $j++) {
+                   $table[$x + $i][$y + $j][$z] = $two[$x + $i][$y + $j][$z];
+               }
+            }    
+        }
+ 
+        return $table;
+    }     
+
+    private function get4x4x1Multiple($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        for ($m = 0; $m < $multiple; $m++) {
+            $z = rand(0, $nr - 1);
+            $x = rand(0, $nr - 4);
+            $y = rand(0, $nr - 4);
+            for ($i = 0; $i < 4; $i++) {
+               for ($j = 0; $j < 4; $j++) {
+                   $table[$x + $i][$y + $j][$z] = $two[$x + $i][$y + $j][$z];
+               }
+            }    
+        }
+ 
+        return $table;
+    }
+
+    private function get3x3x1Multiple($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        for ($m = 0; $m < $multiple; $m++) {
+            $z = rand(0, $nr - 1);
+            $x = rand(0, $nr - 3);
+            $y = rand(0, $nr - 3);
+            for ($i = 0; $i < 3; $i++) {
+               for ($j = 0; $j < 3; $j++) {
+                   $table[$x + $i][$y + $j][$z] = $two[$x + $i][$y + $j][$z];
+               }
+            }    
+        }
+ 
+        return $table;
+    }
+    
+    private function get3x3x1Multiple40($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 40); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        for ($m = 0; $m < $multiple; $m++) {
+            $z = rand(0, $nr - 1);
+            $x = rand(0, $nr - 3);
+            $y = rand(0, $nr - 3);
+            for ($i = 0; $i < 3; $i++) {
+               for ($j = 0; $j < 3; $j++) {
+                   $table[$x + $i][$y + $j][$z] = $two[$x + $i][$y + $j][$z];
+               }
+            }    
+        }
+ 
+        return $table;
+    }      
+
 
     public function changeMethodList($methods) {
         $this->methods = $methods;

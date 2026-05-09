@@ -124,9 +124,9 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
-    public $Numhalstep = 3; // 2
-    private $maxPopulation = 90;
-    private $nrTimes = 6;
+    public $Numhalstep = 16; // 2
+    private $maxPopulation = 800;
+    private $nrTimes = 2;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -139,7 +139,7 @@ class MainController extends Controller
     private $selectUsingPowerNoBestData = 1;
 
  
-    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28 ];
+    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24  ]; // 28
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
@@ -755,9 +755,8 @@ class MainController extends Controller
         $t3 = microtime(true);
           // HEAD LOOP
          
-        $individual = 10;  
-
-        while ($repeatQ < 40 && $nrPop < $maxPop && $maxQ < $maxPoints) {
+ 
+        while ($repeatQ < 20 && $nrPop < $maxPop && $maxQ < $maxPoints) {
  
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
