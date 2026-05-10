@@ -113,6 +113,8 @@ class MainController extends Controller
        72 => "useBigMutator - 2 - Part Layer Z - (10%)" 
     ];
 
+    private $debugInfo = 0;
+
     public $nrMaxPopulation = 120;
 
     public $startPopulation = 800;
@@ -125,8 +127,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 120;
-    private $nrTimes = 8;
+    private $maxPopulation = 60;
+    private $nrTimes = 12;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -150,7 +152,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 2;
+    private $randomDoingTrybe = 0;
 
 
     private $usingPower = 0;
@@ -281,7 +283,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
            // $randomDoing = rand(26, 27);
-          $randomDoing = 28;  
+          $randomDoing = 9;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -353,28 +355,39 @@ class MainController extends Controller
         } elseif ($randomDoing == 4) {
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $usedpercent = rand(70,99);
-     
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data); 
+            }                
+            $power = $gtx->getPower($population0);
+
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
- 
             $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
- 
+            $population0 = $gtx->usepower($population0, $power);
         } elseif ($randomDoing == 5) { 
         
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0, 1);
             $usedpercent = rand(70,99);
-     
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data); 
+            }                
+            $power = $gtx->getPower($population0);     
+
             $stiffPattern = $gtx->getStiffPattern($calculations, $usedpercent, 10);
- 
             $population0 = $gtx->getStableGeneration(10, $this->startPopulation, $stiffPattern[0], $stiffPattern[1]);
+
+            $population0 = $gtx->usepower($population0, $power);
 
         } elseif ($randomDoing == 6) { // 10% change
 
             $change = 100;
             $calculations = $this->getCalculationLevel($id, $lvl, 5, 0);
             $tempplate = $gtx->getStiilPatern(10, $change);
- 
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data); 
+            }                
+            $power = $gtx->getPower($population0);   
             $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
-             
+            $population0 = $gtx->usepower($population0, $power);
 
         }  elseif ($randomDoing == 7) {  // clone
 
@@ -408,9 +421,13 @@ class MainController extends Controller
             $change = 100;
             $calculations = $this->getCalculationLevel($id, $lvl, 5, 0);
             $tempplate = $gtx->getStiilPaternXYZ(10);
- 
+             foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data); 
+            }                
+            $power = $gtx->getPower($population0);  
             $population0 = $gtx->getPopulationFromStillTemplate(10, $this->startPopulation,  $tempplate, $calculations[0], $change);
- 
+            $population0 = $gtx->usepower($population0, $power);
+
         } elseif ($randomDoing == 10 || $randomDoing == 23) {  // start with 3 *  mutations
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
@@ -720,6 +737,9 @@ class MainController extends Controller
         $res = $gtx->calcPopulation($population0, $headPoints);
         unset($population0);
  
+        if ($this->debugInfo) {
+            $this->debugInfo($res, $randomDoing);
+        }
         /*
         echo $randomDoing."<br/>";
         foreach ($res AS $r) {
@@ -861,7 +881,7 @@ class MainController extends Controller
         $result2 = $maxQ / $maxPoints; 
         if ($result2  > $minimumCalc) {
             $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
-            $pgc =  (1 - $result2) / (1 - ($last / $first));
+            $pgc =  (1 - $result2) / ( ($last / $first) - 1);
             
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
             "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first, "start" => $first / $maxPoints,
@@ -2108,5 +2128,15 @@ class MainController extends Controller
  
         return view("showpowerselect", ['calco' => $calco, 'area' => $area, "order" => $order, "desc" => $desc, "pname" => $this->populationName]);
     }
+
+    private function debugInfo($res, $randomDoing) {
+        echo $randomDoing."<br/>";
+        foreach ($res AS $r) {
+            echo $r['sum']."</br>";
+        }
+        exit();
+ 
+    }
+ 
 
 }
