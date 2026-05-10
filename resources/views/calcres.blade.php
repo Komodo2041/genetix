@@ -12,14 +12,16 @@
       <tr>
          <th>Id</th>
          <th>Level</th>
-         <th>Result</th> 
+         <th>Result</th>
+         <th>Progress</th> 
          <th></th>
       </tr>
       @foreach ($calco AS $p) 
         <tr>
             <td>#{{$p['id']}}</td>
             <td>{{$p['level']}}</td>
-            <td>{{$p['obtainedresult']}}</td> 
+            <td>{{$p['obtainedresult']}}</td>
+            <td>{{$p['progress']}}</td> 
             <td>
                <a href="/calculating/progress/{{$p['id']}}" ><button>Pokaż postęp</button></a>           
             </td>

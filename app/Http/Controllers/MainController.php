@@ -139,7 +139,7 @@ class MainController extends Controller
     private $selectUsingPowerNoBestData = 1;
 
  
-    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24  ]; // 28
+    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28 ];
 
     private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
     private $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
@@ -150,7 +150,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 0;
+    private $randomDoingTrybe = 2;
 
 
     private $usingPower = 0;
@@ -861,7 +861,7 @@ class MainController extends Controller
         $result2 = $maxQ / $maxPoints; 
         if ($result2  > $minimumCalc) {
             $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
-            $pgc =  (1 - $result2);
+            $pgc =  (1 - $result2) / (1 - ($last / $first));
             
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
             "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first, "start" => $first / $maxPoints,
