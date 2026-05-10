@@ -124,9 +124,9 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
-    public $Numhalstep = 16; // 2
-    private $maxPopulation = 800;
-    private $nrTimes = 2;
+    public $Numhalstep = 2; // 2
+    private $maxPopulation = 60;
+    private $nrTimes = 8;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -150,7 +150,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 2;
+    private $randomDoingTrybe = 0;
 
 
     private $usingPower = 0;
@@ -860,8 +860,11 @@ class MainController extends Controller
         $result2 = $maxQ / $maxPoints; 
         if ($result2  > $minimumCalc) {
             $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
+            $pgc =  (1 - $result2);
+            
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
-            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first, "start" => $first / $maxPoints]);
+            "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first, "start" => $first / $maxPoints,
+            "progcalc" => $pgc]);
 
             if ($randomDoing == 7 || $randomDoing == 8 || $randomDoing == 130 || $randomDoing == 131 ) {
                 $clones["result"] = $result2;
@@ -909,8 +912,8 @@ class MainController extends Controller
         } else {
             $lvlReso = $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
             if ($lvlReso[0] > 0) {
-                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0], "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
-                 "obtainedresult" => $result2, "typecalc" => 22 ]);
+                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
+                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints  ]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
   
