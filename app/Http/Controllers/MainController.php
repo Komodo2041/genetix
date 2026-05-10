@@ -125,7 +125,7 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
+    private $maxPopulation = 120;
     private $nrTimes = 8;
 
 
@@ -281,7 +281,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
            // $randomDoing = rand(26, 27);
-          //  $randomDoing = 64;  
+          $randomDoing = 28;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -570,11 +570,11 @@ class MainController extends Controller
             }
             $this->addpopulation = 1;
         
-            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->additionalPopulationSize)->get();
+            $calculations = $this->getCalculationLevel($id, $lvl, $this->additionalPopulationSize); 
             foreach ($calculations AS $c) {
                 $additionalPopulation[] = json_decode($c->data);
             }            
- 
+  
         }  elseif ($randomDoing == 29) {
 
             $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
@@ -768,6 +768,7 @@ class MainController extends Controller
             $gtx->choosemodify($res, 10, $usedmodify);
 
             if ($this->addpopulation) {
+             
                 $new = $additionalPopulation[rand(0, count($additionalPopulation) - 1)];
                 $selectedIndividuals[] = $new;
                  
@@ -1891,6 +1892,7 @@ class MainController extends Controller
 
         for ($i = 0; $i < $this->nrTimes; $i++) {
             $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
+            $this->addpopulation = 0;
         }
         echo "OK"; exit();
     }
