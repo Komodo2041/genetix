@@ -128,7 +128,7 @@ class MainController extends Controller
 
     public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
-    private $nrTimes = 12;
+    private $nrTimes = 8;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -283,7 +283,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
            // $randomDoing = rand(26, 27);
-          $randomDoing = 9;  
+           //  $randomDoing = 9;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -934,7 +934,7 @@ class MainController extends Controller
             $lvlReso = $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
             if ($lvlReso[0] > 0) {
                 $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
-                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints  ]);
+                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "progress" => $last / $first  ]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
   
@@ -1885,10 +1885,13 @@ class MainController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
+        $random = 0;
+
         $lvlmax = Calculation::where("area_id", $id)->max("level");
         if (!$lvlmax) {
             $lvlmax = 1;
         }
+        $lvlmin = $lvlmax;
 
         if ($trybe == 2) {
             $count = Calculation::where("area_id", $id)->where("level", $lvlmax)->count();
@@ -1901,17 +1904,19 @@ class MainController extends Controller
 
         if ($trybe == 1) {
             if ($lvlmax > 5) {
-                $lvlmax = rand($lvlmax - 3, $lvlmax);
-            } else {
-                $lvlmax = rand(1, $lvlmax);
+                $lvlmin = $lvlmax - 3;
+            } else { 
+                $lvlmin = 1;
             }
-             
-        } elseif ($trybe == 2) {
-
+            $random = 1;
         }
 
         for ($i = 0; $i < $this->nrTimes; $i++) {
-            $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
+            $lvl = $lvlmax;
+            if ($random) {
+                $lvl = rand($lvlmin, $lvlmax);
+            }
+            $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation);
             $this->addpopulation = 0;
         }
         echo "OK"; exit();
