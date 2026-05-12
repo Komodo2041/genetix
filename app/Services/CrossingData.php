@@ -2210,11 +2210,18 @@ class CrossingData
                
      }
 
-     public function createPopulationFromBloBFromLevel($population, $all, $nr = 10) {
+     public function createPopulationFromBloBFromLevel($population, $all, $nr = 10, $type = 1) {
         $max = count($population);
-        $blob = $this->blob3random($population, $max, $nr = 10);
+        $blob = [];
+        if ($type == 1) {
+            $blob = $this->blob3random($population, $max, $nr = 10);
+        } elseif ($type == 2) {
+            $blob = $this->blob6($population, $max, $nr = 10);
+        }
         $table = [];
         $res = [];
+        $used = [];
+        $possible = 10 * $all;
         for ($n = 0; $n < $all; $n++) {
             $one = $population[rand(0, $max - 1)];
             $pom = $this->gopom2table($nr);
@@ -2230,7 +2237,17 @@ class CrossingData
                     }
                 }
             }
-            $res[] = $table;
+            $shortTable = sha1(json_encode($table));
+            if (in_array($shortTable, $used)) {
+                if ($possible > 0) {
+                    $possible--;
+                    $n--;
+                }
+            } else {
+                $res[] = $table;
+                $used[] = $shortTable;
+            }
+             
         }
         return $res;
      }

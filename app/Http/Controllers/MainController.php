@@ -111,7 +111,8 @@ class MainController extends Controller
        70 => "useBigMutator - 2 - Part Layer Z - (20%)", 
        71 => "useBigMutator - 1 - Part Layer Z - (10%)",
        72 => "useBigMutator - 2 - Part Layer Z - (10%)",
-       73 => "Blob3 From the level" 
+       73 => "Blob3 From the level",
+       74 => "Blob6 From the level" 
     ];
 
     private $debugInfo = 0;
@@ -128,7 +129,7 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 80;
+    private $maxPopulation = 120;
     private $nrTimes = 6;
 
 
@@ -283,7 +284,8 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-           // $randomDoing = rand(26, 27);
+            $randomDoing = rand(73, 74);
+
            //  $randomDoing = 9;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
@@ -719,9 +721,21 @@ class MainController extends Controller
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
-            $population0 = $cross->createPopulationFromBloBFromLevel($population0, $this->startPopulation, 10);
- 
-            
+            $power = $gtx->getPower($population0); 
+            $population0 = $cross->createPopulationFromBloBFromLevel($population0, $this->startPopulation, 10, 1);
+            $population0 = $gtx->usepower($population0, $power);
+
+        }  elseif ($randomDoing == 74) { 
+        
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $power = $gtx->getPower($population0); 
+            $population0 = $cross->createPopulationFromBloBFromLevel($population0, $this->startPopulation, 10, 2);
+            $population0 = $gtx->usepower($population0, $power);
+
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
