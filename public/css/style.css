@@ -23,6 +23,10 @@ table.level td.red {
     background: red;
 }
 
+table.level td.orange {
+    background: darkorange;
+}
+
 div.totable {
     width: 100%;
     float: left;
@@ -89,4 +93,10 @@ a.desc {
 p.backo {
     background: #dcdcdc;
     padding: 10px;
+}
+
+div.col {
+    width: 230px;
+    float: left;
+    margin: 2px;
 }

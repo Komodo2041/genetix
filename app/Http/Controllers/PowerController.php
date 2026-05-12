@@ -90,4 +90,20 @@ class PowerController extends Controller
 
     }
 
+    public function show5Result($id) {
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+        $calculations = Calculation::where("area_id", $id)->where("level", $lvlmax)->inRandomOrder()->take(5)->get();
+
+        $reso = [];
+        foreach ($calculations AS $c) {
+            $reso[] = json_decode($c->data); 
+        }        
+        return view("show5results", ['reso' => $reso,   "area" => $area, "lvlmax" => $lvlmax, "good" => json_decode($area->data)]);
+    }
+
 }

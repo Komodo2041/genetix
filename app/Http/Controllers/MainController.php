@@ -127,8 +127,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
-    private $nrTimes = 8;
+    private $maxPopulation = 80;
+    private $nrTimes = 6;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -933,8 +933,9 @@ class MainController extends Controller
         } else {
             $lvlReso = $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
             if ($lvlReso[0] > 0) {
+                $pgc =  (1 - $result2) / ( ($last / $first) - 1);
                 $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
-                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "progress" => $last / $first  ]);
+                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "progress" => $last / $first, "progcalc" => $pgc  ]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
   
@@ -1902,8 +1903,8 @@ class MainController extends Controller
             }
         }
 
-        if ($trybe == 1) {
-            if ($lvlmax > 5) {
+        if ($trybe == 1 || $trybe == 3) {
+            if ($lvlmax > 5 && $trybe == 1) {
                 $lvlmin = $lvlmax - 3;
             } else { 
                 $lvlmin = 1;

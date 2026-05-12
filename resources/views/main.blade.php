@@ -73,7 +73,7 @@
                   <a href="/calcAllPowerSelect/{{$a->id}}"><button>Oblicz wybór na podstawie siły</button></a>
                   <a href="/showPowerSelect/{{$a->id}}"><button>Pokaż wybór na podstawie siły</button></a>
  
-
+                  <a href="/show5Result/{{$a->id}}"><button>Pokaż 5 różnych wyników</button></a>
 
                   @if ($a->flex == 0) 
                      <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>
@@ -121,7 +121,7 @@
      </form>  
 
      <br/><br/><br/><br/> 
-     <b>Tryb 0:</b> Uruchomienie {{$nrTimes}} razy:
+     <b>Tryb 0: (Najwyższy lvl do przodu)</b> Uruchomienie {{$nrTimes}} razy:
      @forelse ($area AS $a)
         <a href="/calcareamoretimes/{{$a->id}}/0" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
@@ -137,9 +137,17 @@
      @endforelse
 
      <br/><br/> 
-     <b>Tryb 2:</b> Uruchomienie {{$nrTimes}} razy:
+     <b>Tryb 2: (Staraj się przeskoczyć level)</b> Uruchomienie {{$nrTimes}} razy:
      @forelse ($area AS $a)
         <a href="/calcareamoretimes/{{$a->id}}/2" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
+     @empty 
+      -
+     @endforelse
+
+     <br/><br/> 
+     <b>Tryb 3: (losowy wybór levelu)</b> Uruchomienie {{$nrTimes}} razy:
+     @forelse ($area AS $a)
+        <a href="/calcareamoretimes/{{$a->id}}/3" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 
       -
      @endforelse
