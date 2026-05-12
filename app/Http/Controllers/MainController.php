@@ -110,7 +110,8 @@ class MainController extends Controller
        69 => "useBigMutator - 1 - Part Layer Z - (20%)",
        70 => "useBigMutator - 2 - Part Layer Z - (20%)", 
        71 => "useBigMutator - 1 - Part Layer Z - (10%)",
-       72 => "useBigMutator - 2 - Part Layer Z - (10%)" 
+       72 => "useBigMutator - 2 - Part Layer Z - (10%)",
+       73 => "Blob3 From the level" 
     ];
 
     private $debugInfo = 0;
@@ -711,6 +712,16 @@ class MainController extends Controller
             }
 
 
+        } elseif ($randomDoing == 73) { 
+        
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $population0 = $cross->createPopulationFromBloBFromLevel($population0, $this->startPopulation, 10);
+ 
+            
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
@@ -740,13 +751,7 @@ class MainController extends Controller
         if ($this->debugInfo) {
             $this->debugInfo($res, $randomDoing);
         }
-        /*
-        echo $randomDoing."<br/>";
-        foreach ($res AS $r) {
-            echo $r['sum']."</br>";
-        }
-        exit(); */
-
+ 
 
         if ($this->usingPower == 1) {
             return [$res, $bestResult, $randomDoing];
@@ -1919,6 +1924,7 @@ class MainController extends Controller
             }
             $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation);
             $this->addpopulation = 0;
+            $this->useBigMutator = 0;
         }
         echo "OK"; exit();
     }

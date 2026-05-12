@@ -13,7 +13,8 @@ class CrossingData
      * 
      */
 
-    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4", "useavgojoindiffe" ];
+    public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4", "useavgojoindiffe",
+     "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom" ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
     public $methods = ["updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
@@ -27,7 +28,7 @@ class CrossingData
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
         "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X",
         "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0", "get5x5x1Multiple",  "get4x4x1Multiple",
-        "get3x3x1Multiple40", "get3x3x1Multiple"
+        "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -2030,7 +2031,209 @@ class CrossingData
         }
  
         return $table;
-    }      
+    }
+
+
+     private function blob3_wonerandom($population, $max, $nr = 10) {
+        $blob = $this->blob3random($population, $max, $nr = 10);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $pom = [];
+        for ($i = 0; $i < $nr; $i++) {
+           $pom2 = rand(0, 100);
+           if ($pom2 < 20) {
+              $pom[] = 1;
+           } else {
+              $pom[] = 0;
+           }  
+        }
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $blob[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        return $table;
+     }
+ 
+     private function blob3_wfiverandom($population, $max, $nr = 10) {
+        $blob = $this->blob3random($population, $max, $nr = 10);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $pom = [];
+        for ($i = 0; $i < $nr; $i++) {
+           $pom2 = rand(0, 100);
+           if ($pom2 < 50) {
+              $pom[] = 1;
+           } else {
+              $pom[] = 0;
+           }  
+        }
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $blob[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        return $table;
+     }
+ 
+     private function blob3_fromthelevel($population, $max, $nr = 10) {
+        $blob = $this->blob3random($population, $max, $nr = 10);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $pom = $this->gopom2table($nr);
+        $pom2 = rand(1, $nr);
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $blob[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        return $table;
+     }
+
+ 
+     private function blob6_wonerandom($population, $max, $nr = 10) {
+        $blob = $this->blob6($population, $max, $nr = 10);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $pom = [];
+        for ($i = 0; $i < $nr; $i++) {
+           $pom2 = rand(0, 100);
+           if ($pom2 < 20) {
+              $pom[] = 1;
+           } else {
+              $pom[] = 0;
+           }  
+        }
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $blob[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        return $table;
+     }
+ 
+     private function blob6_wfiverandom($population, $max, $nr = 10) {
+        $blob = $this->blob6($population, $max, $nr = 10);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $pom = [];
+        for ($i = 0; $i < $nr; $i++) {
+           $pom2 = rand(0, 100);
+           if ($pom2 < 50) {
+              $pom[] = 1;
+           } else {
+              $pom[] = 0;
+           }  
+        }
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $blob[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        return $table;
+     }
+
+     private function blob6_fromthelevel($population, $max, $nr = 10) {
+        $blob = $this->blob6($population, $max, $nr = 10);
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $pom = $this->gopom2table($nr);
+        $pom2 = rand(1, $nr);
+ 
+        
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($pom[$z] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $blob[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        return $table;
+     }
+
+     private function gopom2table($nr) {
+        $res = [];
+        $pom2 = rand(1, $nr);
+        for ($i = 0; $i < $nr; $i++) {
+           if ($i < $pom2) {
+              $res[] = 1;
+           } else {
+              $res[] = 0;
+           }  
+        }
+        return $res;
+               
+     }
+
+     public function createPopulationFromBloBFromLevel($population, $all, $nr = 10) {
+        $max = count($population);
+        $blob = $this->blob3random($population, $max, $nr = 10);
+        $table = [];
+        $res = [];
+        for ($n = 0; $n < $all; $n++) {
+            $one = $population[rand(0, $max - 1)];
+            $pom = $this->gopom2table($nr);
+            $table = [];
+            for ($i = 0; $i < $nr; $i++) {
+                for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        if ($pom[$z] == 0) {
+                           $table[$i][$j][$z] = $one[$i][$j][$z];
+                        } else {
+                            $table[$i][$j][$z] = $blob[$i][$j][$z];
+                        }
+                    }
+                }
+            }
+            $res[] = $table;
+        }
+        return $res;
+     }
 
 
     public function changeMethodList($methods) {
