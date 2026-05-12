@@ -23,7 +23,8 @@ class MutationData
         "shuffleRand6x6x2_X", "shuffleRand6x6x2_Y", "shuffleRand6x6x2_Z", "shuffleRand6x6x3_X", "shuffleRand6x6x3_Y", "shuffleRand6x6x3_Z",
         "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines",
         "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple",
-        "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer"
+        "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer",
+        "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ"
     ];
 
     public function setNumerMutation($nr) {
@@ -2157,9 +2158,206 @@ class MutationData
            $pop[$x][$y][$z] = 1;
        }
  
- 
        return  $pop;
+    }
+  
+    private function shuffledoublecrossinOneLayerZ($pop, $nr = 10) {
+        $pom_x1 = rand(0, $nr - 1);
+        $pom_x2 = rand(0, $nr - 1);
+        $pom_y1 = rand(0, $nr - 1);
+        $pom_y2 = rand(0, $nr - 1);
+        $pom_z = rand(0, $nr - 1);
+           
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && ( $i == $pom_x1 || $i == $pom_x2 || $j == $pom_y1 || $j == $pom_y2 )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pom_z && ( $i == $pom_x1 || $i == $pom_x2 || $j == $pom_y1 || $j == $pom_y2 )) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shuffleMaxBorder_LayerZ_width_1($pop, $nr = 10) {
+        $pom_z = rand(0, $nr - 1);
+
+        $possible_x = [];
+        $possible_y = [];
+
+        for ($i = 0; $i < 1; $i++) {
+           $possible_x[] = $i;
+           $possible_y[] = $i;
+           $possible_x[] = $nr - $i - 1;
+           $possible_y[] = $nr - $i - 1;           
+        }
+ 
+
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shuffleMaxBorder_LayerZ_width_2($pop, $nr = 10) {
+        $pom_z = rand(0, $nr - 1);
+
+        $possible_x = [];
+        $possible_y = [];
+
+        for ($i = 0; $i < 2; $i++) {
+           $possible_x[] = $i;
+           $possible_y[] = $i;
+           $possible_x[] = $nr - $i - 1;
+           $possible_y[] = $nr - $i - 1;           
+        }
+ 
+
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+    
+    private function shuffleMaxBorder_LayerZ_width_3($pop, $nr = 10) {
+        $pom_z = rand(0, $nr - 1);
+
+        $possible_x = [];
+        $possible_y = [];
+
+        for ($i = 0; $i < 3; $i++) {
+           $possible_x[] = $i;
+           $possible_y[] = $i;
+           $possible_x[] = $nr - $i - 1;
+           $possible_y[] = $nr - $i - 1;           
+        }
+ 
+
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }    
+
+    private function shuffleMaxBorder_LayerZ_width_4($pop, $nr = 10) {
+        $pom_z = rand(0, $nr - 1);
+
+        $possible_x = [];
+        $possible_y = [];
+
+        for ($i = 0; $i < 4; $i++) {
+           $possible_x[] = $i;
+           $possible_y[] = $i;
+           $possible_x[] = $nr - $i - 1;
+           $possible_y[] = $nr - $i - 1;           
+        }
+ 
+
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
     } 
+
 
     public function getAllMethod() {
        return $this->mutationList;       
