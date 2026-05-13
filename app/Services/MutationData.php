@@ -24,7 +24,9 @@ class MutationData
         "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines",
         "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple",
         "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer",
-        "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ"
+        "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ",
+        "shufflesquereBorderOneLayerZ"
+
     ];
 
     public function setNumerMutation($nr) {
@@ -53,19 +55,37 @@ class MutationData
  
 
     private function godown1x1($pop, $nr = 10) {
-       $x = rand(0, $nr - 1);
-       $y = rand(0, $nr - 1);
-       $z = rand(0, $nr - 1);
-       $pop[$x][$y][$z] = 0;
+ 
+       $changed = 0;
+       $i = 1500;
+       while ($changed == 0 && $i > 0) {
+           $x = rand(0, $nr - 1);
+           $y = rand(0, $nr - 1);
+           $z = rand(0, $nr - 1);
+           if ($pop[$x][$y][$z] == 1) {
+              $pop[$x][$y][$z] = 0;
+              $changed = 1;
+           }
+           $i--;
+       }
+        
        return  $pop;
     }
 
     private function goup1x1($pop, $nr = 10) {
-       $x = rand(0, $nr - 1);
-       $y = rand(0, $nr - 1);
-       $z = rand(0, $nr - 1);
-       $pop[$x][$y][$z] = 1;
-       return  $pop;
+       $changed = 0;
+       $i = 1500;
+       while ($changed == 0 && $i > 0) {
+           $x = rand(0, $nr - 1);
+           $y = rand(0, $nr - 1);
+           $z = rand(0, $nr - 1);
+           if ($pop[$x][$y][$z] == 0) {
+              $pop[$x][$y][$z] = 1;
+              $changed = 1;
+           }
+           $i--;
+       }
+       return $pop;
     }    
 
     private function goupanddown1x1($pop, $nr = 10) {
@@ -385,17 +405,30 @@ class MutationData
 
  
     private function neighbourchange($pop, $nr = 10) {
-        $pom1 = rand(1, $nr - 2);
-        $pom2 = rand(1, $nr - 2);
-        $pom3 = rand(1, $nr - 2);
 
-        $changex = rand(-1, 1);
-        $changey = rand(-1, 1);
-        $changez = rand(-1, 1);
+        $changed = 0;
+        $ix = 500;
+        while ($changed == 0 && $ix > 0) {
 
-        $pom = $pop[$pom1][$pom2][$pom3]; 
-        $pop[$pom1][$pom2][$pom3] = $pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez];
-        $pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez] = $pom;
+            $pom1 = rand(1, $nr - 2);
+            $pom2 = rand(1, $nr - 2);
+            $pom3 = rand(1, $nr - 2);
+
+            $changex = rand(-1, 1);
+            $changey = rand(-1, 1);
+            $changez = rand(-1, 1);
+
+            if ($pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez] != $pop[$pom1][$pom2][$pom3] ) {
+                $pom = $pop[$pom1][$pom2][$pom3]; 
+                $pop[$pom1][$pom2][$pom3] = $pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez];
+                $pop[$pom1 + $changex][$pom2 + $changey][$pom3 + $changez] = $pom;
+                $changed = 1;
+            }
+            $ix--;
+ 
+
+        }
+ 
 
         return $pop;     
 
@@ -2214,7 +2247,7 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -2225,8 +2258,8 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
-                          $used[] = $pop[$i][$j][$z];
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
+                         $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
             }
@@ -2255,7 +2288,7 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                    if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -2266,8 +2299,8 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
-                          $used[] = $pop[$i][$j][$z];
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
+                         $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
             }
@@ -2296,7 +2329,7 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -2307,8 +2340,8 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
-                          $used[] = $pop[$i][$j][$z];
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
+                           $pop[$i][$j][$z] = array_shift($used);;
                      }
                 }
             }
@@ -2337,7 +2370,7 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
                           $used[] = $pop[$i][$j][$z];
                      }
                 }
@@ -2348,8 +2381,8 @@ class MutationData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
 
-                     if ($z == $pom_z && in_array($i, $possible_x ) && in_array($j, $possible_y )) {
-                          $used[] = $pop[$i][$j][$z];
+                     if ($z == $pom_z && (in_array($i, $possible_x ) || in_array($j, $possible_y ))) {
+                           $pop[$i][$j][$z] = array_shift($used);
                      }
                 }
             }
@@ -2357,6 +2390,45 @@ class MutationData
         return $pop;     
 
     } 
+
+    private function shufflesquereBorderOneLayerZ($pop, $nr = 10) {
+        $pom_x1 = rand(0, $nr - 3);
+        $pom_x2 = rand($pom_x1 + 2, $nr - 1);
+        $pom_y1 = rand(0, $nr - 3);
+        $pom_y2 = rand($pom_y1 + 2, $nr - 1);
+        $pom_z = rand(0, $nr - 1);
+           
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z &&
+                         ( (( $i == $pom_x1 || $i == $pom_x2 ) && ($j >= $pom_y1 && $j <= $pom_y2)) ||
+                         (( $j == $pom_y1 || $j == $pom_y2 ) && ($i >= $pom_x1 && $i <= $pom_x2))
+                         ) ) {
+                           $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom_z &&
+                         ( (( $i == $pom_x1 || $i == $pom_x2 ) && ($j >= $pom_y1 && $j <= $pom_y2)) ||
+                         (( $j == $pom_y1 || $j == $pom_y2 ) && ($i >= $pom_x1 && $i <= $pom_x2))
+                         ) ) {
+                            $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
 
 
     public function getAllMethod() {

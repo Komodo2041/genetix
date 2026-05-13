@@ -128,9 +128,9 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
-    public $Numhalstep = 2; // 2
-    private $maxPopulation = 120;
-    private $nrTimes = 6;
+    public $Numhalstep = 4; // 2
+    private $maxPopulation = 240;
+    private $nrTimes = 2;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -162,7 +162,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 72);
+             $randomDoing = rand(0, 74);
              if ($this->randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
              } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
@@ -284,7 +284,7 @@ class MainController extends Controller
         if (!$dId) {
             
             $randomDoing = $this->getRandomDoing();
-            $randomDoing = rand(73, 74);
+            // $randomDoing = rand(73, 74);
 
            //  $randomDoing = 9;  
         } else {
@@ -1627,6 +1627,7 @@ class MainController extends Controller
 
         $mresults = [];
         foreach ($mutations AS $key => $method) {
+            echo $method."<br/>";
             $population0 = [];
             $result = [0, 0];
           
