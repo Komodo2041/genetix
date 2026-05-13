@@ -26,7 +26,7 @@ class MutationData
         "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer",
         "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ",
         "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13", "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12",
-         "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2"
+        "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2", "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple"
 
     ];
 
@@ -814,15 +814,23 @@ class MutationData
         $pom3 = rand(0, 5);
         $used = [];
 
-        for ($i = 0; $i < $nr; $i++) {
-           for ($j = 0; $j < $nr; $j++) {
-                for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $j == $pom2 && ( $pom3 < $z && $pom3 + 4 >= $z)) {
-                        $used[] = $pop[$i][$j][$z];  
-                     }
+        $df = 2000; 
+        while (  $df > 0 && $this->isNotDiffer($used)) {  
+            $used = [];      
+            $pom1 = rand(0, $nr - 1);
+            $pom2 = rand(0, $nr - 1);
+            $pom3 = rand(0, 5);
+            for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        if ($i == $pom1 && $j == $pom2 && ( $pom3 < $z && $pom3 + 4 >= $z)) {
+                            $used[] = $pop[$i][$j][$z];  
+                        }
+                    }
                 }
             }
-        }   
+            $df--;
+        }
          shuffle($used);
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -843,15 +851,23 @@ class MutationData
         $pom3 = rand(0, 5);
         $used = [];
 
-        for ($i = 0; $i < $nr; $i++) {
-           for ($j = 0; $j < $nr; $j++) {
-                for ($z = 0; $z < $nr; $z++) {
-                     if ($j == $pom1 && $z == $pom2 && ( $pom3 < $i && $pom3 + 4 >= $i)) {
-                        $used[] = $pop[$i][$j][$z];  
-                     }
+        $df = 2000; 
+        while ( $df > 0 && $this->isNotDiffer($used)) {
+            $used = [];
+            $pom1 = rand(0, $nr - 1);
+            $pom2 = rand(0, $nr - 1);
+            $pom3 = rand(0, 5);            
+            for ($i = 0; $i < $nr; $i++) {
+                for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        if ($j == $pom1 && $z == $pom2 && ( $pom3 < $i && $pom3 + 4 >= $i)) {
+                            $used[] = $pop[$i][$j][$z];  
+                        }
+                    }
                 }
-            }
-        }   
+            } 
+            $df--;
+        }
         shuffle($used);
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
@@ -2636,8 +2652,27 @@ class MutationData
         return $pop;     
 
     }
+ 
+    private function shufflesquereBorderOneLayerZMultiple($pop, $nr = 10) {
 
-
+       $many = rand(2, 10);
+       for ($i = 0; $i < $many; $i++) {
+          $pop = $this->shufflesquereBorderOneLayerZ($pop, $nr);
+       }
+       return $pop;
+    }
+ 
+    private function shuffleMaxBorder_LayerZ_width_2Multiple($pop, $nr = 10) {
+       $methods = ["shuffleMaxBorder_LayerZ_width_1", "shuffleMaxBorder_LayerZ_width_2_12", "shuffleMaxBorder_LayerZ_width_2",
+        "shuffleMaxBorder_LayerZ_width_2_23", "shufflesquereBorderOneLayerZ_width2", "shuffleMaxBorder_LayerZ_width_2_03"];
+       $many = rand(2, 10);
+       for ($i = 0; $i < $many; $i++) {
+          $m = $methods[rand(0, count($methods) - 1)];
+          $pop = $this->$m($pop, $nr);
+       }
+       return $pop;
+    }
+ 
     public function getAllMethod() {
        return $this->mutationList;       
     }
@@ -2648,6 +2683,24 @@ class MutationData
 
     public function setNrMutation($nr) {
         $this->nrmutation = $nr;
+    }
+
+    private function isNotDiffer($used) {
+       $res = 1;
+       $c = count($used);
+       if ($c == 0) {
+          return $res;
+       }
+       $val = $used[0];
+        
+       for ($i = 0; $i < $c; $i++) {
+          if ($used[$i] != $val) {
+            $res = 0;
+            break;
+          }
+       }
+       return $res;
+
     }
 
 }

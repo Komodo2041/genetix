@@ -128,9 +128,9 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
-    public $Numhalstep = 4; // 2
-    private $maxPopulation = 240;
-    private $nrTimes = 2;
+    public $Numhalstep = 2; // 2
+    private $maxPopulation = 60;
+    private $nrTimes = 10;
 
 
     private $saveCrosMutationMatrix = 1.000001;
