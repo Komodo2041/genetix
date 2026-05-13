@@ -26,7 +26,7 @@ class MutationData
         "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer",
         "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ",
         "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13", "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12",
-         "shuffleMaxBorder_LayerZ_width_3_123"
+         "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2"
 
     ];
 
@@ -2588,6 +2588,45 @@ class MutationData
                      if ($z == $pom_z &&
                          ( (( $i == $pom_x1 || $i == $pom_x2 ) && ($j >= $pom_y1 && $j <= $pom_y2)) ||
                          (( $j == $pom_y1 || $j == $pom_y2 ) && ($i >= $pom_x1 && $i <= $pom_x2))
+                         ) ) {
+                            $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shufflesquereBorderOneLayerZ_width2($pop, $nr = 10) {
+        $pom_x1 = rand(0, $nr - 3);
+        $pom_x2 = rand($pom_x1 + 2, $nr - 1);
+        $pom_y1 = rand(0, $nr - 3);
+        $pom_y2 = rand($pom_y1 + 2, $nr - 1);
+        $pom_z = rand(0, $nr - 1);
+           
+         $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                     if ($z == $pom_z &&
+                         ( (( $i == $pom_x1 || $i == $pom_x2 || $i == $pom_x1 - 1 || $i == $pom_x2 + 1 ) && ($j >= $pom_y1 - 1 && $j <= $pom_y2 + 1)) ||
+                         (( $j == $pom_y1 || $j == $pom_y2 || $j == $pom_y1 - 1 || $j == $pom_y2 + 1 ) && ($i >= $pom_x1 - 1 && $i <= $pom_x2 + 1))
+                         ) ) {
+                           $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom_z &&
+                         ( (( $i == $pom_x1 || $i == $pom_x2 || $i == $pom_x1 - 1 || $i == $pom_x2 + 1 ) && ($j >= $pom_y1 - 1 && $j <= $pom_y2 + 1)) ||
+                         (( $j == $pom_y1 || $j == $pom_y2 || $j == $pom_y1 - 1 || $j == $pom_y2 + 1 ) && ($i >= $pom_x1 - 1 && $i <= $pom_x2 + 1))
                          ) ) {
                             $pop[$i][$j][$z] = array_shift($used);
                      }
