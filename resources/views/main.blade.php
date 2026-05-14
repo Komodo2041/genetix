@@ -129,7 +129,7 @@
      @endforelse
 
      <br/><br/> 
-     <b>Tryb 1:</b> Uruchomienie {{$nrTimes}} razy:
+     <b>Tryb 1: (4 najwyższe levele)</b> Uruchomienie {{$nrTimes}} razy:
      @forelse ($area AS $a)
         <a href="/calcareamoretimes/{{$a->id}}/1" ><button>{{$a->name}} ID : {{$a->id}}</button></a>
      @empty 

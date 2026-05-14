@@ -130,7 +130,7 @@ class MainController extends Controller
 
     public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
-    private $nrTimes = 10;
+    private $nrTimes = 6;
 
 
     private $saveCrosMutationMatrix = 1.000001;

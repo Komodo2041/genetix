@@ -43,7 +43,7 @@ class CrossingData
        for ($i = 0; $i < $this->nrcrossing; $i++) {
             $m = $this->methods[rand(0, $nrmethod - 1)];
 
-            if (count($population) < 10) { 
+            if (count($population) < 6) { 
               if (in_array($m, $this->multipleCrossings)) {
                   $m = $this->bestCrossing[rand(0, count($this->bestCrossing) - 1)];
               }
