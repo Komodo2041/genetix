@@ -2,10 +2,14 @@
 
 namespace App\Services;
  
+use App\Models\PowerMatrix;
+
 class MutationData
 {
 
     public $nrmutation = 270;    
+    private $matrixpowerorder = [];
+
 
     private $mutationList = [
         "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6",
@@ -26,8 +30,8 @@ class MutationData
         "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer",
         "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ",
         "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13", "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12",
-        "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2", "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple"
-
+        "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2", "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple",
+        "shuffleonMatrixPower10", "shuffleonMatrixPower20", "shuffleonMatrixPower50", "shuffleonMatrixPower100"
     ];
 
     public function setNumerMutation($nr) {
@@ -2672,6 +2676,110 @@ class MutationData
        }
        return $pop;
     }
+
+    private function shuffleonMatrixPower10($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 1);
+    }
+
+    private function shuffleonMatrixPower20($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 2);
+    }
+
+    private function shuffleonMatrixPower50($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 3);
+    }
+    
+    private function shuffleonMatrixPower100($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 4);
+    }    
+
+    private function shuffleonMatrixPower($pop, $nr = 10, $trybe = 1) {
+
+       $orders = $this->getOrders($nr);
+       if (!$orders) {
+           return $pop;
+       }
+
+       $size = 2; 
+       $place = rand(0, count($orders) - 1);
+       switch ($trybe) {
+          case 1:
+             $size = rand(2, 10);
+            break;
+          case 2:
+             $size = rand(10, 20);
+            break;
+          case 3:
+             $size = rand(20, 50);
+            break;
+          case 4:
+             $size = rand(50, 100);
+            break;                                    
+       }
+       
+        $keys = $this->getSliceOrders($orders, $place, $size);
+        $used = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $key = $i."-".$j."-".$z;
+                    if (in_array($key, $keys)) {
+                        $used[] = $pop[$i][$j][$z];
+                    }
+                }
+           }
+        }       
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $key = $i."-".$j."-".$z;
+                    if (in_array($key, $keys)) {
+                        $pop[$i][$j][$z] = array_shift($used);
+                    }
+                }
+           }
+        }
+
+        return $pop;
+
+    }
+
+    private function getSliceOrders($orders, $place, $size) {
+       
+       $keys = [];
+       $i = 0; 
+       foreach ($orders as $key => $value) {
+          if ($i >= $place && $i <= $place + $size) {
+            $keys[] = $key; 
+          }        
+          $i++;
+       } 
+       return $keys;
+    }
+
+    private function getOrders($size = 10) {
+       $orders = [];
+       if ($this->matrixpowerorder) {
+           $orders = $this->matrixpowerorder;
+       } else {
+           $data = PowerMatrix::where("size", $size)->first();
+           $orders = json_decode($data->orderdata);
+           $this->matrixpowerorder = $orders;
+       }
+
+        $keys = array_keys($orders);
+        shuffle($keys);
+
+        $shuffled_orders = [];
+        foreach ($keys as $key) {
+            $shuffled_orders[$key] = $orders[$key];
+        }
+        $orders = $shuffled_orders;       
+        arsort( $orders);
+        return $orders;
+    }
+
  
     public function getAllMethod() {
        return $this->mutationList;       

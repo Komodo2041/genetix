@@ -834,7 +834,7 @@ class CrossingData
     private function blob6($population, $max, $nr = 10) {
         $randNumbers = $this->getRand($max);
         $blob = [];
-        for ($k =0; $k <= 6; $k++) {
+        for ($k =0; $k < 6; $k++) {
             $blob[] = $population[$k];
         }
  
@@ -843,7 +843,7 @@ class CrossingData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
                     $sum = 0;
-                    for ($k =0; $k <= 6; $k++) {
+                    for ($k =0; $k < 6; $k++) {
                         $sum += $blob[$k][$i][$j][$z];
                     }                    
                     if ($sum <= 3) {
@@ -861,7 +861,7 @@ class CrossingData
     private function blob6random($population, $max, $nr = 10) {
         $randNumbers = $this->getRand($max);
         $blob = [];
-        for ($k =0; $k <= 6; $k++) {
+        for ($k =0; $k < 6; $k++) {
             $blob[] = $population[$k];
         }
  
@@ -870,7 +870,7 @@ class CrossingData
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
                     $sum = 0;
-                    for ($k =0; $k <= 6; $k++) {
+                    for ($k =0; $k < 6; $k++) {
                         $sum += $blob[$k][$i][$j][$z];
                     }                    
                     if ($sum <= 1) {

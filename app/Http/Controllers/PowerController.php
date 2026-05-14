@@ -36,11 +36,18 @@ class PowerController extends Controller
        }
        $allpower = $gtx->calcPowerPoints($table, $size);
  
-
-       
+       $orders = [];
+       for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    $orders[$i."-".$j."-".$z] = $allpower[$i][$j][$z];
+                }
+           }
+       }
+ 
         PowerMatrix::updateOrCreate(
-            ['size' => $size], // Warunek wyszukiwania
-            ['data' => json_encode($allpower)] // Dane do aktualizacji lub utworzenia
+            ['size' => $size], 
+            ['data' => json_encode($allpower), "orderdata" => json_encode($orders) ]
         );
  
        return redirect("/")->with('success', 'Obliczone Matrycę siły dla size '.$size);  
