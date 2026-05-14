@@ -36,6 +36,8 @@ class PowerController extends Controller
        }
        $allpower = $gtx->calcPowerPoints($table, $size);
  
+
+       
         PowerMatrix::updateOrCreate(
             ['size' => $size], // Warunek wyszukiwania
             ['data' => json_encode($allpower)] // Dane do aktualizacji lub utworzenia

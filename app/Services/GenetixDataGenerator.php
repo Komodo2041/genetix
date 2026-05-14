@@ -122,15 +122,17 @@ class GenetixDataGenerator
 
 
     private function calcDist($point, $i, $j, $k) {
-
+       
        $downx = 50 + $i * 100;
        $downy = 50 + $j * 100;
        $downz = 50 + $k * 100;
+     
        $diffx = abs($point['x'] - $downx);
        $diffy = abs($point['y'] - $downy);
        $diffz = abs($point['z'] + $downz);
        $downDagonal = sqrt($diffx * $diffx + $diffy * $diffy );
-       $dist = sqrt($diffz * $diffz + $downDagonal + $downDagonal);
+       $dist = sqrt($diffz * $diffz + $downDagonal * $downDagonal);
+        
        return $dist;
     }
 
@@ -625,7 +627,8 @@ class GenetixDataGenerator
 
     public function calcPowerPoints( $area, $nr) {
  
-       $allPoints = [];   
+       $allPoints = [];
+   
        $point = ['x' => floor($nr * 100 / 2), 'y' => floor($nr * 100 / 2), 'z' => 50 ];
       
        $probeforce = $this->block * $this->probe * $this->G;
@@ -635,11 +638,13 @@ class GenetixDataGenerator
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
+                    
                     $dist = $this->calcDist($point, $i, $j, $z);
                     $force = $probeforce * $area[$i][$j][$z];
                     $force = $force / ($dist * $dist);
-                        
-                    $allPoints[$i][$j][$z] = $force;
+
+                    $allPoints[$i][$j][$z] = $force; 
+                     
                     $allForce[] = $force;
                 }
             }
@@ -648,6 +653,7 @@ class GenetixDataGenerator
         sort($allForce);
         $middle = $allForce[floor(count($allForce) / 2)];
 
+ 
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
