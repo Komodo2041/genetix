@@ -65,5 +65,5 @@ Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\MainController@calc
 Route::get('showPowerSelect/{id}',  "App\Http\Controllers\MainController@showPowerSelect" ); 
  
 Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Result" ); 
- 
- 
+Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\MainController@bottomLastLayer" );  
+  

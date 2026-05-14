@@ -2764,7 +2764,7 @@ class MutationData
            $orders = $this->matrixpowerorder;
        } else {
            $data = PowerMatrix::where("size", $size)->first();
-           $orders = json_decode($data->orderdata);
+           $orders = json_decode($data->orderdata, 1);
            $this->matrixpowerorder = $orders;
        }
 

@@ -1666,7 +1666,7 @@ class MainController extends Controller
                     if ($oldMaxResult * $this->saveCrosMutationMatrix < $calc['sum']) {
                        $je = json_encode($calc['area']);                       
                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
-                            Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
+                          Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
                             "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);
                        }                    
                     }
@@ -2163,6 +2163,28 @@ class MainController extends Controller
         }
         exit();
  
+    }
+
+    public function bottomLastLayer($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+        $avg =  $this->ls->getAvg($id, $lvlmax );
+        if (!$avg) {
+             return redirect("/")->with('error', 'Nie znaleziono średniej ');
+        }
+
+        $calculations = Calculation::where("area_id", $id)->where("level", $lvlmax)->where("obtainedresult" , "<", $avg)->get();
+        foreach ($calculations AS $c) {
+            $lvl = $this->ls->getLvlinAvg($id, $c->obtainedresult);
+            if ($lvl) {
+                Calculation::where("id", $c->id)->update(["level" => $lvl]);
+            }
+        }
+        $this->ls->calcarea($id);
+        return redirect("/")->with('success', 'Zmieniono ostatni level');
     }
  
 

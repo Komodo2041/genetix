@@ -80,6 +80,16 @@ class LevelStering {
        $nc->save();
     }
 
+    public function getAvg($id, $lvl) {
+
+        $avg = LevelAvg::where("area_id", $id)->where("level", $lvl)->first()->avg;
+        return $avg;
+    }
+
+    public function getLvlinAvg($id, $res) {
+       return LevelAvg::where("avg", "<", $res)->where("area_id", $id)->orderBy("avg", "DESC")->first()->toArray()["level"]; 
+    }
+
 }
 
 

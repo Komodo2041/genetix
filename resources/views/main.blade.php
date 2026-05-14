@@ -81,9 +81,11 @@
                      <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br/>
                   @endif
   
+                  <a href="/bottomLastLayer/{{$a->id}}"><button>Obniż ostatnią warstwę</button></a> 
 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
-                 
+                   
+
                    <br/>
                   @foreach ($a->diamonds AS $d)
                        <a href="diamond/{{$a->id}}/{{ count($calco[$a->id]) - 1 }}/{{$d->id}}"><button>Oblicz Diament {{$d->id}}</button></a>     
