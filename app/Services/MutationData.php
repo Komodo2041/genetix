@@ -31,7 +31,7 @@ class MutationData
         "shuffledoublecrossinOneLayerZ", "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13",
         "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12", "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2",
         "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple", "shuffleonMatrixPower10", "shuffleonMatrixPower20", "shuffleonMatrixPower50",
-        "shuffleonMatrixPower100", "shuffleonMatrixPower30", "shuffleonMatrixPower20Multi", "shuffleonMatrixPower10Multi"
+        "shuffleonMatrixPower100", "shuffleonMatrixPower30", "shuffleonMatrixPower20Multi", "shuffleonMatrixPower10Multi", "shuffleonMatrixPower200"
     ];
 
     public function setNumerMutation($nr) {
@@ -2697,6 +2697,10 @@ class MutationData
        return $this->shuffleonMatrixPower($pop, $nr, 5);
     }   
     
+    private function shuffleonMatrixPower200($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 6);
+    }
+
     private function shuffleonMatrixPower10Multi($pop, $nr = 10) {
        $xn = rand(2, 8);
        for ($l = 0; $l < $xn; $l++) {
@@ -2737,7 +2741,10 @@ class MutationData
             break;
           case 5:
              $size = rand(20, 30);
-            break;                                             
+            break;
+          case 6:
+             $size = rand(100, 200);
+            break;                                                         
        }
        
         $keys = $this->getSliceOrders($orders, $place, $size);

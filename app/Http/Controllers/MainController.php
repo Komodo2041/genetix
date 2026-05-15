@@ -1666,8 +1666,8 @@ class MainController extends Controller
                     if ($oldMaxResult * $this->saveCrosMutationMatrix < $calc['sum']) {
                        $je = json_encode($calc['area']);                       
                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
-                          Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
-                            "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);
+                         /*  Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
+                            "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]); */
                        }                    
                     }
                 } else {
