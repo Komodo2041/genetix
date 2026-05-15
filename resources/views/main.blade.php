@@ -82,6 +82,7 @@
                   @endif
   
                   <a href="/bottomLastLayer/{{$a->id}}"><button>Obniż ostatnią warstwę</button></a> 
+                  <a href="/onecalculation/{{$a->id}}"><button>Przelicz obliczenia na jednym zestawie punktów</button></a> 
 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                    

@@ -36,7 +36,8 @@ Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainControll
 Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\MainController@calcAllPowerSelect" ); 
 Route::get('showPowerSelect/{id}',  "App\Http\Controllers\MainController@showPowerSelect" );
 Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\MainController@bottomLastLayer" );
-
+Route::get('onecalculation/{id}',  "App\Http\Controllers\MainController@onecalculation" );
+ 
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
 Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );

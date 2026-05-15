@@ -2187,5 +2187,37 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Zmieniono ostatni level');
     }
  
+    public function onecalculation($id, GenetixDataGenerator $gtx) {
+        set_time_limit(3600);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        Calculation::where("area_id", $id)->update(["result2" => NULL]);
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+        $gtx->setPowerMatrixSize(10); 
+
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);    
+        $calculations = Calculation::where("area_id", $id)->whereNull("result2")->take(200)->get();
+        
+        while ($calculations->count() > 0) {
+            $population0 = [];
+            $ids = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $ids[] = $c->id;
+            }
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            unset($population0);
+            foreach ($res AS $r) {
+               Calculation::where("id", $ids[$r['id']])->update(["result2" => $r['sum'] / $maxPoints]);
+            }  
+            $calculations = Calculation::where("area_id", $id)->whereNull("result2")->take(200)->get();   
+        }
+
+        return redirect("/")->with('success', 'Przeliczono punkty na result2');
+
+    }
 
 }
