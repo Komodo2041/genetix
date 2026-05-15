@@ -13,25 +13,25 @@ class MutationData
 
     private $mutationList = [
         "shufflecolumnXZ", "shufflecolumnYZ", "exchangecolumnXY", "exchangecolumnXZ", "shufflecolumnYZgo6", "shufflecolumnXZgo6",
-        "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d",
-        "clockwiseXYleft", "clockwiseXZleft", "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright",
-        "shufflecolumnYZgo4", "shufflecolumnXYgo4", "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4",
-        "shufflecolumnXYgo6", "changecolumnXYgo6", "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ",
-        "goupanddown1x1", "goup1x1", "exchangefarcolumnXZ", "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange",
-        "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1",
-        "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16", "neighbourchange5", "changeRand9x9",
-        "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2", "changeOneLayerY2",
-        "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
+        "mirrorXY", "mirrorXZ", "mirrorYZ", "mirrorXY_d", "mirrorXZ_d", "mirrorYZ_d", "clockwiseXYleft", "clockwiseXZleft", 
+        "clockwiseYZleft", "clockwiseXYright", "clockwiseXZright", "clockwiseYZright", "shufflecolumnYZgo4", "shufflecolumnXYgo4",
+        "shufflecolumnXZgo4", "changecolumnXYgo4", "changecolumnXZgo4", "changecolumnYZgo4", "shufflecolumnXYgo6", "changecolumnXYgo6",
+        "changecolumnXZgo6", "changecolumnYZgo6", "changecolumnXZ" , "changecolumnYZ", "goupanddown1x1", "goup1x1", "exchangefarcolumnXZ",
+        "exchangecolumnYZ", "exchangefarcolumnXY", "neighbourchange", "shuffleRand4x4", "changeRand4x4", "shuffleRand16x16", 
+        "exchangefarcolumnYZ", "shuffleRand9x9", "godown1x1", "shufflecolumnXY", "changecolumnXY", "neighbourchange10", "changeRand16x16",
+        "neighbourchange5", "changeRand9x9", "changeOneLayerZ", "changeOneLayerX", "changeOneLayerY", "changeOneLayerZ2", "changeOneLayerX2",
+        "changeOneLayerY2", "jointwopointsZ", "dividepointsZ", "jointwopointsZ5", "dividepointsZ5", "mixingZLayers",
         "mixingVerticalLayersZ", "mixingVerticalLayersX", "mixingVerticalLayersY", "mixingYLayers", "mixingXLayers",
         "shuffleRand6x6x6", "shuffleRand5x5x5", "shufflecolumnYZ_3x3", "shufflecolumnXZ_3x3", "shufflecolumnXY_3x3", "shuffleRand7x7x7", "exchangefarcolumnXYMultiple",
         "shuffleRand6x6x2_X", "shuffleRand6x6x2_Y", "shuffleRand6x6x2_Z", "shuffleRand6x6x3_X", "shuffleRand6x6x3_Y", "shuffleRand6x6x3_Z",
         "shuffleRandBorder4x4x4", "shuffleRandBorder5x5x5", "shuffleRandBorder6x6x6", "shuffleRandBorder8x8x8", "shuffleRandBorder7x7x7", "shuffleRand6Lines",
         "shuffleRand6x6x6Multiple", "shuffleRand4x4x4Multiple", "shuffleRand5x5x5Multiple", "shuffleRand4x4x4", "shuffleRand9x9Multiple",
         "shufflecolumnXZgo6Multiple", "shufflecolumnYZgo6Multiple", "mixingZLayers3Times", "goupInOneLayer", "godownInOneLayer",
-        "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", "shuffledoublecrossinOneLayerZ",
-        "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13", "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12",
-        "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2", "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple",
-        "shuffleonMatrixPower10", "shuffleonMatrixPower20", "shuffleonMatrixPower50", "shuffleonMatrixPower100"
+        "shuffleMaxBorder_LayerZ_width_4", "shuffleMaxBorder_LayerZ_width_3", "shuffleMaxBorder_LayerZ_width_2", "shuffleMaxBorder_LayerZ_width_1", 
+        "shuffledoublecrossinOneLayerZ", "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13",
+        "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12", "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2",
+        "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple", "shuffleonMatrixPower10", "shuffleonMatrixPower20", "shuffleonMatrixPower50",
+        "shuffleonMatrixPower100", "shuffleonMatrixPower30", "shuffleonMatrixPower20Multi", "shuffleonMatrixPower10Multi"
     ];
 
     public function setNumerMutation($nr) {
@@ -2691,7 +2691,27 @@ class MutationData
     
     private function shuffleonMatrixPower100($pop, $nr = 10) {
        return $this->shuffleonMatrixPower($pop, $nr, 4);
+    }
+
+    private function shuffleonMatrixPower30($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 5);
+    }   
+    
+    private function shuffleonMatrixPower10Multi($pop, $nr = 10) {
+       $xn = rand(2, 8);
+       for ($l = 0; $l < $xn; $l++) {
+           $pop = $this->shuffleonMatrixPower($pop, $nr, 1);
+       } 
+       return $pop;
     }    
+
+    private function shuffleonMatrixPower20Multi($pop, $nr = 10) {
+       $xn = rand(2, 8);
+       for ($l = 0; $l < $xn; $l++) {
+           $pop = $this->shuffleonMatrixPower($pop, $nr, 2);
+       } 
+       return $pop;
+    }
 
     private function shuffleonMatrixPower($pop, $nr = 10, $trybe = 1) {
 
@@ -2704,7 +2724,7 @@ class MutationData
        $place = rand(0, count($orders) - 1);
        switch ($trybe) {
           case 1:
-             $size = rand(2, 10);
+             $size = rand(5, 10);
             break;
           case 2:
              $size = rand(10, 20);
@@ -2714,7 +2734,10 @@ class MutationData
             break;
           case 4:
              $size = rand(50, 100);
-            break;                                    
+            break;
+          case 5:
+             $size = rand(20, 30);
+            break;                                             
        }
        
         $keys = $this->getSliceOrders($orders, $place, $size);

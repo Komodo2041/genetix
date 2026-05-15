@@ -129,8 +129,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
-    private $nrTimes = 6;
+    private $maxPopulation = 240;
+    private $nrTimes = 2;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -954,7 +954,7 @@ class MainController extends Controller
             if ($lvlReso[0] > 0) {
                 $pgc =  (1 - $result2) / ( ($last / $first) - 1);
                 $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
-                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "progress" => $last / $first, "progcalc" => $pgc  ]);
+                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info)]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
   
@@ -2131,7 +2131,7 @@ class MainController extends Controller
  
         }
          
-       return redirect("/")->with('success', " Obliczono wybór populacji przez użycie matrycy siły ");  
+        return redirect("/")->with('success', " Obliczono wybór populacji przez użycie matrycy siły ");  
 
 
     }
