@@ -112,7 +112,8 @@ class MainController extends Controller
        71 => "useBigMutator - 1 - Part Layer Z - (10%)",
        72 => "useBigMutator - 2 - Part Layer Z - (10%)",
        73 => "Blob3 From the level",
-       74 => "Blob6 From the level" 
+       74 => "Blob6 From the level",
+       75 => "Use result2 "  
     ];
 
     private $debugInfo = 0;
@@ -129,8 +130,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 240;
-    private $nrTimes = 2;
+    private $maxPopulation = 30;
+    private $nrTimes = 20;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -162,7 +163,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 74);
+             $randomDoing = rand(0, 75);
              if ($this->randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
              } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
@@ -286,7 +287,7 @@ class MainController extends Controller
             $randomDoing = $this->getRandomDoing();
             // $randomDoing = rand(73, 74);
 
-           //  $randomDoing = 9;  
+              $randomDoing = 75;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -736,6 +737,14 @@ class MainController extends Controller
             $population0 = $cross->createPopulationFromBloBFromLevel($population0, $this->startPopulation, 10, 2);
             $population0 = $gtx->usepower($population0, $power);
 
+        } elseif ($randomDoing == 75) { 
+        
+            $calculations = Calculation::where("area_id", $id)->where("level", ">=", $lvl)->orderBy("result2", "DESC")->orderBy("obtainedresult", "DESC")->take(50)->get();  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+            }
+
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
@@ -953,8 +962,9 @@ class MainController extends Controller
             $lvlReso = $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
             if ($lvlReso[0] > 0) {
                 $pgc =  (1 - $result2) / ( ($last / $first) - 1);
-                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvlReso[0],
-                 "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info)]);
+                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), 
+                "area_id" => $id, "level" => $lvlReso[0], "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "result2" => $result2,
+                  "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info)]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
   
@@ -1666,8 +1676,8 @@ class MainController extends Controller
                     if ($oldMaxResult * $this->saveCrosMutationMatrix < $calc['sum']) {
                        $je = json_encode($calc['area']);                       
                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
-                         /*  Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
-                            "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]); */
+                          Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
+                            "level" => $lvlmax, "obtainedresult" => $calc['sum'] / $maxPoints,  "typecalc" => 21  ]);
                        }                    
                     }
                 } else {
