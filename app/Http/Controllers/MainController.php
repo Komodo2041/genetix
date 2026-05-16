@@ -1875,7 +1875,7 @@ class MainController extends Controller
  
         }
  
-       // CrossMatrix::where("area_id", $id)->update(["hide" => 1]);
+       CrossMatrix::where("area_id", $id)->update(["hide" => 1]);
  
         foreach ($mresults AS $res) {
  

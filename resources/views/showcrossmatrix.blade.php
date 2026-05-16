@@ -10,6 +10,9 @@
  
   <table>
      <tr>
+         <th>
+            #
+         </th>
         <th>
             @if ($order == "name" && $desc == "DESC")
                <a class="asc" href="/showCrossMatrix/{{$area->id}}/?order=name&desc=ASC">Krzyżowanie</a>
@@ -45,9 +48,12 @@
                <a class="desc" href="/showCrossMatrix/{{$area->id}}/?order=max&desc=DESC">MAX</a>
             @endif
         </th>  
-    </tr>  
+    </tr>
+   
 @forelse ($matrix AS $m)
      <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{$m['name']}}</td>
         <td>{{$m['name']}}</td>
         <td>{{$m['bad_result']}}</td>
         <td>{{$m['middle_result']}}</td>

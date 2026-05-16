@@ -11,6 +11,9 @@
   <table>
      <tr>
         <th>
+            #
+         </th>
+        <th>
             @if ($order == "name" && $desc == "DESC")
                <a class="asc" href="/showMatrix/{{$area->id}}/?order=name&desc=ASC">Mutacja</a>
             @else
@@ -49,6 +52,7 @@
     </tr>  
 @forelse ($matrix AS $m)
      <tr>
+        <td>{{ $loop->iteration }}</td>
         <td>{{$m['name']}}</td>
         <td>{{$m['result']}}</td>
         <td>{{$m['same']}}</td>
