@@ -2,22 +2,20 @@
 
 namespace App\Services;
  
+use App\Models\PowerMatrix;
+
 class CrossingData
 {
 
     public $nrcrossing = 490;
-
-    /**
-     * nonused method "cutting_xyz"
-     * 
-     * 
-     */
+    private $matrixpowerorder = [];
+ 
 
     public $multipleCrossings = ["blob6random",  "blob3random", "blob3", "blob6", "layersinx4", "layersinj4", "layersinz4", "useavgojoindiffe",
      "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom" ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
-    public $methods = ["updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
+    public $methods = [ /*"updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
         "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", 
         "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz",
         "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
@@ -28,7 +26,9 @@ class CrossingData
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
         "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X",
         "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0", "get5x5x1Multiple",  "get4x4x1Multiple",
-        "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom"
+        "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom", */
+        "upDownLayerPowerMatrix100", "upDownLayerPowerMatrix125", "upDownLayerPowerMatrix50", "upDownLayerPowerMatrix25",
+        "tassingLayerPowerMatrix25", "tassingLayerPowerMatrix50", "tassingLayerPowerMatrix125", "tassingLayerPowerMatrix100"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -2251,6 +2251,358 @@ class CrossingData
         }
         return $res;
      }
+
+
+    public function upDownLayerPowerMatrix100($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 100;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+        $pom = rand(0, $lvlmax - 2);
+        for ($i = 0; $i < $lvlmax; $i++) {
+            if ($pom < $i) {
+               $lvl[] = 0;
+            } else {
+               $lvl[] = 1;
+            }
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }
+
+     public function upDownLayerPowerMatrix125($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 125;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+        $pom = rand(0, $lvlmax - 2);
+        for ($i = 0; $i < $lvlmax; $i++) {
+            if ($pom < $i) {
+               $lvl[] = 0;
+            } else {
+               $lvl[] = 1;
+            }
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }
+
+     public function upDownLayerPowerMatrix50($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 50;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+        $pom = rand(0, $lvlmax - 2);
+        for ($i = 0; $i < $lvlmax; $i++) {
+            if ($pom < $i) {
+               $lvl[] = 0;
+            } else {
+               $lvl[] = 1;
+            }
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }
+
+     public function upDownLayerPowerMatrix25($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 25;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+        $pom = rand(0, $lvlmax - 2);
+        for ($i = 0; $i < $lvlmax; $i++) {
+            if ($pom < $i) {
+               $lvl[] = 0;
+            } else {
+               $lvl[] = 1;
+            }
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }       
+
+ 
+    public function tassingLayerPowerMatrix100($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 100;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+        for ($i = 0; $i < $lvlmax; $i++) {
+            $lvl[] = rand(0, 1);
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }
+ 
+    public function tassingLayerPowerMatrix125($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 125;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+        for ($i = 0; $i < $lvlmax; $i++) {
+            $lvl[] = rand(0, 1);
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }
+ 
+    public function tassingLayerPowerMatrix50($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 50;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+    
+        for ($i = 0; $i < $lvlmax; $i++) {
+            $lvl[] = rand(0, 1);
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }
+
+    public function tassingLayerPowerMatrix25($population, $max, $nr = 10) {
+
+        $randNumbers = $this->getRand($max);
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]]; 
+
+        $size = 25;
+
+        $orders = $this->getOrders($nr);
+        $parts = $this->getPartsOrders($orders, $size);
+ 
+        $lvl = [];
+        $lvlmax = 1000 / $size;
+       
+        for ($i = 0; $i < $lvlmax; $i++) {
+            $lvl[] = rand(0, 1);
+        }
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    $layer = $parts[$i."-".$j."-".$z];
+                    
+                    if ($lvl[$layer] == 0) {
+                       $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                       $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        } 
+        return $table;        
+ 
+    }    
+
+
+    private function getPartsOrders($orders, $numero) {
+
+        $slice = 0;
+        $val = 0;
+        $res = [];
+        foreach ($orders AS $key => $power) {
+            $slice++;
+            if ($slice > $numero) {
+                $val++;
+                $slice = 0;
+            }
+            $res[$key] = $val;
+        }
+        return $res;
+    }
+
+    private function getOrders($size = 10) {
+       $orders = [];
+       if ($this->matrixpowerorder) {
+           $orders = $this->matrixpowerorder;
+       } else {
+           $data = PowerMatrix::where("size", $size)->first();
+           $orders = json_decode($data->orderdata, 1);
+           $this->matrixpowerorder = $orders;
+       }
+
+        $keys = array_keys($orders);
+        shuffle($keys);
+
+        $shuffled_orders = [];
+        foreach ($keys as $key) {
+            $shuffled_orders[$key] = $orders[$key];
+        }
+        $orders = $shuffled_orders;       
+        arsort( $orders);
+        return $orders;
+    }
+
 
 
     public function changeMethodList($methods) {

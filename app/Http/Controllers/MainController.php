@@ -130,7 +130,7 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 30;
+    private $maxPopulation = 120;
     private $nrTimes = 20;
 
 
@@ -731,20 +731,23 @@ class MainController extends Controller
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
             $population0 = [];
             foreach ($calculations AS $c) {
+            
                 $population0[] = json_decode($c->data);
             }
+          
             $power = $gtx->getPower($population0); 
             $population0 = $cross->createPopulationFromBloBFromLevel($population0, $this->startPopulation, 10, 2);
             $population0 = $gtx->usepower($population0, $power);
 
         } elseif ($randomDoing == 75) { 
         
-            $calculations = Calculation::where("area_id", $id)->where("level", ">=", $lvl)->orderBy("result2", "DESC")->orderBy("obtainedresult", "DESC")->take(50)->get();  
+            $calculations = Calculation::where("area_id", $id)->where("level", "<=", $lvl)->orderBy("result2", "DESC")->orderBy("obtainedresult", "DESC")->take(200)->get();
+            $calculations = $calculations->shuffle()->take(10);
             $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
-
+ 
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
@@ -762,6 +765,7 @@ class MainController extends Controller
         if ($individual > 10) {
             $individual = 10;
         }
+ 
 
         if ($usedcalc) {
             Calculation::whereIn('id', $usedcalc)->increment('calculation');
@@ -1870,8 +1874,8 @@ class MainController extends Controller
             ];
  
         }
-
-        CrossMatrix::where("area_id", $id)->update(["hide" => 1]);
+ 
+       // CrossMatrix::where("area_id", $id)->update(["hide" => 1]);
  
         foreach ($mresults AS $res) {
  
