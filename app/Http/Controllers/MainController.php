@@ -56,7 +56,7 @@ class MainController extends Controller
        15 => "Join River",
        16 => "Join more River",
        17 => "Use Waga Small",
-       18 => "Use Waga Bigg",
+       18 => "Use Waga Big",
        19 => "Use Waga Mini",
        20 => "Use Waga Very Mini",
        21 => "Calculating mutation matrix", // X
@@ -117,6 +117,7 @@ class MainController extends Controller
     ];
 
     private $debugInfo = 0;
+    private $saveCalculationInCrossAndMuationMatrix = 1;
 
     public $nrMaxPopulation = 120;
 
@@ -130,8 +131,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 120;
-    private $nrTimes = 20;
+    private $maxPopulation = 60;
+    private $nrTimes = 8;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -287,7 +288,7 @@ class MainController extends Controller
             $randomDoing = $this->getRandomDoing();
             // $randomDoing = rand(73, 74);
 
-              $randomDoing = 75;  
+            //  $randomDoing = 75;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -1677,7 +1678,7 @@ class MainController extends Controller
                 }
                 if ($calc['sum'] > $oldMaxResult) {
                     $result[0]++;
-                    if ($oldMaxResult * $this->saveCrosMutationMatrix < $calc['sum']) {
+                    if ($this->saveCalculationInCrossAndMuationMatrix && $oldMaxResult * $this->saveCrosMutationMatrix < $calc['sum']) {
                        $je = json_encode($calc['area']);                       
                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
                           Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
@@ -1855,7 +1856,7 @@ class MainController extends Controller
                     $mmax = $row['sum'];
                 }
 
-                if ($max * $this->saveCrosMutationMatrix < $row['sum']) {
+                if ($this->saveCalculationInCrossAndMuationMatrix && $max * $this->saveCrosMutationMatrix < $row['sum']) {
                         $je = json_encode($row['area']);
                         if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
                 

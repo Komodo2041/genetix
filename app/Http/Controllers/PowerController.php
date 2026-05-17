@@ -115,4 +115,23 @@ class PowerController extends Controller
         return view("show5results", ['reso' => $reso,   "area" => $area, "lvlmax" => $lvlmax, "good" => json_decode($area->data)]);
     }
 
+
+/*
+    private function getPartsOrders($orders, $numero) {
+
+        $slice = 0;
+        $val = 0;
+        $res = [];
+        foreach ($orders AS $key => $power) {
+            $slice++;
+            if ($slice > $numero) {
+                $val++;
+                $slice = 0;
+            }
+            $res[$key] = $val;
+        }
+        return $res;
+    }
+*/
+
 }

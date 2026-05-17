@@ -15,7 +15,7 @@ class CrossingData
      "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom" ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
-    public $methods = [ /*"updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
+    public $methods = [ "updown",  "tassingz", "squerInSquere6AxX", "squerInSquere5AxZ", "squerInSquere6AxY", "squerInSquere7AxY", "squerInSquere7AxX",
         "blob6random",  "blob3random", "blob3", "blob6", "squerInSquere5AxX", "squerInSquere5AxY", 
         "layersinx4", "layersinj4", "layersinz4", "layersinj2", "layersinz2", "layersinx2" , "layersin2xyz",
         "chessboardrandom_xz", "squerInSquere6AxZ", "squerInSquere7AxZ", "chessboard_xy", "chessboard_xz", "chessboard_yz", "usedblockhalfhalfrandom",
@@ -26,7 +26,7 @@ class CrossingData
         "rand6x6x6Multiple", "rand5x5x5Multiple", "rand4x4x4Multiple", "rand7x7x7Multiple", "rand8x8x8Multiple",
         "blockRandomXY", "blockRandomYZ", "blockRandomXZ", "updwownup_Z", "updwownup_Y", "updwownup_X",
         "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0", "get5x5x1Multiple",  "get4x4x1Multiple",
-        "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom", */
+        "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom",
         "upDownLayerPowerMatrix100", "upDownLayerPowerMatrix125", "upDownLayerPowerMatrix50", "upDownLayerPowerMatrix25",
         "tassingLayerPowerMatrix25", "tassingLayerPowerMatrix50", "tassingLayerPowerMatrix125", "tassingLayerPowerMatrix100"
     ];
