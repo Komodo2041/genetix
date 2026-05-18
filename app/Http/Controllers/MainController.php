@@ -117,7 +117,7 @@ class MainController extends Controller
     ];
 
     private $debugInfo = 0;
-    private $saveCalculationInCrossAndMuationMatrix = 1;
+    private $saveCalculationInCrossAndMuationMatrix = 0;
 
     public $nrMaxPopulation = 120;
 

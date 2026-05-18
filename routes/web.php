@@ -45,8 +45,9 @@ Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@s
 Route::get('powermatrix/{size}',  "App\Http\Controllers\PowerController@showmatrix" );
 Route::get('calcpowermatrix/{size}',  "App\Http\Controllers\PowerController@calcpowermatrix" ); 
  
-Route::get('showpower/{id}',  "App\Http\Controllers\PowerController@showpower" ); 
-  
+Route::get('showpower/{id}',  "App\Http\Controllers\PowerController@showpower" );
+Route::get('see10Layerpower/{size}',  "App\Http\Controllers\PowerController@see10Layerpower" ); 
+ 
  
 Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Result" ); 
    

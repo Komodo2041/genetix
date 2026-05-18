@@ -3,6 +3,7 @@
 
 <a href="/"><button>Strona główna</button></a><br/>
 
+
 <h3>Matryca siły - Area {{$area->id}}</h3>
 <h4>Power: {{$power}}</h4>    
 

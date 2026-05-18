@@ -2,6 +2,7 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a><br/>
+<a href="/see10Layerpower/10"><button>Pokaż 10 warstw</button></a><br/>
 
 <h3>Matryca siły - size {{$size}}</h3>
 <a href="/calcpowermatrix/10"><button>Oblicz Matryce siły</button></a>   

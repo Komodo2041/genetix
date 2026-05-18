@@ -10,6 +10,11 @@ use App\Models\PowerMatrix;
 use App\Models\Area;
 use App\Models\Calculation;  
 
+use App\Services\CrossingData;
+use App\Services\MatrixHelper;
+
+ 
+
 class PowerController extends Controller
 {
     public function showmatrix($size) {
@@ -115,6 +120,37 @@ class PowerController extends Controller
         return view("show5results", ['reso' => $reso,   "area" => $area, "lvlmax" => $lvlmax, "good" => json_decode($area->data)]);
     }
 
+
+    public function see10Layerpower($size, CrossingData $cross) {
+
+        $data = PowerMatrix::where("size", $size)->first();
+        if (!$data) {
+            return redirect("/")->with('error', 'Brak obliczeń');
+        }
+        $orders = $cross->getOrders(10); 
+        $parts = $cross->getPartsOrders($orders, 100);
+      
+        $helperMatrix = new MatrixHelper();
+        $zero = $helperMatrix->getZeroTable($size);
+        $res = [];
+        for ($n = 0; $n < $size; $n++) {
+            $table = $zero;
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+                        $key = $parts[$i."-".$j."-".$z];
+                         
+                        if ($key == $n) {
+                            $table[$i][$j][$z] = 1;
+                        }
+                    }
+                }
+            }
+            $res[] = $table;
+        }
+        
+        return view("showPowerLayers", ['reso' => $res, "size" => $size]);
+    }
 
 /*
     private function getPartsOrders($orders, $numero) {

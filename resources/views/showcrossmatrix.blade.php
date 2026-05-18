@@ -54,7 +54,6 @@
      <tr>
         <td>{{ $loop->iteration }}</td>
         <td>{{$m['name']}}</td>
-        <td>{{$m['name']}}</td>
         <td>{{$m['bad_result']}}</td>
         <td>{{$m['middle_result']}}</td>
         <td>{{$m['best_result']}}</td>

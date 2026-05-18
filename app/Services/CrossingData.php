@@ -2565,7 +2565,7 @@ class CrossingData
     }    
 
 
-    private function getPartsOrders($orders, $numero) {
+    public function getPartsOrders($orders, $numero) {
 
         $slice = 0;
         $val = 0;
@@ -2581,7 +2581,7 @@ class CrossingData
         return $res;
     }
 
-    private function getOrders($size = 10) {
+    public function getOrders($size = 10) {
        $orders = [];
        if ($this->matrixpowerorder) {
            $orders = $this->matrixpowerorder;
