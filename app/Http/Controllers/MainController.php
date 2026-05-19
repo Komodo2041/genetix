@@ -28,7 +28,9 @@ use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
  
 // COMAND : php artisan app:run-area-calc
- 
+// php artisan app:run-calc-trybe1 
+
+
 class MainController extends Controller
 {
 
