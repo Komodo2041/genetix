@@ -31,7 +31,8 @@ class MutationData
         "shuffledoublecrossinOneLayerZ", "shufflesquereBorderOneLayerZ", "shuffleMaxBorder_LayerZ_width_2_03", "shuffleMaxBorder_LayerZ_width_2_13",
         "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12", "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2",
         "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple", "shuffleonMatrixPower10", "shuffleonMatrixPower20", "shuffleonMatrixPower50",
-        "shuffleonMatrixPower100", "shuffleonMatrixPower30", "shuffleonMatrixPower20Multi", "shuffleonMatrixPower10Multi", "shuffleonMatrixPower200"
+        "shuffleonMatrixPower100", "shuffleonMatrixPower30", "shuffleonMatrixPower20Multi", "shuffleonMatrixPower10Multi", "shuffleonMatrixPower200",
+        "shufflerytal2", "shufflerytal3", "shufflerytal4", "shufflerytal5"
     ];
 
     public function setNumerMutation($nr) {
@@ -2840,5 +2841,142 @@ class MutationData
        return $res;
 
     }
+
+    private function shufflerytal3($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z = rand(0, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 3) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 3) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shufflerytal2($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z = rand(0, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 2) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 2) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shufflerytal4($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z = rand(0, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 4) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 4) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function shufflerytal5($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z = rand(0, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 5) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     $sum = abs($i - $pom_x) + abs($j - $pom_y) + abs($z - $pom_z);
+
+                     if ($sum <= 5) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }    
+
 
 }
