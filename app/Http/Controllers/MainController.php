@@ -157,7 +157,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 2;
+    private $randomDoingTrybe = 0;
 
 
     private $usingPower = 0;

@@ -28,7 +28,8 @@ class CrossingData
         "sandwich_Y", "sandwich_X", "sandwich_Z", "joinwith_one_join1", "joinwith_one_join0", "get5x5x1Multiple",  "get4x4x1Multiple",
         "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom",
         "upDownLayerPowerMatrix100", "upDownLayerPowerMatrix125", "upDownLayerPowerMatrix50", "upDownLayerPowerMatrix25",
-        "tassingLayerPowerMatrix25", "tassingLayerPowerMatrix50", "tassingLayerPowerMatrix125", "tassingLayerPowerMatrix100"
+        "tassingLayerPowerMatrix25", "tassingLayerPowerMatrix50", "tassingLayerPowerMatrix125", "tassingLayerPowerMatrix100",
+        "crystalsize5", "crystalsize4", "crystalsize3",  "mozaics"
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -2603,6 +2604,118 @@ class CrossingData
         return $orders;
     }
 
+ 
+    private function mozaics($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = $i + $j + $z;
+                    if ($sum % 2 == 1) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }    
+
+    private function crystalsize3($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, $nr - 1);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2) + abs($z - $pom3);
+                    if ($sum <= 3) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }
+
+    private function crystalsize4($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, $nr - 1);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2) + abs($z - $pom3);
+                    if ($sum <= 4) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }
+
+    private function crystalsize5($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+        $multiple = rand(2, 20); 
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, $nr - 1);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2) + abs($z - $pom3);
+                    if ($sum <= 5) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }
 
 
     public function changeMethodList($methods) {
