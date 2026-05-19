@@ -27,6 +27,7 @@ use App\Models\Waga;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
  
+// COMAND : php artisan app:run-area-calc
  
 class MainController extends Controller
 {
@@ -156,7 +157,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 0;
+    private $randomDoingTrybe = 2;
 
 
     private $usingPower = 0;
@@ -1928,6 +1929,8 @@ class MainController extends Controller
             $lvlmax = 1;
         }
         $lvlmin = $lvlmax;
+
+ 
 
         if ($trybe == 2) {
             $count = Calculation::where("area_id", $id)->where("level", $lvlmax)->count();
