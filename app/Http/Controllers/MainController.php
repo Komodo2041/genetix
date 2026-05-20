@@ -1919,6 +1919,9 @@ class MainController extends Controller
 
     public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
         set_time_limit(36000);
+        ini_set('memory_limit', '200M');
+
+
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');

@@ -29,7 +29,7 @@ class CrossingData
         "get3x3x1Multiple40", "get3x3x1Multiple", "blob6_fromthelevel", "blob6_wfiverandom", "blob6_wonerandom", "blob3_fromthelevel", "blob3_wfiverandom", "blob3_wonerandom",
         "upDownLayerPowerMatrix100", "upDownLayerPowerMatrix125", "upDownLayerPowerMatrix50", "upDownLayerPowerMatrix25",
         "tassingLayerPowerMatrix25", "tassingLayerPowerMatrix50", "tassingLayerPowerMatrix125", "tassingLayerPowerMatrix100",
-        "crystalsize5", "crystalsize4", "crystalsize3",  "mozaics"
+        "crystalsize5", "crystalsize4", "crystalsize3",  "mozaics", "rombsquere1_inZ", "crystalsize6", "rombsquere2_inZ", "rombsquere3_inZ", "rombsquere4_inZ", "rombsquere5_inZ",
     ];
 
     public function createNewPopulation($population, $cr = null) {
@@ -2632,7 +2632,6 @@ class CrossingData
 
     private function crystalsize3($population, $max, $nr = 10) {
         $randNumbers = $this->getRand($max);
-        $multiple = rand(2, 20); 
  
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];         
@@ -2661,7 +2660,6 @@ class CrossingData
 
     private function crystalsize4($population, $max, $nr = 10) {
         $randNumbers = $this->getRand($max);
-        $multiple = rand(2, 20); 
  
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];         
@@ -2690,7 +2688,6 @@ class CrossingData
 
     private function crystalsize5($population, $max, $nr = 10) {
         $randNumbers = $this->getRand($max);
-        $multiple = rand(2, 20); 
  
         $one = $population[$randNumbers[0]];
         $two = $population[$randNumbers[1]];         
@@ -2716,6 +2713,169 @@ class CrossingData
         }           
         return $table;
     }
+ 
+    private function crystalsize6($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, $nr - 1);
+
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2) + abs($z - $pom3);
+                    if ($sum <= 6) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }    
+
+    private function rombsquere5_inZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2);
+                    if ($sum <= 5) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }
+
+    private function rombsquere4_inZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2);
+                    if ($sum <= 4) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    } 
+
+    private function rombsquere3_inZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2);
+                    if ($sum <= 3) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }
+    
+    private function rombsquere2_inZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2);
+                    if ($sum <= 2) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }    
+
+    private function rombsquere1_inZ($population, $max, $nr = 10) {
+        $randNumbers = $this->getRand($max);
+ 
+        $one = $population[$randNumbers[0]];
+        $two = $population[$randNumbers[1]];         
+
+        $table = $one;
+
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+ 
+        $table = [];
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom1) + abs($j - $pom2);
+                    if ($sum <= 2) {
+                        $table[$i][$j][$z] = $one[$i][$j][$z];
+                    } else {
+                        $table[$i][$j][$z] = $two[$i][$j][$z];
+                    }
+                }
+            }
+        }           
+        return $table;
+    }  
 
 
     public function changeMethodList($methods) {

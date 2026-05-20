@@ -30,7 +30,7 @@ class RunCalcTrybe1 extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation)
     {
         $id = 16;
         $trybe = 1;
