@@ -139,7 +139,7 @@ class MainController extends Controller
 
 
     private $saveCrosMutationMatrix = 1.000001;
-   
+     
 
     private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
  
@@ -1934,9 +1934,7 @@ class MainController extends Controller
             $lvlmax = 1;
         }
         $lvlmin = $lvlmax;
-
  
-
         if ($trybe == 2) {
             $count = Calculation::where("area_id", $id)->where("level", $lvlmax)->count();
             if ($count < 100) {
