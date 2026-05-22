@@ -29,7 +29,7 @@ use App\Models\PowerSelect;
  
 // COMAND : php artisan app:run-area-calc
 // php artisan app:run-calc-trybe1 
-
+// php artisan app:calc-next-level
 
 class MainController extends Controller
 {
@@ -159,7 +159,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 0;
+    private $randomDoingTrybe = 2;
 
 
     private $usingPower = 0;
@@ -1928,7 +1928,7 @@ class MainController extends Controller
         }
 
         $random = 0;
-
+ 
         $lvlmax = Calculation::where("area_id", $id)->max("level");
         if (!$lvlmax) {
             $lvlmax = 1;
@@ -1937,7 +1937,7 @@ class MainController extends Controller
  
         if ($trybe == 2) {
             $count = Calculation::where("area_id", $id)->where("level", $lvlmax)->count();
-            if ($count < 100) {
+            if ($count < 20) {
                 $trybe = 1;
             } else {
                 $lvlmax++;
