@@ -32,7 +32,7 @@
                   <a href="/calcallavg/{{$a->id}}" ><button>Przelicz średnie dla poziomów</button></a>
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a>&nbsp;
-                  <a href="/area/usedmethods/{{$a->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
+                  
 
                   @if (is_null($a->river))
                      <a href="/addRiver/{{$a->id}}"><button>Dodaj rzekę</button></a>&nbsp;
@@ -81,6 +81,9 @@
                      <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br/>
                   @endif
   
+                  <a href="/area/usedmethods/{{$a->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
+                  <a href="/showselectigcalculations/{{$a->id}}"><button>Pokaz wybierania obliczeń</button></a>&nbsp;
+
                   <a href="/bottomLastLayer/{{$a->id}}"><button>Obniż ostatnią warstwę</button></a> 
                   <a href="/onecalculation/{{$a->id}}"><button>Przelicz obliczenia na jednym zestawie punktów</button></a> 
 

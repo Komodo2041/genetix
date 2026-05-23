@@ -159,7 +159,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 2;
+    private $randomDoingTrybe = 0;
 
 
     private $usingPower = 0;
@@ -290,7 +290,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
             // $randomDoing = rand(73, 74);
-
+            $randomDoing = 24;
             //  $randomDoing = 75;  
         } else {
             $nrDiamond = count($this->diamondCrossing);
@@ -2238,6 +2238,28 @@ class MainController extends Controller
         }
 
         return redirect("/")->with('success', 'Przeliczono punkty na result2');
+
+    }
+
+    public function showselectigcalculations($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $calco = Calculation::selectRaw('calculation, level, count(*) AS count ')->where("area_id", $id)->groupBy('calculation', 'level')->orderBy("level", "ASC")->orderBy("calculation", "DESC")->get()->toArray(); 
+        $res = [];
+        $levl = [];
+        foreach ($calco AS $c) {
+            $res[$c['level']][] = $c;
+            if (isset($levl[$c['level']])) {
+                $levl[$c['level']] += $c['count'];
+            } else {
+                $levl[$c['level']] = $c['count'];
+            }
+        }
+ 
+        return view("showselectigcalculations", ['calco' => $res, "area" => $area, "levl" => $levl ]);
 
     }
 

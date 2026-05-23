@@ -37,6 +37,7 @@ Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\MainController@calc
 Route::get('showPowerSelect/{id}',  "App\Http\Controllers\MainController@showPowerSelect" );
 Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\MainController@bottomLastLayer" );
 Route::get('onecalculation/{id}',  "App\Http\Controllers\MainController@onecalculation" );
+Route::get('showselectigcalculations/{id}',  "App\Http\Controllers\MainController@showselectigcalculations" ); 
  
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
