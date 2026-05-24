@@ -84,6 +84,8 @@
                   <a href="/area/usedmethods/{{$a->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
                   <a href="/showselectigcalculations/{{$a->id}}"><button>Pokaz wybierania obliczeń</button></a>&nbsp;
 
+                   <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
+
                   <a href="/bottomLastLayer/{{$a->id}}"><button>Obniż ostatnią warstwę</button></a> 
                   <a href="/onecalculation/{{$a->id}}"><button>Przelicz obliczenia na jednym zestawie punktów</button></a> 
 

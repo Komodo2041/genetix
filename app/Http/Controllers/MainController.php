@@ -1919,10 +1919,18 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
     }
 
+    /*
+       TRYBE
+       0 - max level
+       1 - 3 ostatnie levele
+       2 - level++
+       3 - wszystkie levele
+
+    */
     public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
         set_time_limit(36000);
         ini_set('memory_limit', '200M');
-
+ 
 
         $area = Area::find($id);
         if (!$area) {
