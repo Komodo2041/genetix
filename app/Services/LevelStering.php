@@ -52,9 +52,9 @@ class LevelStering {
             return $l[0]['avg'] + $res;
         }
 
-        $res = (1 - $l[0]['avg']) / 8;
+        $res = (1 - $l[0]['avg']) / 12;
         if ($t == 1) {
-           $res = (1 - $l[0]['avg']) / 7;
+           $res = (1 - $l[0]['avg']) / 10;
         }
 
         return $l[0]['avg'] - $res;

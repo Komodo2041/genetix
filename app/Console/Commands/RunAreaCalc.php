@@ -18,7 +18,7 @@ class RunAreaCalc extends Command
      *
      * @var string
      */
-    protected $signature = 'app:run-area-calc';
+    protected $signature = 'app:run-area-calc {tryb : Tryb} ';
 
     /**
      * The console command description.
@@ -33,7 +33,8 @@ class RunAreaCalc extends Command
     public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation)
     {
         $id = 16;
-        $trybe = 0;
+        $trybe = $this->argument('tryb');
+ 
         $main = new MainController();
         $main->calcareamoretimes($id, $trybe, $gtx, $cross, $mutation, $bigmutation);
     }

@@ -27,9 +27,11 @@ use App\Models\Waga;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
  
-// COMAND : php artisan app:run-area-calc
-// php artisan app:run-calc-trybe1 
-// php artisan app:calc-next-level
+// COMAND : php artisan app:run-area-calc 0
+// php artisan app:run-area-calc 1
+// php artisan app:run-area-calc 2
+// php artisan app:run-area-calc 4
+ 
 
 class MainController extends Controller
 {
