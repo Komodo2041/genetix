@@ -13,16 +13,25 @@ use App\Services\GenetixDataGenerator;
 class AvgController extends Controller
 {
 
-    private $calcpointnumbers = 5;
+    private $calcpointnumbers = 50;
     public $nrMaxPopulation = 120;
 
-    public function showavgcalculations($id) {
+    public function showavgcalculations($id, Request $request) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $calco = Accuratecalc::where("area_id", $id)->get();
-        return view("avgcalc", ['area' => $area, 'calco' => $calco ]);
+        $order = $request->input('order');
+        $desc = $request->input('desc');
+        if (!$order) {
+            $order = "avg";
+        }
+        if (!$desc) {
+            $desc = "DESC";
+        }
+
+        $calco = Accuratecalc::where("area_id", $id)->orderBy($order, $desc)->get();
+        return view("avgcalc", ['area' => $area, 'calco' => $calco, "order" => $order, "desc" => $desc ]);
     }
 
     public function calcAvgforArea($id, GenetixDataGenerator $gtx) {
