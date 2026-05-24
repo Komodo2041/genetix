@@ -134,8 +134,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
-    private $nrTimes = 8;
+    private $maxPopulation = 30;
+    private $nrTimes = 20;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -1645,7 +1645,7 @@ class MainController extends Controller
 
         $mresults = [];
         foreach ($mutations AS $key => $method) {
-            echo $method."<br/>";
+   
             $population0 = [];
             $result = [0, 0];
           

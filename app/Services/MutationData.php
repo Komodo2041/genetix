@@ -32,7 +32,10 @@ class MutationData
         "shuffleMaxBorder_LayerZ_width_2_23", "shuffleMaxBorder_LayerZ_width_2_12", "shuffleMaxBorder_LayerZ_width_3_123", "shufflesquereBorderOneLayerZ_width2",
         "shufflesquereBorderOneLayerZMultiple", "shuffleMaxBorder_LayerZ_width_2Multiple", "shuffleonMatrixPower10", "shuffleonMatrixPower20", "shuffleonMatrixPower50",
         "shuffleonMatrixPower100", "shuffleonMatrixPower30", "shuffleonMatrixPower20Multi", "shuffleonMatrixPower10Multi", "shuffleonMatrixPower200",
-        "shufflerytal2", "shufflerytal3", "shufflerytal4", "shufflerytal5", "rombono2_inZ", "rombono3_inZ", "rombono4_inZ"
+        "shufflerytal2", "shufflerytal3", "shufflerytal4", "shufflerytal5", "rombono2_inZ", "rombono3_inZ", "rombono4_inZ",
+        "shuffleonMatrixPower20_left", "shuffleonMatrixPower20_right", "shuffleonMatrixPower20_middle", "shuffleonMatrixPower20_toborder",
+        "shuffleonMatrixPower50_left", "shuffleonMatrixPower50_right", "shuffleonMatrixPower50_middle", "shuffleonMatrixPower50_toborder",
+        "shuffleonMatrixPower100_left", "shuffleonMatrixPower100_right", "shuffleonMatrixPower100_middle", "shuffleonMatrixPower100_toborder"
     ];
 
     public function setNumerMutation($nr) {
@@ -2718,7 +2721,7 @@ class MutationData
        return $pop;
     }
 
-    private function shuffleonMatrixPower($pop, $nr = 10, $trybe = 1) {
+    private function shuffleonMatrixPower($pop, $nr = 10, $trybe = 1, $howshuffle = 1) {
 
        $orders = $this->getOrders($nr);
        if (!$orders) {
@@ -2759,8 +2762,37 @@ class MutationData
                     }
                 }
            }
-        }       
-        shuffle($used);
+        }
+      
+        if (count($used) < 3) {
+            $howshuffle = 1;
+        }
+
+        switch ($howshuffle) {
+         case 1:
+           shuffle($used);
+         break;
+         case 2:
+           sort($used);
+         break;
+         case 3:
+           rsort($used);
+         break;
+         case 4:
+           $diff = array_chunk($used, ceil(count($used) / 2));
+           sort($diff[0]);
+           rsort($diff[1]);
+           $used = array_merge($diff[0], $diff[1]); 
+         break; 
+         case 5:
+           $diff = array_chunk($used, ceil(count($used) / 2));
+           rsort($diff[0]);
+           sort($diff[1]);
+           $used = array_merge($diff[0], $diff[1]); 
+         break;                                    
+        } 
+ 
+
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
@@ -3084,6 +3116,53 @@ class MutationData
         return $pop;     
 
     }    
+ 
+    private function shuffleonMatrixPower20_left($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 2, 2);
+    }
 
+    private function shuffleonMatrixPower20_right($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 2, 3);
+    }    
+
+    private function shuffleonMatrixPower20_middle($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 2, 4);
+    }  
+
+    private function shuffleonMatrixPower20_toborder($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 2, 5);
+    }      
+
+    private function shuffleonMatrixPower50_left($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 3, 2);
+    }
+
+    private function shuffleonMatrixPower50_right($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 3, 3);
+    }    
+
+    private function shuffleonMatrixPower50_middle($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 3, 4);
+    }  
+
+    private function shuffleonMatrixPower50_toborder($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 3, 5);
+    }
+
+    private function shuffleonMatrixPower100_left($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 4, 2);
+    }
+
+    private function shuffleonMatrixPower100_right($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 4, 3);
+    }    
+
+    private function shuffleonMatrixPower100_middle($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 4, 4);
+    }  
+
+    private function shuffleonMatrixPower100_toborder($pop, $nr = 10) {
+       return $this->shuffleonMatrixPower($pop, $nr, 4, 5);
+    }    
 
 }
