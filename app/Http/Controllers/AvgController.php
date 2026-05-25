@@ -32,12 +32,12 @@ class AvgController extends Controller
             $desc = "DESC";
         }
 
-        $calco = Accuratecalc::where("area_id", $id)->orderBy($order, $desc)->get();
+        $calco = Accuratecalc::with("calculation")->where("area_id", $id)->orderBy($order, $desc)->get();
         return view("avgcalc", ['area' => $area, 'calco' => $calco, "order" => $order, "desc" => $desc ]);
     }
 
     public function calcAvgforArea($id, $part, GenetixDataGenerator $gtx) {
-        set_time_limit(3600);
+        set_time_limit(7200);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -45,63 +45,72 @@ class AvgController extends Controller
         
         $table = json_decode($area->data);
         $gtx->setPowerMatrixSize(10);
-        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get();
+      
+        if ($part == 0) {
+            Calculation::where("area_id", $id)->update(["mule" => 0]);
+        }
+
         $reso = [];
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $calchepers = [];
 
         $levelAvg = Levelavg::where("area_id", $id)->orderBy("level", "DESC")->get()->pluck("avg", "level")->toArray();
  
-        foreach ($calculations AS $calco) {
-            $reso[$calco->id] = [
-                "calc_id" => $calco->id,
-                "area_id" => $calco->area_id,
-                "min" => 1,
-                "max" => 0,
-                "actres" => $calco->obtainedresult,
-                "avgdiff" => 0,
-                "avg" => 0
-            ];
-            $calchepers[$calco->id]['data'] = json_decode($calco->data);
-            $calchepers[$calco->id]['saveres'] = [];
-        }
- 
-        for ($i = 0; $i < $this->calcpointnumbers; $i++) {
-            $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
-  
+       $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(500)->get();
+        while ($calculations->count() > 0) {
+            $cids = [];
             foreach ($calculations AS $calco) {
-                $record = $gtx->calcPopulation([$calchepers[$calco->id]['data']], $headPoints);
-                $sum = $record[0]['sum'] / $maxPoints;
-                if ($sum < $reso[$calco->id]['min']) {
-                    $reso[$calco->id]['min'] = $sum;
-                }
-                if ($sum > $reso[$calco->id]['max']) {
-                    $reso[$calco->id]['max'] = $sum;
-                } 
-                $reso[$calco->id]['avg'] += $sum;
-                $calchepers[$calco->id]['saveres'][] = $sum;           
-            }  
-        }
-
-        foreach ($reso AS $cid => $record) {
-            $reso[$cid]['avg'] = $reso[$cid]['avg'] / $this->calcpointnumbers;
-            $reso[$cid]['avgdiff'] = $reso[$cid]['max'] - $reso[$cid]['min'];
-
-            $variation = 0;
-            foreach ($calchepers[$calco->id]['saveres'] AS $sum) {
-                $variation += abs($reso[$cid]['avg'] - $sum);
-              
-            }  
-            $reso[$cid]['variation'] = $variation / $this->calcpointnumbers;
-            $reso[$cid]['calclevel'] = $this->calcLevel($reso[$cid]['avg'], $levelAvg);
+                $reso[$calco->id] = [
+                    "calc_id" => $calco->id,
+                    "area_id" => $calco->area_id,
+                    "min" => 1,
+                    "max" => 0,
+                    "actres" => $calco->obtainedresult,
+                    "avgdiff" => 0,
+                    "avg" => 0
+                ];
+                $calchepers[$calco->id]['data'] = json_decode($calco->data);
+                $calchepers[$calco->id]['saveres'] = [];
+                $cids[] = $calco->id;
+            }
+    
+            for ($i = 0; $i < $this->calcpointnumbers; $i++) {
+                $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+    
+                foreach ($calculations AS $calco) {
+                    $record = $gtx->calcPopulation([$calchepers[$calco->id]['data']], $headPoints);
+                    $sum = $record[0]['sum'] / $maxPoints;
+                    if ($sum < $reso[$calco->id]['min']) {
+                        $reso[$calco->id]['min'] = $sum;
+                    }
+                    if ($sum > $reso[$calco->id]['max']) {
+                        $reso[$calco->id]['max'] = $sum;
+                    } 
+                    $reso[$calco->id]['avg'] += $sum;
+                    $calchepers[$calco->id]['saveres'][] = $sum;           
+                }  
+            }
  
-            Accuratecalc::updateOrCreate(
-                ['area_id' => $record['area_id'], 'calc_id' => $record['calc_id']], 
-                $reso[$cid]
-            );            
+            foreach ($reso AS $cid => $record) {
+                $reso[$cid]['avg'] = $reso[$cid]['avg'] / $this->calcpointnumbers;
+                $reso[$cid]['avgdiff'] = $reso[$cid]['max'] - $reso[$cid]['min'];
 
-        }
-                  
+                $variation = 0;
+                foreach ($calchepers[$calco->id]['saveres'] AS $s2) {
+                    $variation += abs( $s2 - $reso[$cid]['avg']);
+                }  
+                $reso[$cid]['variation'] = $variation / $this->calcpointnumbers;
+                $reso[$cid]['calclevel'] = $this->calcLevel($reso[$cid]['avg'], $levelAvg);
+    
+                Accuratecalc::updateOrCreate(
+                    ['area_id' => $record['area_id'], 'calc_id' => $cid], 
+                    $reso[$cid]
+                );            
+    
+            }
+            Calculation::whereIn("id", $cids)->update(["mule" => 1]);
+            $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(500)->get();
+        }              
         return redirect("/showavgcalculations/".$id)->with('success', 'Dokonano Obliczeń średnich');
 
     }

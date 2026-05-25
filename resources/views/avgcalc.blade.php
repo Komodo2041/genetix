@@ -42,12 +42,26 @@
             @endif
         </th>
         <th>
+            @if ($order == "variation" && $desc == "DESC")
+               <a class="asc" href="/showavgcalculations/{{$area->id}}/?order=variation&desc=ASC">Var</a>
+            @else
+               <a class="desc" href="/showavgcalculations/{{$area->id}}/?order=variation&desc=DESC">Var</a>
+            @endif
+        </th>        
+        <th>
             @if ($order == "actres" && $desc == "DESC")
                <a class="asc" href="/showavgcalculations/{{$area->id}}/?order=actres&desc=ASC">Res</a>
             @else
                <a class="desc" href="/showavgcalculations/{{$area->id}}/?order=actres&desc=DESC">Res</a>
             @endif
-        </th>  
+        </th>          
+        <th>
+            @if ($order == "calclevel" && $desc == "DESC")
+               <a class="asc" href="/showavgcalculations/{{$area->id}}/?order=calclevel&desc=ASC">Lvl</a>
+            @else
+               <a class="desc" href="/showavgcalculations/{{$area->id}}/?order=calclevel&desc=DESC">Lvl</a>
+            @endif
+        </th>     
     </tr>
    
 @forelse ($calco AS $c)
@@ -57,11 +71,13 @@
         <td>{{ $c->min }}</td>
         <td>{{ $c->max }}</td>
         <td>{{ $c->avgdiff }}</td>
+        <td>{{ $c->variation }}</td>
         <td>{{ $c->actres }}</td>
+        <td>{{ $c->calclevel }}<br/>{{$c->calculation->level}}({{$c->calculation->level- $c->calclevel }})</td>
     </tr>    
 @empty
    <tr>
-     <td colspan="6"> - Brak Obliczeń -</td>
+     <td colspan="8"> - Brak Obliczeń -</td>
 </tr>
 @endforelse
 
