@@ -53,5 +53,5 @@ Route::get('see10Layerpower/{size}',  "App\Http\Controllers\PowerController@see1
 Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Result" ); 
    
 Route::get('showavgcalculations/{id}',  "App\Http\Controllers\AvgController@showavgcalculations" );
-Route::get('calcAvgforArea/{id}',  "App\Http\Controllers\AvgController@calcAvgforArea" );
+Route::get('calcAvgforArea/{id}/{part}',  "App\Http\Controllers\AvgController@calcAvgforArea" );
  

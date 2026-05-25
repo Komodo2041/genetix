@@ -30,7 +30,7 @@ use App\Models\PowerSelect;
 // COMAND : php artisan app:run-area-calc 0
 // php artisan app:run-area-calc 1
 // php artisan app:run-area-calc 2
-// php artisan app:run-area-calc 4
+// php artisan app:run-area-calc 3
  
 
 class MainController extends Controller
@@ -136,8 +136,8 @@ class MainController extends Controller
     public $additionalPopulationSize = 20;
 
     public $Numhalstep = 2; // 2
-    private $maxPopulation = 30;
-    private $nrTimes = 20;
+    private $maxPopulation = 60;
+    private $nrTimes = 10;
 
 
     private $saveCrosMutationMatrix = 1.000001;

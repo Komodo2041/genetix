@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Accuratecalc extends Model
 {
     public $table = "accuratecalc";
-    public $fillable = ["area_id", "calc_id", "avg", "min", "max", "avgdiff", "actres"];
+    public $fillable = ["area_id", "calc_id", "avg", "min", "max", "avgdiff", "actres", "calclevel", "variation"];
  
     public function area() {
         return $this->belongsTo("App\Models\Area", 'area_id');

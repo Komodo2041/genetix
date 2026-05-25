@@ -8,6 +8,8 @@ use App\Models\Area;
 use App\Models\Calculation;
 use App\Models\Accuratecalc;
  
+use App\Models\LevelAvg;
+
 use App\Services\GenetixDataGenerator;
 
 class AvgController extends Controller
@@ -34,7 +36,7 @@ class AvgController extends Controller
         return view("avgcalc", ['area' => $area, 'calco' => $calco, "order" => $order, "desc" => $desc ]);
     }
 
-    public function calcAvgforArea($id, GenetixDataGenerator $gtx) {
+    public function calcAvgforArea($id, $part, GenetixDataGenerator $gtx) {
         set_time_limit(3600);
         $area = Area::find($id);
         if (!$area) {
@@ -46,9 +48,10 @@ class AvgController extends Controller
         $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get();
         $reso = [];
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
-
         $calchepers = [];
 
+        $levelAvg = Levelavg::where("area_id", $id)->orderBy("level", "DESC")->get()->pluck("avg", "level")->toArray();
+ 
         foreach ($calculations AS $calco) {
             $reso[$calco->id] = [
                 "calc_id" => $calco->id,
@@ -75,7 +78,8 @@ class AvgController extends Controller
                 if ($sum > $reso[$calco->id]['max']) {
                     $reso[$calco->id]['max'] = $sum;
                 } 
-                $reso[$calco->id]['avg'] += $sum;              
+                $reso[$calco->id]['avg'] += $sum;
+                $calchepers[$calco->id]['saveres'][] = $sum;           
             }  
         }
 
@@ -83,6 +87,14 @@ class AvgController extends Controller
             $reso[$cid]['avg'] = $reso[$cid]['avg'] / $this->calcpointnumbers;
             $reso[$cid]['avgdiff'] = $reso[$cid]['max'] - $reso[$cid]['min'];
 
+            $variation = 0;
+            foreach ($calchepers[$calco->id]['saveres'] AS $sum) {
+                $variation += abs($reso[$cid]['avg'] - $sum);
+              
+            }  
+            $reso[$cid]['variation'] = $variation / $this->calcpointnumbers;
+            $reso[$cid]['calclevel'] = $this->calcLevel($reso[$cid]['avg'], $levelAvg);
+ 
             Accuratecalc::updateOrCreate(
                 ['area_id' => $record['area_id'], 'calc_id' => $record['calc_id']], 
                 $reso[$cid]
@@ -93,4 +105,16 @@ class AvgController extends Controller
         return redirect("/showavgcalculations/".$id)->with('success', 'Dokonano Obliczeń średnich');
 
     }
+
+    private function calcLevel($avg, $levelAvg) {
+        $res = 1;
+        foreach ($levelAvg AS $lvl => $c) {
+            if ($c < $avg) {
+               $res = $lvl;
+               break;
+            }
+        }
+        return $res;
+    }
+
 }
