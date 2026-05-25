@@ -34,6 +34,10 @@ class LevelStering {
  
     }
 
+    public function delarea($id) {
+        LevelAvg::where("area_id", $id)->delete();
+    }
+
     public function getminimum($id, $lvl, $t = 0) {
       
         if ($lvl == 0) {

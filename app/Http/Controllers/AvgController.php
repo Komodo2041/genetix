@@ -11,6 +11,7 @@ use App\Models\Accuratecalc;
 use App\Models\LevelAvg;
 
 use App\Services\GenetixDataGenerator;
+use App\Services\LevelStering;
 
 class AvgController extends Controller
 {
@@ -56,9 +57,11 @@ class AvgController extends Controller
 
         $levelAvg = Levelavg::where("area_id", $id)->orderBy("level", "DESC")->get()->pluck("avg", "level")->toArray();
  
-       $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(500)->get();
+       $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(50)->get();
         while ($calculations->count() > 0) {
             $cids = [];
+            $reso = [];
+            $calchepers = [];
             foreach ($calculations AS $calco) {
                 $reso[$calco->id] = [
                     "calc_id" => $calco->id,
@@ -80,6 +83,7 @@ class AvgController extends Controller
                 foreach ($calculations AS $calco) {
                     $record = $gtx->calcPopulation([$calchepers[$calco->id]['data']], $headPoints);
                     $sum = $record[0]['sum'] / $maxPoints;
+                    
                     if ($sum < $reso[$calco->id]['min']) {
                         $reso[$calco->id]['min'] = $sum;
                     }
@@ -92,25 +96,28 @@ class AvgController extends Controller
             }
  
             foreach ($reso AS $cid => $record) {
+                 
                 $reso[$cid]['avg'] = $reso[$cid]['avg'] / $this->calcpointnumbers;
                 $reso[$cid]['avgdiff'] = $reso[$cid]['max'] - $reso[$cid]['min'];
-
+ 
                 $variation = 0;
-                foreach ($calchepers[$calco->id]['saveres'] AS $s2) {
-                    $variation += abs( $s2 - $reso[$cid]['avg']);
+                foreach ($calchepers[$cid]['saveres'] AS $s2) {
+                    $abs = abs( $s2 - $reso[$cid]['avg']);
+                    $variation += $abs;
                 }  
                 $reso[$cid]['variation'] = $variation / $this->calcpointnumbers;
                 $reso[$cid]['calclevel'] = $this->calcLevel($reso[$cid]['avg'], $levelAvg);
-    
+  
                 Accuratecalc::updateOrCreate(
-                    ['area_id' => $record['area_id'], 'calc_id' => $cid], 
+                    ['calc_id' => $cid], 
                     $reso[$cid]
                 );            
     
-            }
+            }   
             Calculation::whereIn("id", $cids)->update(["mule" => 1]);
             $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(500)->get();
-        }              
+        }    
+                 
         return redirect("/showavgcalculations/".$id)->with('success', 'Dokonano Obliczeń średnich');
 
     }
@@ -124,6 +131,27 @@ class AvgController extends Controller
             }
         }
         return $res;
+    }
+
+    public function desilting($id, LevelStering $ls) {
+        set_time_limit(3600);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $calco = Accuratecalc::with("calcuation")->where("area_id", $id)->get();
+        $nr = 0;
+        foreach ($calco AS $c) {
+            if ($c->calclevel != $c->calculation->level) {
+               $change = "\n Odmulanie z ".$c->calculation->level. " na ".$c->calclevel."\n";
+               Calculation::where("id", $c->calc_id)->update(["level" => $c->calclevel, "result" => $c->calculation->result." ".$change, "obtainedresult" => $c->avg]); 
+               $nr++;
+            }
+            
+        }
+        $ls->delarea($id);
+        $ls->calcarea($id);
+        return redirect("/showavgcalculations/".$id)->with('success', 'Odmulono obszar - Zmiany: '.$nr);
     }
 
 }

@@ -54,4 +54,5 @@ Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Resul
    
 Route::get('showavgcalculations/{id}',  "App\Http\Controllers\AvgController@showavgcalculations" );
 Route::get('calcAvgforArea/{id}/{part}',  "App\Http\Controllers\AvgController@calcAvgforArea" );
- 
+Route::get('desilting/{id}',  "App\Http\Controllers\AvgController@desilting" );
+  

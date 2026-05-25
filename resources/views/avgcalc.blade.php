@@ -2,9 +2,9 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a><br/>
-
-<a href="/calcAvgforArea/{{$area->id}}/0"><button>Oblicz średnie obliczeń</button></a>&nbsp;
-<a href="/calcAvgforArea/{{$area->id}}/1"><button>Oblicz brakujące obliczenia</button></a>&nbsp;
+<a href="/calcAvgforArea/{{$area->id}}/1"><button>Oblicz brakujące obliczenia</button></a><br/>
+<a href="/calcAvgforArea/{{$area->id}}/0"><button>Oblicz średnie obliczeń (Licz wszystkie)</button></a><br/>
+<a href="/desilting/{{$area->id}} "><button>Odmulanie</button></a>&nbsp;
 <h3>Pokaz średnich oliczeń</h3>
 <div class="container">
  
