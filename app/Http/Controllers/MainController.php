@@ -21,7 +21,7 @@ use App\Models\Diamond;
 use App\Models\Diamondcalc;
 use App\Models\Matrix;
 use App\Models\Waga;
-
+use App\Models\Accuratecalc;
  
 
 use App\Models\CrossMatrix;
@@ -118,7 +118,12 @@ class MainController extends Controller
        72 => "useBigMutator - 2 - Part Layer Z - (10%)",
        73 => "Blob3 From the level",
        74 => "Blob6 From the level",
-       75 => "Use result2 "  
+       75 => "Use result2 ", 
+       76 => "Calculating accuratecalc - use AVG ",
+       77 => "Calculating accuratecalc - use MIN",
+       78 => "Calculating accuratecalc - use MAX",
+       79 => "Calculating accuratecalc - use (MAX - MIN)",
+       80 => "Calculating accuratecalc - use VARIATION",
     ];
 
     private $debugInfo = 0;
@@ -157,6 +162,7 @@ class MainController extends Controller
     private $biglayerSelectingShort = [12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
 
     private $wagaSelecting = [17, 18, 19, 20];
+    private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
@@ -186,7 +192,11 @@ class MainController extends Controller
                 if (!in_array($randomDoing, $this->biglayerSelecting)) {
                     $randomDoing = -1;
                 } 
-             }    
+             } elseif ($this->randomDoingTrybe == 6) { // AVG
+                if (!in_array($randomDoing, $this->avgdetailcalcSelecting)) {
+                    $randomDoing = -1;
+                } 
+             }   
          }
         return $randomDoing; 
     }
@@ -754,6 +764,47 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
  
+        } elseif ( in_array($randomDoing, $this->avgdetailcalcSelecting)) {
+
+            $order = "avg";
+            $desc = "DESC"; 
+            switch ($randomDoing) {
+                case 76:
+                    $order = "avg";
+                    break;
+                case 77:
+                    $order = "min";
+                    break;
+                case 78:
+                    $order = "max";
+                    break;
+                case 79:
+                    $order = "avgdiff";
+                    $desc = "ASC";
+                    break;
+                case 80:
+                    $order = "variation";
+                    $desc = "ASC";                    
+                    break;                                                                                
+            }
+            $ids = Accuratecalc::where("area_id", $id)->take(50)->orderBy($order, $desc)->get();
+            $selected = [];
+            if ($ids) {
+                foreach ($ids AS $ac) {
+                    $selected[] = $ac->calc_id;
+                }
+                $calculations = Calculation::where("area_id", $id)->whereIn("id", $selected)->get();
+            } else {
+                $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+    
+                $randomDoing = -1;
+            }
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
+            }
+        
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
