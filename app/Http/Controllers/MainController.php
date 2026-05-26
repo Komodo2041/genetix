@@ -27,7 +27,9 @@ use App\Models\Accuratecalc;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
  
-// COMAND : php artisan app:run-area-calc 0
+// COMAND :
+// 0 - ostatni, 1 - 4 najlepsze lvl, 2 - next level, 3 -> wszystkie levele
+// php artisan app:run-area-calc 0
 // php artisan app:run-area-calc 1
 // php artisan app:run-area-calc 2
 // php artisan app:run-area-calc 3
@@ -142,7 +144,7 @@ class MainController extends Controller
 
     public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
-    private $nrTimes = 10;
+    private $nrTimes = 8;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -167,7 +169,7 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 0;
+    private $randomDoingTrybe = 6;
 
 
     private $usingPower = 0;
@@ -175,7 +177,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 75);
+             $randomDoing = rand(0, 80);
              if ($this->randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
              } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
@@ -193,9 +195,7 @@ class MainController extends Controller
                     $randomDoing = -1;
                 } 
              } elseif ($this->randomDoingTrybe == 6) { // AVG
-                if (!in_array($randomDoing, $this->avgdetailcalcSelecting)) {
-                    $randomDoing = -1;
-                } 
+                $randomDoing = rand(min($this->avgdetailcalcSelecting), max($this->avgdetailcalcSelecting));  
              }   
          }
         return $randomDoing; 
@@ -302,7 +302,7 @@ class MainController extends Controller
             
             $randomDoing = $this->getRandomDoing();
             // $randomDoing = rand(73, 74);
-            $randomDoing = 24;
+             
             //  $randomDoing = 75;  
         } else {
             $nrDiamond = count($this->diamondCrossing);

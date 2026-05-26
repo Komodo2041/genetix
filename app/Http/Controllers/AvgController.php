@@ -139,7 +139,7 @@ class AvgController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $calco = Accuratecalc::with("calcuation")->where("area_id", $id)->get();
+        $calco = Accuratecalc::with("calculation")->where("area_id", $id)->get();
         $nr = 0;
         foreach ($calco AS $c) {
             if ($c->calclevel != $c->calculation->level) {

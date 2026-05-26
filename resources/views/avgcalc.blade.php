@@ -11,7 +11,11 @@
  <table>
      <tr>
          <th>
-            #Id
+            @if ($order == "calc_id" && $desc == "DESC")
+               <a class="asc" href="/showavgcalculations/{{$area->id}}/?order=calc_id&desc=ASC">#ID</a>
+            @else
+               <a class="desc" href="/showavgcalculations/{{$area->id}}/?order=calc_id&desc=DESC">#ID</a>
+            @endif 
          </th>
         <th>
             @if ($order == "avg" && $desc == "DESC")
