@@ -174,7 +174,7 @@ class MainController extends Controller
     private $randomDoingTrybe = 0;
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 81; 
+    private $testRadomSelecting = 81; // 23
 
     private $usingPower = 0;
 
@@ -304,7 +304,7 @@ class MainController extends Controller
  
         if (!$dId) {
             $randomDoing = $this->getRandomDoing();
-            if ($this->testRadomSelecting) {
+            if ($this->testRadomSelecting != 0) {
                 $randomDoing = $this->testRadomSelecting;
             } 
  
@@ -1038,7 +1038,7 @@ class MainController extends Controller
                 $pgc =  (1 - $result2) / ( ($last / $first) - 1);
                 $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), 
                 "area_id" => $id, "level" => $lvlReso[0], "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "result2" => $result2,
-                  "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info)]);
+                  "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info), "typecalc2" => $randomDoing]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
             }
   
