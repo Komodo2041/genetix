@@ -126,7 +126,8 @@ class MainController extends Controller
        78 => "Calculating accuratecalc - use MAX",
        79 => "Calculating accuratecalc - use (MAX - MIN)",
        80 => "Calculating accuratecalc - use VARIATION",
-       81 => "Inversion"
+       81 => "Inversion",
+       82 => "Get Only Inversions"
     ];
 
     private $debugInfo = 0;
@@ -145,8 +146,8 @@ class MainController extends Controller
 
     /*********** SETTING MAIN */
     public $Numhalstep = 3; // 2
-    private $maxPopulation = 180;
-    private $nrTimes = 3;
+    private $maxPopulation = 60;
+    private $nrTimes = 10;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -174,14 +175,14 @@ class MainController extends Controller
     private $randomDoingTrybe = 0;
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 81; // 23
+    private $testRadomSelecting = 82;
 
     private $usingPower = 0;
 
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 80);
+             $randomDoing = rand(0, 82);
              if ($this->randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
              } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
@@ -817,6 +818,19 @@ class MainController extends Controller
             $pattern = $this->helperMatrix->getInversion($dataBest);
             $usepowerDetails = rand(1, 5);
             $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power, $usepowerDetails);
+
+        } elseif ($randomDoing == 82) {
+
+            $calculations = Calculation::where("area_id", $id)->where("level", "<=", $lvl)->where("typecalc2", 81)->orderByRaw('RAND()')->take(10)->get();
+            if (!$calculations) {
+                $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+                $randomDoing = -1;
+            }
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
+            }        
 
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
