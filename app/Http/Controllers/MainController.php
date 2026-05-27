@@ -126,6 +126,7 @@ class MainController extends Controller
        78 => "Calculating accuratecalc - use MAX",
        79 => "Calculating accuratecalc - use (MAX - MIN)",
        80 => "Calculating accuratecalc - use VARIATION",
+       81 => "Inversion"
     ];
 
     private $debugInfo = 0;
@@ -142,9 +143,10 @@ class MainController extends Controller
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
-    public $Numhalstep = 2; // 2
-    private $maxPopulation = 60;
-    private $nrTimes = 8;
+    /*********** SETTING MAIN */
+    public $Numhalstep = 3; // 2
+    private $maxPopulation = 180;
+    private $nrTimes = 3;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -169,8 +171,10 @@ class MainController extends Controller
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 6;
-
+    private $randomDoingTrybe = 0;
+    
+    /***********TESTING RANDOM SELECTING ************/
+    private $testRadomSelecting = 81; 
 
     private $usingPower = 0;
 
@@ -299,11 +303,11 @@ class MainController extends Controller
 
  
         if (!$dId) {
-            
             $randomDoing = $this->getRandomDoing();
-            // $randomDoing = rand(73, 74);
-             
-            //  $randomDoing = 75;  
+            if ($this->testRadomSelecting) {
+                $randomDoing = $this->testRadomSelecting;
+            } 
+ 
         } else {
             $nrDiamond = count($this->diamondCrossing);
             $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
@@ -805,6 +809,15 @@ class MainController extends Controller
                 $usedcalc[] = $c->id;
             }
         
+        } elseif ($randomDoing == 81) {
+
+            $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
+            $dataBest = json_decode($bestResult->data);
+            $power = $gtx->getPower([$dataBest]);
+            $pattern = $this->helperMatrix->getInversion($dataBest);
+            $usepowerDetails = rand(1, 5);
+            $population0 = $gtx->generatePopinPower($this->startPopulation, $pattern, $power, $usepowerDetails);
+
         } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);

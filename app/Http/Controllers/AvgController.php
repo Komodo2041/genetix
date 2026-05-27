@@ -115,7 +115,7 @@ class AvgController extends Controller
     
             }   
             Calculation::whereIn("id", $cids)->update(["mule" => 1]);
-            $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(500)->get();
+            $calculations = Calculation::where("area_id", $id)->where("mule", 0)->orderBy("obtainedresult", "DESC")->take(50)->get();
         }    
                  
         return redirect("/showavgcalculations/".$id)->with('success', 'Dokonano Obliczeń średnich');
