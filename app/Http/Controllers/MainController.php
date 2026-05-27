@@ -182,7 +182,7 @@ class MainController extends Controller
     private function getRandomDoing() {
          $randomDoing = -1;
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, 82);
+             $randomDoing = rand(0, max(array_keys($this->populationName)));
              if ($this->randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
              } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
@@ -205,6 +205,14 @@ class MainController extends Controller
          }
         return $randomDoing; 
     }
+
+    private function checkRandomDoing($x) {
+        if ($x >= 0 && $x <= max(array_keys($this->populationName)) && !in_array($randomDoing, $this->noSelectingPopulation)) {
+            return true;
+        } else {
+            return false;
+        }
+    } 
 
     public function list(Request $request, MeerDataGenerator $mdg) {
  
@@ -2349,6 +2357,15 @@ class MainController extends Controller
  
         return view("showselectigcalculations", ['calco' => $res, "area" => $area, "levl" => $levl ]);
 
+    }
+
+    public function setParamPopAndRandomDoing($m, $pop) {
+        $this->maxPopulation = $pop;
+        if (!$this->checkRandomDoing($m)) {
+           $m = 0;
+        } 
+        $this->testRadomSelecting = $m;
+        $this->nrTimes = 1;
     }
 
 }
