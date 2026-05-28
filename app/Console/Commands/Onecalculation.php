@@ -17,7 +17,7 @@ class onecalculation extends Command
      *
      * @var string
      */
-    protected $signature = 'app:onecalculation {method : Selecting} {nrpop: NrPop}';
+    protected $signature = 'app:onecalculation {method : Opis metody} {nrpop : Opis NrPop}';
 
     /**
      * The console command description.

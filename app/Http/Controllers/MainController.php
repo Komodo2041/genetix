@@ -34,6 +34,7 @@ use App\Models\PowerSelect;
 // php artisan app:run-area-calc 2
 // php artisan app:run-area-calc 3
  
+// php artisan app:onecalculation 82 240
 
 class MainController extends Controller
 {
@@ -146,8 +147,8 @@ class MainController extends Controller
 
     /*********** SETTING MAIN */
     public $Numhalstep = 3; // 2
-    private $maxPopulation = 60;
-    private $nrTimes = 10;
+    private $maxPopulation = 120;
+    private $nrTimes = 5;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -207,7 +208,7 @@ class MainController extends Controller
     }
 
     private function checkRandomDoing($x) {
-        if ($x >= 0 && $x <= max(array_keys($this->populationName)) && !in_array($randomDoing, $this->noSelectingPopulation)) {
+        if ($x >= 0 && $x <= max(array_keys($this->populationName)) && !in_array($x, $this->noSelectingPopulation)) {
             return true;
         } else {
             return false;
@@ -829,7 +830,8 @@ class MainController extends Controller
 
         } elseif ($randomDoing == 82) {
 
-            $calculations = Calculation::where("area_id", $id)->where("level", "<=", $lvl)->where("typecalc2", 81)->orderByRaw('RAND()')->take(10)->get();
+            $calculations = Calculation::where("area_id", $id)->where("level", "<=", $lvl)->whereIn("typecalc2", [81, 82])->orderBy('obtainedresult', "DESC")->take(20)->get();
+            $calculations = $calculations->shuffle()->take(10);
             if (!$calculations) {
                 $calculations = $this->getCalculationLevel($id, $lvl, 10);  
                 $randomDoing = -1;
