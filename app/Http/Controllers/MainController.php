@@ -144,7 +144,7 @@ class MainController extends Controller
        93 => "Use PowerBigMutator - 2 - (10%)",
     ];
 
-    private $debugInfo = 1;
+    private $debugInfo = 0;
     private $saveCalculationInCrossAndMuationMatrix = 0;
 
     public $nrMaxPopulation = 120;
