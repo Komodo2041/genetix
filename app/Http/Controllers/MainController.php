@@ -142,6 +142,8 @@ class MainController extends Controller
        91 => "Use PowerBigMutator - 2 - (40%)",
        92 => "Use PowerBigMutator - 2 - (20%)",
        93 => "Use PowerBigMutator - 2 - (10%)",
+       94 => "Use PowerBigMutator - 1 - (5%)",
+       95 => "Use PowerBigMutator - 2 - (5%)",       
     ];
 
     private $debugInfo = 0;
@@ -182,7 +184,7 @@ class MainController extends Controller
     private $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
     private $biglayerSelectingShort = [12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
 
-    private $powerSelectingShort = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93];
+    private $powerSelectingShort = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95];
 
     private $wagaSelecting = [17, 18, 19, 20];
     private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
@@ -893,6 +895,8 @@ class MainController extends Controller
                 $powermutation->setPercent(20);
             } elseif ($randomDoing == 88 || $randomDoing == 93) {
                 $powermutation->setPercent(10);
+            } elseif ($randomDoing == 94 || $randomDoing == 95) {
+                $powermutation->setPercent(5);
             }
 
         }  elseif ( in_array($randomDoing, $this->diamondCrossing)) {
