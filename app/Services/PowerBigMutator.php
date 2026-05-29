@@ -10,7 +10,7 @@ class PowerBigMutator
 
     public $numbers = 650;
     public $allMethods = ["powerBigLayerMutation200", "powerBigLayerMutation125", "powerBigLayerMutation100", "powerBigLayerMutation50",
-       "powerBigLayerMutation25", "powerBigLayerMutation10", "powerBigLayerMutation5", "powerBigLayerMutation2"];
+       "powerBigLayerMutation25", "powerBigLayerMutation20", "powerBigLayerMutation10", "powerBigLayerMutation5", "powerBigLayerMutation2"];
     public $halfMethods = ["powerBigLayerMutation50", "powerBigLayerMutation25", "powerBigLayerMutation10", "powerBigLayerMutation5", "powerBigLayerMutation2"];
 
     private $cross = null;
@@ -94,6 +94,10 @@ class PowerBigMutator
 
     public function powerBigLayerMutation2($numbers, $size, $pop) {
        return $this->powerBigLayerMutationLine($numbers, $size, $pop, 2); 
+    }   
+
+    public function powerBigLayerMutation20($numbers, $size, $pop) {
+       return $this->powerBigLayerMutationLine($numbers, $size, $pop, 20); 
     }   
 
     public function powerBigLayerMutationLine($numbers, $size, $pop, $value) {

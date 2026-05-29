@@ -19,6 +19,7 @@
          <th>Krzyżowanie</th>
          <th>Mutacja</th>
          <th>Duża Mutacja</th>
+         <th>Power Mutacja</th>
       </tr>
       @foreach ($mutations AS $key => $value) 
         <tr>
@@ -40,7 +41,11 @@
                   TAK
                @endif 
             </td>
-
+            <td>
+               @if (in_array($key, $powermutations))
+                  TAK
+               @endif  
+             </td>   
              
         </tr>
       @endforeach
