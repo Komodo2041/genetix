@@ -8,6 +8,8 @@ use App\Services\CrossingData;
 use App\Services\MutationData; 
 use App\Services\BigMutatorData;
  
+use App\Services\PowerBigMutator;
+
 use App\Services\LevelStering;
 use App\Services\MatrixHelper;
   
@@ -128,10 +130,21 @@ class MainController extends Controller
        79 => "Calculating accuratecalc - use (MAX - MIN)",
        80 => "Calculating accuratecalc - use VARIATION",
        81 => "Inversion",
-       82 => "Get Only Inversions"
+       82 => "Get Only Inversions",
+       83 => "Use PowerBigMutator - 1",
+       84 => "Use PowerBigMutator - 1 - (100%) ",
+       85 => "Use PowerBigMutator - 1 - (70%)", 
+       86 => "Use PowerBigMutator - 1 - (40%)", 
+       87 => "Use PowerBigMutator - 1 - (20%)", 
+       88 => "Use PowerBigMutator - 1 - (10%)",
+       89 => "Use PowerBigMutator - 2 - (100%)", 
+       90 => "Use PowerBigMutator - 2 - (70%)",
+       91 => "Use PowerBigMutator - 2 - (40%)",
+       92 => "Use PowerBigMutator - 2 - (20%)",
+       93 => "Use PowerBigMutator - 2 - (10%)",
     ];
 
-    private $debugInfo = 0;
+    private $debugInfo = 1;
     private $saveCalculationInCrossAndMuationMatrix = 0;
 
     public $nrMaxPopulation = 120;
@@ -140,15 +153,17 @@ class MainController extends Controller
     public $useBigMutator = 0;
     public $funcMutator = 0;
 
+    public $usePowerMutator = 0;
+
     public $maxNumberInCalculation = 5;
 
     public $addpopulation = 0;
     public $additionalPopulationSize = 20;
 
     /*********** SETTING MAIN */
-    public $Numhalstep = 3; // 2
+    public $Numhalstep = 2; // 2
     private $maxPopulation = 120;
-    private $nrTimes = 5;
+    private $nrTimes = 4;
 
 
     private $saveCrosMutationMatrix = 1.000001;
@@ -167,16 +182,18 @@ class MainController extends Controller
     private $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
     private $biglayerSelectingShort = [12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
 
+    private $powerSelectingShort = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93];
+
     private $wagaSelecting = [17, 18, 19, 20];
     private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
 
     private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
 
 
-    private $randomDoingTrybe = 0;
+    private $randomDoingTrybe = 7;
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 82;
+    private $testRadomSelecting = 83;
 
     private $usingPower = 0;
 
@@ -202,7 +219,9 @@ class MainController extends Controller
                 } 
              } elseif ($this->randomDoingTrybe == 6) { // AVG
                 $randomDoing = rand(min($this->avgdetailcalcSelecting), max($this->avgdetailcalcSelecting));  
-             }   
+             } elseif ($this->randomDoingTrybe == 7) { // POWER SELECT
+                $randomDoing = rand(min($this->powerSelectingShort), max($this->powerSelectingShort));  
+             } 
          }
         return $randomDoing; 
     }
@@ -270,7 +289,7 @@ class MainController extends Controller
         return view("main", ['area' => $area, 'calco' => $calcoData, "nrTimes" => $this->nrTimes]);
     }
  
-    public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, $dId = null) {
+    public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $powermutation, $dId = null) {
         
         set_time_limit(40000);
         $halfStep = $this->getSteps($this->maxPopulation);
@@ -842,7 +861,41 @@ class MainController extends Controller
                 $usedcalc[] = $c->id;
             }        
 
-        } elseif ( in_array($randomDoing, $this->diamondCrossing)) {
+        } elseif ($randomDoing == 83) {
+ 
+            $calculations = $this->getCalculationLevel($id, $lvl, 2, 0, 1);
+            $area2 = json_decode($calculations[0]->data);
+            $power = $gtx->getPower([$area2]);
+            $usedcalc[] = $calculations[0]->id;
+            $population0 = $powermutation->powerBigLayerMutation100($this->startPopulation, 10, $area2);
+            $population0 = $gtx->usepower($population0, $power);
+            $this->usePowerMutator = 1;
+ 
+        } elseif ( in_array($randomDoing, $this->powerSelectingShort)) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
+            $population0 = [];
+            foreach ($calculations AS $c) {
+                $usedcalc[] = $c->id;
+                $population0[] = json_decode($c->data);
+            }
+            if ($randomDoing == 84 || $randomDoing == 85 || $randomDoing == 86 || $randomDoing == 87 || $randomDoing == 88) {
+               $this->usePowerMutator = 1;
+            } elseif ($randomDoing == 89 || $randomDoing == 90 || $randomDoing == 91 || $randomDoing == 92 || $randomDoing == 93) {
+               $this->usePowerMutator = 2;
+            } 
+
+            if ($randomDoing == 85 || $randomDoing == 90) {
+                $powermutation->setPercent(70);
+            } elseif ($randomDoing == 86 || $randomDoing == 91) {
+                $powermutation->setPercent(40);
+            } elseif ($randomDoing == 87 || $randomDoing == 92) {
+                $powermutation->setPercent(20);
+            } elseif ($randomDoing == 88 || $randomDoing == 93) {
+                $powermutation->setPercent(10);
+            }
+
+        }  elseif ( in_array($randomDoing, $this->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
             $population0 = $res[0];
@@ -923,6 +976,12 @@ class MainController extends Controller
             if ($this->useBigMutator > 0  && $nrPop % 2 == 1  ) {
 
                 $pop_result = $bigmutation->createNewPopulation($selectedIndividuals, $this->useBigMutator, $this->funcMutator);
+                $newpopulaton = $gtx->usepower($pop_result[0], $power);
+                $pop_result[0] = $newpopulaton;
+                
+            } elseif ($this->usePowerMutator > 0  && $nrPop % 2 == 1  ) {
+
+                $pop_result = $powermutation->createNewPopulation($selectedIndividuals, $this->usePowerMutator );
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result[0] = $newpopulaton;
                 
@@ -2015,7 +2074,7 @@ class MainController extends Controller
        3 - wszystkie levele
 
     */
-    public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
+    public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm) {
         set_time_limit(36000);
         ini_set('memory_limit', '200M');
  
@@ -2056,7 +2115,7 @@ class MainController extends Controller
             if ($random) {
                 $lvl = rand($lvlmin, $lvlmax);
             }
-            $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation);
+            $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation, $pbm);
             $this->addpopulation = 0;
             $this->useBigMutator = 0;
         }
@@ -2191,7 +2250,7 @@ class MainController extends Controller
         return redirect("/")->with('success', 'Włączono Flex dla: '.$id." VAL: ".$tr);         
     }
 
-    public function calcAllPowerSelect($id, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation) {
+    public function calcAllPowerSelect($id, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $powermutation) {
         set_time_limit(36000);
         $area = Area::find($id);
         if (!$area) {
@@ -2207,7 +2266,7 @@ class MainController extends Controller
         $maxPoints2 = $this->ls->getminimum($id, $lvlmax, 1);
 
         for ($i = 0; $i < $this->maxPopulation; $i++) {
-            $result = $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation);
+            $result = $this->calcarea_level($id, $lvlmax,  $gtx, $cross, $mutation, $bigmutation, $powermutation);
             $res = $result[0];
             $best = $result[1];
             $selectId = $result[2];

@@ -9,7 +9,7 @@ use App\Services\GenetixDataGenerator;
 use App\Services\CrossingData;
 use App\Services\MutationData; 
 use App\Services\BigMutatorData;
- 
+use App\Services\PowerBigMutator;
 
 class RunAreaCalc extends Command
 {
@@ -30,12 +30,12 @@ class RunAreaCalc extends Command
     /**
      * Execute the console command.
      */
-    public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation)
+    public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm)
     {
         $id = 16;
         $trybe = $this->argument('tryb');
  
         $main = new MainController();
-        $main->calcareamoretimes($id, $trybe, $gtx, $cross, $mutation, $bigmutation);
+        $main->calcareamoretimes($id, $trybe, $gtx, $cross, $mutation, $bigmutation, $pbm);
     }
 }

@@ -76,8 +76,14 @@
         <td>{{ $c->max }}</td>
         <td>{{ $c->avgdiff }}</td>
         <td>{{ $c->variation }}</td>
-        <td>{{ $c->actres }}</td>
-        <td>{{ $c->calclevel }}<br/>{{$c->calculation->level}}({{$c->calculation->level- $c->calclevel }})</td>
+        <td>
+            {{ $c->actres }} 
+             {{  1 - (($c->max - $c->actres) / $c->avgdiff)  }} 
+         </td>
+        <td>
+           {{ $c->calclevel }}<br/>
+              {{$c->calculation->level}}({{$c->calculation->level- $c->calclevel }})
+        </td>
     </tr>    
 @empty
    <tr>
