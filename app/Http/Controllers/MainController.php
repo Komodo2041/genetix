@@ -12,7 +12,7 @@ use App\Services\PowerBigMutator;
 
 use App\Services\LevelStering;
 use App\Services\MatrixHelper;
-  
+use App\Services\PopulationName;  
   
 use Illuminate\Http\Request;
 
@@ -44,108 +44,10 @@ class MainController extends Controller
     public function __construct() {
         $this->ls = new LevelStering();
         $this->helperMatrix = new MatrixHelper();
+        $pn = new PopulationName();
+        $this->populationName = $pn->populationName;
     }
-
-    private $populationName = [
-       0 => "Generation 0",
-       -1 => "10 from level down",
-       1 => "5 down, 5 more down",
-       2 => "2 differene",
-       3 => "2 more different",
-       4 => "Stable Pattern",
-       5 => "Stable Pattern bext results",
-       6 => "Change Still Template",
-       7 => "Clone",
-       8 => "Multiple Clone",
-       9 => "Pattern XYZ",
-       10 => "3 mutation First",
-       11 => "2 * bigLayerMutation",
-       12 => "useBigMutator - 1",
-       13 => "useBigMutator - 2",
-       14 => "bigLayerMutationCircle - 3",
-       15 => "Join River",
-       16 => "Join more River",
-       17 => "Use Waga Small",
-       18 => "Use Waga Big",
-       19 => "Use Waga Mini",
-       20 => "Use Waga Very Mini",
-       21 => "Calculating mutation matrix", // X
-       22 => "Paratrooper", // X
-       23 => "Use Only Mutations",
-       24 => "Use non used calculations",
-       25 => "Calculating crossing matrix", // X
-       26 => "Use blob 6 Random to first generation",
-       27 => "Use blob 3 Random to first generation",
-       28 => "Elevent Different",
-       29 => "Use Random50 to first generation",
-       30 => "Half Results", // X
-       31 => "Set one Layer X (1) 100%",
-       32 => "Set one Layer Y (1) 100%",
-       33 => "Set one Layer Z (1) 100%",
-       34 => "Create population - use power empty",
-       35 => "Generate population From 50% power ",
-       36 => "Generate population From 75% power ",
-       37 => "Generate population From 90% power ",
-       38 => "Power Up Some Poitns ",
-       39 => "Power Down Some Points ",
-       40 => "Create population - use power Full",
-       41 => "Generate population From 95% power ",
-       42 => "Set one Layer X (0) 100%",
-       43 => "Set one Layer Y (0) 100%",
-       44 => "Set one Layer Z (0) 100%",
-       45 => "Set one Layer X (1) 50%",
-       46 => "Set one Layer Y (1) 50%",
-       47 => "Set one Layer Z (1) 50%",
-       48 => "Set one Layer X (0) 50%",
-       49 => "Set one Layer Y (0) 50%",
-       50 => "Set one Layer Z (0) 50%",
-       51 => "Zero the lower 3 layers",
-       52 => "Zero the lower layers", 
-       53 => "Zero the big lower layers",
-       54 => "Zero the lower 3 layers (50%)",
-       55 => "Zero the lower layers (50%)", 
-       56 => "Zero the big lower layers (50%) ",
-       57 => "Up 3 layers", 
-       58 => "Small up layers", 
-       59 => "Big Up layers",
-       60 => "Zero 4x4x4",
-       61 => "Zero 5x5x5",
-       62 => "Zero 6x6x6",
-       63 => "Calculating powerMatrix", // X
-       64 => "Use 10 Calculating powerMatrix Together",
-       65 => "useBigMutator - 1 - Part Layer Z - (70%)",
-       66 => "useBigMutator - 2 - Part Layer Z - (70%)", 
-       67 => "useBigMutator - 1 - Part Layer Z - (40%)", 
-       68 => "useBigMutator - 2 - Part Layer Z - (40%)", 
-       69 => "useBigMutator - 1 - Part Layer Z - (20%)",
-       70 => "useBigMutator - 2 - Part Layer Z - (20%)", 
-       71 => "useBigMutator - 1 - Part Layer Z - (10%)",
-       72 => "useBigMutator - 2 - Part Layer Z - (10%)",
-       73 => "Blob3 From the level",
-       74 => "Blob6 From the level",
-       75 => "Use result2 ", 
-       76 => "Calculating accuratecalc - use AVG ",
-       77 => "Calculating accuratecalc - use MIN",
-       78 => "Calculating accuratecalc - use MAX",
-       79 => "Calculating accuratecalc - use (MAX - MIN)",
-       80 => "Calculating accuratecalc - use VARIATION",
-       81 => "Inversion",
-       82 => "Get Only Inversions",
-       83 => "Use PowerBigMutator - 1",
-       84 => "Use PowerBigMutator - 1 - (100%) ",
-       85 => "Use PowerBigMutator - 1 - (70%)", 
-       86 => "Use PowerBigMutator - 1 - (40%)", 
-       87 => "Use PowerBigMutator - 1 - (20%)", 
-       88 => "Use PowerBigMutator - 1 - (10%)",
-       89 => "Use PowerBigMutator - 2 - (100%)", 
-       90 => "Use PowerBigMutator - 2 - (70%)",
-       91 => "Use PowerBigMutator - 2 - (40%)",
-       92 => "Use PowerBigMutator - 2 - (20%)",
-       93 => "Use PowerBigMutator - 2 - (10%)",
-       94 => "Use PowerBigMutator - 1 - (5%)",
-       95 => "Use PowerBigMutator - 2 - (5%)",       
-    ];
-
+ 
     private $debugInfo = 0;
     private $saveCalculationInCrossAndMuationMatrix = 0;
 
@@ -165,9 +67,8 @@ class MainController extends Controller
     /*********** SETTING MAIN */
     public $Numhalstep = 2; // 2
     private $maxPopulation = 120;
-    private $nrTimes = 4;
-
-
+    private $nrTimes = 5;
+ 
     private $saveCrosMutationMatrix = 1.000001;
      
 
@@ -195,7 +96,7 @@ class MainController extends Controller
     private $randomDoingTrybe = 7;
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 83;
+    private $testRadomSelecting = 0;
 
     private $usingPower = 0;
 
@@ -355,6 +256,7 @@ class MainController extends Controller
         $individual = 10;
         $lvl = $lvl - 1;
         $additionalPopulation = [];
+        $population0 = [];
 
         if ($lvl <= 0 ) {
             
@@ -364,7 +266,6 @@ class MainController extends Controller
         } elseif ($randomDoing == 0 || $lvl == 1) {
         
             $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -374,7 +275,6 @@ class MainController extends Controller
         } elseif ($randomDoing == 1) {
           
             $calculations = $this->getCalculationLevel($id, $lvl, 5); 
-            $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -387,8 +287,7 @@ class MainController extends Controller
             }               
         } elseif ($randomDoing == 2) {
              
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $mostdifferent = $this->getmostdifferent($calculations, 2);  
             foreach ($mostdifferent AS $c) {
                 $population0[] = json_decode($c->data);
@@ -398,8 +297,7 @@ class MainController extends Controller
                 
         } elseif ($randomDoing == 3) {
          
-            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $number = rand(3, 10);
             $mostdifferent = $this->getmostdifferent($calculations, $number);  
             foreach ($mostdifferent AS $c) {
@@ -484,8 +382,7 @@ class MainController extends Controller
             $population0 = $gtx->usepower($population0, $power);
 
         } elseif ($randomDoing == 10 || $randomDoing == 23) {  // start with 3 *  mutations
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);
             $cr = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
@@ -513,8 +410,7 @@ class MainController extends Controller
 
         } elseif ( in_array($randomDoing, $this->biglayerSelectingShort)) {
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations AS $c) {
                 $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
@@ -540,8 +436,7 @@ class MainController extends Controller
 
         }  elseif ($randomDoing == 15) { // Join Rivers
 
-            $calculations = $this->getCalculationMaxBest($id, 2);  
-            $population0 = []; 
+            $calculations = $this->getCalculationMaxBest($id, 2);
             foreach ($calculations AS $c) {
                 $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
@@ -558,8 +453,7 @@ class MainController extends Controller
           
         } elseif ($randomDoing == 16) { // Join More Rivers 
 
-            $calculations = $this->getCalculationMaxBest($id, 2);  
-            $population0 = []; 
+            $calculations = $this->getCalculationMaxBest($id, 2);
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
@@ -602,8 +496,7 @@ class MainController extends Controller
             
         } elseif ($randomDoing == 24) {
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 10, 1, 2);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 10, 1, 2);
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -611,9 +504,7 @@ class MainController extends Controller
 
         } elseif ($randomDoing == 26) {
 
-            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
-    
-            $population0 = [];
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
@@ -623,8 +514,7 @@ class MainController extends Controller
  
         } elseif ($randomDoing == 27) {
 
-            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
-            $population0 = [];
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
@@ -634,8 +524,7 @@ class MainController extends Controller
 
         } elseif ($randomDoing == 28) {
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -649,8 +538,7 @@ class MainController extends Controller
   
         }  elseif ($randomDoing == 29) {
 
-            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();  
-            $population0 = [];
+            $calculations = Calculation::where("area_id", $id)->orderBy("level", "DESC")->inRandomOrder()->take($this->startPopulation)->get();
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
@@ -759,7 +647,6 @@ class MainController extends Controller
                 $calculations = $this->getCalculationLevel($id, $lvl, 10);  
                 $randomDoing = -1;
             }
-            $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -768,8 +655,7 @@ class MainController extends Controller
 
         } elseif ($randomDoing == 73) { 
         
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
@@ -779,10 +665,8 @@ class MainController extends Controller
 
         }  elseif ($randomDoing == 74) { 
         
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
-            foreach ($calculations AS $c) {
-            
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);
+            foreach ($calculations AS $c) {            
                 $population0[] = json_decode($c->data);
             }
           
@@ -794,7 +678,6 @@ class MainController extends Controller
         
             $calculations = Calculation::where("area_id", $id)->where("level", "<=", $lvl)->orderBy("result2", "DESC")->orderBy("obtainedresult", "DESC")->take(200)->get();
             $calculations = $calculations->shuffle()->take(10);
-            $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
             }
@@ -834,7 +717,6 @@ class MainController extends Controller
     
                 $randomDoing = -1;
             }
-            $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -857,7 +739,6 @@ class MainController extends Controller
                 $calculations = $this->getCalculationLevel($id, $lvl, 10);  
                 $randomDoing = -1;
             }
-            $population0 = [];
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -875,10 +756,8 @@ class MainController extends Controller
  
         } elseif ( in_array($randomDoing, $this->powerSelectingShort)) {
 
-            $calculations = $this->getCalculationLevel($id, $lvl, 10);  
-            $population0 = [];
+            $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations AS $c) {
-                $usedcalc[] = $c->id;
                 $population0[] = json_decode($c->data);
             }
             if ($randomDoing == 84 || $randomDoing == 85 || $randomDoing == 86 || $randomDoing == 87 || $randomDoing == 88) {
@@ -2108,7 +1987,7 @@ class MainController extends Controller
 
         if ($trybe == 1 || $trybe == 3) {
             if ($lvlmax > 5 && $trybe == 1) {
-                $lvlmin = $lvlmax - 3;
+                $lvlmin = $lvlmax - 4;
             } else { 
                 $lvlmin = 1;
             }
@@ -2123,6 +2002,7 @@ class MainController extends Controller
             $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation, $pbm);
             $this->addpopulation = 0;
             $this->useBigMutator = 0;
+            $this->usePowerMutator = 0;
         }
         echo "OK"; exit();
     }

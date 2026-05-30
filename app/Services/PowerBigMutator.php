@@ -9,9 +9,11 @@ class PowerBigMutator
     private $percent = 100;
 
     public $numbers = 650;
-    public $allMethods = ["powerBigLayerMutation200", "powerBigLayerMutation125", "powerBigLayerMutation100", "powerBigLayerMutation50",
-       "powerBigLayerMutation25", "powerBigLayerMutation20", "powerBigLayerMutation10", "powerBigLayerMutation5", "powerBigLayerMutation2"];
-    public $halfMethods = ["powerBigLayerMutation50", "powerBigLayerMutation25", "powerBigLayerMutation10", "powerBigLayerMutation5", "powerBigLayerMutation2"];
+    public $allMethods = ["powerBigLayerMutation333", "powerBigLayerMutation200", "powerBigLayerMutation125", "powerBigLayerMutation100", "powerBigLayerMutation50",
+       "powerBigLayerMutation25", "powerBigLayerMutation20", "powerBigLayerMutation10", "powerBigLayerMutation5", "powerBigLayerMutation2",
+       "powerBigLayerMutation4", "powerBigLayerMutation3", "powerBigLayerMutation7", "powerBigLayerMutation11"];
+    public $halfMethods = ["powerBigLayerMutation50", "powerBigLayerMutation25", "powerBigLayerMutation10", "powerBigLayerMutation5", 
+       "powerBigLayerMutation2", "powerBigLayerMutation4", "powerBigLayerMutation3", "powerBigLayerMutation7", "powerBigLayerMutation11"];
 
     private $cross = null;
 
@@ -100,12 +102,34 @@ class PowerBigMutator
        return $this->powerBigLayerMutationLine($numbers, $size, $pop, 20); 
     }   
 
+    public function powerBigLayerMutation4($numbers, $size, $pop) {
+       return $this->powerBigLayerMutationLine($numbers, $size, $pop, 4); 
+    }  
+
+    public function powerBigLayerMutation3($numbers, $size, $pop) {
+       return $this->powerBigLayerMutationLine($numbers, $size, $pop, 3); 
+    } 
+
+    public function powerBigLayerMutation7($numbers, $size, $pop) {
+       return $this->powerBigLayerMutationLine($numbers, $size, $pop, 7); 
+    } 
+
+    public function powerBigLayerMutation11($numbers, $size, $pop) {
+       return $this->powerBigLayerMutationLine($numbers, $size, $pop, 11); 
+    }     
+
+    public function powerBigLayerMutation333($numbers, $size, $pop) {
+       return $this->powerBigLayerMutationLine($numbers, $size, $pop, 333); 
+    } 
+
     public function powerBigLayerMutationLine($numbers, $size, $pop, $value) {
 
         $orders = $this->cross->getOrders($size);
         $parts = $this->cross->getPartsOrders($orders, $value);
+      
+        $nrs = floor(($size * $size * $size) / $value); 
  
-        for ($i = 0; $i < $size; $i++) {
+        for ($i = 0; $i < $nrs; $i++) {
             $res[$i] = []; 
         }  
  
@@ -122,13 +146,14 @@ class PowerBigMutator
         for ($n = 0; $n < $numbers; $n++) {
             $used = $res;
             $table = [];
-            for ($k = 0; $k < $size; $k++) { 
+           
+            for ($k = 0; $k < $nrs; $k++) { 
                 if ($this->noChangeZ()) {
                     continue;
-                }                
+                }   
                 shuffle($used[$k]); 
             }
-  
+ 
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
