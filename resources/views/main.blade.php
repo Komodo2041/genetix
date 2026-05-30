@@ -41,11 +41,9 @@
                      <a href="/pourRiver/{{$a->id}}"><button>Wlej rzekę</button></a>&nbsp;
                      <a href="/cloneRiver/{{$a->id}}"><button>Klonuj rzekę</button></a>&nbsp;
                   @endif
-
-                  <a href="/calcMatrix/{{$a->id}}"><button>Aktualizuj Matryce Mutacji</button></a>&nbsp;
+ 
                   <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
-
-                  <a href="/calcCrossMatrix/{{$a->id}}"><button>Oblicz Matryce Krzyżowań</button></a>&nbsp;
+ 
                   <a href="/showCrossMatrix/{{$a->id}}"><button>Pokaż Matryce Krzyżowań</button></a>&nbsp;
 
                   @if ($a->matrixtribe == 0) 
@@ -70,7 +68,7 @@
                   <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a>
 
                   <a href="/showpower/{{$a->id}}"><button>Pokaż obliczenia matrycy siły</button></a>
-                  <a href="/calcAllPowerSelect/{{$a->id}}"><button>Oblicz wybór na podstawie siły</button></a>
+             
                   <a href="/showPowerSelect/{{$a->id}}"><button>Pokaż wybór na podstawie siły</button></a>
  
                   <a href="/show5Result/{{$a->id}}"><button>Pokaż 5 różnych wyników</button></a>

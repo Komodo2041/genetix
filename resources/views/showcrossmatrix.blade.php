@@ -3,7 +3,9 @@
 
 <a href="/"><button>Strona główna</button></a><br/>
 
-<a href="/calcCrossMatrix/{{$area->id}}/500"><button>Aktualizuj Matryce krzyżowań na wiekszej liczbie krzyżowań</button></a>&nbsp;
+<a href="/calcCrossMatrix/{{$area->id}}/100"><button>Aktualizuj Matryce krzyżowań na wiekszej liczbie krzyżowań 100</button></a>&nbsp;<br/>
+<a href="/calcCrossMatrix/{{$area->id}}/500"><button>Aktualizuj Matryce krzyżowań na wiekszej liczbie krzyżowań 500</button></a>&nbsp;<br/>
+<a href="/calcCrossMatrix/{{$area->id}}/1000"><button>Aktualizuj Matryce krzyżowań na wiekszej liczbie krzyżowań 1000</button></a>&nbsp;<br/
 
 <h3>Matryca Krzyżowań</h3>
 <div class="container">

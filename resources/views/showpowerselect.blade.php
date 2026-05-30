@@ -3,8 +3,8 @@
 
 <a href="/"><button>Strona główna</button></a><br/>
 
+<a href="/calcAllPowerSelect/{{$area->id}}"><button>Oblicz wybór na podstawie siły</button></a><br/>
  
-
 <h3>Wybór początkowej populacji - wyniki</h3>
 <div class="container">
  
