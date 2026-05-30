@@ -9,7 +9,6 @@ Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\MainController@percentshow" );
 Route::get('area/histogram/{id}',  "App\Http\Controllers\MainController@histogram" );
 Route::get('area/usedmethods/{id}',  "App\Http\Controllers\MainController@usedmethods" );
-Route::get('mutations',  "App\Http\Controllers\MainController@mutations" );
 Route::get('samecalculations/{id}',  "App\Http\Controllers\MainController@samecalculations" );
 Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" );
 Route::get('showerror/{id}',  "App\Http\Controllers\MainController@showerros" );
@@ -20,21 +19,14 @@ Route::get('hidearea/{id}',  "App\Http\Controllers\MainController@hide" );
 Route::get('pourRiver/{id}',  "App\Http\Controllers\MainController@pourRiver" );
 Route::get('cloneRiver/{id}',  "App\Http\Controllers\MainController@cloneRiver" );
 Route::get('showRiver/{id}',  "App\Http\Controllers\MainController@showRiver" );
-Route::get('calcMatrix/{id}',  "App\Http\Controllers\MainController@calcMatrix" );
-Route::get('calcMatrix/{id}/{nrM}',  "App\Http\Controllers\MainController@calcMatrix" ); 
-Route::get('showMatrix/{id}',  "App\Http\Controllers\MainController@showMatrix" );
 Route::get('turn_matrix/{id}',  "App\Http\Controllers\MainController@turnMatrix" ); 
 Route::get('turnoff_matrix/{id}',  "App\Http\Controllers\MainController@turnoffMatrix" ); 
 Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\MainController@turnofftwoMatrix" ); 
 Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@createweighingscale" );
-Route::get('calcCrossMatrix/{id}',  "App\Http\Controllers\MainController@calcCrossMatrix" );
-Route::get('showCrossMatrix/{id}',  "App\Http\Controllers\MainController@showCrossMatrix" ); 
-Route::get('calcCrossMatrix/{id}/{nrM}',  "App\Http\Controllers\MainController@calcCrossMatrix" ); 
+ 
 Route::get('changeFlex/{id}/{tr}',  "App\Http\Controllers\MainController@changeFlex" );
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\MainController@setmatrixcross" ); 
 Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" );
-Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\MainController@calcAllPowerSelect" ); 
-Route::get('showPowerSelect/{id}',  "App\Http\Controllers\MainController@showPowerSelect" );
 Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\MainController@bottomLastLayer" );
 Route::get('onecalculation/{id}',  "App\Http\Controllers\MainController@onecalculation" );
 Route::get('showselectigcalculations/{id}',  "App\Http\Controllers\MainController@showselectigcalculations" ); 
@@ -55,4 +47,13 @@ Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Resul
 Route::get('showavgcalculations/{id}',  "App\Http\Controllers\AvgController@showavgcalculations" );
 Route::get('calcAvgforArea/{id}/{part}',  "App\Http\Controllers\AvgController@calcAvgforArea" );
 Route::get('desilting/{id}',  "App\Http\Controllers\AvgController@desilting" );
-  
+
+Route::get('mutations',  "App\Http\Controllers\CheckingCrossAndMutation@mutations" );
+Route::get('calcMatrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcMatrix" );
+Route::get('calcMatrix/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcMatrix" ); 
+Route::get('calcCrossMatrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutationr@calcCrossMatrix" );
+Route::get('showCrossMatrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showCrossMatrix" ); 
+Route::get('calcCrossMatrix/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcCrossMatrix" );
+Route::get('showMatrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showMatrix" );
+Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcAllPowerSelect" ); 
+Route::get('showPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showPowerSelect" );
