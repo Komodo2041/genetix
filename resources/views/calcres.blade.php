@@ -2,6 +2,12 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a><br/>
+<a href="/samecalculations/{{$area->id}}"><button>Znajdź podobne obliczenia</button></a>&nbsp;
+<a href="/showselectigcalculations/{{$area->id}}"><button>Pokaz wybierania obliczeń</button></a>&nbsp;
+<a href="/onecalculation/{{$area->id}}"><button>Przelicz obliczenia na jednym zestawie punktów</button></a>&nbsp;
+<a href="/bottomLastLayer/{{$area->id}}"><button>Obniż ostatnią warstwę</button></a>&nbsp;
+<a href="/area/usedmethods/{{$area->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
+ <a href="/area/deleteSameCalc/{{$area->id}}"><button>Usuń Takie same obliczenia</button></a>&nbsp;
 
 <h3>Obliczenia dla {{$area->name}} - {{$area->id}}</h3>
 <div class="container">

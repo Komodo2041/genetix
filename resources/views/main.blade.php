@@ -61,16 +61,11 @@
                   @else ($a->matrixcross == 1)   
                      <a href="/setmatrixcross/{{$a->id}}/2"><button>Włącz matrycę tylko dla najlepszych krzyżowań</button></a>                      
                   @endif 
-
-                  <a href="/samecalculations/{{$a->id}}"><button>Znajdź podobne obliczenia</button></a><br/>
-
-                  <a href="/createweighingscale/{{$a->id}}"><button>Twórz wagę</button></a> 
+ 
                   <a href="/calculations/{{$a->id}}"><button>Pokaż obliczenia</button></a>
 
                   <a href="/showpower/{{$a->id}}"><button>Pokaż obliczenia matrycy siły</button></a>
-             
                   <a href="/showPowerSelect/{{$a->id}}"><button>Pokaż wybór na podstawie siły</button></a>
- 
                   <a href="/show5Result/{{$a->id}}"><button>Pokaż 5 różnych wyników</button></a>
 
                   @if ($a->flex == 0) 
@@ -78,15 +73,8 @@
                   @else
                      <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br/>
                   @endif
-  
-                  <a href="/area/usedmethods/{{$a->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
-                  <a href="/showselectigcalculations/{{$a->id}}"><button>Pokaz wybierania obliczeń</button></a>&nbsp;
-
-                   <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
-
-                  <a href="/bottomLastLayer/{{$a->id}}"><button>Obniż ostatnią warstwę</button></a> 
-                  <a href="/onecalculation/{{$a->id}}"><button>Przelicz obliczenia na jednym zestawie punktów</button></a> 
-
+                  <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
+ 
                   <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
                    
 

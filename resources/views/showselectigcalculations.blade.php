@@ -2,7 +2,7 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a><br/>
-
+<a href="/calculations/{{$area->id}}"><button>{{$area->name}}</button></a><br/>
  
 
 <h3>Ilość wybrania danych obliczeń do dalszych obliczeń :</h3>

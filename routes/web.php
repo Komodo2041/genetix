@@ -8,8 +8,6 @@ Route::match(["get", "post"], 'area/calc_level2/{id}/{lvl}', "App\Http\Controlle
 Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\MainController@calcarea_level" );
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\MainController@percentshow" );
 Route::get('area/histogram/{id}',  "App\Http\Controllers\MainController@histogram" );
-Route::get('area/usedmethods/{id}',  "App\Http\Controllers\MainController@usedmethods" );
-Route::get('samecalculations/{id}',  "App\Http\Controllers\MainController@samecalculations" );
 Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" );
 Route::get('showerror/{id}',  "App\Http\Controllers\MainController@showerros" );
 Route::get('showring/{id}',  "App\Http\Controllers\MainController@showring" );
@@ -27,21 +25,14 @@ Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@cre
 Route::get('changeFlex/{id}/{tr}',  "App\Http\Controllers\MainController@changeFlex" );
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\MainController@setmatrixcross" ); 
 Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" );
-Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\MainController@bottomLastLayer" );
-Route::get('onecalculation/{id}',  "App\Http\Controllers\MainController@onecalculation" );
-Route::get('showselectigcalculations/{id}',  "App\Http\Controllers\MainController@showselectigcalculations" ); 
  
-
-Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
-Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );
+ 
+ 
 
 Route::get('powermatrix/{size}',  "App\Http\Controllers\PowerController@showmatrix" );
 Route::get('calcpowermatrix/{size}',  "App\Http\Controllers\PowerController@calcpowermatrix" ); 
- 
 Route::get('showpower/{id}',  "App\Http\Controllers\PowerController@showpower" );
 Route::get('see10Layerpower/{size}',  "App\Http\Controllers\PowerController@see10Layerpower" ); 
- 
- 
 Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Result" ); 
    
 Route::get('showavgcalculations/{id}',  "App\Http\Controllers\AvgController@showavgcalculations" );
@@ -57,3 +48,13 @@ Route::get('calcCrossMatrix/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAnd
 Route::get('showMatrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showMatrix" );
 Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcAllPowerSelect" ); 
 Route::get('showPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showPowerSelect" );
+
+
+Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
+Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );
+Route::get('samecalculations/{id}',  "App\Http\Controllers\CalcController@samecalculations" );
+Route::get('showselectigcalculations/{id}',  "App\Http\Controllers\CalcController@showselectigcalculations" );
+Route::get('onecalculation/{id}',  "App\Http\Controllers\CalcController@onecalculation" );
+Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\CalcController@bottomLastLayer" );
+Route::get('area/usedmethods/{id}',  "App\Http\Controllers\CalcController@usedmethods" );
+Route::get('area/deleteSameCalc/{id}',  "App\Http\Controllers\CalcController@deleteSameCalc" );
