@@ -90,10 +90,10 @@ class MainController extends Controller
     private $wagaSelecting = [17, 18, 19, 20];
     private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
 
-    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96];
+    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97];
 
 
-    private $randomDoingTrybe = 7;
+    private $randomDoingTrybe = 2;
     
     /***********TESTING RANDOM SELECTING ************/
     private $testRadomSelecting = 0;
@@ -944,7 +944,10 @@ class MainController extends Controller
         } else {
             $lvlReso = $this->ls->savenocalc($id, $lvl + 1, $result2, $minimumCalc, $randomDoing );
             if ($lvlReso[0] > 0) {
-                $pgc =  (1 - $result2) / ( ($last / $first) - 1);
+                $pgc = 0;
+                if ($last > $first) {
+                    $pgc =  (1 - $result2) / ( ($last / $first) - 1);
+                }
                 $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), 
                 "area_id" => $id, "level" => $lvlReso[0], "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "result2" => $result2,
                   "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info), "typecalc2" => $randomDoing]);

@@ -526,7 +526,7 @@ class CheckingCrossAndMutation extends Controller
             }
         }
 
-        BigMutationMatrix::where("area_id", $id)->update(["hide" => 1]); 
+        BigMutationMatrix::where("area_id", $id)->where("type", 1)->update(["hide" => 1]); 
         foreach ($mresults AS $res) {
             BigMutationMatrix::create($res);               
         }
@@ -535,5 +535,120 @@ class CheckingCrossAndMutation extends Controller
 
 
     }
+
+
+    public function showBigMutationLayer($id, Request $request) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $order = $request->input('order');
+        $desc = $request->input('desc');
+        if (!$order) {
+            $order = "max";
+        }
+        if (!$desc) {
+            $desc = "DESC";
+        }
+
+        $matrix = BigMutationMatrix::where("area_id", $id)->where("hide", 0)->where("type", 2)->orderBy($order, $desc)->get();
+        return view("showbitmuationlayermatrix", [ 'area' => $area, "order" => $order, "desc" => $desc, "matrix" => $matrix ]);
+    }
+
+    public function calcBigMutationLayer($id, $nrM, BigMutatorData $powermutation, GenetixDataGenerator $gtx ) {
+        set_time_limit(12000);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+ 
+        if ($nrM) {
+            $powermutation->setNrMutation($nrM);
+        }
+ 
+        $mutations = $powermutation->getAllMethod();  
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+
+        $gtx->setPowerMatrixSize(10);  
+        $power = $gtx->getPower([$table]);
+
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
+ 
+        if (!$bestResult) {
+            return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+        }
+
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+
+        $mresults = [];
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $jd = json_decode($bestResult[0]->data);
+
+        $headCalc = $gtx->calcPopulation([$jd], $headPoints);
+        $headSum = $headCalc[0]['sum'];
+ 
+        for ($percent = 100; $percent > 0; $percent -= 10) {
+            $powermutation->setPercent($percent);
+            foreach ($mutations AS $knr => $method) {
+
+                $population0 = [];
+                $population0[] = $jd;
+        
+                $res = $powermutation->createNewPopulation($population0, 3, $knr, 0);   
+                $population0 = $gtx->usepower($res[0], $power);
+                $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
+    
+                $sum = 0;
+                $max = 0;
+                $better = 0;
+                $all = 0;
+
+                foreach ($res AS $record) {
+                   if ($max < $record['sum']) {
+                       $max = $record['sum'];
+                   }
+                   $all++;
+                   $sum += $record['sum'];
+                   if ($record['sum'] > $headSum) {
+                      $better++;
+ 
+                    if ($this->saveCalculationInCrossAndMuationMatrix &&  $headSum * $this->saveCrosMutationMatrix < $record['sum']) {
+                       $je = json_encode($record['area']);                       
+                       if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
+                          Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
+                            "level" => $lvlmax, "obtainedresult" => $record['sum'] / $maxPoints,  "typecalc" => 97  ]);
+                       }                    
+                    }
+ 
+
+                   }
+                }
+
+                $mresults[] = [ 
+                    "name" => $method,
+                    "type" => 2,
+                    "percent" => $percent,
+                    "area_id" => $id,
+                    "max" => $max / $headSum,
+                    "avg" => $sum / ($all * $maxPoints),                
+                    "better" =>  $better / $all
+                ]; 
+ 
+            }
+        }
+
+        BigMutationMatrix::where("area_id", $id)->where("type", 2)->update(["hide" => 1]); 
+        foreach ($mresults AS $res) {
+            BigMutationMatrix::create($res);               
+        }
+
+        return redirect("/showBigMutationLayer/".$area->id)->with('success', 'Obliczono matrycę BigMutation Layer dla area: '.$id);  
+
+
+    }
+
+
 
 }

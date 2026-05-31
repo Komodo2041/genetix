@@ -82,7 +82,9 @@
          </td>
         <td>
            {{ $c->calclevel }}<br/>
-              {{$c->calculation->level}}({{$c->calculation->level- $c->calclevel }})
+             @if (isset($c->calculation->level))
+              {{$c->calculation->level}}({{$c->calculation->level - $c->calclevel }})
+             @endif 
         </td>
     </tr>    
 @empty

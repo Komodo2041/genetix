@@ -36,6 +36,8 @@ Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMuta
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\CheckingCrossAndMutation@setmatrixcross" ); 
 Route::get('showPowerBigLayer/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showPowerBigLayer" );
 Route::get('calcPowerBigLayer/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcPowerBigLayer" );
+Route::get('showBigMutationLayer/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showBigMutationLayer" );
+Route::get('calcBigMutationLayer/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcBigMutationLayer" );
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
 Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );

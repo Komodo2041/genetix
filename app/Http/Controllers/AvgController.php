@@ -142,7 +142,7 @@ class AvgController extends Controller
         $calco = Accuratecalc::with("calculation")->where("area_id", $id)->get();
         $nr = 0;
         foreach ($calco AS $c) {
-            if ($c->calclevel != $c->calculation->level) {
+            if (isset($c->calculation->level) && $c->calclevel != $c->calculation->level) {
                $change = "\n Odmulanie z ".$c->calculation->level. " na ".$c->calclevel."\n";
                Calculation::where("id", $c->calc_id)->update(["level" => $c->calclevel, "result" => $c->calculation->result." ".$change, "obtainedresult" => $c->avg]); 
                $nr++;

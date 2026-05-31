@@ -37,10 +37,13 @@ class BigMutatorData
         return $this->allMethods;
     }
 
-    public function createNewPopulation($population, $usem = 1, $metodo = 0) {
+    public function createNewPopulation($population, $usem = 1, $metodo = 0, $useres = 1) {
 
        $max = count($population);
        $res = $population;
+       if ($useres == 0) {
+          $res = [];
+       }       
        $mutting = [];
        $tablemethods = [];
        if ($usem == 1 || $usem == 0) {
@@ -982,6 +985,10 @@ class BigMutatorData
             return 0;
         }
         return 1;
+    }
+
+    public function setNrMutation($nr) {
+        $this->numbers = $nr;
     }
 
 }
