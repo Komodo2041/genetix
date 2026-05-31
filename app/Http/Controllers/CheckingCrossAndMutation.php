@@ -14,8 +14,8 @@ use App\Models\Area;
 use App\Models\Calculation;
 use App\Models\Matrix;
 use App\Models\CrossMatrix;
-use App\Models\PowerSelect;
- 
+use App\Models\PowerSelect; 
+use App\Models\BigMutationMatrix;
 
 use App\Http\Controllers\MainController;
 
@@ -24,7 +24,7 @@ class CheckingCrossAndMutation extends Controller
 
 
     private $saveCrosMutationMatrix = 1.000001;
-    private $saveCalculationInCrossAndMuationMatrix = 0;
+    private $saveCalculationInCrossAndMuationMatrix = 1;
     private $main = null;
 
     private $powerCalc = 120;
@@ -104,6 +104,7 @@ class CheckingCrossAndMutation extends Controller
         }
 
         $lvlmax = Calculation::where("area_id", $id)->max("level");
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
 
         $mresults = [];
         foreach ($mutations AS $key => $method) {
@@ -124,7 +125,7 @@ class CheckingCrossAndMutation extends Controller
             $max = 0;
 
             $oldMaxResult = 0;
-            $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+             
 
             foreach ($res AS $key2 => $calc) {
                  if ($calc['howitwascreated'] == "generation") {
@@ -422,5 +423,117 @@ class CheckingCrossAndMutation extends Controller
         Area::where("id", $id)->update(["matrixcross" => $val]);
         return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
     }    
+
+    public function showPowerBigLayer($id, Request $request) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $order = $request->input('order');
+        $desc = $request->input('desc');
+        if (!$order) {
+            $order = "max";
+        }
+        if (!$desc) {
+            $desc = "DESC";
+        }
+
+       // $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy($order, $desc)->get();
+        return view("showpowerlayermatrix", [ 'area' => $area, "order" => $order, "desc" => $desc]);
+    }
+
+    public function calcPowerBigLayer($id, $nrM, PowerBigMutator $powermutation, GenetixDataGenerator $gtx ) {
+        set_time_limit(12000);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+ 
+        if ($nrM) {
+            $powermutation->setNrMutation($nrM);
+        }
+ 
+        $mutations = $powermutation->getAllMethod();  
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+
+        $gtx->setPowerMatrixSize(10);  
+        $power = $gtx->getPower([$table]);
+
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
+ 
+        if (!$bestResult) {
+            return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
+        }
+
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+
+        $mresults = [];
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $jd = json_decode($bestResult[0]->data);
+
+        $headCalc = $gtx->calcPopulation([$jd], $headPoints);
+        $headSum = $headCalc[0]['sum'];
+ 
+        for ($percent = 100; $percent > 0; $percent -= 10) {
+            $powermutation->setPercent($percent);
+            foreach ($mutations AS $method) {
+
+                $population0 = [];
+                $population0[] = $jd;
+        
+                $res = $powermutation->createNewPopulation($population0, 3, $method);   
+                $population0 = $gtx->usepower($res[0], $power);
+                $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
+    
+                $sum = 0;
+                $max = 0;
+                $better = 0;
+                $all = 0;
+
+                foreach ($res AS $record) {
+                   if ($max < $record['sum']) {
+                       $max = $record['sum'];
+                   }
+                   $all++;
+                   $sum += $record['sum'];
+                   if ($record['sum'] > $headSum) {
+                      $better++;
+ 
+                    if ($this->saveCalculationInCrossAndMuationMatrix &&  $headSum * $this->saveCrosMutationMatrix < $record['sum']) {
+                       $je = json_encode($record['area']);                       
+                       if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
+                          Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
+                            "level" => $lvlmax, "obtainedresult" => $record['sum'] / $maxPoints,  "typecalc" => 96  ]);
+                       }                    
+                    }
+ 
+
+                   }
+                }
+
+                $mresults[] = [ 
+                    "name" => $method,
+                    "type" => 1,
+                    "percent" => $percent,
+                    "area_id" => $id,
+                    "max" => $max / $headSum,
+                    "avg" => $sum / ($all * $maxPoints),                
+                    "better" =>  $better / $all
+                ]; 
+ 
+            }
+        }
+
+        BigMutationMatrix::where("area_id", $id)->update(["hide" => 1]); 
+        foreach ($mresults AS $res) {
+            BigMutationMatrix::create($res);               
+        }
+
+        return redirect("/showPowerBigLayer/".$area->id)->with('success', 'Obliczono matrycę PowerBigMutation dla area: '.$id);  
+
+
+    }
 
 }

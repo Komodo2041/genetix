@@ -36,7 +36,7 @@ class PowerBigMutator
         return 1;
     }    
 
-    public function createNewPopulation($population, $usem = 1 ) {
+    public function createNewPopulation($population, $usem = 1, $method = null ) {
 
        $max = count($population);
        $res = $population;
@@ -48,7 +48,10 @@ class PowerBigMutator
        } elseif ($usem == 2) {
            $nrmethos = count($this->halfMethods);
            $tablemethods = $this->halfMethods;
-       } 
+       } elseif ($usem == 3) {
+           $nrmethos = 1;
+           $tablemethods = [$method];
+       }
 
        for ($i = 0; $i < $this->numbers; $i++) {
  
@@ -172,6 +175,9 @@ class PowerBigMutator
         $this->percent = $p;
     }
 
-
+    public function setNrMutation($nr) {
+        $this->numbers = $nr;
+    }
+ 
 }
 

@@ -6,10 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\Calculation;
 use App\Services\MeerDataGenerator;
+use App\Http\Controllers\MainController;
 
 class AreaController extends Controller
 {
 
+    public function __construct() {  
+        $this->main = new MainController();
+    }
+ 
     public function list(Request $request, MeerDataGenerator $mdg) {
       
         $area = Area::with("calculations")->where("hide", 0)->get();
@@ -63,7 +68,7 @@ class AreaController extends Controller
             }
         }
  
-        return view("main", ['area' => $area, 'calco' => $calcoData, "nrTimes" => $this->nrTimes]);
+        return view("main", ['area' => $area, 'calco' => $calcoData, "nrTimes" => $this->main->nrTimes]);
     }
 
  

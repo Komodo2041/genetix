@@ -67,7 +67,7 @@ class MainController extends Controller
     /*********** SETTING MAIN */
     public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
-    private $nrTimes = 5;
+    public $nrTimes = 5;
  
     private $saveCrosMutationMatrix = 1.000001;
      
@@ -90,7 +90,7 @@ class MainController extends Controller
     private $wagaSelecting = [17, 18, 19, 20];
     private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
 
-    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63];
+    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96];
 
 
     private $randomDoingTrybe = 7;

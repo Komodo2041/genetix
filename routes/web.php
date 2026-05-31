@@ -34,6 +34,8 @@ Route::get('showPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutati
 Route::get('turnoff_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@turnoffMatrix" ); 
 Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@turnofftwoMatrix" );
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\CheckingCrossAndMutation@setmatrixcross" ); 
+Route::get('showPowerBigLayer/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showPowerBigLayer" );
+Route::get('calcPowerBigLayer/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcPowerBigLayer" );
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
 Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );

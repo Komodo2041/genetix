@@ -17,7 +17,15 @@
       </tr>
       @forelse ($area AS $a)
         <tr>
-            <td><b>{{$a->id}}</b> {{$a->name}}</td>
+            <td>
+                <b>{{$a->id}}</b> {{$a->name}}<br/>
+                 <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
+                  @if ($a->flex == 0) 
+                     <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>
+                  @else
+                     <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br/>
+                  @endif                 
+            </td>
             <td style="width:400px;">
               <h4>All: {{$a?->calculations->count()}} </h4> 
               @if (isset($calco[$a->id]))
@@ -68,14 +76,10 @@
                   <a href="/showPowerSelect/{{$a->id}}"><button>Pokaż wybór na podstawie siły</button></a>
                   <a href="/show5Result/{{$a->id}}"><button>Pokaż 5 różnych wyników</button></a>
 
-                  @if ($a->flex == 0) 
-                     <a href="/changeFlex/{{$a->id}}/1"><button>Ustaw flex w pokoleniu</button></a> <br/>
-                  @else
-                     <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br/>
-                  @endif
-                  <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
  
-                  <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br/>
+                  <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
+                  <a href="/showPowerBigLayer/{{$a->id}}"><button>Power Big Layer</button></a>&nbsp;
+                  
                    
 
                    <br/>

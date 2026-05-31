@@ -101,7 +101,8 @@ class PopulationName
        92 => "Use PowerBigMutator - 2 - (20%)",
        93 => "Use PowerBigMutator - 2 - (10%)",
        94 => "Use PowerBigMutator - 1 - (5%)",
-       95 => "Use PowerBigMutator - 2 - (5%)",       
+       95 => "Use PowerBigMutator - 2 - (5%)",
+       96 => "Calculating PowerBigMutation",  
     ];
 
 }
