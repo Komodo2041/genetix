@@ -2,6 +2,7 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a><br/>
+ <a href="/area/showpercent/{{$aid}}"><button>Pokaż dopasowanie</button></a>&nbsp;
 
 <h3>Różnice</h3>
 <div class="container">

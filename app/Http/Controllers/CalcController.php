@@ -8,6 +8,7 @@ use App\Services\GenetixDataGenerator;
 
 use App\Models\Calculation;
 use App\Models\Area;
+use App\Services\LevelStering;
 
 class CalcController extends Controller
 {
@@ -16,6 +17,7 @@ class CalcController extends Controller
 
     public function __construct() {  
         $this->main = new MainController();
+         $this->ls = new LevelStering();
     }
 
     public function list($id, Request $request ) {
@@ -174,5 +176,293 @@ class CalcController extends Controller
         return redirect("/calculations/".$area->id)->with('success', 'Usunięto takie same wyniki');
     }
  
+
+    public function showerros($id) {
+       $calc = Calculation::find($id);
+       if (!$calc) {
+          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+       }
+        $area = Area::find($calc->area_id);
+         $aid = $area->id;
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $res = [];
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            $res[0][$i] = 0;
+            $res[1][$i] = 0;
+            $res[2][$i] = 0;
+        }  
+        $res2 = $res;
+        $data = json_decode($calc->data);
+        $area = json_decode($area->data);
+
+        
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                
+                   if ($data[$i][$j][$z]) {
+                       $res[0][$i]++;
+                       $res[1][$j]++;
+                       $res[2][$z]++;
+                   }
+                   if ($area[$i][$j][$z]) {
+                       $res2[0][$i]++;
+                       $res2[1][$j]++;
+                       $res2[2][$z]++;
+                   }
+                }
+            }
+        }  
+ 
+        return view("showdiff", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2, "aid" => $aid ]);
+
+    }
+
+    public function showring($id) {
+       $calc = Calculation::find($id);
+        if (!$calc) {
+           return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
+        }
+        $area = Area::find($calc->area_id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $nr = 10;
+        $aid = $area->id;
+        $res = array_fill(0, $nr, array_fill(0, floor($nr / 2), 0));
+        $res2 =  array_fill(0, $nr, array_fill(0, floor($nr / 2), 0));
+        $data = json_decode($calc->data);
+        $area = json_decode($area->data);
+         
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    for ($k =0, $l = $nr - 1; $k < $l; $k++, $l--) {   
+                        if (($i == $k || $i == $l || $j == $k || $j == $l) && ($i >= $k && $i <= $l) && ($j >= $k && $j <= $l) ) {
+                           if ($data[$i][$j][$z]) {
+                              $res[$z][$k]++;
+                           }
+                           if ($area[$i][$j][$z]) {
+                              $res2[$z][$k]++;
+                           }                           
+                        }
+                    }
+                }
+           }
+        }         
+ 
+        return view("showring", ['calc' => $data, 'area' => $area, 'res' => $res, 'res2' => $res2, "aid" => $aid ]);
+    }
+    
+    public function histogram($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $calc = [];
+        $table = json_decode($area->data);
+
+        $levels = [[
+              'sum' => 0,
+              'all' => 0,
+              'avg' => 0
+           ]];
+        $maxlevel = 1;
+        foreach ($area->calculations AS $c) {
+           $pc = json_decode($c->data);
+           if (!isset($levels[$c->level])) {
+            $levels[$c->level] = [
+                'sum' => 0,
+                'all' => 0,
+                'avg' => 0,
+                'areabulb' => $table,
+                'histogram' => [],
+                'tohistogram' => $table,
+                'sameinlevel' => 0
+            ];
+           }
+           $levels[$c->level]['sum'] += $c->obtainedresult;
+           $levels[$c->level]['all'] += 1;
+           $calc[] = [
+              'level' => $c->level,
+              'sum' => $c->obtainedresult,
+              'points' => $this->calcpointer( $table, $pc)
+           ]; 
+           if ( $c->level > $maxlevel) {
+              $maxlevel = $c->level;
+           }
+           $levels[$c->level]['areabulb'] = $this->calcallinLevel($levels[$c->level]['areabulb'], $pc);
+           $levels[$c->level]['histogram'] = $this->calcallinHistogramLevel($levels[$c->level]['tohistogram'], $pc, $levels[$c->level]['histogram']);
+        }
+ 
+        foreach ($levels AS $key => $value) {
+            if ($levels[$key]["all"] > 0) {
+                $levels[$key]["avg"] = $levels[$key]["sum"] /  $levels[$key]["all"];
+            } else {
+                $levels[$key]["avg"] = 0;
+            }
+            $levels[$key]["divlvl"] = 1;
+        }
+        for ($i = 1; $i <= $maxlevel; $i++) {
+            if (!isset( $levels[$i]) || !isset( $levels[$i - 1])) {
+                continue;
+            }
+            $levels[$i]["divlvl"] = $levels[$i]["avg"] - $levels[$i - 1]["avg"];
+            $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
+            $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
+            $levels[$i]["show_histogram"] = $this->gethistogram($levels[$i]['histogram'], $levels[$i]['all']);
+        }
+ 
+        $samecalculations = Calculation::selectRaw(' count(id) AS count, level')->where("area_id", $id)->whereNotNull("same")->groupBy( 'level')->orderBy("level")->get();
+        $samecalculations = $samecalculations->pluck("count", "level")->toArray();
+         
+
+        return view("histogram", ['calco' => $calc, 'levels' => $levels, 'samecalc' => $samecalculations]);
+
+    }
+ 
+    private function calcpointer($one, $two) {
+        $sum = 0;
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       $sum++;
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
+    
+    private function calcallinLevel($one, $two) {
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       $one[$i][$j][$z] = 2;
+                    }
+                }
+            }
+        }
+        return $one;
+
+    }
+    
+    private function calcallinHistogramLevel($one, $two, $res) {
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       if (!isset($res[$i][$j][$z])) {
+                           $res[$i][$j][$z] = 1;
+                       } else {
+                           $res[$i][$j][$z]++;
+                       }
+                    } else {
+                       if (!isset($res[$i][$j][$z])) {
+                           $res[$i][$j][$z] = 0;
+                       }
+                    }
+                }
+            }
+        }
+        return $res;
+
+    }
+    
+    private function getnumber2inarea($one) {
+        $sum = 0;
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == 2) {
+                       $sum++;
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
+ 
+    private function gethistogram($hist, $maxo = 30) {
+        $nr = 10;
+        for ($i= 0; $i < $maxo; $i++ ) {
+            $res[$i] = 0;
+        }
+        $maxLevel = 0;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $h = $hist[$i][$j][$z];
+                    if (!isset($res[$h])) {
+                       $res[$h] = 1;                       
+                    } else {
+                       $res[$h]++;
+                    }
+                    if ($h > $maxLevel) {
+                        $maxLevel = $h;
+                    }
+                } 
+            }
+        }
+        for ($i = $maxLevel + 1; $i < $maxo; $i++) {
+            unset($res[$i]);
+        }
+      
+        return $res;
+    }
+    
+ 
+    public function calcallavg($id) {
+        $this->ls->calcarea($id);
+        return redirect("/")->with('success',  "Przeliczono średnią dla area ID:".$id); 
+    }    
+
+    public function percentshow($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $calc = [];
+        $table = json_decode($area->data);
+
+ 
+        $maxlevel = 1;
+        $caclcount = count($area->calculations);
+        $i = 0;
+        foreach ($area->calculations AS $c) {
+            $i++;
+           if ($i + 1000 < $caclcount) {
+             continue;
+           }
+           $pc = json_decode($c->data);
+ 
+           $calc[] = [
+              'id' => $c->id,
+              'level' => $c->level,
+              'sum' => $c->obtainedresult,
+              'points' => $this->calcpointer( $table, $pc)
+           ]; 
+           if ( $c->level > $maxlevel) {
+              $maxlevel = $c->level;
+           }
+           
+        }
+ 
+ 
+        return view("percent", ['calco' => $calc ]);
+
+    }
 
 }

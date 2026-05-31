@@ -6,12 +6,7 @@ Route::match(["get", "post"], '/', "App\Http\Controllers\MainController@list" );
  
 Route::match(["get", "post"], 'area/calc_level2/{id}/{lvl}', "App\Http\Controllers\MainController@calcarea_level" );
 Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\MainController@calcarea_level" );
-Route::get('area/showpercent/{id}',  "App\Http\Controllers\MainController@percentshow" );
-Route::get('area/histogram/{id}',  "App\Http\Controllers\MainController@histogram" );
 Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" );
-Route::get('showerror/{id}',  "App\Http\Controllers\MainController@showerros" );
-Route::get('showring/{id}',  "App\Http\Controllers\MainController@showring" );
-Route::get('calcallavg/{id}',  "App\Http\Controllers\MainController@calcallavg" );
 Route::get('addRiver/{id}',  "App\Http\Controllers\MainController@addRiver" );
 Route::get('hidearea/{id}',  "App\Http\Controllers\MainController@hide" );
 Route::get('pourRiver/{id}',  "App\Http\Controllers\MainController@pourRiver" );
@@ -58,3 +53,8 @@ Route::get('onecalculation/{id}',  "App\Http\Controllers\CalcController@onecalcu
 Route::get('bottomLastLayer/{id}',  "App\Http\Controllers\CalcController@bottomLastLayer" );
 Route::get('area/usedmethods/{id}',  "App\Http\Controllers\CalcController@usedmethods" );
 Route::get('area/deleteSameCalc/{id}',  "App\Http\Controllers\CalcController@deleteSameCalc" );
+Route::get('showerror/{id}',  "App\Http\Controllers\CalcController@showerros" );
+Route::get('showring/{id}',  "App\Http\Controllers\CalcController@showring" );
+Route::get('area/histogram/{id}',  "App\Http\Controllers\CalcController@histogram" );
+Route::get('calcallavg/{id}',  "App\Http\Controllers\CalcController@calcallavg" );
+Route::get('area/showpercent/{id}',  "App\Http\Controllers\CalcController@percentshow" );
