@@ -9,6 +9,7 @@ use App\Services\GenetixDataGenerator;
 use App\Models\Calculation;
 use App\Models\Area;
 use App\Services\LevelStering;
+use App\Http\Controllers\MainController;
 
 class CalcController extends Controller
 {

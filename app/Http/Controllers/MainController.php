@@ -26,6 +26,8 @@ use App\Models\Accuratecalc;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
  
+use App\Http\Controllers\DiamondController;
+
 // COMAND :
 // 0 - ostatni, 1 - 4 najlepsze lvl, 2 - next level, 3 -> wszystkie levele
 // php artisan app:run-area-calc 0
@@ -71,7 +73,7 @@ class MainController extends Controller
     private $saveCrosMutationMatrix = 1.000001;
      
 
-    private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136, 137];
+    private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136];
  
     private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
     private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
@@ -784,9 +786,7 @@ class MainController extends Controller
             $population0 = $res[0];
             $clones = $res[1];
         } 
-
  
-
         if (count($population0) == 0) {
             return redirect("/")->with('error', "Pojawił się brak populacji dla random : ".$randomDoing);
         }
@@ -1135,37 +1135,6 @@ class MainController extends Controller
        return $res;
     }
  
-    public function adddiamond($id) {
-       $calc = Calculation::find($id);
-       if (!$calc) {
-          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
-       }
-       $d = Diamond::create(["area_id" => $calc->area_id, "calc_id" => $id]);
-       Diamondcalc::create(["calc_id" => $id, "result" => $calc->obtainedresult, "diamond_id" => $d->id ]);
-       return redirect("/")->with('success',  "Dodano diament");
-    }
-
-    private function getDiamond($dId) {
-        $dc = Diamondcalc::where("diamond_id", $dId)->orderByRaw("result DESC")->first();
-        if (!$dc) {
-          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
-        }
-        $calc = Calculation::find($dc->calc_id);
-        if (!$calc) {
-          return redirect("/")->with('error',  "Nie znaleziono obliczenia"); 
-        }   
-        return $calc;
-    }
-
-    private function getDiamondCalculations($dId) {
-        $dc = Diamondcalc::where("diamond_id", $dId)->orderByRaw("result DESC")->take(10)->get();
-        $calco = [];
-        foreach ($dc AS $d) {
-            $calco[] = $d->calc_id;
-        }
-        return Calculation::whereIn('id', $calco)->get();
-    }
- 
     public function hide($id) {
         $area = Area::find($id);
         if (!$area) {
@@ -1249,7 +1218,7 @@ class MainController extends Controller
        1 - 3 ostatnie levele
        2 - level++
        3 - wszystkie levele
-
+       4 - pierwszy level
     */
     public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm) {
         set_time_limit(36000);
@@ -1303,102 +1272,7 @@ class MainController extends Controller
         }
         echo "OK"; exit();
     }
-    
-
-    private function stereDiaomond($randomDoing, $mutation, $bigmutation) {
  
-        if ($randomDoing == 130) {  // diamond - clone
-
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $change = rand(1, 10);
-            $res = $gtx->clonePattern($area, 1, $change);
-            $population0 = [$area, $res[0]];
-         
-
-            $clones["calc_id"] = $calculations->id;
-            $clones["oldresult"] = $calculations->obtainedresult;
-            $clones["change"] = $change;
-        } elseif ($randomDoing == 131) { // multiple clone
-
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $change = rand(1, 10);
-            $size = 10;
-            $res = $gtx->clonePattern($area, $this->startPopulation, $change);
-            $population0 = $res;
-         
-            
-            $clones["calc_id"] = $calculations->id;
-            $clones["oldresult"] = $calculations->obtainedresult;
-            $clones["change"] = $change;     
-        }  elseif ($randomDoing == 132) {  
-
-            $calculations = $this->getDiamondCalculations($dId);           
-            $population0 = [];  
-            foreach ($calculations AS $c) {
-                $population0[] = json_decode($c->data);
-            }
-       
-   
-        } elseif ($randomDoing == 133) { 
-            $calculations = $this->getDiamondCalculations($dId);  
-            $population0 = [];
-            $cr = [];
-            foreach ($calculations AS $c) {
-                $population0[] = json_decode($c->data);
-                $cr[] = "generation";
-            }
-             
-            $res = $mutation->addmutation($population0, $cr);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $population0 = $res[0];
-
-        } elseif ($randomDoing == 134) { 
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $population0 = [];
-            $population0[] = $area;
-            $cr = ["generation"];
- 
-            $res = $mutation->addmutation($population0, $cr);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $res = $mutation->addmutation($res[0], $res[1]);
-            $population0 = $res[0];
-
-        } elseif ($randomDoing == 135) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 1;
-            $bigmethod = $bigmutation->getRandomMethod();
-            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
- 
-        } elseif ($randomDoing == 136) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 2;
-            $bigmethod = $bigmutation->getRandomMethod();
-            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
-
-        } elseif ($randomDoing == 137) {
-            
-            $calculations = $this->getDiamond($dId);
-            $area = json_decode($calculations->data);
-            $this->useBigMutator = 3;
-            $bigmethod = $bigmutation->getRandomMethod();
-            $this->funcMutator = $bigmutation->getIdFunc($bigmethod);
-            $population0 = $bigmutation->$bigmethod($this->startPopulation, 10, $area);
-
-        }   
-
-        return [$population0, $clones];
-
-    }
-
-
     private function getSteps($nr) {
 
        if ($this->Numhalstep <= 1) {
@@ -1448,6 +1322,17 @@ class MainController extends Controller
         } 
         $this->testRadomSelecting = $m;
         $this->nrTimes = 1;
+    }
+
+    private function stereDiaomond($randomDoing, $mutation, $bigmutation) {
+        $ds = new DiamondController();
+        if ($randomDoing == 135) {
+           $this->useBigMutator = 1;
+        } elseif ($randomDoing == 136) {
+           $this->useBigMutator = 2;
+        }
+        return $ds->stereDiaomond($randomDoing, $mutation, $bigmutation);
+
     }
 
 }

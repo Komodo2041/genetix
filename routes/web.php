@@ -6,13 +6,11 @@ Route::match(["get", "post"], '/', "App\Http\Controllers\MainController@list" );
  
 Route::match(["get", "post"], 'area/calc_level2/{id}/{lvl}', "App\Http\Controllers\MainController@calcarea_level" );
 Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\MainController@calcarea_level" );
-Route::get('diamon/add/{id}',  "App\Http\Controllers\MainController@adddiamond" );
 Route::get('hidearea/{id}',  "App\Http\Controllers\MainController@hide" );
  Route::get('turn_matrix/{id}',  "App\Http\Controllers\MainController@turnMatrix" ); 
 Route::get('turnoff_matrix/{id}',  "App\Http\Controllers\MainController@turnoffMatrix" ); 
 Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\MainController@turnofftwoMatrix" ); 
 Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@createweighingscale" );
- 
 Route::get('changeFlex/{id}/{tr}',  "App\Http\Controllers\MainController@changeFlex" );
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\MainController@setmatrixcross" ); 
 Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" );
@@ -59,3 +57,5 @@ Route::get('cloneRiver/{id}',  "App\Http\Controllers\RiverController@cloneRiver"
 Route::get('showRiver/{id}',  "App\Http\Controllers\RiverController@showRiver" );
 Route::get('pourRiver/{id}',  "App\Http\Controllers\RiverController@pourRiver" );
 Route::get('addRiver/{id}',  "App\Http\Controllers\RiverController@addRiver" );
+
+Route::get('diamon/add/{id}',  "App\Http\Controllers\DiamondController@adddiamond" );
