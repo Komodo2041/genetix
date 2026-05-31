@@ -206,5 +206,101 @@ class MatrixHelper {
 
     }
 
+    public function getmostdifferent($calculations, $nr) {
+ 
+       $count = count($calculations);
+       $results = [];
+       $res = [];
+       $used = [];
+       for ($i = 0; $i < $count; $i++) {
+          for ($j = 0; $j < $count; $j++) {
+             if ($i == $j) {
+                 $results[$i][$j] = 0;
+                 continue;
+             }
+             $results[$i][$j] = 1000 - $this->calcpointer(json_decode($calculations[$i]->data), json_decode($calculations[$j]->data));
+          }
+       }
+
+       $maxpairs = [];
+       $max = 0;
+       for ($i = 0; $i < $count; $i++) {
+          for ($j = 0; $j < $count; $j++) {
+             if ($i == $j) { 
+                 continue;
+             }
+             if ($results[$i][$j] > $max) {
+                $maxpairs = [$i, $j];
+                $max = $results[$i][$j];
+             }
+          }
+       }       
+ 
+ 
+       for ($i = 2; $i <= $nr; $i++) {
+           $max = 0;
+           for ($j = 0; $j < $count; $j++) {
+              if (in_array($j, $maxpairs)) {
+                 continue;
+              }
+              $sum = 0;
+              $newNumber = -1;
+              foreach ($maxpairs AS $m) {
+                  $sum += $results[$j][$m];
+              }
+              if ($sum > $max) {
+                $max = $sum;
+                $newNumber = $j;
+              }
+
+           }
+           if ($newNumber > -1) {
+               $maxpairs[] = $newNumber;
+           }
+       }
+
+       foreach ($maxpairs AS $m) {
+          $res[] = $calculations[$m];
+       }
+
+       return $res;
+
+    }
+
+ 
+ 
+    public function calcpointer($one, $two) {
+        $sum = 0;
+        $nr = 10;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                       $sum++;
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
+
+ 
+    public function checkedSameResultsinLine($usedcalculations, $area) {
+       $res = 0;
+       foreach ($usedcalculations AS $one ) {
+          $all = $this->calcpointer($one, $area);
+          
+          if ($all > 999) {
+            $res = $all;
+            break;
+          }
+       }
+        
+       return $res;
+    }
+ 
+
+ 
+
 
 }

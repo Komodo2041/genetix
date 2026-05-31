@@ -139,7 +139,7 @@ class MainController extends Controller
     } 
 
     public function list(Request $request, MeerDataGenerator $mdg) {
-     ini_set('memory_limit', '200M');
+      
         $area = Area::with("calculations")->where("hide", 0)->get();
     
         $calco = Calculation::selectRaw('COUNT(id) AS count, area_id, level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg')->groupBy('area_id', 'level')->orderBy("level")->get()->toArray();
@@ -290,7 +290,7 @@ class MainController extends Controller
         } elseif ($randomDoing == 2) {
              
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
-            $mostdifferent = $this->getmostdifferent($calculations, 2);  
+            $mostdifferent = $this->helperMatrix->getmostdifferent($calculations, 2);  
             foreach ($mostdifferent AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -301,7 +301,7 @@ class MainController extends Controller
          
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             $number = rand(3, 10);
-            $mostdifferent = $this->getmostdifferent($calculations, $number);  
+            $mostdifferent = $this->helperMatrix->getmostdifferent($calculations, $number);  
             foreach ($mostdifferent AS $c) {
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
@@ -980,7 +980,7 @@ class MainController extends Controller
                     break;
                 }
                 
-                $diff = $this->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
+                $diff = $this->helperMatrix->checkedSameResultsinLine($usedcalculations, $res[$i]['area']);
                 if ($diff === 0) {
                     $usedcalculations[] = $res[$i]['area'];
                     $result =  $res[$i]['sum'] / $maxPoints;
@@ -1013,66 +1013,7 @@ class MainController extends Controller
  
     }
 
-    private function getmostdifferent($calculations, $nr) {
  
-       $count = count($calculations);
-       $results = [];
-       $res = [];
-       $used = [];
-       for ($i = 0; $i < $count; $i++) {
-          for ($j = 0; $j < $count; $j++) {
-             if ($i == $j) {
-                 $results[$i][$j] = 0;
-                 continue;
-             }
-             $results[$i][$j] = 1000 - $this->calcpointer(json_decode($calculations[$i]->data), json_decode($calculations[$j]->data));
-          }
-       }
-
-       $maxpairs = [];
-       $max = 0;
-       for ($i = 0; $i < $count; $i++) {
-          for ($j = 0; $j < $count; $j++) {
-             if ($i == $j) { 
-                 continue;
-             }
-             if ($results[$i][$j] > $max) {
-                $maxpairs = [$i, $j];
-                $max = $results[$i][$j];
-             }
-          }
-       }       
- 
- 
-       for ($i = 2; $i <= $nr; $i++) {
-           $max = 0;
-           for ($j = 0; $j < $count; $j++) {
-              if (in_array($j, $maxpairs)) {
-                 continue;
-              }
-              $sum = 0;
-              $newNumber = -1;
-              foreach ($maxpairs AS $m) {
-                  $sum += $results[$j][$m];
-              }
-              if ($sum > $max) {
-                $max = $sum;
-                $newNumber = $j;
-              }
-
-           }
-           if ($newNumber > -1) {
-               $maxpairs[] = $newNumber;
-           }
-       }
-
-       foreach ($maxpairs AS $m) {
-          $res[] = $calculations[$m];
-       }
-
-       return $res;
-
-    }
 
     private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1, $obtain = 0) {
         $used = [];
@@ -1102,37 +1043,6 @@ class MainController extends Controller
             }
         }
         return $newcalc;
-    }
- 
- 
-    private function calcpointer($one, $two) {
-        $sum = 0;
-        $nr = 10;
-        for ($i = 0; $i < $nr; $i++) {
-            for ($j = 0; $j < $nr; $j++) {
-                for ($z = 0; $z < $nr; $z++) {
-                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
-                       $sum++;
-                    }
-                }
-            }
-        }
-        return $sum;
-    }
-
- 
-    private function checkedSameResultsinLine($usedcalculations, $area) {
-       $res = 0;
-       foreach ($usedcalculations AS $one ) {
-          $all = $this->calcpointer($one, $area);
-          
-          if ($all > 999) {
-            $res = $all;
-            break;
-          }
-       }
-        
-       return $res;
     }
  
     public function hide($id) {
