@@ -36,10 +36,13 @@ class PowerBigMutator
         return 1;
     }    
 
-    public function createNewPopulation($population, $usem = 1, $method = null ) {
+    public function createNewPopulation($population, $usem = 1, $method = null, $useres = 1 ) {
 
        $max = count($population);
        $res = $population;
+       if ($useres == 0) {
+          $res = [];
+       }
        $mutting = [];
        $tablemethods = [];
        if ($usem == 1 || $usem == 0) {

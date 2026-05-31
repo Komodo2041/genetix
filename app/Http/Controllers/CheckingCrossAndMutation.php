@@ -439,8 +439,8 @@ class CheckingCrossAndMutation extends Controller
             $desc = "DESC";
         }
 
-       // $matrix = CrossMatrix::where("area_id", $id)->where("hide", 0)->orderBy($order, $desc)->get();
-        return view("showpowerlayermatrix", [ 'area' => $area, "order" => $order, "desc" => $desc]);
+        $matrix = BigMutationMatrix::where("area_id", $id)->where("hide", 0)->where("type", 1)->orderBy($order, $desc)->get();
+        return view("showpowerlayermatrix", [ 'area' => $area, "order" => $order, "desc" => $desc, "matrix" => $matrix ]);
     }
 
     public function calcPowerBigLayer($id, $nrM, PowerBigMutator $powermutation, GenetixDataGenerator $gtx ) {
@@ -483,7 +483,7 @@ class CheckingCrossAndMutation extends Controller
                 $population0 = [];
                 $population0[] = $jd;
         
-                $res = $powermutation->createNewPopulation($population0, 3, $method);   
+                $res = $powermutation->createNewPopulation($population0, 3, $method, 0);   
                 $population0 = $gtx->usepower($res[0], $power);
                 $res = $gtx->calcPopulation($population0, $headPoints, $res[1]);
     
