@@ -299,7 +299,21 @@ class MatrixHelper {
        return $res;
     }
  
+    public function getSteps($nr, $step) {
 
+       if ($step <= 1) {
+          return [];
+       }
+       $step = floor($nr / $step);
+       $res = [];
+       $nem  = 0;
+       while ($nem + $step < $nr) {
+           $nem += $step;
+           $res[] = $nem;
+       }
+       return $res;
+   
+    }
  
 
 

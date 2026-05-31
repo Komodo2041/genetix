@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Services\MeerDataGenerator;
+ 
 use App\Services\GenetixDataGenerator;
 use App\Services\CrossingData;
 use App\Services\MutationData; 
@@ -137,67 +136,11 @@ class MainController extends Controller
             return false;
         }
     } 
-
-    public function list(Request $request, MeerDataGenerator $mdg) {
-      
-        $area = Area::with("calculations")->where("hide", 0)->get();
-    
-        $calco = Calculation::selectRaw('COUNT(id) AS count, area_id, level, MAX(obtainedresult) as max, AVG(obtainedresult) as avg')->groupBy('area_id', 'level')->orderBy("level")->get()->toArray();
- 
-        $calcoData = [];
-        foreach ($calco AS $c) {
-           $calcoData[$c["area_id"]][] = $c; 
-        }
- 
-        $save =  $request->input('save');
-        if ($save) {
-            $action = $request->input('action');
-            switch($action) {
-                case "Dodaj test Dno morza":
-                    $res = $mdg->generateMeer(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono nowy obszar dna');
-                    break;
-                 case "Dodaj obszar 0 i 1":
-                    $res = $mdg->generate0and1(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono obszar 0 i 1');
-                    break;
-                case "Dodaj przekladaniec Z":
-                    $res = $mdg->generateprzekladaniecZ(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono przekladniec Z');
-                    break;
-                case "Dodaj przekladaniec X":
-                    $res = $mdg->generateprzekladaniecX(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono przekladniec X');
-                    break;
-                case "Dodaj przekladaniec Y":
-                    $res = $mdg->generateprzekladaniecY(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono przekladniec Y');
-                    break;
-                case "Generuj jaskinie":
-                    $res = $mdg->generateCave(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono jaskinię');
-                    break;                    
-                case "3 różne warstwy Z":
-                    $res = $mdg->generateprze3otherLayerZ(10);
-                       Area::create(["name" => $res["name"], "data" => json_encode($res['data'])]);
-                       return redirect("/")->with('success', 'Utworzono 3 warstwy w osi Z');
-                    break;         
-            }
-        }
- 
-        return view("main", ['area' => $area, 'calco' => $calcoData, "nrTimes" => $this->nrTimes]);
-    }
  
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $powermutation, $dId = null) {
         
         set_time_limit(40000);
-        $halfStep = $this->getSteps($this->maxPopulation);
+        $halfStep = $this->helperMatrix->getSteps($this->maxPopulation, $this->Numhalstep);
         $useonlyMutation = 0;
 
         $area = Area::find($id);
@@ -1012,9 +955,7 @@ class MainController extends Controller
         }
  
     }
-
  
-
     private function getCalculationLevel($id, $lvl, $nr, $norepeat = 1, $obtain = 0) {
         $used = [];
         $newcalc = [];
@@ -1045,39 +986,10 @@ class MainController extends Controller
         return $newcalc;
     }
  
-    public function hide($id) {
-        $area = Area::find($id);
-        if (!$area) {
-            return redirect("/")->with('error', 'Nie znaleziono podanego area');
-        }
-        $area->hide = 1;
-        $area->save();
-        Area::where("river", $id)->update(["hide" => 1]);
-        return redirect("/")->with('success', 'Ukryto obszar');
-    }
- 
     public function getCalculationMaxBest($id, $number) {
-
         return  Calculation::where("area_id", $id)->orderByDesc("obtainedresult" )->limit(max(0, $number))->get();
- 
     }
  
-    public function turnMatrix($id) {
-        Area::where("id", $id)->update(["matrixtribe" => 1]);
-        return redirect("/")->with('success', 'Włączono matrycę mutacji dla area: '.$id); 
-    }
-
-    public function turnoffMatrix($id) { 
-        Area::where("id", $id)->update(["matrixtribe" => 0]);
-        return redirect("/")->with('success', 'Wyłączono matrycę mutacji dla area: '.$id);         
-    }
-
-    public function turnofftwoMatrix($id) { 
-        Area::where("id", $id)->update(["matrixtribe" => 2]);
-        return redirect("/")->with('success', 'Wyłączono inny tryb matrycy: '.$id);         
-    }    
-     
-
     public function createweighingscale($id, GenetixDataGenerator $gtx) {
         set_time_limit(3600);
         $area = Area::find($id);
@@ -1117,11 +1029,6 @@ class MainController extends Controller
         return $weightDiffo;        
     }
  
-    public function setmatrixcross($id, $val) {
-        Area::where("id", $id)->update(["matrixcross" => $val]);
-        return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
-    }
-
     /*
        TRYBE
        0 - max level
@@ -1183,22 +1090,6 @@ class MainController extends Controller
         echo "OK"; exit();
     }
  
-    private function getSteps($nr) {
-
-       if ($this->Numhalstep <= 1) {
-          return [];
-       }
-       $step = floor($nr / $this->Numhalstep);
-       $res = [];
-       $nem  = 0;
-       while ($nem + $step < $nr) {
-           $nem += $step;
-           $res[] = $nem;
-       }
-       return $res;
-   
-    }
-
     private function calcBetter($sum, $res) {
         $result = 0;
         foreach ($res AS $rekord) {
@@ -1209,11 +1100,6 @@ class MainController extends Controller
             }
         }
         return $result;
-    }
-
-    public function changeFlex($id, $tr) {
-        Area::where("id", $id)->update(["flex" => $tr]);
-        return redirect("/")->with('success', 'Włączono Flex dla: '.$id." VAL: ".$tr);         
     }
  
     private function debugInfo($res, $randomDoing) {

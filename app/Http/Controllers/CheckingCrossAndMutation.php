@@ -403,4 +403,24 @@ class CheckingCrossAndMutation extends Controller
         return view("showpowerselect", ['calco' => $calco, 'area' => $area, "order" => $order, "desc" => $desc, "pname" => $this->main->populationName]);
     }
 
+    public function turnMatrix($id) {
+        Area::where("id", $id)->update(["matrixtribe" => 1]);
+        return redirect("/")->with('success', 'Włączono matrycę mutacji dla area: '.$id); 
+    }
+
+    public function turnoffMatrix($id) { 
+        Area::where("id", $id)->update(["matrixtribe" => 0]);
+        return redirect("/")->with('success', 'Wyłączono matrycę mutacji dla area: '.$id);         
+    }
+
+    public function turnofftwoMatrix($id) { 
+        Area::where("id", $id)->update(["matrixtribe" => 2]);
+        return redirect("/")->with('success', 'Wyłączono inny tryb matrycy: '.$id);         
+    }
+    
+    public function setmatrixcross($id, $val) {
+        Area::where("id", $id)->update(["matrixcross" => $val]);
+        return redirect("/")->with('success', 'Włączono inny tryb matrycy krzyżowań dla: '.$id." VAL: ".$val);         
+    }    
+
 }
