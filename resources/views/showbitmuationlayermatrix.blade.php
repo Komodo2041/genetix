@@ -21,37 +21,37 @@
          </th>
         <th>
             @if ($order == "name" && $desc == "DESC")
-               <a class="asc" href="/showBigMutationLayer/{{$area->id}}/?order=name&desc=ASC">Mutacja</a>
+               <a class="asc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=name&desc=ASC">Mutacja</a>
             @else
-               <a class="desc" href="/showBigMutationLayer/{{$area->id}}/?order=name&desc=DESC">Mutacja</a>
+               <a class="desc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=name&desc=DESC">Mutacja</a>
             @endif 
         </th>
         <th>
             @if ($order == "percent" && $desc == "DESC")
-               <a class="asc" href="/showBigMutationLayer/{{$area->id}}/?order=percent&desc=ASC">%</a>
+               <a class="asc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=percent&desc=ASC">%</a>
             @else
-               <a class="desc" href="/showBigMutationLayer/{{$area->id}}/?order=percent&desc=DESC">%</a>
+               <a class="desc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=percent&desc=DESC">%</a>
             @endif 
         </th>        
         <th>
             @if ($order == "avg" && $desc == "DESC")
-               <a class="asc" href="/showBigMutationLayer/{{$area->id}}/?order=avg&desc=ASC">AVG</a>
+               <a class="asc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=avg&desc=ASC">AVG</a>
             @else
-               <a class="desc" href="/showBigMutationLayer/{{$area->id}}/?order=avg&desc=DESC">AVG</a>
+               <a class="desc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=avg&desc=DESC">AVG</a>
             @endif 
         </th>
         <th>
             @if ($order == "max" && $desc == "DESC")
-               <a class="asc" href="/showBigMutationLayer/{{$area->id}}/?order=max&desc=ASC">MAX</a>
+               <a class="asc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=max&desc=ASC">MAX</a>
             @else
-               <a class="desc" href="/showBigMutationLayer/{{$area->id}}/?order=max&desc=DESC">MAX</a>
+               <a class="desc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=max&desc=DESC">MAX</a>
             @endif
         </th>  
         <th>
             @if ($order == "better" && $desc == "DESC")
-               <a class="asc" href="/showBigMutationLayer/{{$area->id}}/?order=better&desc=ASC">Better</a>
+               <a class="asc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=better&desc=ASC">Better</a>
             @else
-               <a class="desc" href="/showBigMutationLayer/{{$area->id}}/?order=better&desc=DESC">Better</a>
+               <a class="desc" href="/showBigMutationLayer/{{$tryb}}/{{$area->id}}/?order=better&desc=DESC">Better</a>
             @endif
         </th>
  
