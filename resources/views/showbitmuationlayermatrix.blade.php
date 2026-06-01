@@ -1,12 +1,16 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br/>
- 
-<a href="/calcBigMutationLayer/{{$area->id}}/100"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań - 100</button></a>&nbsp;<br/>
-<a href="/calcBigMutationLayer/{{$area->id}}/200"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań - 200</button></a>&nbsp;<br/>
-<a href="/calcBigMutationLayer/{{$area->id}}/500"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań- 500</button></a>&nbsp;<br/>
-<a href="/calcBigMutationLayer/{{$area->id}}/1000"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań - 1000</button></a>&nbsp;<br/>
+<a href="/"><button>Strona główna</button></a> &nbsp;
+    <a href="/showBigMutationLayer/0/{{$area->id}}"><button @if ($tryb == 0) class="gray" @endif>Layer Z</button></a>&nbsp;
+    <a href="/showBigMutationLayer/1/{{$area->id}}"><button @if ($tryb == 1) class="gray" @endif>Layer X</button></a>&nbsp;
+    <a href="/showBigMutationLayer/2/{{$area->id}}"><button @if ($tryb == 2) class="gray" @endif>Layer Y</button></a>&nbsp;
+
+<br/>
+<a href="/calcBigMutationLayer/{{$area->id}}/{{$tryb}}/100"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań - 100</button></a>&nbsp;<br/>
+<a href="/calcBigMutationLayer/{{$area->id}}/{{$tryb}}/200"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań - 200</button></a>&nbsp;<br/>
+<a href="/calcBigMutationLayer/{{$area->id}}/{{$tryb}}/500"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań- 500</button></a>&nbsp;<br/>
+<a href="/calcBigMutationLayer/{{$area->id}}/{{$tryb}}/1000"><button>Aktualizuj Matryce Mutacji na wiekszej wywołań - 1000</button></a>&nbsp;<br/>
 <h3>Matryca Wyników Mutatora Big Layer</h3>
 <div class="container">
  

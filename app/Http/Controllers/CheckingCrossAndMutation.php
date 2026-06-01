@@ -537,7 +537,7 @@ class CheckingCrossAndMutation extends Controller
     }
 
 
-    public function showBigMutationLayer($id, Request $request) {
+    public function showBigMutationLayer( $tryb, $id, Request $request) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -551,12 +551,25 @@ class CheckingCrossAndMutation extends Controller
         if (!$desc) {
             $desc = "DESC";
         }
+        $type = 2;
+        switch ($tryb) {
+           case 0:
+            $type = 2;
+            break;
+           case 1:
+            $type = 3;
+            break;
+           case 2:
+            $type = 4;
+            break;
 
-        $matrix = BigMutationMatrix::where("area_id", $id)->where("hide", 0)->where("type", 2)->orderBy($order, $desc)->get();
-        return view("showbitmuationlayermatrix", [ 'area' => $area, "order" => $order, "desc" => $desc, "matrix" => $matrix ]);
+        }
+
+        $matrix = BigMutationMatrix::where("area_id", $id)->where("hide", 0)->where("type", $type)->orderBy($order, $desc)->get();
+        return view("showbitmuationlayermatrix", [ 'area' => $area, "order" => $order, "desc" => $desc, "matrix" => $matrix, 'tryb' => $tryb ]);
     }
 
-    public function calcBigMutationLayer($id, $nrM, BigMutatorData $powermutation, GenetixDataGenerator $gtx ) {
+    public function calcBigMutationLayer($id, $tryb, $nrM, BigMutatorData $powermutation, GenetixDataGenerator $gtx ) {
         set_time_limit(12000);
         $area = Area::find($id);
         if (!$area) {
@@ -566,6 +579,28 @@ class CheckingCrossAndMutation extends Controller
         if ($nrM) {
             $powermutation->setNrMutation($nrM);
         }
+        $typecalc = 97;
+        $dimmension = "(Z)";
+        switch ($tryb) {
+           case 0:
+            $type = 2;
+            $dimmension = "(Z)";
+            $powermutation->setTrybe(0);
+            $typecalc = 97;
+            break;
+           case 1:
+            $type = 3;
+            $dimmension = "(X)";
+            $typecalc = 98;
+            $powermutation->setTrybe(1);
+            break;
+           case 2:
+            $type = 4;
+            $dimmension = "(Y)";
+            $powermutation->setTrybe(2);
+            $typecalc = 99;
+            break;
+        }        
  
         $mutations = $powermutation->getAllMethod();  
         $table = json_decode($area->data);
@@ -617,8 +652,8 @@ class CheckingCrossAndMutation extends Controller
                     if ($this->saveCalculationInCrossAndMuationMatrix &&  $headSum * $this->saveCrosMutationMatrix < $record['sum']) {
                        $je = json_encode($record['area']);                       
                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
-                          Calculation::create(["result" => "Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
-                            "level" => $lvlmax, "obtainedresult" => $record['sum'] / $maxPoints,  "typecalc" => 97  ]);
+                          Calculation::create(["result" => $dimmension." - Wynik dzięki mutacji ".$method , "data" => $je, "area_id" => $id, 
+                            "level" => $lvlmax, "obtainedresult" => $record['sum'] / $maxPoints,  "typecalc" => $typecalc  ]);
                        }                    
                     }
  
@@ -628,7 +663,7 @@ class CheckingCrossAndMutation extends Controller
 
                 $mresults[] = [ 
                     "name" => $method,
-                    "type" => 2,
+                    "type" => $type,
                     "percent" => $percent,
                     "area_id" => $id,
                     "max" => $max / $headSum,
@@ -639,12 +674,12 @@ class CheckingCrossAndMutation extends Controller
             }
         }
 
-        BigMutationMatrix::where("area_id", $id)->where("type", 2)->update(["hide" => 1]); 
+        BigMutationMatrix::where("area_id", $id)->where("type", $type)->update(["hide" => 1]); 
         foreach ($mresults AS $res) {
             BigMutationMatrix::create($res);               
         }
 
-        return redirect("/showBigMutationLayer/".$area->id)->with('success', 'Obliczono matrycę BigMutation Layer dla area: '.$id);  
+        return redirect("/showBigMutationLayer/".$tryb."/".$area->id)->with('success', 'Obliczono matrycę BigMutation Layer dla area: '.$id);  
 
 
     }

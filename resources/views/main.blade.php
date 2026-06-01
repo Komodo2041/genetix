@@ -79,7 +79,7 @@
  
                   <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
                   <a href="/showPowerBigLayer/{{$a->id}}"><button>Power Big Layer</button></a>&nbsp;
-                  <a href="/showBigMutationLayer/{{$a->id}}"><button>Big Muation Layer</button></a>&nbsp;
+                  <a href="/showBigMutationLayer/0/{{$a->id}}"><button>Big Muation Layer</button></a>&nbsp;
                     
 
                    <br/>

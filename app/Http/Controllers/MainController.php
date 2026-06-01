@@ -67,7 +67,7 @@ class MainController extends Controller
     /*********** SETTING MAIN */
     public $Numhalstep = 2; // 2
     private $maxPopulation = 60;
-    public $nrTimes = 5;
+    public $nrTimes = 8;
  
     private $saveCrosMutationMatrix = 1.000001;
      
@@ -90,7 +90,7 @@ class MainController extends Controller
     private $wagaSelecting = [17, 18, 19, 20];
     private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
 
-    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97];
+    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99];
 
 
     private $randomDoingTrybe = 2;
@@ -892,8 +892,11 @@ class MainController extends Controller
         $result2 = $maxQ / $maxPoints; 
         if ($result2  > $minimumCalc) {
             $name = "Wynik w pokoleniu ".$nrPop." Wynik: ". $result2 ." Czas generacji ".($t4 - $t3)." s";
-            $pgc =  (1 - $result2) / ( ($last / $first) - 1);
-            
+            $pgc = 0;
+            if ($last > $first) {
+                $pgc =  (1 - $result2) / ( ($last / $first) - 1);
+            }
+ 
             $cred = Calculation::create(["result" => $name, "data" => json_encode($res[0]['area']), "area_id" => $id, "level" => $lvl + 1, "obtainedresult" => $result2,
             "usedmod" => json_encode($usedmodify), "typecalc" => $randomDoing, "population" => $nrPop, "info" => json_encode($info), "progress" => $last / $first, "start" => $first / $maxPoints,
             "progcalc" => $pgc]);

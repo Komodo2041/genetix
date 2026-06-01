@@ -9,6 +9,8 @@ class BigMutatorData
     
     private $percent = 100;
 
+    private $trybe = 0;
+
     public $numbers = 650;
     public $allMethods = ["bigLayerMutation", "bigLayerMutationMediumSquere", "bigLayerMutationMiniSquere", "bigLayerMutationMiniRandomSquere",
                 "bigLayerMutationStripRandom5x1Y", "bigLayerMutationStripRandom5x1X", "bigLayerMutationStrip5x1Y", "bigLayerMutationStrip5x1X",
@@ -32,6 +34,66 @@ class BigMutatorData
         }
         return $id;
     } 
+
+    public function setTrybe($value) {
+        $this->trybe = $value;
+    }
+
+    private function getDirection($val, $i, $j, $z) {
+        switch ($this->trybe) {
+           case 0:
+               return $this->DimmensionZ($val, $i, $j, $z); 
+            break;
+           case 1:
+                return $this->DimmensionX($val, $i, $j, $z);
+            break;
+           case 2:
+                return $this->DimmensionY($val, $i, $j, $z);
+            break;                        
+        } 
+    }
+
+    private function DimmensionZ($val, $i, $j, $z) {
+       switch ($val) {
+          case 0:
+            return $z;
+            break;
+          case 1:
+            return $i;
+            break;
+          case 2:
+            return $j;
+            break;                        
+       }
+    }
+
+    private function DimmensionX($val, $i, $j, $z) {
+       switch ($val) {
+          case 0:
+            return $i;
+            break;
+          case 1:
+            return $j;
+            break;
+          case 2:
+            return $z;
+            break;                        
+       }
+    }
+    
+    private function DimmensionY($val, $i, $j, $z) {
+       switch ($val) {
+          case 0:
+            return $j;
+            break;
+          case 1:
+            return $i;
+            break;
+          case 2:
+            return $z;
+            break;                        
+       }
+    }    
 
     public function getAllMethod() {
         return $this->allMethods;
@@ -73,7 +135,7 @@ class BigMutatorData
        return [$res, $mutting];       
     }   
 
-
+ 
     public function bigLayerMutation($numbers, $size, $pop) {
         for ($i = 0; $i < $size; $i++) {
             $res[$i] = []; 
@@ -82,7 +144,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -102,7 +164,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)]);
                     }
                 }
             }
@@ -124,14 +186,14 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    if ($i < 5 && $j < 5) {
-                       $res[$z][0][] = $pop[$i][$j][$z];
-                    } elseif ($i >= 5 && $j < 5) {
-                        $res[$z][1][] = $pop[$i][$j][$z];
-                    } elseif ($i >= 5 && $j >= 5) {
-                        $res[$z][2][] = $pop[$i][$j][$z];
-                    } elseif ($i < 5 && $j >= 5) {
-                        $res[$z][3][] = $pop[$i][$j][$z];
+                    if ($this->getDirection(1, $i, $j, $z) < 5 && $this->getDirection(2, $i, $j, $z) < 5) {
+                       $res[$this->getDirection(0, $i, $j, $z)][0][] = $pop[$i][$j][$z];
+                    } elseif ($this->getDirection(1, $i, $j, $z) >= 5 && $this->getDirection(2, $i, $j, $z) < 5) {
+                        $res[$this->getDirection(0, $i, $j, $z)][1][] = $pop[$i][$j][$z];
+                    } elseif ($this->getDirection(1, $i, $j, $z) >= 5 && $this->getDirection(2, $i, $j, $z) >= 5) {
+                        $res[$this->getDirection(0, $i, $j, $z)][2][] = $pop[$i][$j][$z];
+                    } elseif ($this->getDirection(1, $i, $j, $z) < 5 && $this->getDirection(2, $i, $j, $z) >= 5) {
+                        $res[$this->getDirection(0, $i, $j, $z)][3][] = $pop[$i][$j][$z];
                     }
                 }
             }
@@ -154,14 +216,14 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        if ($i < 5 && $j < 5) {
-                           $table[$i][$j][$z] = array_shift($used[$z][0]);
-                        } elseif ($i >= 5 && $j < 5) {
-                            $table[$i][$j][$z] = array_shift($used[$z][1]);
-                        } elseif ($i >= 5 && $j >= 5) {
-                            $table[$i][$j][$z] = array_shift($used[$z][2]);
-                        } elseif ($i < 5 && $j >= 5) {
-                            $table[$i][$j][$z] = array_shift($used[$z][3]);
+                        if ($this->getDirection(1, $i, $j, $z) < 5 && $this->getDirection(2, $i, $j, $z) < 5) {
+                           $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][0]);
+                        } elseif ($this->getDirection(1, $i, $j, $z) >= 5 && $this->getDirection(2, $i, $j, $z) < 5) {
+                            $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][1]);
+                        } elseif ($this->getDirection(1, $i, $j, $z) >= 5 && $this->getDirection(2, $i, $j, $z) >= 5) {
+                            $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][2]);
+                        } elseif ($this->getDirection(1, $i, $j, $z) < 5 && $this->getDirection(2, $i, $j, $z) >= 5) {
+                            $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][3]);
                         }
  
                     }
@@ -184,7 +246,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 2) * 5 + floor($j / 2)][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -206,7 +268,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 2) * 5 + floor($j / 2)]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)]);
                     }
                 }
             }
@@ -229,7 +291,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 2) * 5 + floor($j / 2)][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -255,7 +317,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 2) * 5 + floor($j / 2)]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)]);
                     }
                 }
             }
@@ -276,7 +338,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 2) * 5 + floor($j / 2)][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -301,7 +363,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 2) * 5 + floor($j / 2)]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)]);
                     }
                 }
             }
@@ -323,7 +385,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 5) * 10 + $j][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -347,7 +409,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 5) * 10 + $j]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)]);
                     }
                 }
             }
@@ -368,7 +430,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($j / 5) * 10 + $i ][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -391,7 +453,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ]);
                     }
                 }
             }
@@ -413,7 +475,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 5) * 10 + $j][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -441,7 +503,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 5) * 10 + $j]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)]);
                     }
                 }
             }
@@ -462,7 +524,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 5) * 10 + $j][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -487,7 +549,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 5) * 10 + $j]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)]);
                     }
                 }
             }
@@ -509,7 +571,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($j / 5) * 10 + $i ][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -535,7 +597,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ]);
                     }
                 }
             }
@@ -556,7 +618,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($j / 5) * 10 + $i ][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -584,7 +646,7 @@ class BigMutatorData
             
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ]);
                     }
                 }
             }
@@ -605,7 +667,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($j / 5) * 10 + $i ][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -631,7 +693,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($j / 5) * 10 + $i ]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(2, $i, $j, $z) / 5) * 10 + $this->getDirection(1, $i, $j, $z) ]);
                     }
                 }
             }
@@ -652,7 +714,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 5) * 10 + $j][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -678,7 +740,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 5) * 10 + $j]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 5) * 10 + $this->getDirection(2, $i, $j, $z)]);
                     }
                 }
             }
@@ -700,7 +762,7 @@ class BigMutatorData
         for ($i = 0; $i < $size; $i++) {
            for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z][ floor($i / 2) * 5 + floor($j / 2)][] = $pop[$i][$j][$z];
+                    $res[$this->getDirection(0, $i, $j, $z)][ floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)][] = $pop[$i][$j][$z];
                 }
             }
         }  
@@ -726,7 +788,7 @@ class BigMutatorData
             for ($i = 0; $i < $size; $i++) {
                 for ($j = 0; $j < $size; $j++) {
                     for ($z = 0; $z < $size; $z++) {
-                        $table[$i][$j][$z] = array_shift($used[$z][floor($i / 2) * 5 + floor($j / 2)]);
+                        $table[$i][$j][$z] = array_shift($used[$this->getDirection(0, $i, $j, $z)][floor($this->getDirection(1, $i, $j, $z) / 2) * 5 + floor($this->getDirection(2, $i, $j, $z) / 2)]);
                     }
                 }
             }
@@ -738,7 +800,7 @@ class BigMutatorData
     }     
 
 
-     /* +++ */ 
+     /* +++  OHNEDIMENSION */ 
     public function bigLayerMutationTemplatePlusRandom($numbers, $size, $pop) {
  
         $result = [$pop];
@@ -796,14 +858,36 @@ class BigMutatorData
                     $used = [];
                     for ($m = 0; $m < 3; $m++) {
                         for ($n = 0; $n < 3; $n++) {
-                            $used[] = $pop[$x + $m][$y + $n][$z];
+                            switch ($this->trybe) {
+                                case 0:
+                                    $used[] = $pop[$x + $m][$y + $n][$z];
+                                    break;
+                                case 1:
+                                    $used[] = $pop[$z][$x + $m][$y + $n] ;
+                                    break;
+                                case 2:
+                                    $used[] = $pop[$x + $m][$z][$y + $n] ;
+                                    break;        
+                            }
+                             
                         }
                     }
                
                     shuffle($used);
                     for ($m = 0; $m < 3; $m++) {
                         for ($n = 0; $n < 3; $n++) {
-                            $table[$x + $m][$y + $n][$z] = array_shift($used);
+                            switch ($this->trybe) {
+                                case 0:
+                                     $table[$x + $m][$y + $n][$z] = array_shift($used);
+                                    break;
+                                case 1:
+                                     $table[$z][$x + $m][$y + $n] = array_shift($used);
+                                    break;
+                                case 2:
+                                     $table[$x + $m][$z][$y + $n] = array_shift($used);
+                                    break;                                                                        
+                            }    
+                            
                         }
                     }
                 }
@@ -838,14 +922,35 @@ class BigMutatorData
                     $used = [];
                     for ($m = 0; $m < 4; $m++) {
                         for ($n = 0; $n < 4; $n++) {
-                            $used[] = $pop[$x + $m][$y + $n][$z];
+                            switch ($this->trybe) {
+                                case 0:
+                                    $used[] = $pop[$x + $m][$y + $n][$z];
+                                    break;
+                                case 1:
+                                    $used[] = $pop[$z][$x + $m][$y + $n];
+                                    break;
+                                case 2:
+                                    $used[] = $pop[$x + $m][$z][$y + $n];
+                                    break;                                    
+                            }
+                             
                         }
                     }
                
                     shuffle($used);
                     for ($m = 0; $m < 4; $m++) {
                         for ($n = 0; $n < 4; $n++) {
-                            $table[$x + $m][$y + $n][$z] = array_shift($used);
+                            switch ($this->trybe) {
+                                case 0:
+                                    $table[$x + $m][$y + $n][$z] = array_shift($used);
+                                    break;
+                                case 1:
+                                    $table[$z][$x + $m][$y + $n] = array_shift($used);
+                                    break;
+                                case 2:
+                                    $table[$x + $m][$z][$y + $n] = array_shift($used);
+                                    break;        
+                            }
                         }
                     }
                 }
@@ -881,14 +986,35 @@ class BigMutatorData
                     $used = [];
                     for ($m = 0; $m < 2; $m++) {
                         for ($n = 0; $n < 2; $n++) {
-                            $used[] = $pop[$x + $m][$y + $n][$z];
+                            switch ($this->trybe) {
+                                case 0:
+                                    $used[] = $pop[$x + $m][$y + $n][$z];
+                                    break;
+                                case 1:
+                                    $used[] = $pop[$z][$x + $m][$y + $n];
+                                    break;
+                                case 2:
+                                    $used[] = $pop[$x + $m][$z][$y + $n] ;
+                                    break;        
+                            } 
                         }
                     }
                
                     shuffle($used);
                     for ($m = 0; $m < 2; $m++) {
                         for ($n = 0; $n < 2; $n++) {
-                            $table[$x + $m][$y + $n][$z] = array_shift($used);
+                            switch ($this->trybe) {
+                                case 0:
+                                    $table[$x + $m][$y + $n][$z] = array_shift($used);
+                                    break;
+                                case 1:
+                                    $table[$z][$x + $m][$y + $n] = array_shift($used);
+                                    break;
+                                case 2:
+                                    $table[$x + $m][$z][$y + $n] = array_shift($used);
+                                    break;        
+                            }
+                             
                         }
                     }
                 }
@@ -901,7 +1027,7 @@ class BigMutatorData
   
     }     
 
-  
+ 
     public function bigLayerMutationCircle($numbers, $size, $pop) {
       $result = [$pop];
         for ($n = 0; $n < $numbers; $n++) {
@@ -940,7 +1066,18 @@ class BigMutatorData
                        $p = ['x' => $newx, 'y' => $newy ];
                        $usedp[] = $key;
                        $points[] = $p;
-                       $used[] = $pop[$newx][$newy][$z];
+                       switch ($this->trybe) {
+                            case 0:
+                                $used[] = $pop[$newx][$newy][$z];
+                            break;
+                            case 1:
+                                $used[] = $pop[$z][$newx][$newy];
+                            break;
+                            case 2:
+                                $used[] = $pop[$newx][$z][$newy];
+                            break;        
+                       }
+                        
                     } else {
                        $ch = rand(0,1);
                        if ($ch == 1) {
@@ -958,7 +1095,18 @@ class BigMutatorData
  
                     $newx = $points[$l]['x'];
                     $newy = $points[$l]['y'];
-                    $table[$newx][$newy][$z] = array_shift($used);
+                    switch ($this->trybe) {
+                        case 0:
+                            $table[$newx][$newy][$z] = array_shift($used);
+                            break;
+                        case 1:
+                            $table[$z][$newx][$newy] = array_shift($used);
+                            break;
+                        case 2:
+                            $table[$newx][$z][$newy] = array_shift($used);
+                            break;        
+                    }
+                     
                 } 
             } 
             $result[] = $table;

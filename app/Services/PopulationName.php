@@ -103,7 +103,9 @@ class PopulationName
        94 => "Use PowerBigMutator - 1 - (5%)",
        95 => "Use PowerBigMutator - 2 - (5%)",
        96 => "Calculating PowerBigMutation", // X
-       97 => "Calculating Big Mutation Layer", // X  
+       97 => "Calculating Big Mutation Layer (Z)", // X 
+       98 => "Calculating Big Mutation Layer (X)", // X 
+       99 => "Calculating Big Mutation Layer (Y)", // X 
     ];
 
 }
