@@ -34,23 +34,24 @@ use App\Http\Controllers\DiamondController;
 // php artisan app:run-area-calc 2
 // php artisan app:run-area-calc 3
 // php artisan app:run-area-calc 4 
-
-
+ 
 // php artisan app:onecalculation 82 240
 
 class MainController extends Controller
 {
 
+    private $randomDoingTrybe = 0;
+
     public function __construct() {
         $this->ls = new LevelStering();
         $this->helperMatrix = new MatrixHelper();
-        $pn = new PopulationName();
+        $pn = new PopulationName($this->randomDoingTrybe);
         $this->populationName = $pn->populationName;
+        $this->pn = $pn;
     }
  
     private $debugInfo = 0;
-    private $saveCalculationInCrossAndMuationMatrix = 0;
-
+ 
     public $nrMaxPopulation = 120;
 
     public $startPopulation = 800;
@@ -69,77 +70,21 @@ class MainController extends Controller
     private $maxPopulation = 60;
     public $nrTimes = 8;
  
-    private $saveCrosMutationMatrix = 1.000001;
-     
-
-    private $diamondCrossing = [130, 131, 132, 133, 134, 135, 136];
- 
-    private $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
-    private $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
+    
     private $selectUsingPowerNoBestData = 1;
-
  
-    private $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28 ];
-
-    private $stillPatternOrClone = [4, 5, 6, 7, 8, 9];
-    private $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
-    private $biglayerSelectingShort = [12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72];
-
-    private $powerSelectingShort = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95];
-
-    private $wagaSelecting = [17, 18, 19, 20];
-    private $avgdetailcalcSelecting = [76, 77, 78, 79, 80];
-
-    private $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99];
-
-
-    private $randomDoingTrybe = 2;
     
     /***********TESTING RANDOM SELECTING ************/
     private $testRadomSelecting = 0;
 
     private $usingPower = 0;
-
-    private function getRandomDoing() {
-         $randomDoing = -1;
-         while (in_array($randomDoing, $this->noSelectingPopulation)) {
-             $randomDoing = rand(0, max(array_keys($this->populationName)));
-             if ($this->randomDoingTrybe  == 1) {
-                 $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
-             } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
-                if (!in_array($randomDoing, $this->normalSelecting)) {
-                    $randomDoing = -1;
-                }                   
-             } elseif ($this->randomDoingTrybe  == 3) {
-                $randomDoing = rand(min($this->selectUsingPowerBottomLayerZero), max($this->selectUsingPowerBottomLayerZero));             
-             } elseif ($this->randomDoingTrybe  == 4) { // NO WAGA
-                if (in_array($randomDoing, $this->wagaSelecting)) {
-                    $randomDoing = -1;
-                }              
-             } elseif ($this->randomDoingTrybe == 5) {
-                if (!in_array($randomDoing, $this->biglayerSelecting)) {
-                    $randomDoing = -1;
-                } 
-             } elseif ($this->randomDoingTrybe == 6) { // AVG
-                $randomDoing = rand(min($this->avgdetailcalcSelecting), max($this->avgdetailcalcSelecting));  
-             } elseif ($this->randomDoingTrybe == 7) { // POWER SELECT
-                $randomDoing = rand(min($this->powerSelectingShort), max($this->powerSelectingShort));  
-             } 
-         }
-        return $randomDoing; 
-    }
-
-    private function checkRandomDoing($x) {
-        if ($x >= 0 && $x <= max(array_keys($this->populationName)) && !in_array($x, $this->noSelectingPopulation)) {
-            return true;
-        } else {
-            return false;
-        }
-    } 
  
     public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $powermutation, $dId = null) {
         
         set_time_limit(40000);
+        // MORE MEMORY
+       // ini_set('memory_limit', '250M');
+
         $halfStep = $this->helperMatrix->getSteps($this->maxPopulation, $this->Numhalstep);
         $useonlyMutation = 0;
 
@@ -180,15 +125,14 @@ class MainController extends Controller
 
  
         if (!$dId) {
-            $randomDoing = $this->getRandomDoing();
+            $randomDoing = $this->pn->getRandomDoing();
             if ($this->testRadomSelecting != 0) {
                 $randomDoing = $this->testRadomSelecting;
             } 
  
         } else {
-            $nrDiamond = count($this->diamondCrossing);
-            $randomDoing = $this->diamondCrossing[rand(0, $nrDiamond - 1 )];  
-       
+            $nrDiamond = count($this->pn->diamondCrossing);
+            $randomDoing = $this->pn->diamondCrossing[rand(0, $nrDiamond - 1 )];         
             $diamonds = ["diamond_id" => $dId];
         }
 
@@ -353,7 +297,7 @@ class MainController extends Controller
 
            $this->useBigMutator = 1;
 
-        } elseif ( in_array($randomDoing, $this->biglayerSelectingShort)) {
+        } elseif ( in_array($randomDoing, $this->pn->biglayerSelectingShort)) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations AS $c) {
@@ -412,7 +356,7 @@ class MainController extends Controller
             } 
   
             
-        }  elseif ( in_array($randomDoing, $this->wagaSelecting)) {
+        }  elseif ( in_array($randomDoing, $this->pn->wagaSelecting)) {
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
             if (!$bestResult) {
                 return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
@@ -495,7 +439,7 @@ class MainController extends Controller
             $population0 = $gtx->usepower($population0, $power);
 
 
-        } elseif ( in_array($randomDoing, $this->selectUsingPower)) { 
+        } elseif ( in_array($randomDoing, $this->pn->selectUsingPower)) { 
         
             $bestResult = Calculation::where("area_id", $id)->where("level", $lvl)->orderByRaw('RAND()')->first();
           
@@ -627,7 +571,7 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
             }
  
-        } elseif ( in_array($randomDoing, $this->avgdetailcalcSelecting)) {
+        } elseif ( in_array($randomDoing, $this->pn->avgdetailcalcSelecting)) {
 
             $order = "avg";
             $desc = "DESC"; 
@@ -699,7 +643,7 @@ class MainController extends Controller
             $population0 = $gtx->usepower($population0, $power);
             $this->usePowerMutator = 1;
  
-        } elseif ( in_array($randomDoing, $this->powerSelectingShort)) {
+        } elseif ( in_array($randomDoing, $this->pn->powerSelectingShort)) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations AS $c) {
@@ -723,7 +667,7 @@ class MainController extends Controller
                 $powermutation->setPercent(5);
             }
 
-        }  elseif ( in_array($randomDoing, $this->diamondCrossing)) {
+        }  elseif ( in_array($randomDoing, $this->pn->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
             $population0 = $res[0];
@@ -906,7 +850,7 @@ class MainController extends Controller
             
                 Clones::create($clones);
             } 
-            if ( in_array($randomDoing, $this->diamondCrossing)) {
+            if ( in_array($randomDoing, $this->pn->diamondCrossing)) {
                 $diamonds["result"] = $result2;
                 $diamonds["calc_id"] = $cred->id;
                 Diamondcalc::create($diamonds);
@@ -1119,7 +1063,7 @@ class MainController extends Controller
  
     public function setParamPopAndRandomDoing($m, $pop) {
         $this->maxPopulation = $pop;
-        if (!$this->checkRandomDoing($m)) {
+        if (!$this->pn->checkRandomDoing($m)) {
            $m = 0;
         } 
         $this->testRadomSelecting = $m;

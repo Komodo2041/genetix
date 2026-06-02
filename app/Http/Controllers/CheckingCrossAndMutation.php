@@ -22,9 +22,9 @@ use App\Http\Controllers\MainController;
 class CheckingCrossAndMutation extends Controller
 {
 
-
+ 
     private $saveCrosMutationMatrix = 1.000001;
-    private $saveCalculationInCrossAndMuationMatrix = 1;
+    private $saveCalculationInCrossAndMuationMatrix = 0;
     private $main = null;
 
     private $powerCalc = 120;
@@ -97,7 +97,7 @@ class CheckingCrossAndMutation extends Controller
         $gtx->setPowerMatrixSize(10);  
         $power = $gtx->getPower([$table]);
 
-        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1)->get();
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(10)->get()->shuffle()->take(1);
  
         if (!$bestResult) {
             return redirect("/")->with('error', 'Brak obliczeń dla podanego area');

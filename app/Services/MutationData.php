@@ -35,7 +35,9 @@ class MutationData
         "shufflerytal2", "shufflerytal3", "shufflerytal4", "shufflerytal5", "rombono2_inZ", "rombono3_inZ", "rombono4_inZ",
         "shuffleonMatrixPower20_left", "shuffleonMatrixPower20_right", "shuffleonMatrixPower20_middle", "shuffleonMatrixPower20_toborder",
         "shuffleonMatrixPower50_left", "shuffleonMatrixPower50_right", "shuffleonMatrixPower50_middle", "shuffleonMatrixPower50_toborder",
-        "shuffleonMatrixPower100_left", "shuffleonMatrixPower100_right", "shuffleonMatrixPower100_middle", "shuffleonMatrixPower100_toborder"
+        "shuffleonMatrixPower100_left", "shuffleonMatrixPower100_right", "shuffleonMatrixPower100_middle", "shuffleonMatrixPower100_toborder",
+        "neighbourchange20", "neighbourchange50", "neighbourchange100", "liftDown", "liftDown5", "liftDown10", "liftDown20", "liftUp", "liftUp5", "liftUp10", "liftUp20",
+        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2"
     ];
 
     public function setNumerMutation($nr) {
@@ -457,7 +459,26 @@ class MutationData
        return $pop;
     }    
  
- 
+    private function neighbourchange20($pop, $nr = 10) {
+       for ($i = 0; $i < 20; $i++) {
+          $pop = $this->neighbourchange($pop, $nr);
+       }
+       return $pop;
+    }   
+    
+    private function neighbourchange50($pop, $nr = 10) {
+       for ($i = 0; $i < 50; $i++) {
+          $pop = $this->neighbourchange($pop, $nr);
+       }
+       return $pop;
+    }  
+    
+    private function neighbourchange100($pop, $nr = 10) {
+       for ($i = 0; $i < 100; $i++) {
+          $pop = $this->neighbourchange($pop, $nr);
+       }
+       return $pop;
+    }       
  
     private function exchangecolumnXZ($pop, $nr = 10) {
         $pom1 = rand(1, $nr - 3);
@@ -3163,6 +3184,110 @@ class MutationData
 
     private function shuffleonMatrixPower100_toborder($pop, $nr = 10) {
        return $this->shuffleonMatrixPower($pop, $nr, 4, 5);
+    }    
+
+    private function liftUp($pop, $nr = 10) {
+    
+        $change = 0;
+        $i = 0;
+        while ($change == 0 && $i < 100) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(1, $nr - 1);
+            if ($pop[$x][$y][$z] == 1 && $pop[$x][$y][$z - 1] == 0) {
+                $pop[$x][$y][$z] = 0;
+                $pop[$x][$y][$z - 1] = 1;
+                $change = 1;
+            }
+            $i++;
+        }
+        return $pop;
+    }
+
+    private function liftUp5($pop, $nr = 10) {
+        for ($i = 0; $i < 5; $i++) {
+            $pop = $this->liftUp($pop, $nr);
+        }
+        return $pop;
+    }
+
+    private function liftUp2($pop, $nr = 10) {
+        for ($i = 0; $i < 2; $i++) {
+            $pop = $this->liftUp($pop, $nr);
+        }
+        return $pop;
+    }
+
+    private function liftUp10($pop, $nr = 10) {
+        for ($i = 0; $i < 10; $i++) {
+            $pop = $this->liftUp($pop, $nr);
+        }
+        return $pop;
+    }
+
+    private function liftUp20($pop, $nr = 10) {
+        for ($i = 0; $i < 20; $i++) {
+            $pop = $this->liftUp($pop, $nr);
+        }
+        return $pop;
+    }      
+
+    private function liftDown($pop, $nr = 10) {
+    
+        $change = 0;
+        $i = 0;
+        while ($change == 0 && $i < 100) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 2);
+            if ($pop[$x][$y][$z] == 1 && $pop[$x][$y][$z + 1] == 0) {
+                $pop[$x][$y][$z] = 0;
+                $pop[$x][$y][$z + 1] = 1;
+                $change = 1;
+            }
+            $i++;
+        }
+        return $pop;
+    }
+
+    private function liftDown5($pop, $nr = 10) {
+        for ($i = 0; $i < 5; $i++) {
+            $pop = $this->liftDown($pop, $nr);
+        }
+        return $pop;
+    }
+
+    private function liftDown10($pop, $nr = 10) {
+        for ($i = 0; $i < 10; $i++) {
+            $pop = $this->liftDown($pop, $nr);
+        }
+        return $pop;
+    }
+
+    private function liftDown20($pop, $nr = 10) {
+        for ($i = 0; $i < 20; $i++) {
+            $pop = $this->liftDown($pop, $nr);
+        }
+        return $pop;
+    }
+
+    private function liftDown2($pop, $nr = 10) {
+        for ($i = 0; $i < 2; $i++) {
+            $pop = $this->liftDown($pop, $nr);
+        }
+        return $pop;
+    }    
+
+    private function liftDown10Up10($pop, $nr = 10) {
+        $pop = $this->liftDown10($pop, $nr);
+        $pop = $this->liftUp10($pop, $nr);
+        return $pop;
+    }
+
+    private function liftDown2Up2($pop, $nr = 10) {
+        $pop = $this->liftDown2($pop, $nr);
+        $pop = $this->liftUp2($pop, $nr);
+        return $pop;
     }    
 
 }
