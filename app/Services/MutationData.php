@@ -37,7 +37,7 @@ class MutationData
         "shuffleonMatrixPower50_left", "shuffleonMatrixPower50_right", "shuffleonMatrixPower50_middle", "shuffleonMatrixPower50_toborder",
         "shuffleonMatrixPower100_left", "shuffleonMatrixPower100_right", "shuffleonMatrixPower100_middle", "shuffleonMatrixPower100_toborder",
         "neighbourchange20", "neighbourchange50", "neighbourchange100", "liftDown", "liftDown5", "liftDown10", "liftDown20", "liftUp", "liftUp5", "liftUp10", "liftUp20",
-        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2"
+        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2", "liftBigDown", "liftBigUp"
     ];
 
     public function setNumerMutation($nr) {
@@ -3288,6 +3288,42 @@ class MutationData
         $pop = $this->liftDown2($pop, $nr);
         $pop = $this->liftUp2($pop, $nr);
         return $pop;
+    }
+
+    private function liftBigDown($pop, $nr = 10) {
+    
+        $change = 0;
+        $i = 0;
+        while ($change == 0 && $i < 100) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 3);
+            if ($pop[$x][$y][$z] == 1 && $pop[$x][$y][$z + 2] == 0) {
+                $pop[$x][$y][$z] = 0;
+                $pop[$x][$y][$z + 2] = 1;
+                $change = 1;
+            }
+            $i++;
+        }
+        return $pop;
     }    
+
+    private function liftBigUp($pop, $nr = 10) {
+    
+        $change = 0;
+        $i = 0;
+        while ($change == 0 && $i < 100) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(2, $nr - 1);
+            if ($pop[$x][$y][$z] == 1 && $pop[$x][$y][$z - 2] == 0) {
+                $pop[$x][$y][$z] = 0;
+                $pop[$x][$y][$z - 2] = 1;
+                $change = 1;
+            }
+            $i++;
+        }
+        return $pop;
+    }
 
 }

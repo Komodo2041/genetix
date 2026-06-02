@@ -34,6 +34,7 @@ use App\Http\Controllers\DiamondController;
 // php artisan app:run-area-calc 2
 // php artisan app:run-area-calc 3
 // php artisan app:run-area-calc 4 
+// php artisan app:run-area-calc 5
  
 // php artisan app:onecalculation 82 240
 
@@ -1025,6 +1026,9 @@ class MainController extends Controller
 
          if ($trybe == 4) {
             $lvlmax = 1;
+         }
+         if ($trybe == 5) {
+            $lvlmax = 2;
          }
 
         for ($i = 0; $i < $this->nrTimes; $i++) {
