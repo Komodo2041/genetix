@@ -8,7 +8,6 @@ Route::get('changeFlex/{id}/{tr}',  "App\Http\Controllers\AreaController@changeF
 
 Route::match(["get", "post"], 'area/calc_level2/{id}/{lvl}', "App\Http\Controllers\MainController@calcarea_level" );
 Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\MainController@calcarea_level" );
-Route::get('createweighingscale/{id}',  "App\Http\Controllers\MainController@createweighingscale" );
 Route::get('calcareamoretimes/{id}/{trybe}',  "App\Http\Controllers\MainController@calcareamoretimes" );
  
 Route::get('powermatrix/{size}',  "App\Http\Controllers\PowerController@showmatrix" );
@@ -59,3 +58,5 @@ Route::get('pourRiver/{id}',  "App\Http\Controllers\RiverController@pourRiver" )
 Route::get('addRiver/{id}',  "App\Http\Controllers\RiverController@addRiver" );
 
 Route::get('diamon/add/{id}',  "App\Http\Controllers\DiamondController@adddiamond" );
+
+Route::get('createweighingscale/{id}',  "App\Http\Controllers\WagaController@createweighingscale" );

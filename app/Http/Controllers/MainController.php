@@ -11,7 +11,8 @@ use App\Services\PowerBigMutator;
 use App\Services\LevelStering;
 use App\Services\MatrixHelper;
 use App\Services\PopulationName;  
-  
+use App\Services\WagaService;    
+
 use Illuminate\Http\Request;
 
 use App\Models\Area; 
@@ -20,7 +21,7 @@ use App\Models\Clones;
 use App\Models\Diamond;
 use App\Models\Diamondcalc;
 use App\Models\Matrix;
-use App\Models\Waga;
+use App\Models\Waga; 
 use App\Models\Accuratecalc;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
@@ -365,7 +366,7 @@ class MainController extends Controller
             $wg = Waga::where("calculation_id", $bestResult->id)->first();
             $dataBest = json_decode($bestResult->data);
             if (!$wg) { 
-                $wdiff = $this->getdiffwaga($dataBest, $headPoints, $id, $bestResult->id, $gtx);
+                $wdiff = WagaService::getdiffwaga($dataBest, $headPoints, $id, $bestResult->id, $gtx);
             } else {
                 $wdiff = json_decode($wg->data);
             }
@@ -939,45 +940,6 @@ class MainController extends Controller
  
     public function getCalculationMaxBest($id, $number) {
         return  Calculation::where("area_id", $id)->orderByDesc("obtainedresult" )->limit(max(0, $number))->get();
-    }
- 
-    public function createweighingscale($id, GenetixDataGenerator $gtx) {
-        set_time_limit(3600);
-        $area = Area::find($id);
-        if (!$area) {
-            return redirect("/")->with('error', 'Nie znaleziono podanego area');
-        }
-        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->first();
-        if (!$bestResult) {
-            return redirect("/")->with('error', 'Brak obliczeń dla podanego area');
-        }
-        $data = json_decode($bestResult->data);
- 
-        $table = json_decode($area->data);
-        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
-  
-        $this->getdiffwaga($data, $headPoints, $id, $bestResult->id, $gtx);
-        return redirect("/")->with('success', 'Obliczono wagę dla area: '.$id);   
-
-    }
-
-    private function getdiffwaga($data, $headPoints, $areaId, $cId, $gtx) {
-        $weightDiffo = [];
-        $diff = 0.4;
-        $points = 0;
-        $step = 0;
-        $size = 10;
-        $maxpoints = round(0.1 * $size * $size * $size);
-        while ($points < $maxpoints && $step < 50) {
-             $weightDiffo = $gtx->getWeightScale($data, $headPoints, $size, $diff);
-             $step++;
-             $points = $gtx->calcpointinarea($weightDiffo, $size);
-             $diff = $diff / 1.3; 
-        }
-  
-        Waga::create(["data" => json_encode($weightDiffo), "area_id" => $areaId, "calculation_id" => $cId ]); 
-
-        return $weightDiffo;        
     }
  
     /*
