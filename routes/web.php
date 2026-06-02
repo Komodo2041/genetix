@@ -29,7 +29,7 @@ Route::get('calcCrossMatrix/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAnd
 Route::get('showMatrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showMatrix" );
 Route::get('calcAllPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcAllPowerSelect" ); 
 Route::get('showPowerSelect/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showPowerSelect" );
- Route::get('turn_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@turnMatrix" ); 
+Route::get('turn_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@turnMatrix" ); 
 Route::get('turnoff_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@turnoffMatrix" ); 
 Route::get('turnofftwo_matrix/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@turnofftwoMatrix" );
 Route::get('setmatrixcross/{id}/{val}',  "App\Http\Controllers\CheckingCrossAndMutation@setmatrixcross" ); 
@@ -37,6 +37,10 @@ Route::get('showPowerBigLayer/{id}',  "App\Http\Controllers\CheckingCrossAndMuta
 Route::get('calcPowerBigLayer/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcPowerBigLayer" );
 Route::get('showBigMutationLayer/{id}/{tryb}',  "App\Http\Controllers\CheckingCrossAndMutation@showBigMutationLayer" );
 Route::get('calcBigMutationLayer/{id}/{tryb}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcBigMutationLayer" );
+
+Route::get('calcOneMutation/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcOneMutation" );
+Route::post('calcOneMutation/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcOneMutation" );
+
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
 Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );

@@ -1,7 +1,10 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br/>
+<a href="/"><button>Strona główna</button></a>&nbsp;
+<a href="/calcOneMutation/{{$area->id}}"><button>Przelicz jedną mutację</button></a>
+ 
+<br/>
 
 <a href="/calcMatrix/{{$area->id}}/100"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji - 100</button></a>&nbsp;<br/>
 <a href="/calcMatrix/{{$area->id}}/500"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji - 500</button></a>&nbsp;<br/>

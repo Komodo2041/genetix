@@ -36,8 +36,8 @@ class MutationData
         "shuffleonMatrixPower20_left", "shuffleonMatrixPower20_right", "shuffleonMatrixPower20_middle", "shuffleonMatrixPower20_toborder",
         "shuffleonMatrixPower50_left", "shuffleonMatrixPower50_right", "shuffleonMatrixPower50_middle", "shuffleonMatrixPower50_toborder",
         "shuffleonMatrixPower100_left", "shuffleonMatrixPower100_right", "shuffleonMatrixPower100_middle", "shuffleonMatrixPower100_toborder",
-        "neighbourchange20", "neighbourchange50", "neighbourchange100", "liftDown", "liftDown5", "liftDown10", "liftDown20", "liftUp", "liftUp5", "liftUp10", "liftUp20",
-        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2", "liftBigDown", "liftBigUp"
+        "neighbourchange20", "neighbourchange50", "neighbourchange100", "liftDown", "liftDown5", "liftDown10", "liftDown20", "liftUp5", "liftUp10", "liftUp20",
+        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2", "liftBigDown", "liftBigUp", "liftUp", "shufflecolumnXZgo5", "partcolumnXZgo5"
     ];
 
     public function setNumerMutation($nr) {
@@ -3325,5 +3325,69 @@ class MutationData
         }
         return $pop;
     }
+
+    private function shufflecolumnXZgo5($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 4);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 5 >= $j)) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 5 >= $j)) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function partcolumnXZgo5($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 1);
+        $pom2 = rand(0, $nr - 1);
+        $pom3 = rand(0, 4);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 5 >= $j)) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }   
+
+        $diff = array_chunk($used, 3);
+        rsort($diff[0]);
+        sort($diff[1]);
+        $used = array_merge($diff[0], $diff[1]); 
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 5 >= $j)) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }    
+
 
 }

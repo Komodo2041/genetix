@@ -80,7 +80,7 @@ class CheckingCrossAndMutation extends Controller
     }
 
 
-    public function calcMatrix($id, MutationData $mutation, GenetixDataGenerator $gtx, $nrM = null) {
+    public function calcMatrix($id, MutationData $mutation, GenetixDataGenerator $gtx, $nrM = null, $mutmed = null) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -91,7 +91,10 @@ class CheckingCrossAndMutation extends Controller
         }
 
         set_time_limit(12000);
-        $mutations = $mutation->getAllMethod();  
+        $mutations = $mutation->getAllMethod();
+        if ($mutmed) {
+            $mutations = [$mutmed];
+        }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
 
@@ -171,8 +174,10 @@ class CheckingCrossAndMutation extends Controller
             ];
            
         }
- 
-        Matrix::where("area_id", $id)->update(["hide" => 1]);
+        if (!$mutmed) {
+            Matrix::where("area_id", $id)->update(["hide" => 1]);
+        }
+        
         foreach ($mresults AS $res) {
             $all = $res['res'][0] + $res['res'][1];
             $c = $res['res'][0] / $all;
@@ -685,6 +690,24 @@ class CheckingCrossAndMutation extends Controller
 
     }
 
+    public function calcOneMutation($id, Request $request, MutationData $mutation,  GenetixDataGenerator $gtx) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+ 
+        $methods = $mutation->getAllMethod();
+
+        if ($request->isMethod('post')) {
+            $m = $request->input('method');
+            if ($m && in_array($m, $methods)) {
+                $this->calcMatrix($id, $mutation, $gtx, 1000, $m);
+                return redirect("/showMatrix/".$id)->with('success', 'Obliczono metodę '.$m.' Dla Area '.$id);  
+            }
+        } 
+
+        return view("calcOneMutation", [ 'area' => $area, "methods" => $methods]);
+    }
 
 
 }
