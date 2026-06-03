@@ -11,6 +11,7 @@ class GenetixDataGenerator
     public $probe = 10000;
     public $block = 1e6;
 
+    private $preciso = 100000000000;
     private $pm = [];
 
     public function getFirstGeneration($size, $max, $numbers) {
@@ -30,15 +31,21 @@ class GenetixDataGenerator
        return $allGeneration;
     }
 
-    public function calcPopulation($population0, $headPoints, $usedcrossing = []) {
+    public function calcPopulation($population0, $headPoints, $usedcrossing = [], $possible = null) {
         $res = [];
         $i = 0;
+        $half = floor(count($headPoints) * 0.75);
         foreach ($population0 AS $area) {
             $record = [];
-            $pointsIndividual = $this->calcIndividualPoints($area, $headPoints);
+            $pointsIndividual = $this->calcIndividualPoints($area, $headPoints, $possible);
             $record['points'] = $pointsIndividual;
             $record['area'] = $area;
-            $record['sum'] = $this->calcAreaPoints($pointsIndividual);
+            $record['stoped'] = count($pointsIndividual);
+            if ($half < $record['stoped']) {
+               $record['sum'] = $this->calcAreaPoints($pointsIndividual);
+            } else {
+               $record['sum'] = 1;
+            }
             $record['id'] = $i;
              
             if (isset($usedcrossing[$i])) {
@@ -93,11 +100,14 @@ class GenetixDataGenerator
        return $allPoints;
     } 
 
-    private function calcIndividualPoints($area, $headPoints) {
+    private function calcIndividualPoints($area, $headPoints, $possible = null) {
  
        $nr = 10; 
        $allPoints = [];
-        foreach ($headPoints AS $point) {
+       $diffChange = 0;
+       $possible = floor($possible * 1.2);
+
+        foreach ($headPoints AS $key => $point) {
       
             $allForce = 0;       
             $probeforce = $this->block * $this->probe * $this->G;
@@ -113,8 +123,16 @@ class GenetixDataGenerator
                 }
             }
             $point['v2'] = $allForce;
-            $point['fit'] = $this->calcFit( $point['v'], $point['v2'], );
+            $point['fit'] = $this->calcFit( $point['v'], $point['v2']);
             $allPoints[] = $point;
+
+            if ($possible) {
+                $diffChange += $this->preciso - $point['fit'];
+                if ($diffChange > $possible) {
+                    break;
+                }
+            }
+ 
        }  
       
        return $allPoints;
@@ -141,14 +159,14 @@ class GenetixDataGenerator
         $change = $diff / $v1;
         $result = 0;
         if ($change <= 1) {
-            $result = 100000000000 - $change * 100000000000;
+            $result = $this->preciso - $change * $this->preciso;
         }
         return $result;
 
     }
 
     public function getmaxPoints($nrpoints) {
-        return 100000000000 * $nrpoints;
+        return $this->preciso * $nrpoints;
     }
 
     public function getindyvidual($res, $nr = 10) {

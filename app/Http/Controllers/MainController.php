@@ -85,7 +85,11 @@ class MainController extends Controller
         
         set_time_limit(40000);
         // MORE MEMORY
-       // ini_set('memory_limit', '250M');
+        ini_set('memory_limit', '350M');
+
+        $halfPopulation = floor($this->startPopulation/ 2);
+        $cross->setNr($halfPopulation);
+        $mutation->setNumerMutation($halfPopulation);
 
         $halfStep = $this->helperMatrix->getSteps($this->maxPopulation, $this->Numhalstep);
         $useonlyMutation = 0;
@@ -724,7 +728,7 @@ class MainController extends Controller
 
         $t3 = microtime(true);
           // HEAD LOOP
-         
+        $possibleDiff = $maxPoints - $first;
  
         while ($repeatQ < 20 && $nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
  
@@ -778,8 +782,12 @@ class MainController extends Controller
                 $pop_result[1][] = "Used best Area";
             }
 
-            $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
-            
+            if ($nrPop + 1 == $this->maxPopulation) {
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+            } else {
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1], $possibleDiff);
+            }
+ 
             $power = $gtx->getPowerfromarea($res);
             $maxQ = $res[0]['sum'];
             $maxQ2 = $res[1]['sum']; 
@@ -788,6 +796,7 @@ class MainController extends Controller
                 $repeatQ++; 
             } else {
                 $repeatQ = 0;
+                $possibleDiff = $maxPoints - $maxQ;
             }    
  
             $diff = $maxQ / $oldQ;
@@ -804,8 +813,10 @@ class MainController extends Controller
 
             if ($area->flex == 1) {
                 $individual = $nrBetter;
-                if ($individual < 4) {
+                if ($individual < 3) {
                     $individual = 10; 
+                } elseif ($individual > 20) {
+                   $individual = 20;
                 }
             } else {
                 $individual = 10; 
@@ -899,7 +910,8 @@ class MainController extends Controller
                 if ($last > $first) {
                     $pgc =  (1 - $result2) / ( ($last / $first) - 1);
                 }
-                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ", "data" => json_encode($res[0]['area']), 
+                $timemsg = " Czas generacji ".($t4 - $t3)." s";
+                $calco = Calculation::create(["result" => "Spadocorniarz z ".($lvl + 1)." na level ".$lvlReso[0]." (".$randomDoing.") ".$timemsg, "data" => json_encode($res[0]['area']), 
                 "area_id" => $id, "level" => $lvlReso[0], "obtainedresult" => $result2, "typecalc" => 22, "population" => $nrPop, "start" => $first / $maxPoints, "result2" => $result2,
                   "progress" => $last / $first, "progcalc" => $pgc, "info" => json_encode($info), "typecalc2" => $randomDoing]);
                 $this->ls->saveCalco($calco->id, $lvlReso[1]); 
@@ -1023,7 +1035,7 @@ class MainController extends Controller
     private function debugInfo($res, $randomDoing) {
         echo $randomDoing."<br/>";
         foreach ($res AS $r) {
-            echo $r['sum']."</br>";
+            echo $r['sum']." - ".$r['stoped']."</br>";
         }
         exit();
  
