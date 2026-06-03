@@ -41,7 +41,7 @@ class MutationData
         "replaceSquere2x2", "replaceSquere4x4", "replaceSquere5x5", "replaceSquere4x4Random", "replaceSquere3x3Random", "replaceSquere5x5Random", "replaceSquere6x6Random",
         "replaceSquere6x6", "replaceSquere7x7", "replaceSquere7x7Random", "replaceRectangleRandom", "replaceRectangle", "neighbourchange2",
         "replaceSquere8x8Random", "replaceSquere8x8", "replaceSquere9x9Random", "replaceSquere9x9", "replaceSquere10x10Random2", "replaceSquere10x10Random3", 
-        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10", "shuffleSamePower"
+        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10", "shuffleSamePower", "shuffleSamePowerMulti"
     ];
 
     public function setNumerMutation($nr) {
@@ -3907,5 +3907,12 @@ class MutationData
 
     }   
 
+    private function shuffleSamePowerMulti($pop, $nr = 10) {
+       $rand = rand(2, 8);
+       for ($i = 0; $i < $rand; $i++) {
+          $pop = $this->shuffleSamePower($pop, $nr);
+       }
+       return $pop;
+    }
 
 }
