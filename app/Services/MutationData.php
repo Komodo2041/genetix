@@ -41,7 +41,7 @@ class MutationData
         "replaceSquere2x2", "replaceSquere4x4", "replaceSquere5x5", "replaceSquere4x4Random", "replaceSquere3x3Random", "replaceSquere5x5Random", "replaceSquere6x6Random",
         "replaceSquere6x6", "replaceSquere7x7", "replaceSquere7x7Random", "replaceRectangleRandom", "replaceRectangle", "neighbourchange2",
         "replaceSquere8x8Random", "replaceSquere8x8", "replaceSquere9x9Random", "replaceSquere9x9", "replaceSquere10x10Random2", "replaceSquere10x10Random3", 
-        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10"
+        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10", "shuffleSamePower"
     ];
 
     public function setNumerMutation($nr) {
@@ -3860,5 +3860,52 @@ class MutationData
 
         return $pop;
     }     
+
+    private function shuffleSamePower($pop, $nr = 10) {
+
+       $orders = $this->getOrders($nr);
+       if (!$orders) {
+           return $pop;
+       }
+ 
+       $isthesame = 1;
+       $des = 100;
+       $val = 0;
+       while ($isthesame && $des > 0) {        
+                $used = [];
+                $x = rand(0, $nr - 1);
+                $y = rand(0, $nr - 1);
+                $z = rand(0, $nr - 1);
+
+                $val = $orders[$x."-".$y."-".$z];
+        
+                for ($i = 0; $i < $nr; $i++) {
+                     for ($j = 0; $j < $nr; $j++) {
+                        for ($z = 0; $z < $nr; $z++) {
+
+                            if ($orders[$x."-".$y."-".$z] == $val) {
+                                $used[] = $pop[$i][$j][$z];
+                            }
+                        }
+                    }
+                }
+            $des--;
+            $isthesame = $this->checSameArray($used);                
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                    if ($orders[$x."-".$y."-".$z] == $val) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop; 
+
+
+    }   
+
 
 }
