@@ -714,7 +714,6 @@ class MainController extends Controller
         $repeatQ = 0;
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $nrPop = 0;
-        $maxPop = $this->maxPopulation;
  
         $info = [];
         $usedmodify = [];
@@ -727,7 +726,7 @@ class MainController extends Controller
           // HEAD LOOP
          
  
-        while ($repeatQ < 20 && $nrPop < $maxPop && $maxQ < $maxPoints) {
+        while ($repeatQ < 20 && $nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
  
             $selectedIndividuals = $gtx->getindyvidual($res, $individual);
         
@@ -762,6 +761,8 @@ class MainController extends Controller
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+                $newpopulaton = $gtx->usepower($pop_result[0], $power);
+                $pop_result[0] = $newpopulaton;
 
             } elseif ($useonlyMutation == 1) {
                 
@@ -770,7 +771,7 @@ class MainController extends Controller
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result[0] = $newpopulaton;
             }
-            
+    
             if ($usebestArea == 1) {
                 $pop_result[0][] = $bestArea;
                 $usebestArea = 0;
@@ -778,6 +779,7 @@ class MainController extends Controller
             }
 
             $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+            
             $power = $gtx->getPowerfromarea($res);
             $maxQ = $res[0]['sum'];
             $maxQ2 = $res[1]['sum']; 
@@ -829,7 +831,7 @@ class MainController extends Controller
             } 
 
             $nrPop++;             
-        }
+        }  
         $last = $res[0]['sum'];
         $t4 = microtime(true);
         arsort($usedmodify); 

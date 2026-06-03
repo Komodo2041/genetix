@@ -37,7 +37,11 @@ class MutationData
         "shuffleonMatrixPower50_left", "shuffleonMatrixPower50_right", "shuffleonMatrixPower50_middle", "shuffleonMatrixPower50_toborder",
         "shuffleonMatrixPower100_left", "shuffleonMatrixPower100_right", "shuffleonMatrixPower100_middle", "shuffleonMatrixPower100_toborder",
         "neighbourchange20", "neighbourchange50", "neighbourchange100", "liftDown", "liftDown5", "liftDown10", "liftDown20", "liftUp5", "liftUp10", "liftUp20",
-        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2", "liftBigDown", "liftBigUp", "liftUp", "shufflecolumnXZgo5", "partcolumnXZgo5"
+        "liftDown10Up10", "liftUp2", "liftDown2", "liftDown2Up2", "liftBigDown", "liftBigUp", "liftUp", "shufflecolumnXZgo5", "partcolumnXZgo5", "replaceSquere3x3",
+        "replaceSquere2x2", "replaceSquere4x4", "replaceSquere5x5", "replaceSquere4x4Random", "replaceSquere3x3Random", "replaceSquere5x5Random", "replaceSquere6x6Random",
+        "replaceSquere6x6", "replaceSquere7x7", "replaceSquere7x7Random", "replaceRectangleRandom", "replaceRectangle", "neighbourchange2",
+        "replaceSquere8x8Random", "replaceSquere8x8", "replaceSquere9x9Random", "replaceSquere9x9", "replaceSquere10x10Random2", "replaceSquere10x10Random3", 
+        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10"
     ];
 
     public function setNumerMutation($nr) {
@@ -478,7 +482,14 @@ class MutationData
           $pop = $this->neighbourchange($pop, $nr);
        }
        return $pop;
-    }       
+    }
+    
+    private function neighbourchange2($pop, $nr = 10) {
+       for ($i = 0; $i < 2; $i++) {
+          $pop = $this->neighbourchange($pop, $nr);
+       }
+       return $pop;
+    }      
  
     private function exchangecolumnXZ($pop, $nr = 10) {
         $pom1 = rand(1, $nr - 3);
@@ -3326,22 +3337,51 @@ class MutationData
         return $pop;
     }
 
+    private function checSameArray($used) {
+        if (count($used) == 0) {
+            return 0;
+        }
+        $res = 1;
+        $val = $used[0];
+        for ($i = 0; $i < count($used); $i++) {
+            if ($val != $used[$i]) {
+               $res = 0;
+               break;
+            }
+        }
+        return $res;
+    }
+
     private function shufflecolumnXZgo5($pop, $nr = 10) {
         $pom1 = rand(0, $nr - 1);
         $pom2 = rand(0, $nr - 1);
         $pom3 = rand(0, 4);
         $used = [];
 
-        for ($i = 0; $i < $nr; $i++) {
-           for ($j = 0; $j < $nr; $j++) {
-                for ($z = 0; $z < $nr; $z++) {
-                     if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 5 >= $j)) {
-                        $used[] = $pop[$i][$j][$z];  
-                     }
+        $isthesame = 1;
+        $des = 100;
+        while ($isthesame && $des > 0) {
+            $used = [];
+            for ($i = 0; $i < $nr; $i++) {
+                 for ($j = 0; $j < $nr; $j++) {
+                    for ($z = 0; $z < $nr; $z++) {
+                        if ($i == $pom1 && $z == $pom2 && ( $pom3 < $j && $pom3 + 5 >= $j)) {
+                            $used[] = $pop[$i][$j][$z];  
+                        }
+                    }
                 }
             }
-        }   
+            $des--;
+            $isthesame = $this->checSameArray($used);
+        }
+        $old = $used;
+        $des = 10;
         shuffle($used);
+        while ($old == $used && $des > 0) {
+           shuffle($used);
+           $des--;
+        } 
+   
         for ($i = 0; $i < $nr; $i++) {
            for ($j = 0; $j < $nr; $j++) {
                 for ($z = 0; $z < $nr; $z++) {
@@ -3389,5 +3429,436 @@ class MutationData
 
     }    
 
+    private function checkNumbers($pomZ, $pomZ2) {
+        if ($pomZ == $pomZ2) {
+            if ($pomZ2 == 0) {
+                $pomZ2 = 1;
+            } else {
+                $pomZ2--;
+            } 
+        }
+        return $pomZ2;
+    }
+
+    private function replaceSquere3x3($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 3);
+        $pom2 = rand(0, $nr - 3);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+ 
+
+        for ($x = 0; $x <= 2; $x++) {
+            for ($y = 0; $y <= 2; $y++) {
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+
+    private function replaceSquere4x4($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 4);
+        $pom2 = rand(0, $nr - 4);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 3; $x++) {
+            for ($y = 0; $y <= 3; $y++) {
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+
+    private function replaceSquere2x2($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 2);
+        $pom2 = rand(0, $nr - 2);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 1; $x++) {
+            for ($y = 0; $y <= 1; $y++) {
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }    
+
+    private function replaceSquere5x5($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 5);
+        $pom2 = rand(0, $nr - 5);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 4; $x++) {
+            for ($y = 0; $y <= 4; $y++) {
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+
+    private function replaceSquere5x5Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 5);
+        $pom2 = rand(0, $nr - 5);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 4; $x++) {
+            for ($y = 0; $y <= 4; $y++) {
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }    
+
+    private function replaceSquere4x4Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 4);
+        $pom2 = rand(0, $nr - 4);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 3; $x++) {
+            for ($y = 0; $y <= 3; $y++) {
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }    
+
+    private function replaceSquere3x3Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 3);
+        $pom2 = rand(0, $nr - 3);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x <= 2; $x++) {
+            for ($y = 0; $y <= 2; $y++) {
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+
+    private function replaceSquere6x6Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 6);
+        $pom2 = rand(0, $nr - 6);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x <= 5; $x++) {
+            for ($y = 0; $y <= 5; $y++) {
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    } 
+    
+    private function replaceSquere6x6($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 6);
+        $pom2 = rand(0, $nr - 6);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x <= 5; $x++) {
+            for ($y = 0; $y <= 5; $y++) {             
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }      
+     
+    private function replaceSquere7x7($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 7);
+        $pom2 = rand(0, $nr - 7);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1);
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x <= 6; $x++) {
+            for ($y = 0; $y <= 6; $y++) {             
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }    
+
+    private function replaceSquere7x7Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 7);
+        $pom2 = rand(0, $nr - 7);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 6; $x++) {
+            for ($y = 0; $y <= 6; $y++) {   
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                          
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    } 
+
+    private function replaceRectangle($pop, $nr = 10) {
+    
+        $pomx1 = rand(0, $nr - 2);
+        $pomx2 = rand($pomx1 + 1, $nr - 1);
+        $pomy1 = rand(0, $nr - 2);
+        $pomy2 = rand($pomy1, $nr - 1);        
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = $pomx1; $x <= $pomx2; $x++) {
+            for ($y = $pomy1; $y <= $pomy2; $y++) {             
+                $pom = $pop[$x][$y][$pomZ];
+                $pop[$x][$y][$pomZ] = $pop[$x][$y][$pomZ2];
+                $pop[$x][$y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+    
+    private function replaceRectangleRandom($pop, $nr = 10) {
+    
+        $pomx1 = rand(0, $nr - 2);
+        $pomx2 = rand($pomx1 + 1, $nr - 1);
+        $pomy1 = rand(0, $nr - 2);
+        $pomy2 = rand($pomy1, $nr - 1);        
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1);
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = $pomx1; $x <= $pomx2; $x++) {
+            for ($y = $pomy1; $y <= $pomy2; $y++) {
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                         
+                $pom = $pop[$x][$y][$pomZ];
+                $pop[$x][$y][$pomZ] = $pop[$x][$y][$pomZ2];
+                $pop[$x][$y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+
+    private function replaceSquere8x8($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 8);
+        $pom2 = rand(0, $nr - 8);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1);
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x <= 7; $x++) {
+            for ($y = 0; $y <= 7; $y++) {             
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }    
+
+    private function replaceSquere8x8Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 8);
+        $pom2 = rand(0, $nr - 8);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 7; $x++) {
+            for ($y = 0; $y <= 7; $y++) {   
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                          
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    } 
+
+    private function replaceSquere9x9($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 9);
+        $pom2 = rand(0, $nr - 9);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1);
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x <= 8; $x++) {
+            for ($y = 0; $y <= 8; $y++) {             
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }    
+
+    private function replaceSquere9x9Random($pop, $nr = 10) {
+    
+        $pom1 = rand(0, $nr - 9);
+        $pom2 = rand(0, $nr - 9);
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1); 
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+
+        for ($x = 0; $x <= 8; $x++) {
+            for ($y = 0; $y <= 8; $y++) {   
+                $r = rand(0, 1);
+                if ($r == 0) {
+                    continue;
+                }                          
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    } 
+
+    private function replaceSquere10x10($pop, $nr = 10) {
+    
+ 
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1);
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x < $nr; $x++) {
+            for ($y = 0; $y < $nr; $y++) {             
+                $pom = $pop[$x][$y][$pomZ];
+                $pop[$x][$y][$pomZ] = $pop[$x][$y][$pomZ2];
+                $pop[$x][$y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    } 
+
+    private function replaceSquere10x10Random2($pop, $nr = 10) {
+        return $this->replaceSquere10x10Random($pop, $nr, 1);
+    }
+
+    private function replaceSquere10x10Random3($pop, $nr = 10) {
+        return $this->replaceSquere10x10Random($pop, $nr, 2);
+    }
+
+    private function replaceSquere10x10Random4($pop, $nr = 10) {
+        return $this->replaceSquere10x10Random($pop, $nr, 3);
+    }
+
+    private function replaceSquere10x10Random5($pop, $nr = 10) {
+        return $this->replaceSquere10x10Random($pop, $nr, 4);
+    }
+    
+    private function replaceSquere10x10Random6($pop, $nr = 10) {
+        return $this->replaceSquere10x10Random($pop, $nr, 5);
+    }     
+    
+
+    private function replaceSquere10x10Random($pop, $nr = 10, $chance = 1) {
+    
+ 
+        $pomZ = rand(0, $nr - 1);
+        $pomZ2 = rand(0, $nr - 1);
+        $pomZ2 = $this->checkNumbers($pomZ, $pomZ2);
+        
+        for ($x = 0; $x < $nr; $x++) {
+            for ($y = 0; $y < $nr; $y++) {  
+                $r = rand(0, $chance);
+                if ($r == 0) {
+                    continue;
+                }                              
+                $pom = $pop[$x][$y][$pomZ];
+                $pop[$x][$y][$pomZ] = $pop[$x][$y][$pomZ2];
+                $pop[$x][$y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }     
 
 }
