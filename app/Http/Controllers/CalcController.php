@@ -8,13 +8,23 @@ use App\Services\GenetixDataGenerator;
 
 use App\Models\Calculation;
 use App\Models\Area;
+use App\Models\Gen0;
 use App\Services\LevelStering;
 use App\Http\Controllers\MainController;
+ 
+use App\Services\CrossingData;
+use App\Services\MutationData; 
+
+use App\Services\Generation0Helper;
 
 class CalcController extends Controller
 {
 
     public $nrMaxPopulation = 120;
+
+    public $manyrepeat = 10;
+    public $maxPopulation = 10;
+    public $startPopulation = 800;
 
     public function __construct() {  
         $this->main = new MainController();
@@ -461,9 +471,66 @@ class CalcController extends Controller
            
         }
  
- 
         return view("percent", ['calco' => $calc ]);
 
     }
+
+    public function showgeneration0($id) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }        
+        return view("showgeneration0", ['area' => $area ]);
+    }
+
+    public function calcGeneration0($id, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx) {
+        set_time_limit(40000);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+ 
+        $pattern = $gen0->getPattern($tryb, 10); 
+   
+        $halfPopulation = floor($this->startPopulation/ 2);
+        $cross->setNr($halfPopulation);
+        $mutation->setNumerMutation($halfPopulation);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);   
+        $individual = 10;     
+ 
+       for ($i = 0; $i < $this->manyrepeat; $i++) {
+
+          $population0 = [];
+          for ($n = 0; $n < $this->startPopulation; $n++) {
+              $population0[] = $gen0->createBoard($pattern, 10);
+          }
+     
+          $res = $gtx->calcPopulation($population0, $headPoints); 
+          unset($population0);
+
+           $nrPop = 0;
+           $maxQ = $res[0]['sum'];
+
+            while ( $nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+    
+                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]); 
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+  
+                $maxQ = $res[0]['sum'];           
+                $nrPop++;             
+            }
+            $last = $res[0]['sum'];
+            $result = $last / $maxPoints;
+            Gen0::create(["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern) ]);
+            unset($res);
+       }
+ 
+       return redirect("/showgeneration0/".$id)->with('success', 'Obliczono pierwsze pokolenie');
+    }
+
 
 }

@@ -55,6 +55,8 @@ Route::get('showring/{id}',  "App\Http\Controllers\CalcController@showring" );
 Route::get('area/histogram/{id}',  "App\Http\Controllers\CalcController@histogram" );
 Route::get('calcallavg/{id}',  "App\Http\Controllers\CalcController@calcallavg" );
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\CalcController@percentshow" );
+Route::get('showgeneration0/{id}',  "App\Http\Controllers\CalcController@showgeneration0" );
+Route::get('calcGeneration0/{id}/{tryb}',  "App\Http\Controllers\CalcController@calcGeneration0" );
 
 Route::get('cloneRiver/{id}',  "App\Http\Controllers\RiverController@cloneRiver" );
 Route::get('showRiver/{id}',  "App\Http\Controllers\RiverController@showRiver" );
