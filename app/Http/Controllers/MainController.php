@@ -12,7 +12,7 @@ use App\Services\LevelStering;
 use App\Services\MatrixHelper;
 use App\Services\PopulationName;  
 use App\Services\WagaService;    
-
+use App\Services\Generation0Helper;
 use Illuminate\Http\Request;
 
 use App\Models\Area; 
@@ -77,11 +77,12 @@ class MainController extends Controller
  
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 0;
+    private $testRadomSelecting = 100;
 
     private $usingPower = 0;
  
-    public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $powermutation, $dId = null) {
+    public function calcarea_level($id, $lvl,  GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation,
+           BigMutatorData $bigmutation, PowerBigMutator $powermutation, Generation0Helper $gen0, $dId = null) {
         
         set_time_limit(40000);
         // MORE MEMORY
@@ -673,7 +674,21 @@ class MainController extends Controller
                 $powermutation->setPercent(5);
             }
 
-        }  elseif ( in_array($randomDoing, $this->pn->diamondCrossing)) {
+        } elseif ($randomDoing == 100) {
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data); 
+            }                
+            $power = $gtx->getPower($population0);
+
+            $stiffPattern = $gtx->getStiffPattern($calculations, 10, 10);
+            $pattern = $gen0->calcPattern($stiffPattern[1]);
+            for ($n = 0; $n < $this->startPopulation; $n++) {
+                $population0[] = $gen0->createBoard($pattern, 10);
+            }
+            $population0 = $gtx->usepower($population0, $power);
+            
+        } elseif ( in_array($randomDoing, $this->pn->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
             $population0 = $res[0];

@@ -46,6 +46,22 @@ class Generation0Helper {
         }
     }
 
+    public function calcPattern($data, $size = 10) {
+
+       for ($i = 0; $i < 10; $i++) {
+            $res[$i] = 0;
+       }
+       for ($i = 0; $i < $size; $i++) {
+           for ($j = 0; $j < $size; $j++) {
+               for ($z = 0; $z < $size; $z++) {
+                  $res[$z] += $data[$i][$j][$z];
+               }
+           }
+       }
+       return $res;
+
+    }    
+
 }
 
 

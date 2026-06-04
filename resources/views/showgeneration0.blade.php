@@ -12,9 +12,20 @@
 
 <div class="container">
  
- TUTAJ BĘDZIE POKAZ NAJLPESZYCH WYNIKÓW
-   
- 
+   <table>
+      <tr>
+        <th>Patter</th>
+        <th>Result</th>
+        <th>Pop</th>
+      </tr>
+      @foreach ($gen AS $g)
+      <tr>
+        <th>{{$g->data}}</th>
+        <th>{{$g->result}}</th>
+        <th>{{$g->population}}</th>
+      </tr>      
+      @endforeach
+</table>
  
   
 </div>

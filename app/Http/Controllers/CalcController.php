@@ -479,12 +479,16 @@ class CalcController extends Controller
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
-        }        
-        return view("showgeneration0", ['area' => $area ]);
+        }
+        $gen = Gen0::where("area_id", $id)->orderBy("result", "desc")->take(100)->get();
+
+        return view("showgeneration0", ['area' => $area, 'gen' => $gen ]);
     }
 
     public function calcGeneration0($id, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx) {
         set_time_limit(40000);
+        ini_set('memory_limit', '300M');
+        
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -529,8 +533,9 @@ class CalcController extends Controller
             unset($res);
        }
  
-       return redirect("/showgeneration0/".$id)->with('success', 'Obliczono pierwsze pokolenie');
+       return redirect("/showgeneration0/".$id)->with('success', 'Obliczono pierwsze pokolenie dla '.json_encode($pattern));
     }
 
+ 
 
 }
