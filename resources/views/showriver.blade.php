@@ -11,6 +11,7 @@
    <table>
       <tr>
          <th>Nazwa</th>
+         <th>Area Id</th>
          <th>Level</th>
          <th>Wynik</th>
          <th>Liczba Punktów</th>
@@ -19,6 +20,7 @@
       @foreach ($calco AS $p) 
         <tr>
             <td>{{$p['name']}}</td>
+            <td>{{$p['area_id']}}</td>
             <td>{{$p['level']}}</td>
             <td>{{$p['sum']}}</td>
             <td>{{$p['points']}}</td>

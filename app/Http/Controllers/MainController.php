@@ -1004,7 +1004,7 @@ class MainController extends Controller
             $lvlmax = 1;
          }
          if ($trybe == 5) {
-            $lvlmax = 2;
+            $lvlmax = 3;
          }
 
         for ($i = 0; $i < $this->nrTimes; $i++) {

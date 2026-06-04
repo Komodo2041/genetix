@@ -41,7 +41,8 @@ class MutationData
         "replaceSquere2x2", "replaceSquere4x4", "replaceSquere5x5", "replaceSquere4x4Random", "replaceSquere3x3Random", "replaceSquere5x5Random", "replaceSquere6x6Random",
         "replaceSquere6x6", "replaceSquere7x7", "replaceSquere7x7Random", "replaceRectangleRandom", "replaceRectangle", "neighbourchange2",
         "replaceSquere8x8Random", "replaceSquere8x8", "replaceSquere9x9Random", "replaceSquere9x9", "replaceSquere10x10Random2", "replaceSquere10x10Random3", 
-        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10", "shuffleSamePower", "shuffleSamePowerMulti"
+        "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10", "shuffleSamePower", "shuffleSamePowerMulti",
+        "mixingZLayersInRecatngle", "shuffleSamePowerWidth", "shuffleSamePowerWidth_10", "shuffleSamePowerWidth_50"
     ];
 
     public function setNumerMutation($nr) {
@@ -3908,11 +3909,98 @@ class MutationData
     }   
 
     private function shuffleSamePowerMulti($pop, $nr = 10) {
-       $rand = rand(2, 8);
+       $rand = rand(2, 3);
        for ($i = 0; $i < $rand; $i++) {
           $pop = $this->shuffleSamePower($pop, $nr);
        }
        return $pop;
     }
+
+    private function mixingZLayersInRecatngle($pop, $nr = 10) {
+        $pom1 = rand(0, $nr - 2);
+        $used = [];
+
+        $x1 = rand(0, $nr - 2);
+        $x2 = rand($x1 + 1, $nr - 1);
+        $y1 = rand(0, $nr - 2);
+        $y2 = rand($y1 + 1, $nr - 1);        
+
+        for ($i = $x1; $i <= $x2; $i++) {
+           for ($j = $y1; $j <= $y2; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     if ($z == $pom1 || $z == $pom1 + 1 ) {
+                        $used[] = $pop[$i][$j][$z];  
+                     }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = $x1; $i <= $x2; $i++) {
+           for ($j = $y1; $j <= $y2; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pom1 || $z == $pom1 + 1 ) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }
+        return $pop;
+
+    }
+
+
+    private function shuffleSamePowerWidth($pop, $nr = 10, $witdh = 0.2) {
+
+       $orders = $this->getOrders($nr);
+       if (!$orders) {
+           return $pop;
+       }
+ 
+       $isthesame = 1;
+       $des = 100;
+       $val = 0;
+       while ($isthesame && $des > 0) {        
+                $used = [];
+                $x = rand(0, $nr - 1);
+                $y = rand(0, $nr - 1);
+                $z = rand(0, $nr - 1);
+
+                $val = $orders[$x."-".$y."-".$z];
+        
+                for ($i = 0; $i < $nr; $i++) {
+                     for ($j = 0; $j < $nr; $j++) {
+                        for ($z = 0; $z < $nr; $z++) {
+
+                            if ($orders[$x."-".$y."-".$z] - $witdh <= $val && $orders[$x."-".$y."-".$z] + $witdh >= $val) {
+                                $used[] = $pop[$i][$j][$z];
+                            }
+                        }
+                    }
+                }
+            $des--;
+            $isthesame = $this->checSameArray($used);                
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) { 
+                    if ($orders[$x."-".$y."-".$z] - $witdh <= $val && $orders[$x."-".$y."-".$z] + $witdh >= $val) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                    }
+                }
+            }
+        }          
+        return $pop; 
+
+
+    }  
+ 
+    private function shuffleSamePowerWidth_10($pop, $nr = 10 ) {
+       return $this->shuffleSamePowerWidth($pop, $nr, 0.1);
+    }
+
+    private function shuffleSamePowerWidth_50($pop, $nr = 10 ) {
+       return $this->shuffleSamePowerWidth($pop, $nr, 0.5);
+    }    
 
 }

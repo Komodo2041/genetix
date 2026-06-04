@@ -61,6 +61,7 @@ class RiverController extends Controller
             $data = json_decode($c->data);
             $record = [
                 "name" => $area->name,
+                "area_id" => $id,
                 'level' => $c->level,
                 'sum' => $c->obtainedresult,
                 'points' => $this->calcpointer( $table, $data)
@@ -75,6 +76,7 @@ class RiverController extends Controller
                 $data = json_decode($c->data);
                 $record = [
                     "name" => $ar->name,
+                    "area_id" => $ar->id,
                     'level' => $c->level,
                     'sum' => $c->obtainedresult,
                     'points' => $this->calcpointer( $table, $data)
@@ -137,6 +139,8 @@ class RiverController extends Controller
         return redirect("/")->with('success', 'Utworzono rzekę');
     }
 
-
+    public function getCalculationMaxBest($id, $number) {
+        return  Calculation::where("area_id", $id)->orderByDesc("obtainedresult" )->limit(max(0, $number))->get();
+    }
 
 }
