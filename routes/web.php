@@ -64,3 +64,6 @@ Route::get('addRiver/{id}',  "App\Http\Controllers\RiverController@addRiver" );
 Route::get('diamon/add/{id}',  "App\Http\Controllers\DiamondController@adddiamond" );
 
 Route::get('createweighingscale/{id}',  "App\Http\Controllers\WagaController@createweighingscale" );
+
+Route::get('showCron',  "App\Http\Controllers\CronController@show" );
+Route::post('showCron',  "App\Http\Controllers\CronController@show" );

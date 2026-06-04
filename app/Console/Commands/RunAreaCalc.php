@@ -11,6 +11,8 @@ use App\Services\MutationData;
 use App\Services\BigMutatorData;
 use App\Services\PowerBigMutator;
 
+use App\Models\CronSett;
+
 class RunAreaCalc extends Command
 {
     /**
@@ -32,8 +34,17 @@ class RunAreaCalc extends Command
      */
     public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm)
     {
-        $id = 16;
+        
         $trybe = $this->argument('tryb');
+        
+        $sett = CronSett::where("tryb", $trybe)->pluck("area_id")->toArray();
+        if (count($sett)) {
+           $id = $sett[rand(0, count($sett) - 1)];
+           echo "Wybrano Area ".$id;
+        } else {
+           echo "Brak Area Dla tego Trybu ".$trybe;
+           exit();    
+        }
  
         $main = new MainController();
         $main->calcareamoretimes($id, $trybe, $gtx, $cross, $mutation, $bigmutation, $pbm);

@@ -5,7 +5,7 @@
 
 <a href="/mutations"><button>Mutacje - Krzyżowania</button></a> 
 <a href="/powermatrix/10"><button>Pokaz Matryce siły - size 10</button></a>  
-
+<a href="/showCron"><button>Ustawienia Crona</button></a> 
 
 <div class="container">
     
