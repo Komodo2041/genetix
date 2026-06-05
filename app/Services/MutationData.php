@@ -42,7 +42,7 @@ class MutationData
         "replaceSquere6x6", "replaceSquere7x7", "replaceSquere7x7Random", "replaceRectangleRandom", "replaceRectangle", "neighbourchange2",
         "replaceSquere8x8Random", "replaceSquere8x8", "replaceSquere9x9Random", "replaceSquere9x9", "replaceSquere10x10Random2", "replaceSquere10x10Random3", 
         "replaceSquere10x10Random4", "replaceSquere10x10Random5", "replaceSquere10x10Random6", "replaceSquere10x10", "shuffleSamePower", "shuffleSamePowerMulti",
-        "mixingZLayersInRecatngle", "shuffleSamePowerWidth", "shuffleSamePowerWidth_10", "shuffleSamePowerWidth_50"
+        "mixingZLayersInRecatngle", "shuffleSamePowerWidth", "shuffleSamePowerWidth_10", "shuffleSamePowerWidth_50", "rombono3_inY", "rombono3_inX", "rombono2_inX"
     ];
 
     public function setNumerMutation($nr) {
@@ -4002,5 +4002,110 @@ class MutationData
     private function shuffleSamePowerWidth_50($pop, $nr = 10 ) {
        return $this->shuffleSamePowerWidth($pop, $nr, 0.5);
     }    
+
+    private function rombono3_inX($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z1 = rand(0, $nr - 2);
+        $pom_z2 = rand($pom_z1, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($j - $pom_x) + abs($z - $pom_y);
+
+                     if ($sum <= 3 && $i >= $pom_z1 && $i <= $pom_z2) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                      $sum = abs($j - $pom_x) + abs($z - $pom_y);
+
+                      if ($sum <= 3 && $i >= $pom_z1 && $i <= $pom_z2) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function rombono3_inY($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z1 = rand(0, $nr - 2);
+        $pom_z2 = rand($pom_z1, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($i - $pom_x) + abs($z - $pom_y);
+
+                     if ($sum <= 3 && $j >= $pom_z1 && $j <= $pom_z2) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                     $sum = abs($i - $pom_x) + abs($z - $pom_y);
+
+                      if ($sum <= 3 && $j >= $pom_z1 && $j <= $pom_z2) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }
+
+    private function rombono2_inX($pop, $nr = 10) {
+        $pom_x = rand(0, $nr - 1); 
+        $pom_y = rand(0, $nr - 1); 
+        $pom_z1 = rand(0, $nr - 2);
+        $pom_z2 = rand($pom_z1, $nr - 1);
+           
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($j - $pom_x) + abs($z - $pom_y);
+
+                     if ($sum <= 2 && $i >= $pom_z1 && $i <= $pom_z2) {
+                          $used[] = $pop[$i][$j][$z];
+                     }
+                }
+            }
+        }   
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+           for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = abs($j - $pom_x) + abs($z - $pom_y);
+
+                     if ($sum <= 2 && $i >= $pom_z1 && $i <= $pom_z2) {
+                         $pop[$i][$j][$z] = array_shift($used);
+                     }
+                }
+            }
+        }          
+        return $pop;     
+
+    }   
 
 }
