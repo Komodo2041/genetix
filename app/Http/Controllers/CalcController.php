@@ -499,6 +499,18 @@ class CalcController extends Controller
             $calculations = Calculation::where("area_id", $id)->orderBy('obtainedresult', 'DESC')->take(25)->get();
             $stiffPattern = $gtx->getStiffPattern($calculations, 10, 10);
             $pattern = $gen0->calcPattern($stiffPattern[1]);                     
+        } elseif ($tryb == 5) {
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $pattern = json_decode($best->data);
+            foreach ($pattern AS $key => $res) {
+                $pattern[$key] = rand(-5, 5) + $res;
+                if ($pattern[$key] > 100) {
+                    $pattern[$key] = 100;
+                }
+                if ($pattern[$key] < 0) {
+                    $pattern[$key] = 0;
+                }                
+            }
         }
      
 
