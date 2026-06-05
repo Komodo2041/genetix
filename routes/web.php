@@ -37,10 +37,10 @@ Route::get('showPowerBigLayer/{id}',  "App\Http\Controllers\CheckingCrossAndMuta
 Route::get('calcPowerBigLayer/{id}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcPowerBigLayer" );
 Route::get('showBigMutationLayer/{id}/{tryb}',  "App\Http\Controllers\CheckingCrossAndMutation@showBigMutationLayer" );
 Route::get('calcBigMutationLayer/{id}/{tryb}/{nrM}',  "App\Http\Controllers\CheckingCrossAndMutation@calcBigMutationLayer" );
-
 Route::get('calcOneMutation/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcOneMutation" );
 Route::post('calcOneMutation/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcOneMutation" );
-
+Route::get('calcOneCrossing/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcOneCrossing" );
+Route::post('calcOneCrossing/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@calcOneCrossing" );
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController@list" );
 Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController@showprocess" );

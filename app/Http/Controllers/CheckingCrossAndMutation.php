@@ -208,7 +208,7 @@ class CheckingCrossAndMutation extends Controller
     }
 
 
-    public function calcCrossMatrix($id, CrossingData $cross, GenetixDataGenerator $gtx, $nrM = null) {
+    public function calcCrossMatrix($id, CrossingData $cross, GenetixDataGenerator $gtx, $nrM = null, $mutmed = null) {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -219,7 +219,10 @@ class CheckingCrossAndMutation extends Controller
         }
 
         set_time_limit(12000);
-        $crossings = $cross->getAllMethod();  
+        $crossings = $cross->getAllMethod();
+        if ($mutmed) {
+            $crossings = [$mutmed];
+        }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
         $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(20)->get();
@@ -293,8 +296,9 @@ class CheckingCrossAndMutation extends Controller
             ];
  
         }
- 
-        CrossMatrix::where("area_id", $id)->update(["hide" => 1]); 
+        if (!$mutmed) {
+            CrossMatrix::where("area_id", $id)->update(["hide" => 1]); 
+        }
         foreach ($mresults AS $res) {
  
             CrossMatrix::create(["area_id" => $id, "name" => $res['name'], "max" => $res['max'],
@@ -707,6 +711,25 @@ class CheckingCrossAndMutation extends Controller
         } 
 
         return view("calcOneMutation", [ 'area' => $area, "methods" => $methods]);
+    }
+
+    public function calcOneCrossing($id, Request $request, CrossingData $cross,  GenetixDataGenerator $gtx) {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+ 
+        $methods = $cross->getAllMethod();
+
+        if ($request->isMethod('post')) {
+            $m = $request->input('method');
+            if ($m && in_array($m, $methods)) {
+                $this->calcCrossMatrix($id, $cross, $gtx, 1000, $m);
+                return redirect("/showCrossMatrix/".$id)->with('success', 'Obliczono metodę '.$m.' Dla Area '.$id);  
+            }
+        } 
+
+        return view("calcOneCrossing", [ 'area' => $area, "methods" => $methods]);
     }
 
 

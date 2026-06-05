@@ -1,7 +1,9 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br/>
+<a href="/"><button>Strona główna</button></a>
+<a href="/calcOneCrossing/{{$area->id}}"><button>Przelicz jedno krzyżowanie</button></a>
+<br/>
 
 <a href="/calcCrossMatrix/{{$area->id}}/100"><button>Aktualizuj Matryce krzyżowań na wiekszej liczbie krzyżowań 100</button></a>&nbsp;<br/>
 <a href="/calcCrossMatrix/{{$area->id}}/500"><button>Aktualizuj Matryce krzyżowań na wiekszej liczbie krzyżowań 500</button></a>&nbsp;<br/>
