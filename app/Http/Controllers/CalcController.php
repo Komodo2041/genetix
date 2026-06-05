@@ -20,6 +20,9 @@ use App\Services\Generation0Helper;
 class CalcController extends Controller
 {
 
+    // php artisan app:calc-gen0 16 6 
+    // php artisan app:calc-gen0 16 5
+
     public $nrMaxPopulation = 120;
 
     public $manyrepeat = 10;
@@ -521,7 +524,7 @@ class CalcController extends Controller
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);   
         $individual = 10;     
- $this->manyrepeat = 1;
+ 
        for ($i = 0; $i < $this->manyrepeat; $i++) {
 
           $population0 = [];
