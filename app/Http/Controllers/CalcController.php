@@ -493,9 +493,15 @@ class CalcController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
- 
-        $pattern = $gen0->getPattern($tryb, 10); 
-   
+        if (in_array($tryb, [1, 2, 3])) {
+            $pattern = $gen0->getPattern($tryb, 10); 
+        }  elseif ($tryb == 4) {
+            $calculations = Calculation::where("area_id", $id)->orderBy('obtainedresult', 'DESC')->take(25)->get();
+            $stiffPattern = $gtx->getStiffPattern($calculations, 10, 10);
+            $pattern = $gen0->calcPattern($stiffPattern[1]);                     
+        }
+     
+
         $halfPopulation = floor($this->startPopulation/ 2);
         $cross->setNr($halfPopulation);
         $mutation->setNumerMutation($halfPopulation);
@@ -503,7 +509,7 @@ class CalcController extends Controller
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);   
         $individual = 10;     
- 
+ $this->manyrepeat = 1;
        for ($i = 0; $i < $this->manyrepeat; $i++) {
 
           $population0 = [];
