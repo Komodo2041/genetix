@@ -69,3 +69,4 @@ Route::get('createweighingscale/{id}',  "App\Http\Controllers\WagaController@cre
 
 Route::get('showCron',  "App\Http\Controllers\CronController@show" );
 Route::post('showCron',  "App\Http\Controllers\CronController@show" );
+Route::post('cron/setOneCalc',  "App\Http\Controllers\CronController@setOneCalc" );

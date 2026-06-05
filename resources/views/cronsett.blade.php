@@ -36,4 +36,26 @@
  
 </div>
 
+<div class="container">
+   <form action="/cron/setOneCalc" method="POST"> 
+        @csrf;
+        <table>
+         <tr>
+           <th>Nazwa</th>
+           <th> </th>      
+       </tr> 
+          @foreach ($areas AS $a)
+             <tr>
+                <td>{{$a->name}} :  {{$a->id}}</td>
+                <td><input name="sett2[{{$a->id}}]" value="1" type="checkbox" @if ($sett2[$a->id] == 1) checked @endif /></td>
+             </tr>   
+          @endforeach
+         </table>
+
+      <input type="submit" value="Zmień" name="submit" />
+    </form>
+ 
+</div>
+
+
 @endsection('content')

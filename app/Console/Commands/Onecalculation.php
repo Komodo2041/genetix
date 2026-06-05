@@ -10,6 +10,8 @@ use App\Services\CrossingData;
 use App\Services\MutationData; 
 use App\Services\BigMutatorData;
 
+use App\Models\Area;
+
 class onecalculation extends Command
 {
     /**
@@ -31,10 +33,20 @@ class onecalculation extends Command
      */
     public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation)
     {
-        $id = 16;
+        
         $m = $this->argument('method');
         $pop = $this->argument('nrpop');
- 
+        $id = 0;
+        
+        $sett = Area::where("cronmatrix", 1)->pluck("area_id")->toArray();
+        if (count($sett)) {
+           $id = $sett[rand(0, count($sett) - 1)];
+           echo "Wybrano Area ".$id."\n";
+        } else {
+           echo "Brak ID "; 
+           exit();    
+        }
+
         $main = new MainController();
         $main->setParamPopAndRandomDoing($m, $pop);
      

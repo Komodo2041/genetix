@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Area extends Model
 {
     public $table = "area";
-    public $fillable = ["name", "data", "hide", "river", "matrixcross", "matrixtribe", "flex"];
+    public $fillable = ["name", "data", "hide", "river", "matrixcross", "matrixtribe", "flex", "cronmatrix"];
 
     public function calculations() {
         return $this->hasMany("App\Models\Calculation", "area_id")->orderBy("level");

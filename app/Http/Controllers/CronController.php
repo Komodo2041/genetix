@@ -23,13 +23,28 @@ class CronController extends Controller
 
 
         $res = [];
+        $res2 = [];
         $data = CronSett::all();
         $areas = Area::where("hide", 0)->get();
         foreach ($data AS $c) {
             $res[$c->area_id][$c->tryb] = 1;
         }
- 
-        return view("cronsett", ['sett' => $res, "areas" => $areas]);
 
+        foreach ($areas AS $a) {
+            $res2[$a->id] = $a->cronmatrix;
+        }
+ 
+        return view("cronsett", ['sett' => $res, "areas" => $areas, 'sett2' => $res2]);
+
+    }
+
+    public function setOneCalc(Request $request) {
+
+        $sett2 = $request->input('sett2');
+        Area::where("hide", "0")->update(["cronmatrix" => 0]);
+        foreach ($sett2 AS $key => $val) {
+            Area::where("id", $key)->update(["cronmatrix" => 1]);
+        }
+        return redirect("/showCron")->with('success', "Ustawiono Cron "); 
     }
 }
