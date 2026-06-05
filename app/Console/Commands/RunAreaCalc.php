@@ -10,6 +10,7 @@ use App\Services\CrossingData;
 use App\Services\MutationData; 
 use App\Services\BigMutatorData;
 use App\Services\PowerBigMutator;
+use App\Services\Generation0Helper;
 
 use App\Models\CronSett;
 
@@ -32,7 +33,7 @@ class RunAreaCalc extends Command
     /**
      * Execute the console command.
      */
-    public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm)
+    public function handle(GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm, Generation0Helper $gen0)
     {
         
         $trybe = $this->argument('tryb');
@@ -40,13 +41,13 @@ class RunAreaCalc extends Command
         $sett = CronSett::where("tryb", $trybe)->pluck("area_id")->toArray();
         if (count($sett)) {
            $id = $sett[rand(0, count($sett) - 1)];
-           echo "Wybrano Area ".$id;
+           echo "Wybrano Area ".$id."\n";
         } else {
            echo "Brak Area Dla tego Trybu ".$trybe;
            exit();    
         }
  
         $main = new MainController();
-        $main->calcareamoretimes($id, $trybe, $gtx, $cross, $mutation, $bigmutation, $pbm);
+        $main->calcareamoretimes($id, $trybe, $gtx, $cross, $mutation, $bigmutation, $pbm, $gen0);
     }
 }

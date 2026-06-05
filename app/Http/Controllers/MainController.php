@@ -26,6 +26,8 @@ use App\Models\Accuratecalc;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
  
+use App\Models\Select100;
+
 use App\Http\Controllers\DiamondController;
 
 // COMAND :
@@ -77,7 +79,7 @@ class MainController extends Controller
  
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 100;
+    private $testRadomSelecting = 0;
 
     private $usingPower = 0;
  
@@ -683,6 +685,7 @@ class MainController extends Controller
 
             $stiffPattern = $gtx->getStiffPattern($calculations, 10, 10);
             $pattern = $gen0->calcPattern($stiffPattern[1]);
+            Select100::create(["area_id" => $id, "pattern" => json_encode($pattern)]);
             for ($n = 0; $n < $this->startPopulation; $n++) {
                 $population0[] = $gen0->createBoard($pattern, 10);
             }
@@ -979,7 +982,7 @@ class MainController extends Controller
        3 - wszystkie levele
        4 - pierwszy level
     */
-    public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm) {
+    public function calcareamoretimes($id, $trybe, GenetixDataGenerator $gtx, CrossingData $cross, MutationData $mutation, BigMutatorData $bigmutation, PowerBigMutator $pbm, Generation0Helper $gen0) {
         set_time_limit(36000);
         ini_set('memory_limit', '200M');
  
@@ -1027,7 +1030,7 @@ class MainController extends Controller
             if ($random) {
                 $lvl = rand($lvlmin, $lvlmax);
             }
-            $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation, $pbm);
+            $this->calcarea_level($id, $lvl, $gtx, $cross, $mutation, $bigmutation, $pbm, $gen0);
             $this->addpopulation = 0;
             $this->useBigMutator = 0;
             $this->usePowerMutator = 0;
