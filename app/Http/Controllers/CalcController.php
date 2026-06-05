@@ -514,6 +514,17 @@ class CalcController extends Controller
                     $pattern[$key] = 0;
                 }                
             }
+        } elseif ($tryb == 6) {
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $pattern = json_decode($best->data);
+            $key = rand(0, count($pattern) - 1);
+            $pattern[$key] = rand(-5, 5) + $pattern[$key];
+            if ($pattern[$key] > 100) {
+                $pattern[$key] = 100;
+            }
+            if ($pattern[$key] < 0) {
+                $pattern[$key] = 0;
+            }  
         }
      
 
