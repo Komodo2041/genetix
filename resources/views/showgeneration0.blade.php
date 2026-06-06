@@ -8,7 +8,7 @@
 <a href="/calcGeneration0/{{$area->id}}/3"><button>Oblicz 1 generację (11, 23)</button></a>
 <a href="/calcGeneration0/{{$area->id}}/4"><button>Oblicz 1 generację (Najlepsze z Calculations)</button></a>
 <a href="/calcGeneration0/{{$area->id}}/5"><button>Oblicz 1 generację (-5, +5 z najlepszego wyniku)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/6"><button>Oblicz 1 generację (-5, +5 z najlepszego wyniku tylko jedna zmiana)</button></a>
+<a href="/calcGeneration0/{{$area->id}}/6"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
 
 <p>{{$area->id}} : {{$area->name}} - Najlepsze Generacje</p>
 

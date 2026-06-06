@@ -62,6 +62,16 @@ class Generation0Helper {
 
     }    
 
+    public function cleanValue($val) {
+         if ($val > 100) {
+            $val = 100;
+        }
+        if ($val < 0) {
+            $val = 0;
+        }  
+        return $val;
+    }
+
 }
 
 

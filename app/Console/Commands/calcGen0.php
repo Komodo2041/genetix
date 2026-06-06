@@ -44,9 +44,9 @@ class calcGen0 extends Command
           if ($tryb == 8) {
              $tryb = 6;
           }          
-          $calc->manyrepeat = 2;
+          $calc->manyrepeat = 1;
           $calc->maxPopulation = 10;
-          for ($i = 0; $i < 10; $i++) {
+          for ($i = 0; $i < 50; $i++) {
             echo $i."\n";
             $calc->calcGeneration0($aid, $tryb, $gen0, $cross, $mutation,  $gtx);
           }

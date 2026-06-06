@@ -23,6 +23,8 @@ class CalcController extends Controller
     // php artisan app:calc-gen0 16 6 
     // php artisan app:calc-gen0 16 5
 
+    // php artisan app:calc-gen0 16 8
+
     public $nrMaxPopulation = 120;
 
     public $manyrepeat = 10;
@@ -506,25 +508,14 @@ class CalcController extends Controller
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
             $pattern = json_decode($best->data);
             foreach ($pattern AS $key => $res) {
-                $pattern[$key] = rand(-5, 5) + $res;
-                if ($pattern[$key] > 100) {
-                    $pattern[$key] = 100;
-                }
-                if ($pattern[$key] < 0) {
-                    $pattern[$key] = 0;
-                }                
+                $pattern[$key] = $gen0->cleanValue(rand(-5, 5) + $res);               
             }
         } elseif ($tryb == 6) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $key = rand(0, count($pattern) - 1);
-            $pattern[$key] = rand(-5, 5) + $pattern[$key];
-            if ($pattern[$key] > 100) {
-                $pattern[$key] = 100;
-            }
-            if ($pattern[$key] < 0) {
-                $pattern[$key] = 0;
-            }  
+            $key2 = rand(0, count($pattern) - 1);
+            $pattern[$key] =  $gen0->cleanValue(rand(-10, 10) + $pattern[$key]); 
         }
      
 
