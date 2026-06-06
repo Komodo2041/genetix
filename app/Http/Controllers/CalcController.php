@@ -23,7 +23,7 @@ class CalcController extends Controller
     // php artisan app:calc-gen0 16 6 
     // php artisan app:calc-gen0 16 5
 
-    // php artisan app:calc-gen0 16 8
+    // php artisan app:calc-gen0 16 9
 
     public $nrMaxPopulation = 120;
 
@@ -516,6 +516,20 @@ class CalcController extends Controller
             $key = rand(0, count($pattern) - 1);
             $key2 = rand(0, count($pattern) - 1);
             $pattern[$key] =  $gen0->cleanValue(rand(-10, 10) + $pattern[$key]); 
+        } elseif ($tryb == 7) {
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
+            $newpattern = array_fill(0, 10, 0);
+            $all = 0;
+            foreach ($best AS $b) {
+                $pattern = json_decode($b->data);
+                foreach ($pattern AS $key => $val) {
+                    $newpattern[$key] += $val;
+                }
+                $all++;
+            } 
+            foreach ($newpattern AS $key => $val) {
+                $newpattern[$key] = round($val / $all);
+            }
         }
      
 

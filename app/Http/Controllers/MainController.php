@@ -25,7 +25,7 @@ use App\Models\Waga;
 use App\Models\Accuratecalc;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect; 
- 
+use App\Models\Gen0;  
 use App\Models\Select100;
 
 use App\Http\Controllers\DiamondController;
@@ -79,7 +79,7 @@ class MainController extends Controller
  
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 0;
+    private $testRadomSelecting = 101;
 
     private $usingPower = 0;
  
@@ -691,6 +691,21 @@ class MainController extends Controller
             }
             $population0 = $gtx->usepower($population0, $power);
             
+        }  elseif ($randomDoing == 101) {
+
+            $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
+            foreach ($calculations AS $c) {
+                $population0[] = json_decode($c->data); 
+            }                
+            $power = $gtx->getPower($population0);        
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $pattern = json_decode($best->data);
+            $population0 = [];
+            for ($n = 0; $n < $this->startPopulation; $n++) {
+                $population0[] = $gen0->createBoard($pattern, 10);
+            }
+            $population0 = $gtx->usepower($population0, $power);            
+
         } elseif ( in_array($randomDoing, $this->pn->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
@@ -1022,7 +1037,7 @@ class MainController extends Controller
             $lvlmax = 1;
          }
          if ($trybe == 5) {
-            $lvlmax = 3;
+            $lvlmax = 6;
          }
 
         for ($i = 0; $i < $this->nrTimes; $i++) {

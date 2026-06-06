@@ -37,11 +37,11 @@ class calcGen0 extends Command
        echo "Wlaczono ".$aid." tryb - ".$tryb."\n";
        $calc = new CalcController();
 
-       if ($tryb == 7 || $tryb == 8) {
-          if ($tryb == 7) {
+       if ($tryb == 8 || $tryb == 9) {
+          if ($tryb == 8) {
              $tryb = 5;
           }
-          if ($tryb == 8) {
+          if ($tryb == 9) {
              $tryb = 6;
           }          
           $calc->manyrepeat = 1;
