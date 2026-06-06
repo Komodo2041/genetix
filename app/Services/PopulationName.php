@@ -140,6 +140,15 @@ class PopulationName
 
     public function getRandomDoing() {
          $randomDoing = -1;
+
+         // 50 % chance to normal
+         if ($this->randomDoingTrybe == 0) {
+            $r = rand(0, 1);
+            if ($r == 1) {
+                $this->randomDoingTrybe = 2;
+            }
+         }
+
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
              $randomDoing = rand(0, max(array_keys($this->populationName)));
              if ($this->randomDoingTrybe  == 1) {
