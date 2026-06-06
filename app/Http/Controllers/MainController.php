@@ -79,7 +79,7 @@ class MainController extends Controller
  
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 101;
+    private $testRadomSelecting = 102;
 
     private $usingPower = 0;
  
@@ -691,14 +691,18 @@ class MainController extends Controller
             }
             $population0 = $gtx->usepower($population0, $power);
             
-        }  elseif ($randomDoing == 101) {
+        }  elseif ($randomDoing == 101 || $randomDoing == 102) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 50, 0);
             foreach ($calculations AS $c) {
                 $population0[] = json_decode($c->data); 
             }                
-            $power = $gtx->getPower($population0);        
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $power = $gtx->getPower($population0);
+            if ($randomDoing == 101) {
+                $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            } else {
+                $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->inRandomOrder()->first();
+            }
             $pattern = json_decode($best->data);
             $population0 = [];
             for ($n = 0; $n < $this->startPopulation; $n++) {

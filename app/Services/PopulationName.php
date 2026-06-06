@@ -117,6 +117,7 @@ class PopulationName
        99 => "Calculating Big Mutation Layer (Y)", // X 
        100 => "Using Pattern From Gen0 Pattern ",
        101 => "Usign the best patern from gen 0",
+       101 => "Usign the best patern from gen 0 (one from 10 result)",
     ];
 
     public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99];
