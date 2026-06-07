@@ -63,6 +63,7 @@ Route::get('showRiver/{id}',  "App\Http\Controllers\RiverController@showRiver" )
 Route::get('pourRiver/{id}',  "App\Http\Controllers\RiverController@pourRiver" );
 Route::get('addRiver/{id}',  "App\Http\Controllers\RiverController@addRiver" );
 Route::get('riverSettings/{id}',  "App\Http\Controllers\RiverController@riverSettings" );
+Route::post('river/changeName/{id}',  "App\Http\Controllers\RiverController@changeName" );
  
 
 Route::get('diamon/add/{id}',  "App\Http\Controllers\DiamondController@adddiamond" );

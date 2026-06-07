@@ -157,4 +157,13 @@ class RiverController extends Controller
 
     }
 
+    public function changeName($id, Request $request) {
+       $name = $request->input("title");
+       $area = Area::find($id);
+       if ($name) {
+        Area::where("id", $id)->update(["name" => $name]);
+       }
+       return redirect("/riverSettings/".$area->river)->with('success', 'Zmieniono Nazwę rzeki');
+    }
+
 }

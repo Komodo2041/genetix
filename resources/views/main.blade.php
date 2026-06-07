@@ -41,6 +41,7 @@
                   <a href="/area/showpercent/{{$a->id}}"><button>Pokaż procenty dopasowania</button></a> &nbsp;
                   <a href="/area/histogram/{{$a->id}}"><button>Histogram</button></a>&nbsp;
  
+                 <a href="/showRiver/{{$a->id}}"><button>Pokaż wyniki rzek</button></a>&nbsp;
  
                   <a href="/showMatrix/{{$a->id}}"><button>Pokaż Matryce Mutacji</button></a>&nbsp;
  
