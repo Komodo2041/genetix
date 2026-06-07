@@ -529,7 +529,7 @@ class CalcController extends Controller
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $bestR = $best->result;
-            $val = rand(0, 10);
+            $val = rand(1, 10);
             $keys = $gen0->getTwoKeysFromPattern($pattern, $val);
             $pattern[$keys[0]] = $pattern[$keys[0]] - $val;
             $pattern[$keys[1]] = $pattern[$keys[1]] + $val;
@@ -586,10 +586,10 @@ class CalcController extends Controller
             }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
-            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb ];
+            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb, "changes" => "", "worked" => 0 ];
             if ($tryb == 5  || $tryb == 6 || $tryb == 7) {
                 $create['changes'] = json_encode($changes);
-                if ($result < $bestR) {
+                if ($result > $bestR) {
                     $create['worked'] = 1;
                 }
             }

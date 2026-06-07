@@ -1,7 +1,10 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br/>
+<a href="/"><button>Strona główna</button></a>
+<a href="/riverSettings/{{$area->id}}"><button>Sterowanie Rzekami</button></a><br/>
+<a href="/addRiver/{{$area->id}}"><button>Dodaj rzekę</button></a>&nbsp;
+<br/>
 
 <h3>Rzeki</h3>
 <div class="container">

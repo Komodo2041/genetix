@@ -85,7 +85,7 @@ class RiverController extends Controller
             }
         }
 
-        return view("showriver", ['calco' => $res ]);    
+        return view("showriver", ['calco' => $res, "area" => $area]);    
 
     }
 
@@ -141,6 +141,20 @@ class RiverController extends Controller
 
     public function getCalculationMaxBest($id, $number) {
         return  Calculation::where("area_id", $id)->orderByDesc("obtainedresult" )->limit(max(0, $number))->get();
+    }
+
+
+    public function riverSettings($id) {
+   
+        $area = Area::find($id);
+        if (!$area ) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area lub nie ma rzeki');
+        }
+
+        $areas = Area::where("hide", 0)->where("river", $id)->get();
+
+        return view("showriverSettings", [ "area" => $area, "areas" => $areas]);    
+
     }
 
 }
