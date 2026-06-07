@@ -498,6 +498,9 @@ class CalcController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
+        $changes = array_fill(0, 10, 0);
+        $pattern = [];
+        $bestR = 0;
         if (in_array($tryb, [1, 2, 3])) {
             $pattern = $gen0->getPattern($tryb, 10); 
         }  elseif ($tryb == 4) {
@@ -506,17 +509,34 @@ class CalcController extends Controller
             $pattern = $gen0->calcPattern($stiffPattern[1]);                     
         } elseif ($tryb == 5) {
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $bestR = $best->result;
             $pattern = json_decode($best->data);
             foreach ($pattern AS $key => $res) {
-                $pattern[$key] = $gen0->cleanValue(rand(-5, 5) + $res);               
+                $v = rand(-5, 5);
+                $pattern[$key] = $gen0->cleanValue($v + $res);  
+                $changes[$key] = $v;             
             }
         } elseif ($tryb == 6) {
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
+            $bestR = $best->result;
             $key = rand(0, count($pattern) - 1);
             $key2 = rand(0, count($pattern) - 1);
-            $pattern[$key] =  $gen0->cleanValue(rand(-10, 10) + $pattern[$key]); 
+            $v = rand(-10, 10);
+            $changes[$key] = $v;
+            $pattern[$key] =  $gen0->cleanValue($v + $pattern[$key]); 
         } elseif ($tryb == 7) {
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $pattern = json_decode($best->data);
+            $bestR = $best->result;
+            $val = rand(0, 10);
+            $keys = $gen0->getTwoKeysFromPattern($pattern, $val);
+            $pattern[$keys[0]] = $pattern[$keys[0]] - $val;
+            $pattern[$keys[1]] = $pattern[$keys[1]] + $val;
+            $changes[$keys[0]] = -1 * $val;
+            $changes[$keys[1]] = $val;
+      
+        } elseif ($tryb == 8) {
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
@@ -566,10 +586,18 @@ class CalcController extends Controller
             }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
-            Gen0::create(["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern) ]);
+            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb ];
+            if ($tryb == 5  || $tryb == 6 || $tryb == 7) {
+                $create['changes'] = json_encode($changes);
+                if ($result < $bestR) {
+                    $create['worked'] = 1;
+                }
+            }
+            Gen0::create($create);
             unset($res);
        }
  
+       
        return redirect("/showgeneration0/".$id)->with('success', 'Obliczono pierwsze pokolenie dla '.json_encode($pattern));
     }
 

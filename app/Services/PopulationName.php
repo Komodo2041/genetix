@@ -141,35 +141,36 @@ class PopulationName
     public function getRandomDoing() {
          $randomDoing = -1;
 
+         $randomDoingTrybe = $this->randomDoingTrybe;
          // 50 % chance to normal
-         if ($this->randomDoingTrybe == 0) {
+         if ($randomDoingTrybe == 0) {
             $r = rand(0, 1);
             if ($r == 1) {
-                $this->randomDoingTrybe = 2;
+                $randomDoingTrybe = 2;
             }
          }
 
          while (in_array($randomDoing, $this->noSelectingPopulation)) {
              $randomDoing = rand(0, max(array_keys($this->populationName)));
-             if ($this->randomDoingTrybe  == 1) {
+             if ($randomDoingTrybe  == 1) {
                  $randomDoing = rand(min($this->selectUsingPower), max($this->selectUsingPower));
-             } elseif ($this->randomDoingTrybe  == 2) { // NORMAL
+             } elseif ($randomDoingTrybe  == 2) { // NORMAL
                 if (!in_array($randomDoing, $this->normalSelecting)) {
                     $randomDoing = -1;
                 }                   
-             } elseif ($this->randomDoingTrybe  == 3) {
+             } elseif ($randomDoingTrybe  == 3) {
                 $randomDoing = rand(min($this->selectUsingPowerBottomLayerZero), max($this->selectUsingPowerBottomLayerZero));             
-             } elseif ($this->randomDoingTrybe  == 4) { // NO WAGA
+             } elseif ($randomDoingTrybe == 4) { // NO WAGA
                 if (in_array($randomDoing, $this->wagaSelecting)) {
                     $randomDoing = -1;
                 }              
-             } elseif ($this->randomDoingTrybe == 5) {
+             } elseif ($randomDoingTrybe == 5) {
                 if (!in_array($randomDoing, $this->biglayerSelecting)) {
                     $randomDoing = -1;
                 } 
-             } elseif ($this->randomDoingTrybe == 6) { // AVG
+             } elseif ($randomDoingTrybe == 6) { // AVG
                 $randomDoing = rand(min($this->avgdetailcalcSelecting), max($this->avgdetailcalcSelecting));  
-             } elseif ($this->randomDoingTrybe == 7) { // POWER SELECT
+             } elseif ($randomDoingTrybe == 7) { // POWER SELECT
                 $randomDoing = rand(min($this->powerSelectingShort), max($this->powerSelectingShort));  
              } 
          }

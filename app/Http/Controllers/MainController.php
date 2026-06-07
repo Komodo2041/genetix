@@ -79,7 +79,7 @@ class MainController extends Controller
  
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 102;
+    private $testRadomSelecting = 101;
 
     private $usingPower = 0;
  

@@ -72,6 +72,18 @@ class Generation0Helper {
         return $val;
     }
 
+   public function getTwoKeysFromPattern($pattern, $val) {
+     $key = rand(0, count($pattern) - 1);
+     while ($pattern[$key] < $val) {
+        $key = rand(0, count($pattern) - 1);
+     }
+     $key2 = rand(0, count($pattern) - 1);
+     while ($pattern[$key2] + $val > 100) {
+        $key2 = rand(0, count($pattern) - 1);
+     }    
+     return [$key, $key2]; 
+   }
+
 }
 
 

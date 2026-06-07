@@ -80,7 +80,7 @@
                   <a href="/showavgcalculations/{{$a->id}}"><button>Szczegóły średnich wyników</button></a>&nbsp;
                   <a href="/showPowerBigLayer/{{$a->id}}"><button>Power Big Layer</button></a>&nbsp;
                   <a href="/showBigMutationLayer/0/{{$a->id}}"><button>Big Muation Layer</button></a>&nbsp;
-                  <a href="/showgeneration0/{{$a->id}}"><button>Inne (Obliczenia 0)</button></a>&nbsp;  
+                  <a href="/showgeneration0/{{$a->id}}"><button>Inne (Obliczenia Gen0)</button></a>&nbsp;  
 
                    <br/>
                   @foreach ($a->diamonds AS $d)

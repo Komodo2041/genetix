@@ -9,7 +9,8 @@
 <a href="/calcGeneration0/{{$area->id}}/4"><button>Oblicz 1 generację (Najlepsze z Calculations)</button></a>
 <a href="/calcGeneration0/{{$area->id}}/5"><button>Oblicz 1 generację (-5, +5 z najlepszego wyniku)</button></a>
 <a href="/calcGeneration0/{{$area->id}}/6"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/7"><button>AVG 20 Best Result</button></a>
+<a href="/calcGeneration0/{{$area->id}}/7"><button>Oblicz 1 generację Jeden +10, drugi -10</button></a>
+<a href="/calcGeneration0/{{$area->id}}/8"><button>AVG 20 Best Result</button></a>
 
 <p>{{$area->id}} : {{$area->name}} - Najlepsze Generacje</p>
 
