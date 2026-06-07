@@ -25,7 +25,7 @@
             </td>
             <td>
                 <form action="/river/changeName/{{$a->id}}" method="POST">
-                    @csrf;
+                    @csrf
                     <input type="text" name="title" value="{{$a->name}}" />
                     <input type="submit" name="sub"  value="Zmień" />
                 </form>   
@@ -34,7 +34,19 @@
       @endforeach
 </table>
 
-  
+<h3>Zapis Gen0 Do rzek </h3>
+    <form action="/river/settingGen0Box/{{$area->id}}" method="POST">
+        @csrf
+        @foreach ($areas AS $a) 
+            <input type="radio" name="setto" value="{{$a->id}}" @if ($sett == $a->id) checked @endif >&nbsp;
+             {{$a->name}}
+            <br/>
+        @endforeach
+        <br/>
+        <input type="submit" name="sub"  value="Zmień" />
+    </form>    
+
+
 </div>
 
 @endsection('content')

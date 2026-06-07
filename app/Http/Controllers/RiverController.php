@@ -152,8 +152,12 @@ class RiverController extends Controller
         }
 
         $areas = Area::where("hide", 0)->where("river", $id)->get();
-
-        return view("showriverSettings", [ "area" => $area, "areas" => $areas]);    
+        $sett = 0;
+        $gen0 = Area::where("river", $id)->where("gen0set", 1)->first();
+        if ($gen0) {
+            $sett = $gen0->id;
+        } 
+        return view("showriverSettings", [ "area" => $area, "areas" => $areas, "sett" => $sett]);    
 
     }
 
@@ -164,6 +168,18 @@ class RiverController extends Controller
         Area::where("id", $id)->update(["name" => $name]);
        }
        return redirect("/riverSettings/".$area->river)->with('success', 'Zmieniono Nazwę rzeki');
+    }
+
+    public function settingGen0Box($id, Request $request) {
+
+        $area = Area::find($id);
+        if (!$area ) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area lub nie ma rzeki');
+        } 
+        $sett = $request->input("setto");
+        Area::where("river", $id)->update(["gen0set" => 0]);
+        Area::where("id", $sett)->update(["gen0set" => 1]);
+        return redirect("/riverSettings/".$area->id)->with('success', 'Zmieniono Ustawienia Gen0');
     }
 
 }

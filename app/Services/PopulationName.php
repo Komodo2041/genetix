@@ -118,9 +118,10 @@ class PopulationName
        100 => "Using Pattern From Gen0 Pattern ",
        101 => "Usign the best patern from gen 0",
        101 => "Usign the best patern from gen 0 (one from 10 result)",
+       102 => "Calculating Gen0", // X
     ];
 
-    public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99];
+    public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102];
 
     public $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
     public $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];

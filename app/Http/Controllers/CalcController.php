@@ -494,9 +494,14 @@ class CalcController extends Controller
         set_time_limit(40000);
         ini_set('memory_limit', '300M');
         
-        $area = Area::find($id);
+        $area = Area::find($id);        
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $settBox = 0;
+        $settGen0 = Area::where("river", $id)->where("gen0set", 1)->first();
+        if ($settGen0) {
+            $settBox = $settGen0->id;
         }
         $changes = array_fill(0, 10, 0);
         $pattern = [];
@@ -594,6 +599,10 @@ class CalcController extends Controller
                 }
             }
             Gen0::create($create);
+            if ($settBox) {
+                 Calculation::create(["result" => "Obliczenia Gen0", "data" => json_encode($res[0]['area']), "area_id" => $settBox, "level" => 1, 
+                    "obtainedresult" => $result, "typecalc" => 102, "population" => $nrPop,  ]);
+            }
             unset($res);
        }
  
