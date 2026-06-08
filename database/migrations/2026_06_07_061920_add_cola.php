@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('gen0', function (Blueprint $table) {
             $table->integer("tryb");
-            $table->text("changes");
-            $table->boolean("worked");
+            $table->text("changes")->nullable();
+            $table->boolean("worked")->default(0);
         });
     }
 

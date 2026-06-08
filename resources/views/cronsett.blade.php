@@ -35,7 +35,7 @@
     </form>
  
 </div>
-
+<h3>Pojedyńcze Obliczenie Cron</h3>
 <div class="container">
    <form action="/cron/setOneCalc" method="POST"> 
         @csrf;

@@ -31,7 +31,7 @@ use App\Models\Select100;
 use App\Http\Controllers\DiamondController;
 
 // COMAND :
-// 0 - ostatni, 1 - 4 najlepsze lvl, 2 - next level, 3 -> wszystkie levele
+// 0 - ostatni, 1 - 4 najlepsze lvl, 2 - next level, 3 -> wszystkie levele 4 -> Pierwszy level
 // php artisan app:run-area-calc 0
 // php artisan app:run-area-calc 1
 // php artisan app:run-area-calc 2
@@ -79,7 +79,7 @@ class MainController extends Controller
  
     
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 101;
+    private $testRadomSelecting = 16;
 
     private $usingPower = 0;
  
@@ -703,13 +703,16 @@ class MainController extends Controller
             } else {
                 $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->inRandomOrder()->first();
             }
-            $pattern = json_decode($best->data);
-            $population0 = [];
-            for ($n = 0; $n < $this->startPopulation; $n++) {
-                $population0[] = $gen0->createBoard($pattern, 10);
+            if ($best) {
+                $pattern = json_decode($best->data);
+                $population0 = [];
+                for ($n = 0; $n < $this->startPopulation; $n++) {
+                    $population0[] = $gen0->createBoard($pattern, 10);
+                }
+                $population0 = $gtx->usepower($population0, $power);            
+            } else {
+                $randomDoing = -1;
             }
-            $population0 = $gtx->usepower($population0, $power);            
-
         } elseif ( in_array($randomDoing, $this->pn->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
@@ -801,7 +804,7 @@ class MainController extends Controller
 
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
-                $pop_result = $mutation->addmutation($newpopulaton, $pop_result[1]);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result[0] = $newpopulaton;
 

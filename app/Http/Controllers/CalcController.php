@@ -591,7 +591,7 @@ class CalcController extends Controller
             }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
-            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb, "changes" => "", "worked" => 0 ];
+            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb  ];
             if ($tryb == 5  || $tryb == 6 || $tryb == 7) {
                 $create['changes'] = json_encode($changes);
                 if ($result > $bestR) {
