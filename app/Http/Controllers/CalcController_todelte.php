@@ -630,3 +630,6 @@ class CalcController extends Controller
         return redirect("/showgeneration0/" . $id)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
     }
 }
+rn));
+    }
+}

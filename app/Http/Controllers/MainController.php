@@ -87,7 +87,7 @@ class MainController extends Controller
 
 
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 16;
+    private $testRadomSelecting = 0;
 
     private $usingPower = 0;
 
@@ -953,7 +953,7 @@ class MainController extends Controller
             $lvlmax = 1;
         }
         if ($trybe == 5) {
-            $lvlmax = 6;
+            $lvlmax = 7;
         }
 
         for ($i = 0; $i < $this->nrTimes; $i++) {
