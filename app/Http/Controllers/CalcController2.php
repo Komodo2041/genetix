@@ -500,8 +500,8 @@ class CalcController2 extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
         $gen = Gen0::where("area_id", $id)->orderBy("result", "desc")->take(100)->get();
-
-        return view("showgeneration0", ['area' => $area, 'gen' => $gen]);
+        $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->count();
+        return view("showgeneration0", ['area' => $area, 'gen' => $gen, "workedcount" => $workedcount]);
     }
 
     public function calcGeneration0($id, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
@@ -585,7 +585,20 @@ class CalcController2 extends Controller
             $changes[$key] = -1 * 2 * $val;
             $changes[$key - 1] = $val;
             $changes[$key + 1] = $val;
-        } elseif ($tryb == 10) { // AVG
+        } elseif ($tryb == 10) {
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $pattern = json_decode($best->data);
+            $bestR = $best->result;
+
+            $worked = Gen0::where("area_id", $id)->where("worked", 1)->inRandomOrder()->first();
+            if (!$worked) {
+                return redirect("/showgeneration0/" . $id)->with('error', 'Brak dobrych obliczeń');
+            }
+            $changes = json_decode($worked->changes);
+            for ($i = 0; $i < 10; $i++) {
+                $pattern[$i] += $changes[$i];
+            }
+        } elseif ($tryb == 11) { // AVG
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
@@ -656,7 +669,6 @@ class CalcController2 extends Controller
             }
             unset($res);
         }
-
 
         return redirect("/showgeneration0/" . $id)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
     }
