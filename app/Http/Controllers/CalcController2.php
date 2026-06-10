@@ -597,6 +597,7 @@ class CalcController2 extends Controller
             $changes = json_decode($worked->changes);
             for ($i = 0; $i < 10; $i++) {
                 $pattern[$i] += $changes[$i];
+                $pattern[$i] = $gen0->cleanValue($pattern[$i]);
             }
         } elseif ($tryb == 11) { // AVG
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
@@ -649,7 +650,7 @@ class CalcController2 extends Controller
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
             $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb];
-            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9) {
+            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10) {
                 $create['changes'] = json_encode($changes);
                 if ($result > $bestR) {
                     $create['worked'] = 1;

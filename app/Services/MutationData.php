@@ -197,7 +197,13 @@ class MutationData
         "shuffleSamePowerWidth_50",
         "rombono3_inY",
         "rombono3_inX",
-        "rombono2_inX"
+        "rombono2_inX",
+        "replace3Squere5x5",
+        "replace3Squere8x8",
+        "replace3Squere10x10",
+        "replace3Squere2x2",
+        "replace3Squere2x2Multi",
+        "replace3Squere5x5Clean"
     ];
 
     public function setNumerMutation($nr)
@@ -4396,6 +4402,62 @@ class MutationData
                 }
             }
         }
+        return $pop;
+    }
+
+    private function replace3Squere5x5($pop, $nr = 10)
+    {
+        return $this->replace3Squere($pop, 5, $nr);
+    }
+
+    private function replace3Squere8x8($pop, $nr = 10)
+    {
+        return $this->replace3Squere($pop, 8, $nr);
+    }
+
+    private function replace3Squere10x10($pop, $nr = 10)
+    {
+        return $this->replace3Squere($pop, 10, $nr);
+    }
+
+    private function replace3Squere2x2($pop, $nr = 10)
+    {
+        return $this->replace3Squere($pop, 2, $nr);
+    }
+
+    private function replace3Squere2x2Multi($pop, $nr = 10)
+    {
+        $r = rand(2, 12);
+        for ($i = 0; $i < $r; $i++) {
+            $pop = $this->replace3Squere($pop, 2, $nr);
+        }
+        return $pop;
+    }
+
+    private function replace3Squere($pop, $size, $nr = 10)
+    {
+        $pom1 = rand(0, $nr - $size);
+        $pom2 = rand(0, $nr - $size);
+        $pomZ = rand(1, $nr - 2);
+
+        for ($x = 0; $x <= $size - 1; $x++) {
+            for ($y = 0; $y <= $size - 1; $y++) {
+
+                $rand = rand(0, 1);
+
+                $pomZ2 = $pomZ;
+                if ($rand == 0) {
+                    $pomZ2--;
+                } else {
+                    $pomZ2++;
+                }
+
+                $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
+                $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
         return $pop;
     }
 }
