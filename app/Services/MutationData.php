@@ -203,7 +203,7 @@ class MutationData
         "replace3Squere10x10",
         "replace3Squere2x2",
         "replace3Squere2x2Multi",
-        "replace3Squere5x5Clean"
+        "change2PointsToMiddle"
     ];
 
     public function setNumerMutation($nr)
@@ -4455,6 +4455,47 @@ class MutationData
                 $pom = $pop[$pom1 + $x][$pom2 + $y][$pomZ];
                 $pop[$pom1 + $x][$pom2 + $y][$pomZ] = $pop[$pom1 + $x][$pom2 + $y][$pomZ2];
                 $pop[$pom1 + $x][$pom2 + $y][$pomZ2] = $pom;
+            }
+        }
+
+        return $pop;
+    }
+
+    private function change2PointsToMiddle($pop, $nr = 10)
+    {
+        $orders = $this->getOrders($nr);
+        $sumPower = 0;
+        $changed = 0;
+        while ($changed < 2) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 1);
+            if ($pop[$x][$y][$z] == 1) {
+                $changed++;
+                $pop[$x][$y][$z] = 0;
+                $sumPower += $orders[$x . "-" . $y . "-" . $z];
+            }
+        }
+        $search = $sumPower / 2;
+        $valuechange = 0;
+        foreach ($orders as $klucz => $wartosc) {
+            if ($wartosc < $search) {
+                $dl = explode("-", $klucz);
+                if ($pop[(int) $dl[0]][(int)  $dl[1]][(int)  $dl[2]] == 0) {
+                    $valuechange = $wartosc;
+                    $pop[$dl[0]][$dl[1]][$dl[2]] = 1;
+                    break;
+                }
+            }
+        }
+        $search = $search - $valuechange;
+        foreach ($orders as $klucz => $wartosc) {
+            if ($wartosc < $search) {
+                $dl = explode("-", $klucz);
+                if ($pop[(int) $dl[0]][(int)  $dl[1]][(int)  $dl[2]] == 0) {
+                    $pop[$dl[0]][$dl[1]][$dl[2]] = 1;
+                    break;
+                }
             }
         }
 
