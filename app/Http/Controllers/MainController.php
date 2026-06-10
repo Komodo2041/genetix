@@ -44,7 +44,7 @@ use App\Http\Controllers\DiamondController;
 class MainController extends Controller
 {
 
-    private $randomDoingTrybe = 0;
+    public $randomDoingTrybe = 0;
 
     public $SelectPopulationHelper = null;
     public $helperMatrix = null;
@@ -83,13 +83,13 @@ class MainController extends Controller
     public $nrTimes = 8;
 
 
-    private $selectUsingPowerNoBestData = 1;
+    public $selectUsingPowerNoBestData = 1;
 
 
     /***********TESTING RANDOM SELECTING ************/
     private $testRadomSelecting = 0;
 
-    private $usingPower = 0;
+    public $usingPower = 0;
 
     public function calcarea_level(
         $id,
@@ -176,7 +176,7 @@ class MainController extends Controller
 
             $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
             $randomDoing = 0;
-        } elseif ($randomDoing == 0 || $lvl == 1) {
+        } elseif ($randomDoing == 0) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 10);
             foreach ($calculations as $c) {
@@ -617,11 +617,9 @@ class MainController extends Controller
             $this->debugInfo($res, $randomDoing);
         }
 
-
         if ($this->usingPower == 1) {
             return [$res, $bestResult, $randomDoing];
         }
-
 
         $maxQ = $res[0]['sum'];
         $oldQ = $res[0]['sum'];
