@@ -601,6 +601,9 @@ class CalcController2 extends Controller
             }
         } elseif ($tryb == 11) {
             $bests = Gen0::where("area_id", $id)->where("tryb", 5)->orderBy("result", "DESC")->take(10)->get();
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $bestR = $best->result;
+            $pattern2 = json_decode($best->data);
             $pattern = array_fill(0, 10, 0);
             $all = 0;
             foreach ($bests as $best) {
@@ -611,7 +614,8 @@ class CalcController2 extends Controller
                 $all++;
             }
             for ($i = 0; $i < 10; $i++) {
-                $pattern[$i] = round($pattern[$i] / $all);
+                $changes[$i] = round($pattern[$i] / $all);
+                $pattern[$i] = $gen0->cleanValue($changes[$i] + $pattern2[$i]);
             }
         } elseif ($tryb == 12) { // AVG
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
@@ -664,7 +668,7 @@ class CalcController2 extends Controller
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
             $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb];
-            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10) {
+            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11) {
                 $create['changes'] = json_encode($changes);
                 if ($result > $bestR) {
                     $create['worked'] = 1;

@@ -87,7 +87,7 @@ class MainController extends Controller
 
 
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 0;
+    private $testRadomSelecting = 103;
 
     public $usingPower = 0;
 
@@ -587,6 +587,18 @@ class MainController extends Controller
                 $population0 = $gtx->usepower($population0, $power);
             } else {
                 $randomDoing = -1;
+            }
+        } elseif ($randomDoing == 103) {
+            $calculations = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $id)->where("level", "<=", $lvl)
+                ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(25)->inRandomOrder()->take(10)->get();
+
+            if (!$calculations) {
+                $calculations = $this->getCalculationLevel($id, $lvl, 10);
+                $randomDoing = -1;
+            }
+            foreach ($calculations as $c) {
+                $population0[] = json_decode($c->data);
+                $usedcalc[] = $c->id;
             }
         } elseif (in_array($randomDoing, $this->pn->diamondCrossing)) {
 

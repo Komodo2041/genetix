@@ -120,6 +120,7 @@ class PopulationName
         101 => "Usign the best patern from gen 0",
         101 => "Usign the best patern from gen 0 (one from 10 result)",
         102 => "Calculating Gen0", // X
+        103 => "Use Not The Same Calculations"
     ];
 
     public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102];
