@@ -203,7 +203,9 @@ class MutationData
         "replace3Squere10x10",
         "replace3Squere2x2",
         "replace3Squere2x2Multi",
-        "change2PointsToMiddle"
+        "change2PointsToMiddle",
+        "diffPointson2Points",
+        "join2Points"
     ];
 
     public function setNumerMutation($nr)
@@ -4476,7 +4478,7 @@ class MutationData
                 $sumPower += $orders[$x . "-" . $y . "-" . $z];
             }
         }
-        $search = $sumPower / 2;
+        $search = ($sumPower / 2) * 0.8;
         $valuechange = 0;
         foreach ($orders as $klucz => $wartosc) {
             if ($wartosc < $search) {
@@ -4498,6 +4500,77 @@ class MutationData
                 }
             }
         }
+
+        return $pop;
+    }
+
+    private function diffPointson2Points($pop, $nr = 10)
+    {
+        $orders = $this->getOrders($nr);
+        $sumPower = 0;
+        $changed = 0;
+        while ($changed < 1) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 1);
+            if ($pop[$x][$y][$z] == 1) {
+                $changed++;
+                $pop[$x][$y][$z] = 0;
+                $sumPower += $orders[$x . "-" . $y . "-" . $z];
+            }
+        }
+        $search = ($sumPower / 2) * 0.8;
+        $valuechange = 0;
+        foreach ($orders as $klucz => $wartosc) {
+            if ($wartosc < $search) {
+                $dl = explode("-", $klucz);
+                if ($pop[(int) $dl[0]][(int)  $dl[1]][(int)  $dl[2]] == 0) {
+                    $valuechange = $wartosc;
+                    $pop[$dl[0]][$dl[1]][$dl[2]] = 1;
+                    break;
+                }
+            }
+        }
+        $search = $search - $valuechange;
+        foreach ($orders as $klucz => $wartosc) {
+            if ($wartosc < $search) {
+                $dl = explode("-", $klucz);
+                if ($pop[(int) $dl[0]][(int)  $dl[1]][(int)  $dl[2]] == 0) {
+                    $pop[$dl[0]][$dl[1]][$dl[2]] = 1;
+                    break;
+                }
+            }
+        }
+
+        return $pop;
+    }
+
+    private function join2Points($pop, $nr = 10)
+    {
+        $orders = $this->getOrders($nr);
+        $sumPower = 0;
+        $changed = 0;
+        while ($changed < 2) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(0, $nr - 1);
+            if ($pop[$x][$y][$z] == 1) {
+                $changed++;
+                $pop[$x][$y][$z] = 0;
+                $sumPower += $orders[$x . "-" . $y . "-" . $z];
+            }
+        }
+        $search = $sumPower;
+        foreach ($orders as $klucz => $wartosc) {
+            if ($wartosc < $search) {
+                $dl = explode("-", $klucz);
+                if ($pop[(int) $dl[0]][(int)  $dl[1]][(int)  $dl[2]] == 0) {
+                    $pop[$dl[0]][$dl[1]][$dl[2]] = 1;
+                    break;
+                }
+            }
+        }
+
 
         return $pop;
     }

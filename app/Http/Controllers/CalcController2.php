@@ -540,8 +540,8 @@ class CalcController2 extends Controller
             $bestR = $best->result;
             $pattern = json_decode($best->data);
             foreach ($pattern as $key => $res) {
-                $v = rand(-5, 5);
-                $pattern[$key] = $gen0->cleanValue($v + $res);
+               $v = rand(-5, 5);
+                $pattern[$key] = $gen0->cleanValue($v + $res); 
                 $changes[$key] = $v;
             }
         } elseif ($tryb == 6) {
