@@ -540,8 +540,8 @@ class CalcController2 extends Controller
             $bestR = $best->result;
             $pattern = json_decode($best->data);
             foreach ($pattern as $key => $res) {
-               $v = rand(-5, 5);
-                $pattern[$key] = $gen0->cleanValue($v + $res); 
+                $v = rand(-5, 5);
+                $pattern[$key] = $gen0->cleanValue($v + $res);
                 $changes[$key] = $v;
             }
         } elseif ($tryb == 6) {
@@ -599,7 +599,21 @@ class CalcController2 extends Controller
                 $pattern[$i] += $changes[$i];
                 $pattern[$i] = $gen0->cleanValue($pattern[$i]);
             }
-        } elseif ($tryb == 11) { // AVG
+        } elseif ($tryb == 11) {
+            $bests = Gen0::where("area_id", $id)->where("tryb", 5)->orderBy("result", "DESC")->take(10)->get();
+            $pattern = array_fill(0, 10, 0);
+            $all = 0;
+            foreach ($bests as $best) {
+                $go = json_decode($best->changes);
+                for ($i = 0; $i < 10; $i++) {
+                    $pattern[$i] += $go[$i];
+                }
+                $all++;
+            }
+            for ($i = 0; $i < 10; $i++) {
+                $pattern[$i] = round($pattern[$i] / $all);
+            }
+        } elseif ($tryb == 12) { // AVG
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;

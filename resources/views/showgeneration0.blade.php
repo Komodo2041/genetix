@@ -14,7 +14,8 @@
 <a href="/calcGeneration0/{{$area->id}}/8"><button>Oblicz 1 generację (Sąsiedzi) Jeden +10, drugi -10</button></a>
 <a href="/calcGeneration0/{{$area->id}}/9"><button>Oblicz 1 generację (Dolina) Jeden +10, drugi -10</button></a>
 <a href="/calcGeneration0/{{$area->id}}/10"><button>Oblicz 1 generację - Działające zmiany</button></a>
-<a href="/calcGeneration0/{{$area->id}}/11"><button>AVG 20 Best Result</button></a>
+<a href="/calcGeneration0/{{$area->id}}/11"><button>AVG (-5, +5) 20 wyników</button></a>
+<a href="/calcGeneration0/{{$area->id}}/12"><button>AVG 20 Best Result</button></a>
 @endif
 
 <p>{{$area->id}} : {{$area->name}} - Najlepsze Generacje</p>
@@ -25,12 +26,14 @@
     <tr>
       <th>Patter</th>
       <th>Result</th>
+      <th>Type</th>
       <th>Pop</th>
     </tr>
     @foreach ($gen AS $g)
     <tr>
       <th>{{$g->data}}</th>
       <th>{{$g->result}}</th>
+      <th>{{$g->tryb}}</th>
       <th>{{$g->population}}</th>
     </tr>
     @endforeach
