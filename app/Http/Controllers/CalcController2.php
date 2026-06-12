@@ -626,7 +626,7 @@ class CalcController2 extends Controller
             $newData = $gen0->minusData($data, $half);
             $pattern = $gen0->addData($newData, $half);
         } elseif ($tryb == 13) {
-            $best = Gen0::where("area_id", $id)->whereIn("tryb", [12, 13])->orderBy("result", "DESC")->take(10)->get()->random(1);
+            $best = Gen0::where("area_id", $id)->whereIn("tryb", [12, 13, 14])->orderBy("result", "DESC")->take(10)->get()->random(1);
             $bestR = $best[0]->result;
             $pattern = json_decode($best[0]->data);
             foreach ($pattern as $key => $res) {
@@ -634,7 +634,23 @@ class CalcController2 extends Controller
                 $pattern[$key] = $gen0->cleanValue($v + $res);
                 $changes[$key] = $v;
             }
-        } elseif ($tryb == 14) { // AVG
+        } elseif ($tryb == 14) {
+            $nr = rand(2, 15);
+            $bests = Gen0::where("area_id", $id)->whereIn("tryb", [12, 13])->orderBy("result", "DESC")->take($nr)->get();
+            $pattern = array_fill(0, 10, 0);
+            $all = 0;
+            foreach ($bests as $best) {
+                $go = json_decode($best->data);
+                for ($i = 0; $i < 10; $i++) {
+                    $pattern[$i] += $go[$i];
+                }
+                $all++;
+            }
+            for ($i = 0; $i < 10; $i++) {
+                $changes[$i] = round($pattern[$i] / $all);
+                $pattern[$i] = $gen0->cleanValue($changes[$i]);
+            }
+        } elseif ($tryb == 15) { // AVG
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
