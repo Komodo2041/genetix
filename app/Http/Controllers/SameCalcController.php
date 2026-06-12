@@ -17,8 +17,10 @@ class SameCalcController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $calcs = CompareCalc::join('calculation', 'comparecalc.calc_id', '=', 'calculation.id')->where("calculation.area_id", $id)->get()->toArray();
-
+        $calcs = CompareCalc::join('calculation', 'comparecalc.calc_id', '=', 'calculation.id')->where("calculation.area_id", $id)->whereNotNull("head")->orderBy("head", "ASC")->get()->toArray();
+        foreach ($calcs as $key => $c) {
+            $calcs[$key]['all'] = CompareCalc::join('calculation', 'comparecalc.calc_id', '=', 'calculation.id')->where("islike", $c['head'])->get()->toArray();
+        }
         return view("compareCalc", ["area" => $area, "calcs" => $calcs]);
     }
 
@@ -53,7 +55,7 @@ class SameCalcController extends Controller
                 foreach ($patterns as $key => $patt) {
                     $change = 1000 - $mh->calcpointer($patt, $data);
 
-                    if ($change <= 10) {
+                    if ($change <= 100) {
                         $same = 1;
                         $result[] = [
                             "calc_id" => $calc->id,

@@ -343,6 +343,7 @@ class CalcController2 extends Controller
             $levels[$i]["toone"] = $levels[$i]["divlvl"] / (1 - $levels[$i - 1]["avg"]);
             $levels[$i]["sameinlevel"] = $this->getnumber2inarea($levels[$i]['areabulb']);
             $levels[$i]["show_histogram"] = $this->gethistogram($levels[$i]['histogram'], $levels[$i]['all']);
+            ksort($levels[$i]["show_histogram"]);
         }
 
         $samecalculations = Calculation::selectRaw(' count(id) AS count, level')->where("area_id", $id)->whereNotNull("same")->groupBy('level')->orderBy("level")->get();
@@ -617,7 +618,23 @@ class CalcController2 extends Controller
                 $changes[$i] = round($pattern[$i] / $all);
                 $pattern[$i] = $gen0->cleanValue($changes[$i] + $pattern2[$i]);
             }
-        } elseif ($tryb == 12) { // AVG
+        } elseif ($tryb == 12) {
+            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $data = json_decode($best->data);
+            $sum = $gen0->calcAllData($data);
+            $half = floor($sum / 2);
+            $newData = $gen0->minusData($data, $half);
+            $pattern = $gen0->addData($newData, $half);
+        } elseif ($tryb == 13) {
+            $best = Gen0::where("area_id", $id)->whereIn("tryb", [12, 13])->orderBy("result", "DESC")->take(10)->get()->random(1);
+            $bestR = $best[0]->result;
+            $pattern = json_decode($best[0]->data);
+            foreach ($pattern as $key => $res) {
+                $v = rand(-5, 5);
+                $pattern[$key] = $gen0->cleanValue($v + $res);
+                $changes[$key] = $v;
+            }
+        } elseif ($tryb == 14) { // AVG
             $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
@@ -673,6 +690,9 @@ class CalcController2 extends Controller
                 if ($result > $bestR) {
                     $create['worked'] = 1;
                 }
+            }
+            if ($tryb == 13) {
+                $create['changes'] = json_encode($changes);
             }
             Gen0::create($create);
             if ($settBox) {

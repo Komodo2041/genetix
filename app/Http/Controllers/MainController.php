@@ -87,7 +87,7 @@ class MainController extends Controller
 
 
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 103;
+    private $testRadomSelecting = 104;
 
     public $usingPower = 0;
 
@@ -590,7 +590,7 @@ class MainController extends Controller
             }
         } elseif ($randomDoing == 103) {
             $calculations = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $id)->where("level", "<=", $lvl)
-                ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(25)->inRandomOrder()->take(10)->get();
+                ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(20)->get()->random(10);
 
             if (!$calculations) {
                 $calculations = $this->getCalculationLevel($id, $lvl, 10);
@@ -600,6 +600,20 @@ class MainController extends Controller
                 $population0[] = json_decode($c->data);
                 $usedcalc[] = $c->id;
             }
+        } elseif ($randomDoing == 104) {
+
+            $calculations = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $id)->where("level", "<=", $lvl)
+                ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(20)->get()->random(10);
+
+            if (!$calculations) {
+                $calculations = $this->getCalculationLevel($id, $lvl, 10);
+                $randomDoing = -1;
+            }
+            foreach ($calculations as $c) {
+                $population0[] = json_decode($c->data);
+            }
+            $res = $cross->createNewPopulation($population0, "random50");
+            $population0 = $res[0];
         } elseif (in_array($randomDoing, $this->pn->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);

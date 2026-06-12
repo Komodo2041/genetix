@@ -23,6 +23,15 @@
             <td>{{$p['islike']}}</td>
             <td>{{$p['change']}}</td>
         </tr>
+        @foreach ($p['all'] AS $p2)
+        <tr>
+            <td>#{{$p2['calc_id']}}</td>
+            <td>{{$p2['level']}}</td>
+            <td>{{$p2['head']}}</td>
+            <td>{{$p2['islike']}}</td>
+            <td>{{$p2['change']}}</td>
+        </tr>
+        @endforeach
         @endforeach
     </table>
 

@@ -15,7 +15,9 @@
 <a href="/calcGeneration0/{{$area->id}}/9"><button>Oblicz 1 generację (Dolina) Jeden +10, drugi -10</button></a>
 <a href="/calcGeneration0/{{$area->id}}/10"><button>Oblicz 1 generację - Działające zmiany</button></a>
 <a href="/calcGeneration0/{{$area->id}}/11"><button>AVG (-5, +5) 20 wyników</button></a>
-<a href="/calcGeneration0/{{$area->id}}/12"><button>AVG 20 Best Result</button></a>
+<a href="/calcGeneration0/{{$area->id}}/12"><button>Del 50% Change And Add 50% Again</button></a>
+<a href="/calcGeneration0/{{$area->id}}/13"><button>(Del 50% Change And Add 50% Again) -> Next +5, -5%</button></a>
+<a href="/calcGeneration0/{{$area->id}}/14"><button>AVG 20 Best Result</button></a>
 @endif
 
 <p>{{$area->id}} : {{$area->name}} - Najlepsze Generacje</p>

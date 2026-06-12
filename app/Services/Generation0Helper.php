@@ -51,7 +51,7 @@ class Generation0Helper
 
     public function calcPattern($data, $size = 10)
     {
-
+        $res = [];
         for ($i = 0; $i < 10; $i++) {
             $res[$i] = 0;
         }
@@ -116,5 +116,38 @@ class Generation0Helper
             $key2++;
         }
         return $key2;
+    }
+
+    public function calcAllData($data)
+    {
+        $sum = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $sum += $data[$i];
+        }
+        return $sum;
+    }
+
+    public function minusData($data, $half, $size = 10)
+    {
+        while ($half > 0) {
+            $r = rand(0, $size - 1);
+            if ($data[$r] > 0) {
+                $data[$r]--;
+                $half--;
+            }
+        }
+        return $data;
+    }
+
+    public function addData($data, $half, $size = 10)
+    {
+        while ($half > 0) {
+            $r = rand(0, $size - 1);
+            if ($data[$r] < 100) {
+                $data[$r]++;
+                $half--;
+            }
+        }
+        return $data;
     }
 }
