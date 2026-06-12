@@ -8,6 +8,7 @@ use App\Models\Calculation;
 use App\Models\CompareCalc;
 
 use App\Services\MatrixHelper;
+use App\Services\GenetixDataGenerator;
 
 class SameCalcController extends Controller
 {
@@ -89,5 +90,61 @@ class SameCalcController extends Controller
             );
         }
         return redirect("/showCalcSame/" . $id)->with('success', 'Obliczono  porównianie obliczeń ');
+    }
+
+    public function checkBlob($id, $tryb, GenetixDataGenerator $gtx)
+    {
+        set_time_limit(3600);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $population0 = [];
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints(120, $table);
+        $gtx->setPowerMatrixSize(10);
+        $maxPoints = $gtx->getmaxPoints(120);
+        $blobType = 105;
+        $setLevel = 1;
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(20)->get();
+        foreach ($calculations as $c) {
+            $population0[] = json_decode($c->data);
+        }
+
+        $power = $gtx->getPower($population0);
+
+        if ($tryb == 0) {
+            $calculations = Calculation::where("area_id", $id)->where("level", 1)->inRandomOrder()->take(100)->get();
+            $blobType = 105;
+        } elseif ($tryb == 1) {
+            $calculations = Calculation::where("area_id", $id)->where("level", 2)->inRandomOrder()->take(100)->get();
+            $setLevel = 2;
+            $blobType = 105;
+        } else {
+            $calculations = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $id)->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(20)->get()->random(10);
+            $blobType = 106;
+        }
+        $population0 = [];
+        foreach ($calculations as $c) {
+            $population0[] = json_decode($c->data);
+        }
+
+        $stiffPattern = $gtx->getStiffPattern($calculations, 95, 10);
+        $population0 = $gtx->getStableGeneration(10, 800, $stiffPattern[0], $stiffPattern[1]);
+        $population0[] = $stiffPattern[1];
+        $population0 = $gtx->usepower($population0, $power);
+
+        $res = $gtx->calcPopulation($population0, $headPoints);
+
+        Calculation::create([
+            "result" => "Liczenie Bloba",
+            "data" => json_encode($res[0]['area']),
+            "area_id" => $id,
+            "level" => $setLevel,
+            "obtainedresult" => $res[0]['sum'] / $maxPoints,
+            "typecalc" => $blobType
+        ]);
+
+        return redirect("/showCalcSame/" . $id)->with('success', 'Obliczono Blob');
     }
 }

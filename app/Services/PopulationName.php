@@ -122,9 +122,11 @@ class PopulationName
         102 => "Calculating Gen0", // X
         103 => "Use Not The Same Calculations",
         104 => "Use Not The Same Calculations (start - 50 random)",
+        105 => "Blob 1 lvl", // X
+        106 => "Blob Head", // X
     ];
 
-    public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102];
+    public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102, 105, 106];
 
     public $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
     public $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];

@@ -4,6 +4,10 @@
 <a href="/"><button>Strona główna</button></a><br />
 <a href="/compareCalculations/{{$area->id}}"><button>Porównań Wyniki</button></a><br />
 
+<a href="/checkBlob/{{$area->id}}/0"><button>Blob 1 levela</button></a>
+<a href="/checkBlob/{{$area->id}}/1"><button>Blob 2 levela</button></a>
+<a href="/checkBlob/{{$area->id}}/2"><button>Blob 10 najlepszych Head</button></a>
+
 <h3>Porównanie Obliczeń</h3>
 <div class="container">
 
@@ -14,6 +18,7 @@
             <th>Head</th>
             <th>Like</th>
             <th>Change</th>
+            <th></th>
         </tr>
         @foreach ($calcs AS $p)
         <tr>
@@ -22,6 +27,7 @@
             <td>{{$p['head']}}</td>
             <td>{{$p['islike']}}</td>
             <td>{{$p['change']}}</td>
+            <td><a href="/showerror/{{$p['calc_id']}}">Pokaż</a></td>
         </tr>
         @foreach ($p['all'] AS $p2)
         <tr>
@@ -30,6 +36,7 @@
             <td>{{$p2['head']}}</td>
             <td>{{$p2['islike']}}</td>
             <td>{{$p2['change']}}</td>
+            <td></td>
         </tr>
         @endforeach
         @endforeach
