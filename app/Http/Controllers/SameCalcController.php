@@ -9,10 +9,11 @@ use App\Models\CompareCalc;
 
 use App\Services\MatrixHelper;
 use App\Services\GenetixDataGenerator;
+use App\Services\Generation0Helper;
 
 class SameCalcController extends Controller
 {
-    public function show($id)
+    public function show($id, GenetixDataGenerator $gtx, Generation0Helper $gen0)
     {
         $area = Area::find($id);
         if (!$area) {
@@ -21,6 +22,10 @@ class SameCalcController extends Controller
         $calcs = CompareCalc::join('calculation', 'comparecalc.calc_id', '=', 'calculation.id')->where("calculation.area_id", $id)->whereNotNull("head")->orderBy("head", "ASC")->get()->toArray();
         foreach ($calcs as $key => $c) {
             $calcs[$key]['all'] = CompareCalc::join('calculation', 'comparecalc.calc_id', '=', 'calculation.id')->where("islike", $c['head'])->get()->toArray();
+
+            $stiffPattern = $gtx->getStiffPattern([$c], 10, 10, 1);
+            $pattern = $gen0->calcPattern($stiffPattern[1]);
+            $calcs[$key]['board'] = json_encode($pattern);
         }
         return view("compareCalc", ["area" => $area, "calcs" => $calcs]);
     }

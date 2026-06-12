@@ -18,6 +18,7 @@
             <th>Head</th>
             <th>Like</th>
             <th>Change</th>
+            <th>Board</th>
             <th></th>
         </tr>
         @foreach ($calcs AS $p)
@@ -27,7 +28,8 @@
             <td>{{$p['head']}}</td>
             <td>{{$p['islike']}}</td>
             <td>{{$p['change']}}</td>
-            <td><a href="/showerror/{{$p['calc_id']}}">Pokaż</a></td>
+            <td>{{$p['board']}}</td>
+            <td><a href="/showerror/{{$p['calc_id']}}"><button>Pokaż</button></a></td>
         </tr>
         @foreach ($p['all'] AS $p2)
         <tr>
@@ -36,6 +38,7 @@
             <td>{{$p2['head']}}</td>
             <td>{{$p2['islike']}}</td>
             <td>{{$p2['change']}}</td>
+            <td></td>
             <td></td>
         </tr>
         @endforeach

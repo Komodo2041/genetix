@@ -16,6 +16,8 @@ use App\Models\Matrix;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect;
 use App\Models\BigMutationMatrix;
+use App\Models\CompareCalc;
+
 use App\Services\Generation0Helper;
 
 use App\Http\Controllers\MainController;
@@ -223,6 +225,22 @@ class CheckingCrossAndMutation extends Controller
         return view("showmatrix", ['matrix' => $matrix, 'area' => $area, "order" => $order, "desc" => $desc]);
     }
 
+    private function getBestResultForCrossing($id)
+    {
+        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(20)->get();
+        $bestResult2 = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $id)
+            ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(20)->get()->random(10);
+        $max = 0;
+        if ($bestResult2) {
+            $max = 1;
+        }
+        $stere = rand(0, $max);
+        if ($stere == 0) {
+            return $bestResult;
+        } else {
+            return $bestResult2;
+        }
+    }
 
     public function calcCrossMatrix($id, CrossingData $cross, GenetixDataGenerator $gtx, $nrM = null, $mutmed = null)
     {
@@ -242,7 +260,8 @@ class CheckingCrossAndMutation extends Controller
         }
         $table = json_decode($area->data);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
-        $bestResult = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(20)->get();
+
+        $bestResult = $this->getBestResultForCrossing($id);
 
         $lvlmax = Calculation::where("area_id", $id)->max("level");
 

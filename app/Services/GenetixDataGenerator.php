@@ -360,7 +360,7 @@ class GenetixDataGenerator
     }
 
 
-    public function getStiffPattern($calculations, $usedpercent, $nr = 10)
+    public function getStiffPattern($calculations, $usedpercent, $nr = 10, $tryb = 0)
     {
         $blobAll = [];
         $stablePoints = [];
@@ -369,7 +369,12 @@ class GenetixDataGenerator
         $diff = 1 - $usedpercent / 100;
 
         foreach ($calculations as $c) {
-            $data = json_decode($c->data);
+            if ($tryb == 0) {
+                $data = json_decode($c->data);
+            } else {
+                $data = json_decode($c['data']);
+            }
+
             for ($i = 0; $i < $nr; $i++) {
                 for ($j = 0; $j < $nr; $j++) {
                     for ($z = 0; $z < $nr; $z++) {
