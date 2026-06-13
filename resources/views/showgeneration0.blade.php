@@ -3,22 +3,39 @@
 
 <a href="/"><button>Strona główna</button></a><br />
 
-<a href="/calcGeneration0/{{$area->id}}/1"><button>Oblicz 1 generację (0, 50)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/2"><button>Oblicz 1 generację (10, 20)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/3"><button>Oblicz 1 generację (11, 23)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/4"><button>Oblicz 1 generację (Najlepsze z Calculations)</button></a>
+<div class="groupBox">
+  <a href="/showgeneration0/{{$area->id}}/0"><button @if ($dimension==0) class="gray" @endif>Obliczenia Gen0 - Z</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/1"><button @if ($dimension==1) class="gray" @endif>Obliczenia Gen0 - X</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/2"><button @if ($dimension==2) class="gray" @endif>Obliczenia Gen0 - Y</button></a>&nbsp;
+</div>
+<div class="groupBox">
+  <a href="/calcGeneration0/{{$area->id}}/1/{{$dimension}}"><button>Oblicz 1 generację (0, 50)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/2/{{$dimension}}"><button>Oblicz 1 generację (10, 20)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/3/{{$dimension}}"><button>Oblicz 1 generację (11, 23)</button></a>
+</div>
+<div class="groupBox">
+  <a href="/calcGeneration0/{{$area->id}}/4/{{$dimension}}"><button>Oblicz 1 generację (Najlepsze z Calculations)</button></a>
+  @if (count($gen) > 0)
+  <a href="/calcGeneration0/{{$area->id}}/5/{{$dimension}}"><button>Oblicz 1 generację (-5, +5 z najlepszego wyniku)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/15/{{$dimension}}"><button>Oblicz 1 generację (-2, +2 z najlepszego wyniku)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/6/{{$dimension}}"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/7/{{$dimension}}"><button>Oblicz 1 generację Jeden +10, drugi -10</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/8/{{$dimension}}"><button>Oblicz 1 generację (Sąsiedzi) Jeden +10, drugi -10</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/9/{{$dimension}}"><button>Oblicz 1 generację (Dolina) Jeden +10, drugi -10</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/10/{{$dimension}}"><button>Oblicz 1 generację - Działające zmiany</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/11/{{$dimension}}"><button>AVG (-5, +5) 20 wyników</button></a>
+  @endif
+</div>
 @if (count($gen) > 0)
-<a href="/calcGeneration0/{{$area->id}}/5"><button>Oblicz 1 generację (-5, +5 z najlepszego wyniku)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/6"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
-<a href="/calcGeneration0/{{$area->id}}/7"><button>Oblicz 1 generację Jeden +10, drugi -10</button></a>
-<a href="/calcGeneration0/{{$area->id}}/8"><button>Oblicz 1 generację (Sąsiedzi) Jeden +10, drugi -10</button></a>
-<a href="/calcGeneration0/{{$area->id}}/9"><button>Oblicz 1 generację (Dolina) Jeden +10, drugi -10</button></a>
-<a href="/calcGeneration0/{{$area->id}}/10"><button>Oblicz 1 generację - Działające zmiany</button></a>
-<a href="/calcGeneration0/{{$area->id}}/11"><button>AVG (-5, +5) 20 wyników</button></a>
-<a href="/calcGeneration0/{{$area->id}}/12"><button>Del 50% Change And Add 50% Again</button></a>
-<a href="/calcGeneration0/{{$area->id}}/13"><button>(Del 50% Change And Add 50% Again) -> Next +5, -5%</button></a>
-<a href="/calcGeneration0/{{$area->id}}/14"><button>AVG DelAdd 50%</button></a>
-<a href="/calcGeneration0/{{$area->id}}/15"><button>AVG 20 Best Result</button></a>
+<div class="groupBox">
+  <a href="/calcGeneration0/{{$area->id}}/12/{{$dimension}}"><button>Del 50% Change And Add 50% Again</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/13/{{$dimension}}"><button>(Del 50% Change And Add 50% Again) -> Next +5, -5%</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/14/{{$dimension}}"><button>AVG DelAdd 50%</button></a>
+</div>
+<div class="groupBox">
+  <a href="/calcGeneration0/{{$area->id}}/15/{{$dimension}}"><button>AVG 20 Best Result</button></a>
+</div>
+
 @endif
 
 <p>{{$area->id}} : {{$area->name}} - Najlepsze Generacje</p>

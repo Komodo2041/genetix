@@ -593,6 +593,9 @@ class CheckingCrossAndMutation extends Controller
                     "better" =>  $better / $all
                 ];
             }
+            if ($percent == 10) {
+                $percent += 5;
+            }
         }
 
         BigMutationMatrix::where("area_id", $id)->where("type", 1)->update(["hide" => 1]);

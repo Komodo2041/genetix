@@ -6,6 +6,8 @@ namespace App\Services;
 class Generation0Helper
 {
 
+    private $dim = 0;
+
     public function getPattern($trybe, $size)
     {
 
@@ -32,7 +34,7 @@ class Generation0Helper
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$i][$j][$z] = $this->fill($pattern[$z]);
+                    $res[$i][$j][$z] = $this->fill($pattern[$this->getDim($i, $j, $z)]);
                 }
             }
         }
@@ -58,11 +60,31 @@ class Generation0Helper
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 for ($z = 0; $z < $size; $z++) {
-                    $res[$z] += $data[$i][$j][$z];
+                    $res[$this->getDim($i, $j, $z)] += $data[$i][$j][$z];
                 }
             }
         }
         return $res;
+    }
+
+    public function setDimension($tryb)
+    {
+        $this->dim = $tryb;
+    }
+
+    private function getDim($i, $j, $z)
+    {
+        switch ($this->dim) {
+            case 0:
+                return $z;
+                break;
+            case 1:
+                return $i;
+                break;
+            case 2:
+                return $j;
+                break;
+        }
     }
 
     public function cleanValue($val)

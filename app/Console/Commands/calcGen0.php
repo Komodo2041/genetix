@@ -18,7 +18,7 @@ class calcGen0 extends Command
     *
     * @var string
     */
-   protected $signature = 'app:calc-gen0 {aid} {tryb} {multione}';
+   protected $signature = 'app:calc-gen0 {aid} {tryb} {multione} {dim=0}';
 
    /**
     * The console command description.
@@ -35,6 +35,7 @@ class calcGen0 extends Command
       $tryb = $this->argument('tryb');
       $aid = $this->argument('aid');
       $multi = $this->argument('multione');
+      $dim = $this->argument('dim');
       echo "Wlaczono " . $aid . " tryb - " . $tryb . "\n";
       $calc = new CalcController2();
 
@@ -43,10 +44,10 @@ class calcGen0 extends Command
          $calc->maxPopulation = 10;
          for ($i = 0; $i < 50; $i++) {
             echo $i . "\n";
-            $calc->calcGeneration0($aid, $tryb, $gen0, $cross, $mutation,  $gtx);
+            $calc->calcGeneration0($aid, $tryb, $dim, $gen0, $cross, $mutation,  $gtx);
          }
       } else {
-         $calc->calcGeneration0($aid, $tryb, $gen0, $cross, $mutation,  $gtx);
+         $calc->calcGeneration0($aid, $tryb, $dim, $gen0, $cross, $mutation,  $gtx);
       }
    }
 }

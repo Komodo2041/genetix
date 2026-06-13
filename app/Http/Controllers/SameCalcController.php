@@ -61,7 +61,7 @@ class SameCalcController extends Controller
                 foreach ($patterns as $key => $patt) {
                     $change = 1000 - $mh->calcpointer($patt, $data);
 
-                    if ($change <= 100) {
+                    if ($change <= 50) {
                         $same = 1;
                         $result[] = [
                             "calc_id" => $calc->id,

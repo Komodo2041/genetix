@@ -494,23 +494,24 @@ class CalcController2 extends Controller
         return view("percent", ['calco' => $calc]);
     }
 
-    public function showgeneration0($id)
+    public function showgeneration0($id, $dimension)
     {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $gen = Gen0::where("area_id", $id)->orderBy("result", "desc")->take(100)->get();
-        $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->count();
-        return view("showgeneration0", ['area' => $area, 'gen' => $gen, "workedcount" => $workedcount]);
+        $gen = Gen0::where("area_id", $id)->orderBy("result", "desc")->where("dim", $dimension)->take(200)->get();
+        $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->where("dim", $dimension)->count();
+        return view("showgeneration0", ['area' => $area, 'gen' => $gen, "workedcount" => $workedcount, "dimension" => $dimension]);
     }
 
-    public function calcGeneration0($id, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    public function calcGeneration0($id, $tryb, $dimension, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
     {
 
         set_time_limit(40000);
         ini_set('memory_limit', '300M');
 
+        $gen0->setDimension($dimension);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -537,7 +538,7 @@ class CalcController2 extends Controller
             $stiffPattern = $gtx->getStiffPattern($calculations, 10, 10);
             $pattern = $gen0->calcPattern($stiffPattern[1]);
         } elseif ($tryb == 5) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->first();
             $bestR = $best->result;
             $pattern = json_decode($best->data);
             foreach ($pattern as $key => $res) {
@@ -546,16 +547,15 @@ class CalcController2 extends Controller
                 $changes[$key] = $v;
             }
         } elseif ($tryb == 6) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $bestR = $best->result;
             $key = rand(0, count($pattern) - 1);
-            $key2 = rand(0, count($pattern) - 1);
             $v = rand(-10, 10);
             $changes[$key] = $v;
             $pattern[$key] =  $gen0->cleanValue($v + $pattern[$key]);
         } elseif ($tryb == 7) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $bestR = $best->result;
             $val = rand(1, 10);
@@ -565,7 +565,7 @@ class CalcController2 extends Controller
             $changes[$keys[0]] = -1 * $val;
             $changes[$keys[1]] = $val;
         } elseif ($tryb == 8) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $bestR = $best->result;
             $val = rand(1, 10);
@@ -575,7 +575,7 @@ class CalcController2 extends Controller
             $changes[$keys[0]] = -1 * $val;
             $changes[$keys[1]] = $val;
         } elseif ($tryb == 9) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $bestR = $best->result;
             $val = rand(-10, 10);
@@ -587,13 +587,13 @@ class CalcController2 extends Controller
             $changes[$key - 1] = $val;
             $changes[$key + 1] = $val;
         } elseif ($tryb == 10) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $pattern = json_decode($best->data);
             $bestR = $best->result;
 
-            $worked = Gen0::where("area_id", $id)->where("worked", 1)->inRandomOrder()->first();
+            $worked = Gen0::where("area_id", $id)->where("dim", $dimension)->where("worked", 1)->inRandomOrder()->first();
             if (!$worked) {
-                return redirect("/showgeneration0/" . $id)->with('error', 'Brak dobrych obliczeń');
+                return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('error', 'Brak dobrych obliczeń');
             }
             $changes = json_decode($worked->changes);
             for ($i = 0; $i < 10; $i++) {
@@ -601,8 +601,8 @@ class CalcController2 extends Controller
                 $pattern[$i] = $gen0->cleanValue($pattern[$i]);
             }
         } elseif ($tryb == 11) {
-            $bests = Gen0::where("area_id", $id)->where("tryb", 5)->orderBy("result", "DESC")->take(10)->get();
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $bests = Gen0::where("area_id", $id)->where("dim", $dimension)->where("tryb", 5)->orderBy("result", "DESC")->take(10)->get();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $bestR = $best->result;
             $pattern2 = json_decode($best->data);
             $pattern = array_fill(0, 10, 0);
@@ -619,14 +619,14 @@ class CalcController2 extends Controller
                 $pattern[$i] = $gen0->cleanValue($changes[$i] + $pattern2[$i]);
             }
         } elseif ($tryb == 12) {
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $data = json_decode($best->data);
             $sum = $gen0->calcAllData($data);
             $half = floor($sum / 2);
             $newData = $gen0->minusData($data, $half);
             $pattern = $gen0->addData($newData, $half);
         } elseif ($tryb == 13) {
-            $best = Gen0::where("area_id", $id)->whereIn("tryb", [12, 13, 14])->orderBy("result", "DESC")->take(10)->get()->random(1);
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->whereIn("tryb", [12, 13, 14])->orderBy("result", "DESC")->take(10)->get()->random(1);
             $bestR = $best[0]->result;
             $pattern = json_decode($best[0]->data);
             foreach ($pattern as $key => $res) {
@@ -636,7 +636,7 @@ class CalcController2 extends Controller
             }
         } elseif ($tryb == 14) {
             $nr = rand(2, 15);
-            $bests = Gen0::where("area_id", $id)->whereIn("tryb", [12, 13])->orderBy("result", "DESC")->take($nr)->get();
+            $bests = Gen0::where("area_id", $id)->where("dim", $dimension)->whereIn("tryb", [12, 13])->orderBy("result", "DESC")->take($nr)->get();
             $pattern = array_fill(0, 10, 0);
             $all = 0;
             foreach ($bests as $best) {
@@ -650,8 +650,17 @@ class CalcController2 extends Controller
                 $changes[$i] = round($pattern[$i] / $all);
                 $pattern[$i] = $gen0->cleanValue($changes[$i]);
             }
-        } elseif ($tryb == 15) { // AVG
-            $best = Gen0::where("area_id", $id)->orderBy("result", "DESC")->take(20)->get();
+        } elseif ($tryb == 15) {
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->first();
+            $bestR = $best->result;
+            $pattern = json_decode($best->data);
+            foreach ($pattern as $key => $res) {
+                $v = rand(-2, 2);
+                $pattern[$key] = $gen0->cleanValue($v + $res);
+                $changes[$key] = $v;
+            }
+        } elseif ($tryb == 16) { // AVG
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
             foreach ($best as $b) {
@@ -700,8 +709,8 @@ class CalcController2 extends Controller
             }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
-            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb];
-            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11) {
+            $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb, "dim" => $dimension];
+            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11 || $tryb == 15) {
                 $create['changes'] = json_encode($changes);
                 if ($result > $bestR) {
                     $create['worked'] = 1;
@@ -725,6 +734,6 @@ class CalcController2 extends Controller
             unset($res);
         }
 
-        return redirect("/showgeneration0/" . $id)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
+        return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
     }
 }
