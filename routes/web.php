@@ -58,6 +58,8 @@ Route::get('area/showpercent/{id}',  "App\Http\Controllers\CalcController2@perce
 Route::get('showgeneration0/{id}/{dimension}',  "App\Http\Controllers\CalcController2@showgeneration0");
 Route::get('calcGeneration0/{id}/{tryb}/{dimension}',  "App\Http\Controllers\CalcController2@calcGeneration0");
 
+Route::get('helpgeneration0/{id}/{dimension}',  "App\Http\Controllers\CalcController2@helpshowgeneration0");
+
 Route::get('cloneRiver/{id}',  "App\Http\Controllers\RiverController@cloneRiver");
 Route::get('showRiver/{id}',  "App\Http\Controllers\RiverController@showRiver");
 Route::get('pourRiver/{id}',  "App\Http\Controllers\RiverController@pourRiver");

@@ -27,7 +27,7 @@ class CalcController2 extends Controller
 
     public $nrMaxPopulation = 120;
 
-    public $manyrepeat = 10;
+    public $manyrepeat = 1;
     public $maxPopulation = 10;
     public $startPopulation = 800;
 
@@ -494,15 +494,24 @@ class CalcController2 extends Controller
         return view("percent", ['calco' => $calc]);
     }
 
-    public function showgeneration0($id, $dimension)
+    public function showgeneration0($id, $dimension, Request $req)
     {
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $gen = Gen0::where("area_id", $id)->orderBy("result", "desc")->where("dim", $dimension)->take(200)->get();
+        $onshow = $req->input("onshow", 0);
+
+        $pgen = Gen0::where("area_id", $id)->orderBy("result", "desc")->where("dim", $dimension);
+        if ($onshow == 1) {
+            $pgen = $pgen->whereIn("tryb", [1, 2, 3]);
+        } elseif ($onshow == 2) {
+            $pgen = $pgen->whereIn("tryb", [12, 13, 14]);
+        }
+        $gen = $pgen->take(200)->get();
         $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->where("dim", $dimension)->count();
-        return view("showgeneration0", ['area' => $area, 'gen' => $gen, "workedcount" => $workedcount, "dimension" => $dimension]);
+
+        return view("showgeneration0", ['area' => $area, 'gen' => $gen, "workedcount" => $workedcount, "dimension" => $dimension, "onshow" => $onshow]);
     }
 
     public function calcGeneration0($id, $tryb, $dimension, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
@@ -524,7 +533,7 @@ class CalcController2 extends Controller
         }
         $settBox = 0;
         $settGen0 = Area::where("river", $headarea->id)->where("gen0set", 1)->first();
-        if ($settGen0) {
+        if ($settGen0 && $dimension == 0) {
             $settBox = $settGen0->id;
         }
 
@@ -601,7 +610,7 @@ class CalcController2 extends Controller
                 $pattern[$i] = $gen0->cleanValue($pattern[$i]);
             }
         } elseif ($tryb == 11) {
-            $bests = Gen0::where("area_id", $id)->where("dim", $dimension)->where("tryb", 5)->orderBy("result", "DESC")->take(10)->get();
+            $bests = Gen0::where("area_id", $id)->where("dim", $dimension)->whereIn("tryb", [5, 15])->orderBy("result", "DESC")->take(10)->get();
             $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
             $bestR = $best->result;
             $pattern2 = json_decode($best->data);
@@ -651,7 +660,7 @@ class CalcController2 extends Controller
                 $pattern[$i] = $gen0->cleanValue($changes[$i]);
             }
         } elseif ($tryb == 15) {
-            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->first();
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->where("tryb", 4)->orderBy("result", "DESC")->first();
             $bestR = $best->result;
             $pattern = json_decode($best->data);
             foreach ($pattern as $key => $res) {
@@ -659,7 +668,16 @@ class CalcController2 extends Controller
                 $pattern[$key] = $gen0->cleanValue($v + $res);
                 $changes[$key] = $v;
             }
-        } elseif ($tryb == 16) { // AVG
+        } elseif ($tryb == 16) {
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->where("tryb", 4)->orderBy("result", "DESC")->first();
+            $bestR = $best->result;
+            $pattern = json_decode($best->data);
+            foreach ($pattern as $key => $res) {
+                $v = rand(-1, 1);
+                $pattern[$key] = $gen0->cleanValue($v + $res);
+                $changes[$key] = $v;
+            }
+        } elseif ($tryb == 17) { // AVG
             $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
@@ -710,7 +728,7 @@ class CalcController2 extends Controller
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
             $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb, "dim" => $dimension];
-            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11 || $tryb == 15) {
+            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11 || $tryb == 15 || $tryb == 16) {
                 $create['changes'] = json_encode($changes);
                 if ($result > $bestR) {
                     $create['worked'] = 1;
@@ -735,5 +753,27 @@ class CalcController2 extends Controller
         }
 
         return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
+    }
+
+    /** METHOD TO TEST */
+    public function helpshowgeneration0($id, $dimension, Request $req)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $pgen = Gen0::where("area_id", $id)->orderBy("result", "desc")->where("dim", $dimension);
+        $gen = $pgen->take(500)->get()->toArray();
+
+        foreach ($gen as $key => $g2) {
+            $pattern = json_decode($g2['data']);
+            $sum = 0;
+            for ($i = 0; $i < 10; $i++) {
+                $sum += abs($pattern[$i] - 30);
+            }
+            $gen[$key]['diff'] = $sum;
+        }
+        return view("helpshowgeneration0", ['area' => $area, 'gen' => $gen,   "dimension" => $dimension]);
     }
 }

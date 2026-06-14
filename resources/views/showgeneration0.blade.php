@@ -9,6 +9,15 @@
   <a href="/showgeneration0/{{$area->id}}/2"><button @if ($dimension==2) class="gray" @endif>Obliczenia Gen0 - Y</button></a>&nbsp;
 </div>
 <div class="groupBox">
+  <a href="/showgeneration0/{{$area->id}}/{{$dimension}}"><button @if ($onshow==0) class="gray" @endif>All</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=1"><button @if ($onshow==1) class="gray" @endif>Kategoria 0-3</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=2"><button @if ($onshow==2) class="gray" @endif>Kategoria 12-14</button></a>&nbsp;
+
+  <a href="/helpgeneration0/{{$area->id}}/1"><button>Pomocene Obliczenia Gen0 - X</button></a>&nbsp;
+  <a href="/helpgeneration0/{{$area->id}}/2"><button>Pomocne Obliczenia Gen0 - Y</button></a>&nbsp;
+
+</div>
+<div class="groupBox">
   <a href="/calcGeneration0/{{$area->id}}/1/{{$dimension}}"><button>Oblicz 1 generację (0, 50)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/2/{{$dimension}}"><button>Oblicz 1 generację (10, 20)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/3/{{$dimension}}"><button>Oblicz 1 generację (11, 23)</button></a>
@@ -18,6 +27,7 @@
   @if (count($gen) > 0)
   <a href="/calcGeneration0/{{$area->id}}/5/{{$dimension}}"><button>Oblicz 1 generację (-5, +5 z najlepszego wyniku)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/15/{{$dimension}}"><button>Oblicz 1 generację (-2, +2 z najlepszego wyniku)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/16/{{$dimension}}"><button>Oblicz 1 generację (-1, +1 z najlepszego wyniku)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/6/{{$dimension}}"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/7/{{$dimension}}"><button>Oblicz 1 generację Jeden +10, drugi -10</button></a>
   <a href="/calcGeneration0/{{$area->id}}/8/{{$dimension}}"><button>Oblicz 1 generację (Sąsiedzi) Jeden +10, drugi -10</button></a>
@@ -44,7 +54,7 @@
 
   <table>
     <tr>
-      <th>Patter</th>
+      <th>Pattern</th>
       <th>Result</th>
       <th>Type</th>
       <th>Pop</th>
