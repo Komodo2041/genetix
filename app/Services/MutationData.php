@@ -206,7 +206,8 @@ class MutationData
         "change2PointsToMiddle",
         "diffPointson2Points",
         "join2Points",
-        "replace3Squere4x4"
+        "replace3Squere4x4",
+        "replace3Squere3x3"
     ];
 
     public function setNumerMutation($nr)
@@ -4416,6 +4417,11 @@ class MutationData
     private function replace3Squere4x4($pop, $nr = 10)
     {
         return $this->replace3Squere($pop, 4, $nr);
+    }
+
+    private function replace3Squere3x3($pop, $nr = 10)
+    {
+        return $this->replace3Squere($pop, 3, $nr);
     }
 
     private function replace3Squere8x8($pop, $nr = 10)
