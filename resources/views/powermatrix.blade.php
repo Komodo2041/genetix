@@ -1,31 +1,45 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br/>
-<a href="/see10Layerpower/10"><button>Pokaż 10 warstw</button></a><br/>
+<a href="/"><button>Strona główna</button></a><br />
+<a href="/see10Layerpower/10"><button>Pokaż 10 warstw</button></a><br />
 
 <h3>Matryca siły - size {{$size}}</h3>
-<a href="/calcpowermatrix/10"><button>Oblicz Matryce siły</button></a>   
+<a href="/calcpowermatrix/10"><button>Oblicz Matryce siły</button></a>
 
-@if ($power) 
-   @foreach ($power AS $x => $table) 
+@if ($power)
+@foreach ($power AS $x => $table)
 <div style="width:100%;">
-   <table >
-   @foreach ($table AS $y => $row)
+   <table>
+      @foreach ($table AS $y => $row)
       <tr>
-      @foreach ($row AS $z => $val)
+         @foreach ($row AS $z => $val)
          <td class="showdata">
             {{$power[$z][$y][$x]}}
          </td>
-      @endforeach 
+         @endforeach
       </tr>
+      @endforeach
+   </table>
    @endforeach
-</table>
-  @endforeach
-@else
+
+   <table>
+      <tr>
+         <th>Level</th>
+         <th>Sum</th>
+      </tr>
+      @foreach ($calc AS $key => $value)
+      <tr>
+         <td>{{$key}}</td>
+         <td>{{$value}}</td>
+      </tr>
+      @endforeach
+   </table>
+
+   @else
    <p>Brak obliczeń dla tej wielkości</p>
-@endif
-  
+   @endif
+
 </div>
 
 @endsection('content')
