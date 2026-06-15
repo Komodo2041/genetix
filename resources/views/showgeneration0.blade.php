@@ -30,6 +30,7 @@
   <a href="/calcGeneration0/{{$area->id}}/16/{{$dimension}}"><button>Oblicz 1 generację (-1, +1 z najlepszego wyniku)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/6/{{$dimension}}"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/7/{{$dimension}}"><button>Oblicz 1 generację Jeden +10, drugi -10</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/17/{{$dimension}}"><button>Oblicz 1 generację Jeden +1, drugi -1</button></a>
   <a href="/calcGeneration0/{{$area->id}}/8/{{$dimension}}"><button>Oblicz 1 generację (Sąsiedzi) Jeden +10, drugi -10</button></a>
   <a href="/calcGeneration0/{{$area->id}}/9/{{$dimension}}"><button>Oblicz 1 generację (Dolina) Jeden +10, drugi -10</button></a>
   <a href="/calcGeneration0/{{$area->id}}/10/{{$dimension}}"><button>Oblicz 1 generację - Działające zmiany</button></a>

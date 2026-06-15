@@ -677,7 +677,25 @@ class CalcController2 extends Controller
                 $pattern[$key] = $gen0->cleanValue($v + $res);
                 $changes[$key] = $v;
             }
-        } elseif ($tryb == 17) { // AVG
+        } elseif ($tryb == 17) {
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(15)->get()->shuffle()->first();
+            $pattern = json_decode($best->data);
+            $bestR = $best->result;
+            $val = rand(1, 2);
+            $keys = $gen0->getTwoKeysFromPattern($pattern, $val);
+            $pattern[$keys[0]] = $gen0->cleanValue($pattern[$keys[0]] - $val);
+            $pattern[$keys[1]] = $gen0->cleanValue($pattern[$keys[1]] + $val);
+            $changes[$keys[0]] = -1 * $val;
+            $changes[$keys[1]] = $val;
+        } elseif ($tryb == 18) {
+            $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
+            $pattern = json_decode($best->data);
+            $bestR = $best->result;
+            $key = rand(0, count($pattern) - 1);
+            $v = rand(-2, 2);
+            $changes[$key] = $v;
+            $pattern[$key] =  $gen0->cleanValue($v + $pattern[$key]);
+        } elseif ($tryb == 19) { // AVG
             $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(20)->get();
             $newpattern = array_fill(0, 10, 0);
             $all = 0;
@@ -691,6 +709,8 @@ class CalcController2 extends Controller
             foreach ($newpattern as $key => $val) {
                 $newpattern[$key] = round($val / $all);
             }
+        } elseif ($tryb == 20) { // ONLY FOR TEST
+            $pattern = array_fill(0, 10, 30);
         }
 
 
@@ -728,7 +748,7 @@ class CalcController2 extends Controller
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
             $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb, "dim" => $dimension];
-            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11 || $tryb == 15 || $tryb == 16) {
+            if ($tryb == 5  || $tryb == 6 || $tryb == 7  || $tryb == 8 || $tryb == 9 || $tryb == 10 || $tryb == 11 || $tryb == 15 || $tryb == 16 || $tryb == 17  || $tryb == 18) {
                 $create['changes'] = json_encode($changes);
                 if ($result > $bestR) {
                     $create['worked'] = 1;
