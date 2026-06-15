@@ -87,7 +87,7 @@ class MainController extends Controller
 
 
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 104;
+    private $testRadomSelecting = 0;
 
     public $usingPower = 0;
 
@@ -603,11 +603,13 @@ class MainController extends Controller
         } elseif ($randomDoing == 104) {
 
             $calculations = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $id)->where("level", "<=", $lvl)
-                ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(20)->get()->random(10);
+                ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(20)->get();
 
             if (!$calculations) {
                 $calculations = $this->getCalculationLevel($id, $lvl, 10);
                 $randomDoing = -1;
+            } else {
+                $calculations = $calculations->random(10);
             }
             foreach ($calculations as $c) {
                 $population0[] = json_decode($c->data);
