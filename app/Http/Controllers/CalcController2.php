@@ -28,6 +28,8 @@ class CalcController2 extends Controller
     public $nrMaxPopulation = 120;
 
     public $manyrepeat = 1;
+    public $manyAltrepeat = 10;
+
     public $maxPopulation = 10;
     public $startPopulation = 800;
 
@@ -775,8 +777,87 @@ class CalcController2 extends Controller
         return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
     }
 
+    public function calcAltGen0($id, $dimension, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    {
+
+        set_time_limit(40000);
+        ini_set('memory_limit', '300M');
+
+        $gen0->setDimension($dimension);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $halfPopulation = floor($this->startPopulation / 2);
+        $cross->setNr($halfPopulation);
+        $mutation->setNumerMutation($halfPopulation);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+        $individual = 10;
+
+        $pattern = [];
+        $best = Gen0::where("area_id", $id)->where("dim", $dimension)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        $bestR = $best->result;
+        $pattern = json_decode($best->data);
+        $oldP = $pattern;
+
+        for ($i = 0; $i < $this->manyAltrepeat; $i++) {
+
+            $population0 = [];
+            for ($n = 0; $n < $this->startPopulation; $n++) {
+                $population0[] = $gen0->createBoard($pattern, 10);
+            }
+
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            unset($population0);
+
+            $nrPop = 0;
+            $maxQ = $res[0]['sum'];
+
+            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+
+                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+
+                $maxQ = $res[0]['sum'];
+                $nrPop++;
+            }
+            $last = $res[0]['sum'];
+            $result = $last / $maxPoints;
+            $reson = 0;
+            if ($result >  $bestR) {
+                $reson = 1;
+            }
+            $bestR = $result;
+
+            $stiffPattern = $gtx->getStiffPattern([$res[0]['area']], 10, 10);
+            $pattern0 = $gen0->calcPattern($stiffPattern[1]);
+
+            $create = [
+                "area_id" => $id,
+                "result" => $result,
+                "population" => $nrPop,
+                "data" => json_encode($pattern),
+                "tryb" => 21,
+                "dim" => $dimension,
+                "data2" => json_encode($pattern0),
+                "reson" => $reson
+            ];
+
+            Gen0::create($create);
+            $pattern = $pattern0;
+            unset($res);
+        }
+
+        return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('success', 'Obliczono ciąg obliczeń gen0 dla ' . json_encode($oldP));
+    }
+
     /** METHOD TO TEST */
-    public function helpshowgeneration0($id, $dimension, Request $req)
+    public function helpshowgeneration0($id, $dimension, Generation0Helper $gen0,  GenetixDataGenerator $gtx)
     {
         $area = Area::find($id);
         if (!$area) {
@@ -785,12 +866,16 @@ class CalcController2 extends Controller
 
         $pgen = Gen0::where("area_id", $id)->orderBy("result", "desc")->where("dim", $dimension);
         $gen = $pgen->take(500)->get()->toArray();
+        $stiffPattern = $gtx->getStiffPattern([$area], 10, 10);
+        $gen0->setDimension($dimension);
+        $pattern0 = $gen0->calcPattern($stiffPattern[1]);
+
 
         foreach ($gen as $key => $g2) {
             $pattern = json_decode($g2['data']);
             $sum = 0;
             for ($i = 0; $i < 10; $i++) {
-                $sum += abs($pattern[$i] - 30);
+                $sum += abs($pattern[$i] - $pattern0[$i]);
             }
             $gen[$key]['diff'] = $sum;
         }

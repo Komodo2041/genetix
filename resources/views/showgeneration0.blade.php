@@ -6,7 +6,10 @@
 <div class="groupBox">
   <a href="/showgeneration0/{{$area->id}}/0"><button @if ($dimension==0) class="gray" @endif>Obliczenia Gen0 - Z</button></a>&nbsp;
   <a href="/showgeneration0/{{$area->id}}/1"><button @if ($dimension==1) class="gray" @endif>Obliczenia Gen0 - X</button></a>&nbsp;
-  <a href="/showgeneration0/{{$area->id}}/2"><button @if ($dimension==2) class="gray" @endif>Obliczenia Gen0 - Y</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/2"><button @if ($dimension==2) class="gray" @endif>Obliczenia Gen0 - Y</button></a>&nbsp;<br />
+  <a href="/calcAltgeneration0/{{$area->id}}/0"><button>Ciąg obliczeń Gen0 - Z</button></a>&nbsp;
+  <a href="/calcAltgeneration0/{{$area->id}}/1"><button>Ciąg obliczeń Gen0 - X</button></a>&nbsp;
+  <a href="/calcAltgeneration0/{{$area->id}}/2"><button>Ciąg obliczeń Gen0 - Y</button></a>&nbsp;
 </div>
 <div class="groupBox">
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}"><button @if ($onshow==0) class="gray" @endif>All</button></a>&nbsp;
@@ -29,6 +32,7 @@
   <a href="/calcGeneration0/{{$area->id}}/15/{{$dimension}}"><button>Oblicz 1 generację (-2, +2 z najlepszego wyniku)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/16/{{$dimension}}"><button>Oblicz 1 generację (-1, +1 z najlepszego wyniku)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/6/{{$dimension}}"><button>Oblicz 1 generację (-10, +10 z najlepszego wyniku tylko jedna zmiana)</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/18/{{$dimension}}"><button>Oblicz 1 generację (-2, +2 z najlepszego wyniku tylko jedna zmiana)</button></a>
   <a href="/calcGeneration0/{{$area->id}}/7/{{$dimension}}"><button>Oblicz 1 generację Jeden +10, drugi -10</button></a>
   <a href="/calcGeneration0/{{$area->id}}/17/{{$dimension}}"><button>Oblicz 1 generację Jeden +1, drugi -1</button></a>
   <a href="/calcGeneration0/{{$area->id}}/8/{{$dimension}}"><button>Oblicz 1 generację (Sąsiedzi) Jeden +10, drugi -10</button></a>
@@ -44,7 +48,7 @@
   <a href="/calcGeneration0/{{$area->id}}/14/{{$dimension}}"><button>AVG DelAdd 50%</button></a>
 </div>
 <div class="groupBox">
-  <a href="/calcGeneration0/{{$area->id}}/15/{{$dimension}}"><button>AVG 20 Best Result</button></a>
+  <a href="/calcGeneration0/{{$area->id}}/19/{{$dimension}}"><button>AVG 20 Best Result</button></a>
 </div>
 
 @endif
