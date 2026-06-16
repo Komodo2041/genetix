@@ -22,8 +22,9 @@ class CalcController2 extends Controller
 
     // php artisan app:calc-gen0 16 6 
     // php artisan app:calc-gen0 16 5
-
     // php artisan app:calc-gen0 16 9
+
+    // app:calc-gen0_ciag 17 0
 
     public $nrMaxPopulation = 120;
 
@@ -834,7 +835,7 @@ class CalcController2 extends Controller
             }
             $bestR = $result;
 
-            $stiffPattern = $gtx->getStiffPattern([$res[0]['area']], 10, 10);
+            $stiffPattern = $gtx->getStiffPattern([$res[0]['area']], 10, 10, 2);
             $pattern0 = $gen0->calcPattern($stiffPattern[1]);
 
             $create = [
@@ -880,5 +881,85 @@ class CalcController2 extends Controller
             $gen[$key]['diff'] = $sum;
         }
         return view("helpshowgeneration0", ['area' => $area, 'gen' => $gen,   "dimension" => $dimension]);
+    }
+
+    public function calc3DimGen0($id, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    {
+
+        set_time_limit(40000);
+        ini_set('memory_limit', '300M');
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $halfPopulation = floor($this->startPopulation / 2);
+        $cross->setNr($halfPopulation);
+        $mutation->setNumerMutation($halfPopulation);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+        $individual = 10;
+
+        $pattern = [];
+        $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        $patternZ = json_decode($best->data);
+        $best = Gen0::where("area_id", $id)->where("dim", 1)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        $patternX = json_decode($best->data);
+        $best = Gen0::where("area_id", $id)->where("dim", 2)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        $patternY = json_decode($best->data);
+
+        $all = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $all += $patternZ[$i];
+            $all += $patternX[$i];
+            $all += $patternY[$i];
+        }
+        $all = round($all / 3);
+
+        for ($i = 0; $i < $this->manyrepeat; $i++) {
+
+            $population0 = [];
+            for ($n = 0; $n < $this->startPopulation; $n++) {
+                $population0[] = $gen0->createBoard3Dim($patternZ, $patternX, $patternY, $all, 10);
+            }
+
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            unset($population0);
+
+            $nrPop = 0;
+            $maxQ = $res[0]['sum'];
+
+            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+
+                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+
+                $maxQ = $res[0]['sum'];
+                $nrPop++;
+            }
+            $last = $res[0]['sum'];
+            $result = $last / $maxPoints;
+
+
+            $create = [
+                "area_id" => $id,
+                "result" => $result,
+                "population" => $nrPop,
+                "data" => json_encode($pattern),
+                "tryb" => 22,
+                "dim" => 0,
+                "data2" => json_encode(["Z" => $patternZ, "X" => $patternX, "Y" => $patternY])
+            ];
+
+            Gen0::create($create);
+
+            unset($res);
+        }
+
+        return redirect("/showgeneration0/" . $id . "/")->with('success', 'Obliczono gen0 na podstawie X, Y, Z ');
     }
 }

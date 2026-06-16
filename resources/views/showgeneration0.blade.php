@@ -10,6 +10,7 @@
   <a href="/calcAltgeneration0/{{$area->id}}/0"><button>Ciąg obliczeń Gen0 - Z</button></a>&nbsp;
   <a href="/calcAltgeneration0/{{$area->id}}/1"><button>Ciąg obliczeń Gen0 - X</button></a>&nbsp;
   <a href="/calcAltgeneration0/{{$area->id}}/2"><button>Ciąg obliczeń Gen0 - Y</button></a>&nbsp;
+  <a href="/calc3DimGen0/{{$area->id}}"><button>Oblicz na podstawie Z,X,Y</button></a>&nbsp;
 </div>
 <div class="groupBox">
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}"><button @if ($onshow==0) class="gray" @endif>All</button></a>&nbsp;

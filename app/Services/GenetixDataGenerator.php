@@ -371,8 +371,10 @@ class GenetixDataGenerator
         foreach ($calculations as $c) {
             if ($tryb == 0) {
                 $data = json_decode($c->data);
-            } else {
+            } elseif ($tryb == 1) {
                 $data = json_decode($c['data']);
+            } elseif ($tryb == 2) {
+                $data = $c;
             }
 
             for ($i = 0; $i < $nr; $i++) {

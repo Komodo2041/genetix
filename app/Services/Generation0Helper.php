@@ -172,4 +172,25 @@ class Generation0Helper
         }
         return $data;
     }
+
+    public function createBoard3Dim($patternZ, $patternX, $patternY, $all, $size)
+    {
+        $res = [];
+        $max = $size * $size * $size;
+        $max2 = $size * $size;
+        $dol = pow($all / $max, 2);
+
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    $procent = ($patternZ[$z] / $max2) * ($patternX[$i] / $max2) * ($patternY[$j] / $max2);
+                    $procent = abs($procent / $dol);
+                    $procent *= 100;
+
+                    $res[$i][$j][$z] = $this->fill($procent);
+                }
+            }
+        }
+        return $res;
+    }
 }
