@@ -26,6 +26,8 @@ class CalcController2 extends Controller
 
     // app:calc-gen0_ciag 17 0
 
+    // app:calc-gen0-x-y-z 17 20
+
     public $nrMaxPopulation = 120;
 
     public $manyrepeat = 1;
@@ -949,7 +951,7 @@ class CalcController2 extends Controller
                 "area_id" => $id,
                 "result" => $result,
                 "population" => $nrPop,
-                "data" => json_encode($pattern),
+                "data" => json_encode($patternZ),
                 "tryb" => 22,
                 "dim" => 0,
                 "data2" => json_encode(["Z" => $patternZ, "X" => $patternX, "Y" => $patternY])
@@ -960,6 +962,6 @@ class CalcController2 extends Controller
             unset($res);
         }
 
-        return redirect("/showgeneration0/" . $id . "/")->with('success', 'Obliczono gen0 na podstawie X, Y, Z ');
+        return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono gen0 na podstawie X, Y, Z ');
     }
 }
