@@ -41,6 +41,8 @@ use App\Http\Controllers\DiamondController;
 
 // php artisan app:onecalculation 82 240
 
+// php artisan app:calc-pattern 17
+
 class MainController extends Controller
 {
 
@@ -87,7 +89,7 @@ class MainController extends Controller
 
 
     /***********TESTING RANDOM SELECTING ************/
-    private $testRadomSelecting = 3;
+    public $testRadomSelecting = 3;
 
     public $usingPower = 0;
 
@@ -173,9 +175,15 @@ class MainController extends Controller
         $population0 = [];
 
         if ($lvl <= 0) {
-
-            $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
-            $randomDoing = 0;
+            if ($randomDoing == 107) {
+                $pattern = json_decode($area->pattern);
+                for ($n = 0; $n < $this->startPopulation; $n++) {
+                    $population0[] = $gen0->createBoard($pattern, 10);
+                }
+            } else {
+                $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
+                $randomDoing = 0;
+            }
         } elseif ($randomDoing == 0) {
 
             $calculations = $this->getCalculationLevel($id, $lvl, 10);

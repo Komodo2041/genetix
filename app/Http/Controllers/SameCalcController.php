@@ -157,7 +157,6 @@ class SameCalcController extends Controller
     public function compareGen0($id)
     {
 
-        set_time_limit(7200);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
@@ -214,5 +213,19 @@ class SameCalcController extends Controller
             $all += abs($t1[$i] - $t2[$i]);
         }
         return $all;
+    }
+
+    public function setRiverGen0($id, Request $req)
+    {
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $patterns = $req->input("patterns");
+        foreach ($patterns as $p) {
+            Area::create(["name" => $area->name . " - Pattern " . $p . " rzeka", "data" => $area->data, "river" => $id, "pattern" => $p]);
+        }
+        return redirect("/")->with('success', 'Dodano nowe rzeki na podstawie pattern');
     }
 }

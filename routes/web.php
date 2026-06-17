@@ -84,3 +84,4 @@ Route::get('showCalcSame/{id}',  "App\Http\Controllers\SameCalcController@show")
 Route::get('compareCalculations/{id}',  "App\Http\Controllers\SameCalcController@compare");
 Route::get('checkBlob/{id}/{tryb}',  "App\Http\Controllers\SameCalcController@checkBlob");
 Route::get('compareGen0/{id}',  "App\Http\Controllers\SameCalcController@compareGen0");
+Route::post('setRiverGen0/{id}',  "App\Http\Controllers\SameCalcController@setRiverGen0");
