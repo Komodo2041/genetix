@@ -207,7 +207,8 @@ class MutationData
         "diffPointson2Points",
         "join2Points",
         "replace3Squere4x4",
-        "replace3Squere3x3"
+        "replace3Squere3x3",
+
     ];
 
     public function setNumerMutation($nr)

@@ -512,6 +512,8 @@ class CalcController2 extends Controller
             $pgen = $pgen->whereIn("tryb", [1, 2, 3]);
         } elseif ($onshow == 2) {
             $pgen = $pgen->whereIn("tryb", [12, 13, 14]);
+        } elseif ($onshow == 3) {
+            $pgen = $pgen->whereIn("tryb", [21, 22]);
         }
         $gen = $pgen->take(200)->get();
         $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->where("dim", $dimension)->count();

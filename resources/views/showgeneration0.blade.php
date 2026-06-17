@@ -16,6 +16,7 @@
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}"><button @if ($onshow==0) class="gray" @endif>All</button></a>&nbsp;
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=1"><button @if ($onshow==1) class="gray" @endif>Kategoria 0-3</button></a>&nbsp;
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=2"><button @if ($onshow==2) class="gray" @endif>Kategoria 12-14</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=3"><button @if ($onshow==3) class="gray" @endif>Kategoria 21-22</button></a>&nbsp;
 
   <a href="/helpgeneration0/{{$area->id}}/1"><button>Pomocene Obliczenia Gen0 - X</button></a>&nbsp;
   <a href="/helpgeneration0/{{$area->id}}/2"><button>Pomocne Obliczenia Gen0 - Y</button></a>&nbsp;
