@@ -909,24 +909,22 @@ class CalcController2 extends Controller
         $pattern = [];
         $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
         $patternZ = json_decode($best->data);
-        $best = Gen0::where("area_id", $id)->where("dim", 1)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
-        $patternX = json_decode($best->data);
-        $best = Gen0::where("area_id", $id)->where("dim", 2)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
-        $patternY = json_decode($best->data);
+        $bestX = Gen0::where("area_id", $id)->where("dim", 1)->orderBy("result", "DESC")->take(50)->get()->shuffle()->take(10)->toArray();
+        $countX = count($bestX);
+        $bestY = Gen0::where("area_id", $id)->where("dim", 2)->orderBy("result", "DESC")->take(50)->get()->shuffle()->take(10)->toArray();
+        $countY = count($bestY);
 
         $all = 0;
         for ($i = 0; $i < 10; $i++) {
             $all += $patternZ[$i];
-            $all += $patternX[$i];
-            $all += $patternY[$i];
         }
-        $all = round($all / 3);
+
 
         for ($i = 0; $i < $this->manyrepeat; $i++) {
 
             $population0 = [];
             for ($n = 0; $n < $this->startPopulation; $n++) {
-                $population0[] = $gen0->createBoard3Dim($patternZ, $patternX, $patternY, $all, 10);
+                $population0[] = $gen0->createBoard3Dim($patternZ, json_decode($bestX[rand(0, $countX - 1)]['data']), json_decode($bestY[rand(0, $countY - 1)]['data']), $all, 10);
             }
 
             $res = $gtx->calcPopulation($population0, $headPoints);
@@ -956,7 +954,7 @@ class CalcController2 extends Controller
                 "data" => json_encode($patternZ),
                 "tryb" => 22,
                 "dim" => 0,
-                "data2" => json_encode(["Z" => $patternZ, "X" => $patternX, "Y" => $patternY])
+                "data2" => json_encode(["Z" => $patternZ])
             ];
 
             Gen0::create($create);
