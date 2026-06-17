@@ -1,8 +1,12 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br />
+<a href="/"><button>Strona główna</button></a>&nbsp;
+<a href="/compareGen0/{{$area->id}}"><button>Porównań Gen0 Z</button></a>
+
+<br />
 <a href="/compareCalculations/{{$area->id}}"><button>Porównań Wyniki</button></a><br />
+
 
 <a href="/checkBlob/{{$area->id}}/0"><button>Blob 1 levela</button></a>
 <a href="/checkBlob/{{$area->id}}/1"><button>Blob 2 levela</button></a>

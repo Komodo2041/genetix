@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\Calculation;
 use App\Models\CompareCalc;
+use App\Models\Gen0;
 
 use App\Services\MatrixHelper;
 use App\Services\GenetixDataGenerator;
@@ -151,5 +152,67 @@ class SameCalcController extends Controller
         ]);
 
         return redirect("/showCalcSame/" . $id)->with('success', 'Obliczono Blob');
+    }
+
+    public function compareGen0($id)
+    {
+
+        set_time_limit(7200);
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $maxdiff = 50;
+        $avg = Gen0::where("area_id", $id)->where("dim", 0)->get()->avg("result");
+
+        $comare = [];
+        $gen0 = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->where("result", ">", $avg)->get()->toArray();
+        $i = 0;
+        foreach ($gen0 as $record) {
+            if ($i == 0) {
+                $comare[] = [
+                    "data" => $record['data'],
+                    "res" => $record['result'],
+                    "calc" => json_decode($record['data'])
+                ];
+            } else {
+                $toDif = json_decode($record['data']);
+                $isnew = 1;
+                foreach ($comare  as $comp) {
+                    $diff = $this->calcDiff($toDif, $comp["calc"]);
+                    if ($diff < $maxdiff) {
+                        $isnew = 0;
+                        break;
+                    }
+                }
+                if ($isnew) {
+                    $comare[] = [
+                        "data" => $record['data'],
+                        "res" => $record['result'],
+                        "calc" => json_decode($record['data'])
+                    ];
+                }
+            }
+            $i++;
+        }
+
+
+        return view("compareGen0", ["area" => $area, "calcs" => $comare]);
+    }
+
+    private function calcDiff($t1, $t2)
+    {
+        $all = 0;
+        for ($i = 0; $i < 10; $i++) {
+            if ($t1[$i] < 0) {
+                $t1[$i] = 0;
+            }
+            if ($t2[$i] < 0) {
+                $t2[$i] = 0;
+            }
+            $all += abs($t1[$i] - $t2[$i]);
+        }
+        return $all;
     }
 }
