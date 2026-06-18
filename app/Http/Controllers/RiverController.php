@@ -145,6 +145,16 @@ class RiverController extends Controller
         return redirect("/")->with('success', 'Utworzono rzekę');
     }
 
+    public function addTama($id)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        Area::create(["name" => $area->name . " - tama", "data" => $area->data, "river" => $id, "tama" => 1]);
+        return redirect("/")->with('success', 'Utworzono tamę');
+    }
+
     public function getCalculationMaxBest($id, $number)
     {
         return  Calculation::where("area_id", $id)->orderByDesc("obtainedresult")->limit(max(0, $number))->get();

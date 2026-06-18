@@ -180,6 +180,13 @@ class MainController extends Controller
                 for ($n = 0; $n < $this->startPopulation; $n++) {
                     $population0[] = $gen0->createBoard($pattern, 10);
                 }
+            } elseif ($randomDoing == 108) {
+                $ids = Area::whereNotNull("pattern")->where("river", $area->river)->get()->pluck("id")->toArray();
+                $calculations = Calculation::whereIn("area_id", $ids)->inRandomOrder()->take(10)->get();
+                foreach ($calculations as $c) {
+                    $population0[] = json_decode($c->data);
+                    $usedcalc[] = $c->id;
+                }
             } else {
                 $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
                 $randomDoing = 0;
