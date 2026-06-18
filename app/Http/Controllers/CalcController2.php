@@ -782,6 +782,7 @@ class CalcController2 extends Controller
         return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
     }
 
+
     public function calcAltGen0($id, $dimension, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
     {
 
@@ -966,5 +967,87 @@ class CalcController2 extends Controller
         }
 
         return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono gen0 na podstawie X, Y, Z ');
+    }
+
+    public function calcUp50OneGen0($id, $upDown, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    {
+
+        set_time_limit(40000);
+        ini_set('memory_limit', '300M');
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $halfPopulation = floor($this->startPopulation / 2);
+        $cross->setNr($halfPopulation);
+        $mutation->setNumerMutation($halfPopulation);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+        $individual = 10;
+
+        $tryb = 23;
+        if ($upDown == 1) {
+            $tryb = 24;
+        }
+
+        $pattern = [];
+        $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+
+        $pattern = json_decode($best->data);
+
+
+        for ($i = 0; $i < 10; $i++) {
+
+            $pattern0 = $pattern;
+            if ($upDown == 0) {
+                $pattern0[$i] = $gen0->cleanValue($pattern0[$i] + 50);
+            } elseif ($upDown == 1) {
+                $pattern0[$i] = $gen0->cleanValue($pattern0[$i] - 50);
+            }
+
+            $population0 = [];
+            for ($n = 0; $n < $this->startPopulation; $n++) {
+                $population0[] = $gen0->createBoard($pattern0, 10);
+            }
+
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            unset($population0);
+
+            $nrPop = 0;
+            $maxQ = $res[0]['sum'];
+
+            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+
+                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+
+                $maxQ = $res[0]['sum'];
+                $nrPop++;
+            }
+            $last = $res[0]['sum'];
+            $result = $last / $maxPoints;
+
+            $create = [
+                "area_id" => $id,
+                "result" => $result,
+                "population" => $nrPop,
+                "data" => json_encode($pattern0),
+                "tryb" => $tryb,
+                "dim" => 0,
+                "data2" => json_encode($pattern),
+                "prev" => $best->id
+            ];
+
+            Gen0::create($create);
+
+            unset($res);
+        }
+
+        return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono Obniżenie o 50 ' . json_encode($pattern));
     }
 }
