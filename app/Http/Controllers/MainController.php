@@ -89,7 +89,7 @@ class MainController extends Controller
 
 
     /***********TESTING RANDOM SELECTING ************/
-    public $testRadomSelecting = 3;
+    public $testRadomSelecting = 0;
 
     public $usingPower = 0;
 
@@ -1001,7 +1001,7 @@ class MainController extends Controller
             $this->usePowerMutator = 0;
         }
         echo "OK";
-        exit();
+        // exit();
     }
 
     private function calcBetter($sum, $res)

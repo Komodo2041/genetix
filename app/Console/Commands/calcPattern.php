@@ -47,6 +47,8 @@ class calcPattern extends Command
 
         $main = new MainController();
         $main->testRadomSelecting = 107;
+        $main->nrTimes = 1;
+
         for ($i = 0; $i < 6; $i++) {
             echo $i . "\n";
             $id = $rivers[rand(0, count($rivers) - 1)];

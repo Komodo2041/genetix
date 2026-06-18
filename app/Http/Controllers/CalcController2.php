@@ -918,13 +918,16 @@ class CalcController2 extends Controller
         for ($i = 0; $i < 10; $i++) {
             $all += $patternZ[$i];
         }
-
+        $patternX = null;
+        $patternY = null;
 
         for ($i = 0; $i < $this->manyrepeat; $i++) {
 
             $population0 = [];
             for ($n = 0; $n < $this->startPopulation; $n++) {
-                $population0[] = $gen0->createBoard3Dim($patternZ, json_decode($bestX[rand(0, $countX - 1)]['data']), json_decode($bestY[rand(0, $countY - 1)]['data']), $all, 10);
+                $patternX = json_decode($bestX[rand(0, $countX - 1)]['data']);
+                $patternY = json_decode($bestY[rand(0, $countY - 1)]['data']);
+                $$population0[] = $gen0->createBoard3Dim($patternZ, $patternX, $patternY, $all, 10);
             }
 
             $res = $gtx->calcPopulation($population0, $headPoints);
@@ -954,7 +957,7 @@ class CalcController2 extends Controller
                 "data" => json_encode($patternZ),
                 "tryb" => 22,
                 "dim" => 0,
-                "data2" => json_encode(["Z" => $patternZ])
+                "data2" => json_encode(["Z" => $patternZ, "X" => $patternX, "Y" => $patternY])
             ];
 
             Gen0::create($create);
