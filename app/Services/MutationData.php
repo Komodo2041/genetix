@@ -208,7 +208,9 @@ class MutationData
         "join2Points",
         "replace3Squere4x4",
         "replace3Squere3x3",
-
+        "middleColumn",
+        "middleColumnRevert",
+        "midd2"
     ];
 
     public function setNumerMutation($nr)
@@ -4585,6 +4587,71 @@ class MutationData
         }
 
 
+        return $pop;
+    }
+
+    private function middleColumn($pop, $nr = 10)
+    {
+
+        $change = 0;
+        $i = 0;
+        while ($change == 0 && $i < 100) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(2, $nr - 1);
+            if ($pop[$x][$y][$z] == 0) {
+                $pop[$x][$y][$z] = 1;
+                $change = 1;
+                $change2 = 0;
+                $max = 50;
+                while ($change2 == 0 && $max > 0) {
+                    $xch = rand(-1, 1);
+                    $ych = rand(-1, 1);
+                    if (isset($pop[$x + $xch][$y + $ych][$z - 2]) && $pop[$x + $xch][$y + $ych][$z - 2] == 1) {
+                        $change2 = 0;
+                        $pop[$x + $xch][$y + $ych][$z - 2] = 0;
+                    }
+                    $max--;
+                }
+            }
+            $i++;
+        }
+        return $pop;
+    }
+
+    private function middleColumnRevert($pop, $nr = 10)
+    {
+
+        $change = 0;
+        $i = 0;
+        while ($change == 0 && $i < 100) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+            $z = rand(2, $nr - 1);
+            if ($pop[$x][$y][$z] == 1) {
+                $pop[$x][$y][$z] = 0;
+                $change = 1;
+                $change2 = 0;
+                $max = 50;
+                while ($change2 == 0 && $max > 0) {
+                    $xch = rand(-1, 1);
+                    $ych = rand(-1, 1);
+                    if (isset($pop[$x + $xch][$y + $ych][$z - 2]) && $pop[$x + $xch][$y + $ych][$z - 2] == 0) {
+                        $change2 = 0;
+                        $pop[$x + $xch][$y + $ych][$z - 2] = 1;
+                    }
+                    $max--;
+                }
+            }
+            $i++;
+        }
+        return $pop;
+    }
+
+    private function midd2($pop, $nr = 10)
+    {
+        $pop = $this->middleColumn($pop, $nr);
+        $pop = $this->middleColumnRevert($pop, $nr);
         return $pop;
     }
 }

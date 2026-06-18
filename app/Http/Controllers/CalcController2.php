@@ -28,6 +28,8 @@ class CalcController2 extends Controller
 
     // app:calc-gen0-x-y-z 17 20
 
+    // php artisan app:up-down-gen-z 17 0
+
     public $nrMaxPopulation = 120;
 
     public $manyrepeat = 1;
@@ -997,15 +999,17 @@ class CalcController2 extends Controller
         $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
 
         $pattern = json_decode($best->data);
-
+        $changes = [];
 
         for ($i = 0; $i < 10; $i++) {
-
+            $changes = array_fill(0, 10, 0);
             $pattern0 = $pattern;
             if ($upDown == 0) {
                 $pattern0[$i] = $gen0->cleanValue($pattern0[$i] + 50);
+                $changes[$i] = 50;
             } elseif ($upDown == 1) {
                 $pattern0[$i] = $gen0->cleanValue($pattern0[$i] - 50);
+                $changes[$i] = -50;
             }
 
             $population0 = [];
@@ -1040,7 +1044,8 @@ class CalcController2 extends Controller
                 "tryb" => $tryb,
                 "dim" => 0,
                 "data2" => json_encode($pattern),
-                "prev" => $best->id
+                "prev" => $best->id,
+                "changes" => json_encode($changes)
             ];
 
             Gen0::create($create);

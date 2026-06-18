@@ -175,18 +175,20 @@ class MainController extends Controller
         $population0 = [];
 
         if ($lvl <= 0) {
-            if ($randomDoing == 107) {
+            if ($randomDoing == 107 || $area->pattern) {
                 $pattern = json_decode($area->pattern);
                 for ($n = 0; $n < $this->startPopulation; $n++) {
                     $population0[] = $gen0->createBoard($pattern, 10);
                 }
-            } elseif ($randomDoing == 108) {
+                $randomDoing = 107;
+            } elseif ($randomDoing == 108 || $area->tama == 1) {
                 $ids = Area::whereNotNull("pattern")->where("river", $area->river)->get()->pluck("id")->toArray();
                 $calculations = Calculation::whereIn("area_id", $ids)->inRandomOrder()->take(10)->get();
                 foreach ($calculations as $c) {
                     $population0[] = json_decode($c->data);
                     $usedcalc[] = $c->id;
                 }
+                $randomDoing = 108;
             } else {
                 $population0 = $gtx->getFirstGeneration(10, 1, $this->startPopulation);
                 $randomDoing = 0;
