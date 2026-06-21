@@ -67,13 +67,18 @@
       <th>Result</th>
       <th>Type</th>
       <th>Pop</th>
+      <th></th>
     </tr>
     @foreach ($gen AS $g)
     <tr>
-      <th>{{$g->data}}</th>
-      <th>{{$g->result}}</th>
-      <th>{{$g->tryb}}</th>
-      <th>{{$g->population}}</th>
+      <td>{{$g->data}}</td>
+      <td>{{$g->result}}</td>
+      <td>{{$g->tryb}}</td>
+      <td>{{$g->population}}</td>
+      <td>
+        <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$g->id}}"><button>Podnieś GenZ o 50%</button></a>&nbsp;
+        <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$g->id}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
+      </td>
     </tr>
     @endforeach
   </table>

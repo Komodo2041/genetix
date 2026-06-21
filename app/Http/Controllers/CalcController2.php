@@ -971,7 +971,7 @@ class CalcController2 extends Controller
         return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono gen0 na podstawie X, Y, Z ');
     }
 
-    public function calcUp50OneGen0($id, $upDown, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    public function calcUp50OneGen0($id, $upDown, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx, $gen0Id = null)
     {
 
         set_time_limit(40000);
@@ -996,7 +996,11 @@ class CalcController2 extends Controller
         }
 
         $pattern = [];
-        $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        if ($gen0Id) {
+            $best = Gen0::where("area_id", $id)->where("dim", 0)->where("id", $gen0Id)->first();
+        } else {
+            $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        }
 
         $pattern = json_decode($best->data);
         $changes = [];
