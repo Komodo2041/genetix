@@ -210,7 +210,9 @@ class MutationData
         "replace3Squere3x3",
         "middleColumn",
         "middleColumnRevert",
-        "midd2"
+        "midd2",
+        "layerInMiddle",
+        "layerInMiddle2Down"
     ];
 
     public function setNumerMutation($nr)
@@ -4652,6 +4654,58 @@ class MutationData
     {
         $pop = $this->middleColumn($pop, $nr);
         $pop = $this->middleColumnRevert($pop, $nr);
+        return $pop;
+    }
+
+    private function layerInMiddle($pop, $nr = 10)
+    {
+
+        $pom = rand(1, $nr - 2);
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pom - 1 || $z == $pom + 1) {
+                        $r = rand(0, 7);
+                        if ($r == 1) {
+                            $pop[$i][$j][$z] = 0;
+                        }
+                    }
+                    if ($z == $pom) {
+                        $r = rand(0, 3);
+                        if ($r == 1) {
+                            $pop[$i][$j][$z] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    private function layerInMiddle2Down($pop, $nr = 10)
+    {
+
+        $pom = rand(1, $nr - 2);
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pom - 1) {
+                        $r = rand(0, 3);
+                        if ($r == 1) {
+                            $pop[$i][$j][$z] = 0;
+                        }
+                    }
+                    if ($z == $pom || $z == $pom + 1) {
+                        $r = rand(0, 3);
+                        if ($r == 1) {
+                            $pop[$i][$j][$z] = 1;
+                        }
+                    }
+                }
+            }
+        }
         return $pop;
     }
 }
