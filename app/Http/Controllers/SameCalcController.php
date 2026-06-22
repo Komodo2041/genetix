@@ -28,6 +28,7 @@ class SameCalcController extends Controller
             $pattern = $gen0->calcPattern($stiffPattern[1]);
             $calcs[$key]['board'] = json_encode($pattern);
         }
+
         return view("compareCalc", ["area" => $area, "calcs" => $calcs]);
     }
 
@@ -154,7 +155,7 @@ class SameCalcController extends Controller
         return redirect("/showCalcSame/" . $id)->with('success', 'Obliczono Blob');
     }
 
-    public function compareGen0($id)
+    public function compareGen0($id, $count = 50)
     {
 
         $area = Area::find($id);
@@ -162,7 +163,7 @@ class SameCalcController extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
-        $maxdiff = 50;
+        $maxdiff = $count;
         $avg = Gen0::where("area_id", $id)->where("dim", 0)->get()->avg("result");
 
         $comare = [];
@@ -171,6 +172,7 @@ class SameCalcController extends Controller
         foreach ($gen0 as $record) {
             if ($i == 0) {
                 $comare[] = [
+                    "gid" => $record['id'],
                     "data" => $record['data'],
                     "res" => $record['result'],
                     "calc" => json_decode($record['data'])
@@ -187,6 +189,7 @@ class SameCalcController extends Controller
                 }
                 if ($isnew) {
                     $comare[] = [
+                        "gid" => $record['id'],
                         "data" => $record['data'],
                         "res" => $record['result'],
                         "calc" => json_decode($record['data'])
@@ -196,8 +199,7 @@ class SameCalcController extends Controller
             $i++;
         }
 
-
-        return view("compareGen0", ["area" => $area, "calcs" => $comare]);
+        return view("compareGen0", ["area" => $area, "calcs" => $comare, "count" => $count]);
     }
 
     private function calcDiff($t1, $t2)

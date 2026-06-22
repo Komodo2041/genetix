@@ -2,7 +2,7 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a>&nbsp;
-<a href="/compareGen0/{{$area->id}}"><button>Porównań Gen0 Z</button></a>
+<a href="/compareGen0/{{$area->id}}/50"><button>Porównań Gen0 Z</button></a>
 
 <br />
 <a href="/compareCalculations/{{$area->id}}"><button>Porównań Wyniki</button></a><br />
