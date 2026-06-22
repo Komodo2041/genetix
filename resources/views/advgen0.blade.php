@@ -30,7 +30,7 @@
                 <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$key}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
                 @endif
                 @if ($record['c23'] > 0 && $record['c24'] > 0)
-                <a href="/calcAdvGen0/{{$area->id}}/1/{{$key}}"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;
+                <a href="/calcAdvGen0/{{$key}}/0"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;
                 @endif
             </td>
         </tr>

@@ -516,6 +516,8 @@ class CalcController2 extends Controller
             $pgen = $pgen->whereIn("tryb", [12, 13, 14]);
         } elseif ($onshow == 3) {
             $pgen = $pgen->whereIn("tryb", [21, 22]);
+        } elseif ($onshow == 4) {
+            $pgen = $pgen->whereIn("tryb", [23, 24]);
         }
         $gen = $pgen->take(200)->get();
         $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->where("dim", $dimension)->count();
@@ -1049,7 +1051,8 @@ class CalcController2 extends Controller
                 "dim" => 0,
                 "data2" => json_encode($pattern),
                 "prev" => $best->id,
-                "changes" => json_encode($changes)
+                "changes" => json_encode($changes),
+                "nrpom" => $i,
             ];
 
             Gen0::create($create);
@@ -1088,5 +1091,140 @@ class CalcController2 extends Controller
         }
 
         return view("advgen0", ['res' => $res, "area" => $area]);
+    }
+
+    public function calcAdvGen0($gid, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    {
+
+        set_time_limit(40000);
+        ini_set('memory_limit', '300M');
+
+        $gen = Gen0::find($gid);
+        if (!$gen) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego gen 0');
+        }
+
+        $area = Area::find($gen->area_id);
+
+        $up = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 23)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
+        $down = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 24)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
+        if (count($up) != 10 && count($down) != 10) {
+            return redirect("/")->with('error', 'Błedny data dla Gen0: ' . $gid);
+        }
+
+        $board = json_decode($gen->data);
+        if ($tryb == 0) {
+            $tryb = rand(25, 31);
+        }
+
+
+        $newchanges = array_fill(0, 10, 0);
+        switch ($tryb) {
+            case 25:
+                for ($i = 0; $i < 10; $i++) {
+                    $newchanges[$up[$i]['nrpom']] += 100 - $i * 10;
+                    $newchanges[$down[$i]['nrpom']] -= 100 - $i * 10;
+                }
+                break;
+            case 26:
+                for ($i = 0; $i < 5; $i++) {
+                    $newchanges[$up[$i]['nrpom']] += 100 - $i * 10;
+                    $newchanges[$down[$i]['nrpom']] -= 100 - $i * 10;
+                }
+                break;
+            case 27:
+                for ($i = 0; $i < 2; $i++) {
+                    $newchanges[$up[$i]['nrpom']] += 50;
+                    $newchanges[$down[$i]['nrpom']] -= 50;
+                }
+                break;
+            case 28:
+                for ($i = 0; $i < 3; $i++) {
+                    $newchanges[$up[$i]['nrpom']] += 50;
+                    $newchanges[$down[$i]['nrpom']] -= 50;
+                }
+                break;
+            case 29:
+                for ($i = 0; $i < 4; $i++) {
+                    $newchanges[$up[$i]['nrpom']] += 50;
+                    $newchanges[$down[$i]['nrpom']] -= 50;
+                }
+                break;
+            case 29:
+                for ($i = 0; $i < 10; $i++) {
+                    if ($up[$i]['avg'] > $gen->result) {
+                        $newchanges[$up[$i]['nrpom']] += 50;
+                    } else {
+                        $newchanges[$up[$i]['nrpom']] -= 50;
+                    }
+                }
+                break;
+            case 30:
+                for ($i = 0; $i < 10; $i++) {
+                    if ($down[$i]['avg'] > $gen->result) {
+                        $newchanges[$down[$i]['nrpom']] -= 50;
+                    } else {
+                        $newchanges[$down[$i]['nrpom']] += 50;
+                    }
+                }
+                break;
+        }
+        for ($i = 0; $i < 10; $i++) {
+            $board[$i] += $newchanges[$i];
+            $board[$i] = $gen0->cleanValue($board[$i]);
+        }
+
+        $halfPopulation = floor($this->startPopulation / 2);
+        $cross->setNr($halfPopulation);
+        $mutation->setNumerMutation($halfPopulation);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $table = json_decode($area->data);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+        $individual = 10;
+
+
+        for ($i = 0; $i < $this->manyrepeat; $i++) {
+
+            $population0 = [];
+            for ($n = 0; $n < $this->startPopulation; $n++) {
+                $population0[] = $gen0->createBoard($board, 10);
+            }
+
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            unset($population0);
+
+            $nrPop = 0;
+            $maxQ = $res[0]['sum'];
+
+            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+
+                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
+                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+
+                $maxQ = $res[0]['sum'];
+                $nrPop++;
+            }
+            $last = $res[0]['sum'];
+            $result = $last / $maxPoints;
+
+
+            $create = [
+                "area_id" => $area->id,
+                "result" => $result,
+                "population" => $nrPop,
+                "data" => json_encode($board),
+                "tryb" => $tryb,
+                "changes" => json_encode($newchanges),
+                "prev" => $gid
+            ];
+
+            Gen0::create($create);
+
+            unset($res);
+        }
+
+        return redirect("/showgeneration0/" . $area->id . "/0")->with('success', 'Obliczono 25-30 dla gen0 ');
     }
 }
