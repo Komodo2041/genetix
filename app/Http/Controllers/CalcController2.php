@@ -1059,4 +1059,34 @@ class CalcController2 extends Controller
 
         return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono Obniżenie o 50 ' . json_encode($pattern));
     }
+
+    public function advancedGen0($id)
+    {
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+
+        $results = Gen0::selectRaw("  count(id) AS count, prev AS id, tryb, MAX(result) AS max ")->where("area_id", $id)->whereIn("tryb", [23, 24])->groupBy("prev", "tryb")->get()->toArray();
+        $res = [];
+        foreach ($results as $record) {
+            $res[$record['id']][$record['tryb']] = $record;
+            $res[$record['id']]['c23'] = 0;
+            $res[$record['id']]['c24'] = 0;
+            $res[$record['id']]['max'] = [];
+        }
+        foreach ($res as $key => $record) {
+            if (isset($record[23])) {
+                $res[$key]['c23'] = $record[23]['count'];
+                $res[$key]['max'][] = $record[23]['max'];
+            }
+            if (isset($record[24])) {
+                $res[$key]['c24'] = $record[24]['count'];
+                $res[$key]['max'][] = $record[24]['max'];
+            }
+        }
+
+        return view("advgen0", ['res' => $res, "area" => $area]);
+    }
 }

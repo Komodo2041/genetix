@@ -1,7 +1,8 @@
 @extends('template')
 @section('content')
 
-<a href="/"><button>Strona główna</button></a><br />
+<a href="/"><button>Strona główna</button></a>
+<a href="/advancedgen0/{{$area->id}}"><button>Advanced Gen0</button></a><br />
 
 <div class="groupBox">
   <a href="/showgeneration0/{{$area->id}}/0"><button @if ($dimension==0) class="gray" @endif>Obliczenia Gen0 - Z</button></a>&nbsp;
