@@ -29,6 +29,7 @@ class CalcController2 extends Controller
     // app:calc-gen0-x-y-z 17 20
 
     // php artisan app:up-down-gen-z 17 0
+    // php artisan app:calc-adv-gen0 24 {nr=10}
 
     public $nrMaxPopulation = 120;
 
@@ -1114,7 +1115,7 @@ class CalcController2 extends Controller
 
         $board = json_decode($gen->data);
         if ($tryb == 0) {
-            $tryb = rand(25, 31);
+            $tryb = rand(25, 30);
         }
 
 
