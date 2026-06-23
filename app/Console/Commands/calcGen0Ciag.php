@@ -7,7 +7,7 @@ use App\Services\CrossingData;
 use App\Services\MutationData;
 use App\Services\Generation0Helper;
 
-use App\Http\Controllers\CalcController2;
+use App\Http\Controllers\Gen0Controller;
 
 use Illuminate\Console\Command;
 
@@ -36,7 +36,7 @@ class calcGen0Ciag extends Command
         $aid = $this->argument('aid');
         $dim = $this->argument('dim');
         echo "Wlaczono " . $aid . " Dim - " . $dim . "\n";
-        $calc = new CalcController2();
+        $calc = new Gen0Controller();
         $calc->calcAltGen0($aid, $dim, $gen0, $cross, $mutation,  $gtx);
     }
 }

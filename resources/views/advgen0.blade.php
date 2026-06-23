@@ -23,10 +23,11 @@
 
             </td>
             <td>
+
                 @if ($record['c23'] == 0)
                 <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$key}}"><button>Podnieś GenZ o 50%</button></a>&nbsp;
                 @endif
-                @if ($record['c23'] == 0)
+                @if ($record['c24'] == 0)
                 <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$key}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
                 @endif
                 @if ($record['c23'] > 0 && $record['c24'] > 0)

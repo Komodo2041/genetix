@@ -9,7 +9,7 @@ use App\Services\CrossingData;
 use App\Services\MutationData;
 use App\Services\Generation0Helper;
 
-use App\Http\Controllers\CalcController2;
+use App\Http\Controllers\Gen0Controller;
 
 class calcGen0 extends Command
 {
@@ -37,7 +37,7 @@ class calcGen0 extends Command
       $multi = $this->argument('multione');
       $dim = $this->argument('dim');
       echo "Wlaczono " . $aid . " tryb - " . $tryb . "\n";
-      $calc = new CalcController2();
+      $calc = new Gen0Controller();
 
       if ($multi == 1) {
          $calc->manyrepeat = 1;

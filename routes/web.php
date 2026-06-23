@@ -55,17 +55,17 @@ Route::get('showring/{id}',  "App\Http\Controllers\CalcController2@showring");
 Route::get('area/histogram/{id}',  "App\Http\Controllers\CalcController2@histogram");
 Route::get('calcallavg/{id}',  "App\Http\Controllers\CalcController2@calcallavg");
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\CalcController2@percentshow");
-Route::get('showgeneration0/{id}/{dimension}',  "App\Http\Controllers\CalcController2@showgeneration0");
-Route::get('calcGeneration0/{id}/{tryb}/{dimension}',  "App\Http\Controllers\CalcController2@calcGeneration0");
-Route::get('calcAltgeneration0/{id}/{dimension}',  "App\Http\Controllers\CalcController2@calcAltGen0");
-Route::get('calc3DimGen0/{id}',  "App\Http\Controllers\CalcController2@calc3DimGen0");
-Route::get('calcUp50OneGen0/{id}/{upDown}',  "App\Http\Controllers\CalcController2@calcUp50OneGen0");
-Route::get('calcUp50OneGen0/{id}/{upDown}/{gen0Id}',  "App\Http\Controllers\CalcController2@calcUp50OneGen0");
-Route::get('advancedgen0/{id}',  "App\Http\Controllers\CalcController2@advancedGen0");
-Route::get('calcAdvGen0/{gid}/{stere}',  "App\Http\Controllers\CalcController2@calcAdvGen0");
 
 
-Route::get('helpgeneration0/{id}/{dimension}',  "App\Http\Controllers\CalcController2@helpshowgeneration0");
+Route::get('showgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@showgeneration0");
+Route::get('calcGeneration0/{id}/{tryb}/{dimension}',  "App\Http\Controllers\Gen0Controller@calcGeneration0");
+Route::get('calcAltgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@calcAltGen0");
+Route::get('calc3DimGen0/{id}',  "App\Http\Controllers\Gen0Controller@calc3DimGen0");
+Route::get('calcUp50OneGen0/{id}/{upDown}',  "App\Http\Controllers\Gen0Controller@calcUp50OneGen0");
+Route::get('calcUp50OneGen0/{id}/{upDown}/{gen0Id}',  "App\Http\Controllers\Gen0Controller@calcUp50OneGen0");
+Route::get('advancedgen0/{id}',  "App\Http\Controllers\Gen0Controller@advancedGen0");
+Route::get('calcAdvGen0/{gid}/{stere}',  "App\Http\Controllers\Gen0Controller@calcAdvGen0");
+Route::get('helpgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@helpshowgeneration0");
 
 Route::get('cloneRiver/{id}',  "App\Http\Controllers\RiverController@cloneRiver");
 Route::get('showRiver/{id}',  "App\Http\Controllers\RiverController@showRiver");

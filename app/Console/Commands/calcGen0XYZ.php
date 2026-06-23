@@ -7,7 +7,7 @@ use App\Services\CrossingData;
 use App\Services\MutationData;
 use App\Services\Generation0Helper;
 
-use App\Http\Controllers\CalcController2;
+use App\Http\Controllers\Gen0Controller;
 
 use Illuminate\Console\Command;
 
@@ -35,7 +35,7 @@ class calcGen0XYZ extends Command
         $aid = $this->argument('aid');
         $nr = $this->argument('nr');
         echo "Wlaczono " . $aid . " XYZ - \n";
-        $calc = new CalcController2();
+        $calc = new Gen0Controller();
         for ($i = 0; $i < $nr; $i++) {
             echo $i . "\n";
             $calc->calc3DimGen0($aid, $gen0, $cross, $mutation,  $gtx);

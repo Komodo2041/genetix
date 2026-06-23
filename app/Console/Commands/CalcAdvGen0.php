@@ -7,7 +7,7 @@ use App\Services\CrossingData;
 use App\Services\MutationData;
 use App\Services\Generation0Helper;
 
-use App\Http\Controllers\CalcController2;
+use App\Http\Controllers\Gen0Controller;
 
 use Illuminate\Console\Command;
 
@@ -37,7 +37,7 @@ class CalcAdvGen0 extends Command
         $aid = $this->argument('aid');
         $nr = $this->argument('nr');
         echo "Wlączono " . $aid . "  - ADV \n";
-        $calc = new CalcController2();
+        $calc = new Gen0Controller();
 
         $results = Gen0::selectRaw("  count(id) AS count, prev AS id  ")->where("area_id", $aid)->whereIn("tryb", [23, 24])->groupBy("prev")
             ->havingRaw("SUM(CASE WHEN tryb = 23 THEN 1 ELSE 0 END) > 0")->havingRaw("SUM(CASE WHEN tryb = 24 THEN 1 ELSE 0 END) > 0")->get()->pluck("id")->toArray();
@@ -49,6 +49,7 @@ class CalcAdvGen0 extends Command
 
         for ($i = 0; $i < $nr; $i++) {
             $gid = $results[rand(0, count($results) - 1)];
+            echo $i . "-" . $gid . "\n";
             $calc->calcAdvGen0($gid, 0, $gen0, $cross, $mutation,  $gtx);
         }
     }

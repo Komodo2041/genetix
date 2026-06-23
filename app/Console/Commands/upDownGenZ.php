@@ -7,7 +7,7 @@ use App\Services\CrossingData;
 use App\Services\MutationData;
 use App\Services\Generation0Helper;
 
-use App\Http\Controllers\CalcController2;
+use App\Http\Controllers\Gen0Controller;
 
 use Illuminate\Console\Command;
 
@@ -35,7 +35,7 @@ class upDownGenZ extends Command
         $aid = $this->argument('id');
         $up = $this->argument('up');
         echo "Wlączono " . $aid . "  - UP OR DOWN \n";
-        $calc = new CalcController2();
+        $calc = new Gen0Controller();
 
         $calc->calcUp50OneGen0($aid, $up, $gen0, $cross, $mutation,  $gtx);
     }
