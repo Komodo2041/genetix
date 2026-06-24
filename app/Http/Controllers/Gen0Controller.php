@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\MainController;
-
 use App\Models\Gen0;
 use App\Models\Area;
 use App\Services\GenetixDataGenerator;
@@ -611,12 +609,14 @@ class Gen0Controller extends Controller
         }
 
         $results = Gen0::selectRaw("  count(id) AS count, prev AS id, tryb, MAX(result) AS max ")->where("area_id", $id)->whereIn("tryb", [23, 24])->groupBy("prev", "tryb")->get()->toArray();
+
         $res = [];
         foreach ($results as $record) {
             $res[$record['id']][$record['tryb']] = $record;
             $res[$record['id']]['c23'] = 0;
             $res[$record['id']]['c24'] = 0;
             $res[$record['id']]['max'] = [];
+            $res[$record['id']]['data'] = Gen0::find($record['id'])->data;
         }
         foreach ($res as $key => $record) {
             if (isset($record[23])) {
@@ -653,9 +653,8 @@ class Gen0Controller extends Controller
 
         $board = json_decode($gen->data);
         if ($tryb == 0) {
-            $tryb = rand(25, 30);
+            $tryb = rand(25, 33);
         }
-
 
         $newchanges = array_fill(0, 10, 0);
         switch ($tryb) {
@@ -704,6 +703,26 @@ class Gen0Controller extends Controller
                         $newchanges[$down[$i]['nrpom']] -= 50;
                     } else {
                         $newchanges[$down[$i]['nrpom']] += 50;
+                    }
+                }
+                break;
+            case 31:
+                for ($i = 0; $i < 1; $i++) {
+                    $newchanges[$up[$i]['nrpom']] += 50;
+                    $newchanges[$down[$i]['nrpom']] -= 50;
+                }
+                break;
+            case 32:
+                for ($i = 0; $i < 10; $i++) {
+                    if ($down[$i]['avg'] > $gen->result) {
+                        $newchanges[$down[$i]['nrpom']] -= 50;
+                    }
+                }
+                break;
+            case 33:
+                for ($i = 0; $i < 10; $i++) {
+                    if ($up[$i]['avg'] > $gen->result) {
+                        $newchanges[$up[$i]['nrpom']] += 50;
                     }
                 }
                 break;
@@ -765,5 +784,23 @@ class Gen0Controller extends Controller
         }
 
         return redirect("/showgeneration0/" . $area->id . "/0")->with('success', 'Obliczono 25-30 dla gen0 ');
+    }
+
+    public function showUpDownGen0Calc($gid)
+    {
+
+        $gen = Gen0::find($gid);
+        if (!$gen) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego gen 0');
+        }
+
+        $area = Area::find($gen->area_id);
+        $up = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 23)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+        $down = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 24)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+        if (count($up) != 10 && count($down) != 10) {
+            return redirect("/")->with('error', 'Błedny data dla Gen0: ' . $gid);
+        }
+
+        return view("showUpDown", ['up' => $up, "down" => $down, "area" => $area, "gen0" => $gen]);
     }
 }

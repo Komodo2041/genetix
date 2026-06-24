@@ -111,3 +111,7 @@ div.groupBox {
     margin: 3px 0px;
     border-radius: 5px;
 }
+
+#colorTable td.green {
+    background: green;
+}

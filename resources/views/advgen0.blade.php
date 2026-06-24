@@ -12,27 +12,32 @@
     <table>
         <tr>
             <th>Id</th>
+            <th>Data</th>
             <th>Max</th>
             <th></th>
         </tr>
         @foreach ($res AS $key => $record)
         <tr>
             <td>{{$key}}</td>
+            <td>{{$record['data']}}</td>
             <td>
                 {{ implode(", ", $record['max']) }}
 
             </td>
             <td>
 
-                @if ($record['c23'] == 0)
-                <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$key}}"><button>Podnieś GenZ o 50%</button></a>&nbsp;
-                @endif
-                @if ($record['c24'] == 0)
-                <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$key}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
-                @endif
-                @if ($record['c23'] > 0 && $record['c24'] > 0)
-                <a href="/calcAdvGen0/{{$key}}/0"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;
-                @endif
+                @if ($record['c23'] < 10)
+                    <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$key}}"><button>Podnieś GenZ o 50%</button></a>&nbsp;
+                    @endif
+                    @if ($record['c24'] < 10)
+                        <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$key}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
+                        @endif
+                        @if ($record['c23'] > 0 && $record['c24'] > 0)
+                        <a href="/calcAdvGen0/{{$key}}/0"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;
+                        <a href="/showUpDownGen0Calc/{{$key}}"><button>Pokaż obliczenia</button></a>&nbsp;<br />
+                        <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$key}}"><button>Podnieś GenZ o 50%</button></a>&nbsp;
+                        <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$key}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
+                        @endif
             </td>
         </tr>
         @endforeach
