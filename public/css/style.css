@@ -19,6 +19,28 @@ table.level td {
     font-size: 7px;
 }
 
+table.small.level td {
+    width: 8px;
+    height: 8px;
+    background: aqua;
+    margin: 0px;
+    padding: 0px;
+}
+
+table.small.level {
+    width: 80px;
+    margin-left: 5px;
+}
+
+div.col.small {
+    width: 82px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid black;
+    font-size: 10px;
+    ;
+}
+
 table.level td.red {
     background: red;
 }

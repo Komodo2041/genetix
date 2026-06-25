@@ -129,6 +129,28 @@ class PowerController extends Controller
         return view("show5results", ['reso' => $reso,   "area" => $area, "lvlmax" => $lvlmax, "good" => json_decode($area->data)]);
     }
 
+    public function show50Result($id, $nr = 0)
+    {
+
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $lvlmax = Calculation::where("area_id", $id)->max("level");
+        $max = $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->count();
+        $total = ceil($max / 64);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->offset($nr * 64)->take(64)->get();
+
+        $reso = [];
+        foreach ($calculations as $c) {
+            $reso[] = [
+                "data" => json_decode($c->data),
+                "lvl" => $c->level,
+            ];
+        }
+        return view("show50results", ['reso' => $reso,   "area" => $area, "lvlmax" => $lvlmax, "good" => json_decode($area->data), "nr" => $nr, "total" => $total]);
+    }
+
 
     public function see10Layerpower($size, CrossingData $cross)
     {

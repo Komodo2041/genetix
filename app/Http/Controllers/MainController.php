@@ -176,6 +176,7 @@ class MainController extends Controller
 
         if ($lvl <= 0) {
             if ($randomDoing == 107 || $area->pattern) {
+
                 $pattern = json_decode($area->pattern);
                 for ($n = 0; $n < $this->startPopulation; $n++) {
                     $population0[] = $gen0->createBoard($pattern, 10);
@@ -715,6 +716,10 @@ class MainController extends Controller
                 $pop_result = $powermutation->createNewPopulation($selectedIndividuals, $this->usePowerMutator);
                 $newpopulaton = $gtx->usepower($pop_result[0], $power);
                 $pop_result[0] = $newpopulaton;
+            } elseif ($useonlyMutation == 0 && $lvl <= 0) {
+
+                $pop_result = $cross->createNewPopulation($selectedIndividuals);
+                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
             } elseif ($useonlyMutation == 0) {
 
                 $pop_result = $cross->createNewPopulation($selectedIndividuals);

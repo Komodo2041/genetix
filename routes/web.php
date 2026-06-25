@@ -15,6 +15,8 @@ Route::get('calcpowermatrix/{size}',  "App\Http\Controllers\PowerController@calc
 Route::get('showpower/{id}',  "App\Http\Controllers\PowerController@showpower");
 Route::get('see10Layerpower/{size}',  "App\Http\Controllers\PowerController@see10Layerpower");
 Route::get('show5Result/{id}',  "App\Http\Controllers\PowerController@show5Result");
+Route::get('show50Result/{id}',  "App\Http\Controllers\PowerController@show50Result");
+Route::get('show50Result/{id}/{nr}',  "App\Http\Controllers\PowerController@show50Result");
 
 Route::get('showavgcalculations/{id}',  "App\Http\Controllers\AvgController@showavgcalculations");
 Route::get('calcAvgforArea/{id}/{part}',  "App\Http\Controllers\AvgController@calcAvgforArea");
