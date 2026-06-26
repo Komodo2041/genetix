@@ -45,7 +45,8 @@ table.level td.red {
     background: red;
 }
 
-table.level td.orange {
+table.level td.orange,
+tr.green td {
     background: darkorange;
 }
 

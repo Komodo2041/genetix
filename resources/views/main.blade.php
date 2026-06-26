@@ -16,7 +16,7 @@
          <th>Opcje</th>
       </tr>
       @forelse ($area AS $a)
-      <tr>
+      <tr @if (isset($areasMax[$a->id]) && $areasMax[$a->id] > 0) class="green" @endif>
          <td>
             <b>{{$a->id}}</b> {{$a->name}}<br />
             <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br />
