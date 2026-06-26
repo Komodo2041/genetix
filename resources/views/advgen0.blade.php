@@ -29,12 +29,11 @@
 
             </td>
             <td>
-
                 @if ($record['c0'] < 10)
-                    <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$key}}"><button>Podnieś GenZ o {{$change}}%</button></a>&nbsp;
+                    <a href="/calcUp50OneGen0/{{$area->id}}/{{$stere[0]}}/{{$key}}"><button>Podnieś GenZ o {{$change}}%</button></a>&nbsp;
                     @endif
                     @if ($record['c1'] < 10)
-                        <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$key}}"><button>Obniż GenZ o {{$change}}%</button></a>&nbsp;
+                        <a href="/calcUp50OneGen0/{{$area->id}}/{{$stere[1]}}/{{$key}}"><button>Obniż GenZ o {{$change}}%</button></a>&nbsp;
                         @endif
                         @if ($record['c0'] > 0 && $record['c1'] > 0)
                         <a href="/calcAdvGen0/{{$key}}/0"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;

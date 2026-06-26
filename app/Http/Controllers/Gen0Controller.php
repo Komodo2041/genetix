@@ -78,17 +78,6 @@ class Gen0Controller extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
-        $headarea = $area;
-
-        if ($area->river) {
-            $headarea = Area::find($area->river);
-        }
-        $settBox = 0;
-        $settGen0 = Area::where("river", $headarea->id)->where("gen0set", 1)->first();
-        if ($settGen0 && $dimension == 0) {
-            $settBox = $settGen0->id;
-        }
-
         $changes = array_fill(0, 10, 0);
         $pattern = [];
         $bestR = 0;
@@ -285,18 +274,8 @@ class Gen0Controller extends Controller
             unset($population0);
 
             $nrPop = 0;
-            $maxQ = $res[0]['sum'];
+            $res = $this->loopCalculating($nrPop, $gtx, $cross, $mutation, $individual, $res,  $maxPoints,  $headPoints);
 
-            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
-
-                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
-                $pop_result = $cross->createNewPopulation($selectedIndividuals);
-                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
-                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
-
-                $maxQ = $res[0]['sum'];
-                $nrPop++;
-            }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
             $create = ["area_id" => $id, "result" => $result, "population" => $nrPop, "data" => json_encode($pattern), "tryb" => $tryb, "dim" => $dimension];
@@ -310,21 +289,58 @@ class Gen0Controller extends Controller
                 $create['changes'] = json_encode($changes);
             }
             Gen0::create($create);
-            if ($settBox) {
-                Calculation::create([
-                    "result" => "Obliczenia Gen0",
-                    "data" => json_encode($res[0]['area']),
-                    "area_id" => $settBox,
-                    "level" => 1,
-                    "obtainedresult" => $result,
-                    "typecalc" => 102,
-                    "population" => $nrPop,
-                ]);
-            }
+            $this->saveGen0InCalculation($area, $dimension, $res, $nrPop, $result);
             unset($res);
         }
 
         return redirect("/showgeneration0/" . $id . "/" . $dimension)->with('success', 'Obliczono pierwsze pokolenie dla ' . json_encode($pattern));
+    }
+
+    private function saveGen0InCalculation($area, $dimension, $res, $nrPop, $result)
+    {
+        if ($dimension != 0) {
+            return;
+        }
+        $headarea = $area;
+
+        if ($area->river) {
+            $headarea = Area::find($area->river);
+        }
+        $settBox = 0;
+        $settGen0 = Area::where("river", $headarea->id)->where("gen0set", 1)->first();
+        if ($settGen0) {
+            $settBox = $settGen0->id;
+        }
+
+        if ($settBox) {
+            Calculation::create([
+                "result" => "Obliczenia Gen0",
+                "data" => json_encode($res[0]['area']),
+                "area_id" => $settBox,
+                "level" => 1,
+                "obtainedresult" => $result,
+                "typecalc" => 102,
+                "population" => $nrPop,
+            ]);
+        } else {
+            $basket = Area::where("river", $area->id)->where("basket", 1)->first();
+            if (!$basket) {
+                $basket = Area::create(["name" => $area->name . " - Kosz", "data" => $area->data, "river" => $area->id, "basket" => 1]);
+            }
+            $max = Calculation::where("area_id", $area->id)->max("obtainedresult");
+            $max = (1 - $max) / 2 + $max;
+            if ($result > $max) {
+                Calculation::create([
+                    "result" => "Obliczenia Gen0 - kosz",
+                    "data" => json_encode($res[0]['area']),
+                    "area_id" => $basket->id,
+                    "level" => 1,
+                    "obtainedresult" => $result,
+                    "typecalc" => 109,
+                    "population" => $nrPop,
+                ]);
+            }
+        }
     }
 
 
@@ -365,18 +381,7 @@ class Gen0Controller extends Controller
             unset($population0);
 
             $nrPop = 0;
-            $maxQ = $res[0]['sum'];
-
-            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
-
-                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
-                $pop_result = $cross->createNewPopulation($selectedIndividuals);
-                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
-                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
-
-                $maxQ = $res[0]['sum'];
-                $nrPop++;
-            }
+            $res = $this->loopCalculating($nrPop, $gtx, $cross, $mutation, $individual, $res,  $maxPoints,  $headPoints);
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
             $reson = 0;
@@ -401,6 +406,7 @@ class Gen0Controller extends Controller
 
             Gen0::create($create);
             $pattern = $pattern0;
+            $this->saveGen0InCalculation($area, $dimension, $res, $nrPop, $result);
             unset($res);
         }
 
@@ -480,18 +486,8 @@ class Gen0Controller extends Controller
             unset($population0);
 
             $nrPop = 0;
-            $maxQ = $res[0]['sum'];
+            $res = $this->loopCalculating($nrPop, $gtx, $cross, $mutation, $individual, $res,  $maxPoints,  $headPoints);
 
-            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
-
-                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
-                $pop_result = $cross->createNewPopulation($selectedIndividuals);
-                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
-                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
-
-                $maxQ = $res[0]['sum'];
-                $nrPop++;
-            }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
 
@@ -507,7 +503,7 @@ class Gen0Controller extends Controller
             ];
 
             Gen0::create($create);
-
+            $this->saveGen0InCalculation($area, 0, $res, $nrPop, $result);
             unset($res);
         }
 
@@ -575,18 +571,9 @@ class Gen0Controller extends Controller
             unset($population0);
 
             $nrPop = 0;
-            $maxQ = $res[0]['sum'];
 
-            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+            $res = $this->loopCalculating($nrPop, $gtx, $cross, $mutation, $individual, $res,  $maxPoints,  $headPoints);
 
-                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
-                $pop_result = $cross->createNewPopulation($selectedIndividuals);
-                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
-                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
-
-                $maxQ = $res[0]['sum'];
-                $nrPop++;
-            }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
 
@@ -604,7 +591,7 @@ class Gen0Controller extends Controller
             ];
 
             Gen0::create($create);
-
+            $this->saveGen0InCalculation($area, 0, $res, $nrPop, $result);
             unset($res);
         }
 
@@ -625,7 +612,7 @@ class Gen0Controller extends Controller
         if ($tryb == 2) {
             $all = [34, 35];
             $change = 20;
-            $stere = [0, 1];
+            $stere = [2, 3];
         }
 
         $results = Gen0::selectRaw("  count(id) AS count, prev AS id, tryb, MAX(result) AS max ")->where("area_id", $id)->whereIn("tryb", $all)->groupBy("prev", "tryb")->get()->toArray();
@@ -772,21 +759,10 @@ class Gen0Controller extends Controller
             unset($population0);
 
             $nrPop = 0;
-            $maxQ = $res[0]['sum'];
+            $res = $this->loopCalculating($nrPop, $gtx, $cross, $mutation, $individual, $res,  $maxPoints,  $headPoints);
 
-            while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
-
-                $selectedIndividuals = $gtx->getindyvidual($res, $individual);
-                $pop_result = $cross->createNewPopulation($selectedIndividuals);
-                $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
-                $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
-
-                $maxQ = $res[0]['sum'];
-                $nrPop++;
-            }
             $last = $res[0]['sum'];
             $result = $last / $maxPoints;
-
 
             $create = [
                 "area_id" => $area->id,
@@ -799,11 +775,27 @@ class Gen0Controller extends Controller
             ];
 
             Gen0::create($create);
-
+            $this->saveGen0InCalculation($area, 0, $res, $nrPop, $result);
             unset($res);
         }
 
-        return redirect("/showgeneration0/" . $area->id . "/0")->with('success', 'Obliczono 25-30 dla gen0 ');
+        return redirect("/showgeneration0/" . $area->id . "/0")->with('success', 'Obliczono 25-33 dla gen0 ');
+    }
+
+    private function loopCalculating(&$nrPop, $gtx, $cross, $mutation, $individual, $res, $maxPoints,  $headPoints)
+    {
+        $maxQ = $res[0]['sum'];
+        while ($nrPop < $this->maxPopulation && $maxQ < $maxPoints) {
+
+            $selectedIndividuals = $gtx->getindyvidual($res, $individual);
+            $pop_result = $cross->createNewPopulation($selectedIndividuals);
+            $pop_result = $mutation->addmutation($pop_result[0], $pop_result[1]);
+            $res = $gtx->calcPopulation($pop_result[0], $headPoints, $pop_result[1]);
+            $maxQ = $res[0]['sum'];
+            $nrPop++;
+        }
+
+        return $res;
     }
 
     public function showUpDownGen0Calc($gid)

@@ -20,7 +20,7 @@ class CalcAdvGen0 extends Command
      *
      * @var string
      */
-    protected $signature = 'app:calc-adv-gen0 {aid} {nr=10}';
+    protected $signature = 'app:calc-adv-gen0 {aid} {tryb=0} {nr=10}';
 
     /**
      * The console command description.
@@ -36,11 +36,17 @@ class CalcAdvGen0 extends Command
     {
         $aid = $this->argument('aid');
         $nr = $this->argument('nr');
+        $tryb = $this->argument('tryb');
         echo "Wlączono " . $aid . "  - ADV \n";
         $calc = new Gen0Controller();
-
-        $results = Gen0::selectRaw("  count(id) AS count, prev AS id  ")->where("area_id", $aid)->whereIn("tryb", [23, 24])->groupBy("prev")
-            ->havingRaw("SUM(CASE WHEN tryb = 23 THEN 1 ELSE 0 END) > 0")->havingRaw("SUM(CASE WHEN tryb = 24 THEN 1 ELSE 0 END) > 0")->get()->pluck("id")->toArray();
+        $results = null;
+        if ($tryb == 0) {
+            $results = Gen0::selectRaw("  count(id) AS count, prev AS id  ")->where("area_id", $aid)->whereIn("tryb", [23, 24])->groupBy("prev")
+                ->havingRaw("SUM(CASE WHEN tryb = 23 THEN 1 ELSE 0 END) > 0")->havingRaw("SUM(CASE WHEN tryb = 24 THEN 1 ELSE 0 END) > 0")->get()->pluck("id")->toArray();
+        } elseif ($tryb == 1) {
+            $results = Gen0::selectRaw("  count(id) AS count, prev AS id  ")->where("area_id", $aid)->whereIn("tryb", [23, 24])->groupBy("prev")
+                ->havingRaw("SUM(CASE WHEN tryb = 34 THEN 1 ELSE 0 END) > 0")->havingRaw("SUM(CASE WHEN tryb = 35 THEN 1 ELSE 0 END) > 0")->get()->pluck("id")->toArray();
+        }
 
         if (count($results) == 0) {
             echo "Brak odp wylicze dla podanego Area";

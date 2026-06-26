@@ -18,6 +18,10 @@
       @forelse ($area AS $a)
       <tr @if (isset($areasMax[$a->id]) && $areasMax[$a->id] > 0) class="green" @endif>
          <td>
+            @if ($a->river > 0) Rzeka @endif
+            @if ($a->tama > 0) Tama @endif
+            @if ($a->basket > 0) Kosz @endif
+            <br />
             <b>{{$a->id}}</b> {{$a->name}}<br />
             <a href="/hidearea/{{$a->id}}"><button>Ukryj</button></a><br />
             @if ($a->flex == 0)
