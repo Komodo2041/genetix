@@ -41,12 +41,6 @@
 
 </div>
 
-
-
-
-
-
-
 </div>
 
 <div style="width:100%; float:left;">

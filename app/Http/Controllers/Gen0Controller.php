@@ -55,6 +55,8 @@ class Gen0Controller extends Controller
             $pgen = $pgen->whereIn("tryb", [21, 22]);
         } elseif ($onshow == 4) {
             $pgen = $pgen->whereIn("tryb", [23, 24]);
+        } elseif ($onshow == 5) {
+            $pgen = $pgen->whereIn("tryb", [25, 26, 27, 28, 29, 30, 31, 32, 33]);
         }
         $gen = $pgen->take(200)->get();
         $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->where("dim", $dimension)->count();
