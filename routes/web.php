@@ -66,6 +66,7 @@ Route::get('calc3DimGen0/{id}',  "App\Http\Controllers\Gen0Controller@calc3DimGe
 Route::get('calcUp50OneGen0/{id}/{upDown}',  "App\Http\Controllers\Gen0Controller@calcUp50OneGen0");
 Route::get('calcUp50OneGen0/{id}/{upDown}/{gen0Id}',  "App\Http\Controllers\Gen0Controller@calcUp50OneGen0");
 Route::get('advancedgen0/{id}',  "App\Http\Controllers\Gen0Controller@advancedGen0");
+Route::get('advancedgen0/{id}/{tryb}',  "App\Http\Controllers\Gen0Controller@advancedGen0");
 Route::get('calcAdvGen0/{gid}/{stere}',  "App\Http\Controllers\Gen0Controller@calcAdvGen0");
 Route::get('helpgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@helpshowgeneration0");
 Route::get('showUpDownGen0Calc/{gid}',  "App\Http\Controllers\Gen0Controller@showUpDownGen0Calc");

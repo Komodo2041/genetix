@@ -57,6 +57,8 @@ class Gen0Controller extends Controller
             $pgen = $pgen->whereIn("tryb", [23, 24]);
         } elseif ($onshow == 5) {
             $pgen = $pgen->whereIn("tryb", [25, 26, 27, 28, 29, 30, 31, 32, 33]);
+        } elseif ($onshow == 6) {
+            $pgen = $pgen->whereIn("tryb", [34, 35]);
         }
         $gen = $pgen->take(200)->get();
         $workedcount = Gen0::where("area_id", $id)->where("worked", 1)->where("dim", $dimension)->count();
@@ -531,9 +533,16 @@ class Gen0Controller extends Controller
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
         $individual = 10;
 
+        $change = 50;
         $tryb = 23;
         if ($upDown == 1) {
             $tryb = 24;
+        } elseif ($upDown == 2) {
+            $change = 20;
+            $tryb = 34;
+        } elseif ($upDown == 3) {
+            $change = 20;
+            $tryb = 35;
         }
 
         $pattern = [];
@@ -549,12 +558,12 @@ class Gen0Controller extends Controller
         for ($i = 0; $i < 10; $i++) {
             $changes = array_fill(0, 10, 0);
             $pattern0 = $pattern;
-            if ($upDown == 0) {
-                $pattern0[$i] = $gen0->cleanValue($pattern0[$i] + 50);
-                $changes[$i] = 50;
-            } elseif ($upDown == 1) {
-                $pattern0[$i] = $gen0->cleanValue($pattern0[$i] - 50);
-                $changes[$i] = -50;
+            if ($upDown == 0 || $upDown == 2) {
+                $pattern0[$i] = $gen0->cleanValue($pattern0[$i] + $change);
+                $changes[$i] = $change;
+            } elseif ($upDown == 1  || $upDown == 3) {
+                $pattern0[$i] = $gen0->cleanValue($pattern0[$i] - $change);
+                $changes[$i] = -1 * $change;
             }
 
             $population0 = [];
@@ -599,10 +608,10 @@ class Gen0Controller extends Controller
             unset($res);
         }
 
-        return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono Obniżenie o 50 ' . json_encode($pattern));
+        return redirect("/showgeneration0/" . $id . "/0")->with('success', 'Obliczono Zmianę o ' . $change . "  " . json_encode($pattern));
     }
 
-    public function advancedGen0($id)
+    public function advancedGen0($id, $tryb = 1)
     {
 
         $area = Area::find($id);
@@ -610,28 +619,37 @@ class Gen0Controller extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
-        $results = Gen0::selectRaw("  count(id) AS count, prev AS id, tryb, MAX(result) AS max ")->where("area_id", $id)->whereIn("tryb", [23, 24])->groupBy("prev", "tryb")->get()->toArray();
+        $all = [23, 24];
+        $stere = [0, 1];
+        $change = 50;
+        if ($tryb == 2) {
+            $all = [34, 35];
+            $change = 20;
+            $stere = [0, 1];
+        }
+
+        $results = Gen0::selectRaw("  count(id) AS count, prev AS id, tryb, MAX(result) AS max ")->where("area_id", $id)->whereIn("tryb", $all)->groupBy("prev", "tryb")->get()->toArray();
 
         $res = [];
         foreach ($results as $record) {
             $res[$record['id']][$record['tryb']] = $record;
-            $res[$record['id']]['c23'] = 0;
-            $res[$record['id']]['c24'] = 0;
+            $res[$record['id']]['c0'] = 0;
+            $res[$record['id']]['c1'] = 0;
             $res[$record['id']]['max'] = [];
             $res[$record['id']]['data'] = Gen0::find($record['id'])->data;
         }
         foreach ($res as $key => $record) {
-            if (isset($record[23])) {
-                $res[$key]['c23'] = $record[23]['count'];
-                $res[$key]['max'][] = $record[23]['max'];
+            if (isset($record[$all[0]])) {
+                $res[$key]['c0'] = $record[$all[0]]['count'];
+                $res[$key]['max'][] = $record[$all[0]]['max'];
             }
-            if (isset($record[24])) {
-                $res[$key]['c24'] = $record[24]['count'];
-                $res[$key]['max'][] = $record[24]['max'];
+            if (isset($record[$all[1]])) {
+                $res[$key]['c1'] = $record[$all[1]]['count'];
+                $res[$key]['max'][] = $record[$all[1]]['max'];
             }
         }
 
-        return view("advgen0", ['res' => $res, "area" => $area]);
+        return view("advgen0", ['res' => $res, "area" => $area, "change" => $change, "stere" => $stere]);
     }
 
     public function calcAdvGen0($gid, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)

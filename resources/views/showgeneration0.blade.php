@@ -2,7 +2,9 @@
 @section('content')
 
 <a href="/"><button>Strona główna</button></a>
-<a href="/advancedgen0/{{$area->id}}"><button>Advanced Gen0</button></a><br />
+<a href="/advancedgen0/{{$area->id}}"><button>Advanced Gen0 [-50, 50]</button></a>&nbsp;
+<a href="/advancedgen0/{{$area->id}}/2"><button>Advanced Gen0 [-20, 20]</button></a>&nbsp;
+<br />
 
 <div class="groupBox">
   <a href="/showgeneration0/{{$area->id}}/0"><button @if ($dimension==0) class="gray" @endif>Obliczenia Gen0 - Z</button></a>&nbsp;
@@ -22,6 +24,7 @@
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=3"><button @if ($onshow==3) class="gray" @endif>Kategoria 21-22</button></a>&nbsp;
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=4"><button @if ($onshow==4) class="gray" @endif>Kategoria 23-24 (-50,+50)</button></a>&nbsp;
   <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=5"><button @if ($onshow==5) class="gray" @endif>Kategoria 25-33</button></a>&nbsp;
+  <a href="/showgeneration0/{{$area->id}}/{{$dimension}}?onshow=4"><button @if ($onshow==6) class="gray" @endif>Kategoria 34-35 (-20,+20)</button></a>&nbsp;
   <br />
 
   <a href="/helpgeneration0/{{$area->id}}/1"><button>Pomocene Obliczenia Gen0 - X</button></a>&nbsp;
@@ -80,8 +83,10 @@
       <td>{{$g->tryb}}</td>
       <td>{{$g->population}}</td>
       <td>
-        <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$g->id}}"><button>Podnieś GenZ o 50%</button></a>&nbsp;
-        <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$g->id}}"><button>Obniż GenZ o 50%</button></a>&nbsp;
+        <a href="/calcUp50OneGen0/{{$area->id}}/0/{{$g->id}}"><button>Up 50%</button></a>&nbsp;
+        <a href="/calcUp50OneGen0/{{$area->id}}/1/{{$g->id}}"><button>Down 50%</button></a>&nbsp;
+        <a href="/calcUp50OneGen0/{{$area->id}}/2/{{$g->id}}"><button>Up 20%</button></a>&nbsp;
+        <a href="/calcUp50OneGen0/{{$area->id}}/3/{{$g->id}}"><button>Down 20%</button></a>&nbsp;
       </td>
     </tr>
     @endforeach
