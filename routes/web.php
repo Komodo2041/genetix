@@ -68,9 +68,10 @@ Route::get('calcUp50OneGen0/{id}/{upDown}/{gen0Id}',  "App\Http\Controllers\Gen0
 Route::get('advancedgen0/{id}',  "App\Http\Controllers\Gen0Controller@advancedGen0");
 Route::get('advancedgen0/{id}/{tryb}',  "App\Http\Controllers\Gen0Controller@advancedGen0");
 Route::get('calcAdvGen0/{gid}/{stere}',  "App\Http\Controllers\Gen0Controller@calcAdvGen0");
+Route::get('calcAdvGen0/{gid}/{stere}/{who}',  "App\Http\Controllers\Gen0Controller@calcAdvGen0");
 Route::get('helpgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@helpshowgeneration0");
 Route::get('showUpDownGen0Calc/{gid}',  "App\Http\Controllers\Gen0Controller@showUpDownGen0Calc");
-
+Route::get('showUpDownGen0Calc/{gid}/{tryb}',  "App\Http\Controllers\Gen0Controller@showUpDownGen0Calc");
 
 Route::get('cloneRiver/{id}',  "App\Http\Controllers\RiverController@cloneRiver");
 Route::get('showRiver/{id}',  "App\Http\Controllers\RiverController@showRiver");

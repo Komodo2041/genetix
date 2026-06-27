@@ -636,10 +636,10 @@ class Gen0Controller extends Controller
             }
         }
 
-        return view("advgen0", ['res' => $res, "area" => $area, "change" => $change, "stere" => $stere]);
+        return view("advgen0", ['res' => $res, "area" => $area, "change" => $change, "stere" => $stere, "tryb" => $tryb]);
     }
 
-    public function calcAdvGen0($gid, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx)
+    public function calcAdvGen0($gid, $tryb, Generation0Helper $gen0, CrossingData $cross, MutationData $mutation, GenetixDataGenerator $gtx, $who = 1)
     {
 
         set_time_limit(40000);
@@ -651,9 +651,14 @@ class Gen0Controller extends Controller
         }
 
         $area = Area::find($gen->area_id);
+        if ($who == 1) {
+            $up = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 23)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
+            $down = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 24)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
+        } elseif ($who == 2) {
+            $up = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 34)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
+            $down = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 35)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
+        }
 
-        $up = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 23)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
-        $down = Gen0::selectRaw("nrpom, AVG(result)  AS avg  ")->where("prev", $gid)->where("tryb", 24)->groupBy("nrpom")->orderBy("avg", "DESC")->get()->toArray();
         if (count($up) != 10 && count($down) != 10) {
             return redirect("/")->with('error', 'Błedny data dla Gen0: ' . $gid);
         }
@@ -798,7 +803,7 @@ class Gen0Controller extends Controller
         return $res;
     }
 
-    public function showUpDownGen0Calc($gid)
+    public function showUpDownGen0Calc($gid, $tryb = 1)
     {
 
         $gen = Gen0::find($gid);
@@ -807,8 +812,14 @@ class Gen0Controller extends Controller
         }
 
         $area = Area::find($gen->area_id);
-        $up = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 23)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
-        $down = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 24)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+        if ($tryb == 1) {
+            $up = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 23)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+            $down = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 24)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+        } elseif ($tryb == 2) {
+            $up = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 34)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+            $down = Gen0::selectRaw("nrpom, AVG(result)  AS result, changes  ")->where("prev", $gid)->where("tryb", 35)->groupBy("nrpom", "changes")->orderBy("nrpom", "ASC")->get()->toArray();
+        }
+
         if (count($up) != 10 && count($down) != 10) {
             return redirect("/")->with('error', 'Błedny data dla Gen0: ' . $gid);
         }

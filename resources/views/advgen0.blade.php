@@ -36,8 +36,8 @@
                         <a href="/calcUp50OneGen0/{{$area->id}}/{{$stere[1]}}/{{$key}}"><button>Obniż GenZ o {{$change}}%</button></a>&nbsp;
                         @endif
                         @if ($record['c0'] > 0 && $record['c1'] > 0)
-                        <a href="/calcAdvGen0/{{$key}}/0"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;
-                        <a href="/showUpDownGen0Calc/{{$key}}"><button>Pokaż obliczenia</button></a>&nbsp;<br />
+                        <a href="/calcAdvGen0/{{$key}}/0/{{$tryb}}"><button>Próbuj zaawansowane Obliczanie</button></a>&nbsp;
+                        <a href="/showUpDownGen0Calc/{{$key}}/{{$tryb}}"><button>Pokaż obliczenia</button></a>&nbsp;<br />
                         <a href="/calcUp50OneGen0/{{$area->id}}/{{$stere[0]}}/{{$key}}"><button>Podnieś GenZ o {{$change}}%</button></a>&nbsp;
                         <a href="/calcUp50OneGen0/{{$area->id}}/{{$stere[1]}}/{{$key}}"><button>Obniż GenZ o {{$change}}%</button></a>&nbsp;
                         @endif
