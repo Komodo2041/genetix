@@ -479,7 +479,7 @@ class Gen0Controller extends Controller
             for ($n = 0; $n < $this->startPopulation; $n++) {
                 $patternX = json_decode($bestX[rand(0, $countX - 1)]['data']);
                 $patternY = json_decode($bestY[rand(0, $countY - 1)]['data']);
-                $$population0[] = $gen0->createBoard3Dim($patternZ, $patternX, $patternY, $all, 10);
+                $population0[] = $gen0->createBoard3Dim($patternZ, $patternX, $patternY, $all, 10);
             }
 
             $res = $gtx->calcPopulation($population0, $headPoints);
