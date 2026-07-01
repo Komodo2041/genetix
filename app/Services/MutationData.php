@@ -212,7 +212,8 @@ class MutationData
         "middleColumnRevert",
         "midd2",
         "layerInMiddle",
-        "layerInMiddle2Down"
+        "layerInMiddle2Down",
+        "powerChangeOneLayerZ"
     ];
 
     public function setNumerMutation($nr)
@@ -4706,6 +4707,51 @@ class MutationData
                 }
             }
         }
+        return $pop;
+    }
+
+    private function powerChangeOneLayerZ($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        $orders = $this->getOrders($nr);
+        $sum = 0;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                $r = rand(0, 5);
+                if ($r == 0 && $pop[$i][$j][$pomZ] == 1) {
+                    $pop[$i][$j][$pomZ] = 0;
+                    $sum += $orders[$i . "-" . $j . "-" . $pomZ];
+                }
+            }
+        }
+
+        $r = 1000;
+        $r2 = 1000;
+        while ($sum > 0 && $r > 0 && $r2 > 0) {
+            $x = rand(0, $nr - 1);
+            $y = rand(0, $nr - 1);
+
+            if ($pop[$x][$y][$pomZ] == 0 && $orders[$x . "-" . $y . "-" . $pomZ]  < $sum && $sum > 0) {
+                $pop[$x][$y][$pomZ] = 1;
+                $sum = $sum - $orders[$x . "-" . $y . "-" . $pomZ];
+                $r = 1000;
+            }
+            $r--;
+            if ($r == 0 && $sum > 0.1) {
+
+                $i = rand(0, $nr - 1);
+                $j = rand(0, $nr - 1);
+                while ($pop[$i][$j][$pomZ] == 0) {
+                    $i = rand(0, $nr - 1);
+                    $j = rand(0, $nr - 1);
+                }
+                $r2--;
+                $pop[$i][$j][$pomZ] = 1;
+                $sum += $orders[$i . "-" . $j . "-" . $pomZ];
+                $r = 1000;
+            }
+        }
+
         return $pop;
     }
 }
