@@ -131,7 +131,7 @@ class MainController extends Controller
             if ($area->matrixtribe == 1) {
                 $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->get()->pluck("name")->toArray();
             } else {
-                $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->orderBy("result", "DESC")->take(10)->get()->pluck("name")->toArray();
+                $methods = Matrix::where("area_id", $id)->where("hide", 0)->where("result", ">", 0)->orderBy("result", "DESC")->orderBy("max", "DESC")->take(10)->get()->pluck("name")->toArray();
             }
 
             if ($methods) {
@@ -143,7 +143,7 @@ class MainController extends Controller
             if ($area->matrixcross == 1) {
                 $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->get()->pluck("name")->toArray();
             } else {
-                $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->orderBy("max", "DESC")->take(10)->get()->pluck("name")->toArray();
+                $methods = CrossMatrix::where("area_id", $id)->where("hide", 0)->where("max", ">", 1)->orderBy("max", "DESC")->orderBy("middle_result", "DESC")->take(10)->get()->pluck("name")->toArray();
             }
 
             if ($methods) {

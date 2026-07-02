@@ -213,7 +213,16 @@ class MutationData
         "midd2",
         "layerInMiddle",
         "layerInMiddle2Down",
-        "powerChangeOneLayerZ"
+        "powerChangeOneLayerZ",
+        "moveQuere4x4",
+        "moveQuere4x4Multi",
+        "moveQuere5x5",
+        "moveQuere5x5Multi",
+        "moveQuere3x3",
+        "moveQuere3x3Multi",
+        "moveQuere6x6",
+        "moveQuere2x2Multi",
+        "moveQuere2x2"
     ];
 
     public function setNumerMutation($nr)
@@ -4752,6 +4761,121 @@ class MutationData
             }
         }
 
+        return $pop;
+    }
+
+    private function moveQuere4x4($pop, $nr = 10, $z = -1)
+    {
+        return $this->moveQuere4x4Head($pop, $nr, 4, $z);
+    }
+
+    private function moveQuere4x4Head($pop, $nr = 10, $size = 4, $z = -1)
+    {
+        $pomZ = $z;
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        $pomX = rand(1, $nr - $size - 1);
+        $pomY = rand(1, $nr - $size - 1);
+        $tryb = rand(0, 3);
+        $chX = 0;
+        $chY = 0;
+        $pop2 = $pop;
+
+        switch ($tryb) {
+            case 0:
+                $chX = 1;
+                for ($i = 0; $i < $size; $i++) {
+                    $pop[$pomX + $i][$pomY][$pomZ] = $pop[$pomX + $i + $chX][$pomY][$pomZ];
+                }
+                break;
+            case 1:
+                $chX = -1;
+                for ($i = 0; $i < $size; $i++) {
+                    $pop[$pomX + $i][$pomY + $size - 1][$pomZ] = $pop[$pomX + $i + $chX][$pomY + $size - 1][$pomZ];
+                }
+                break;
+            case 2:
+                $chY = 1;
+                for ($i = 0; $i < $size; $i++) {
+                    $pop[$pomX][$pomY + $i][$pomZ] = $pop[$pomX][$pomY + $i + $chY][$pomZ];
+                }
+                break;
+            case 3:
+                $chY  = -1;
+                for ($i = 0; $i < $size; $i++) {
+                    $pop[$pomX + $size - 1][$pomY + $i][$pomZ] = $pop[$pomX + $size - 1][$pomY + $i + $chY][$pomZ];
+                }
+                break;
+        }
+
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                $pop[$pomX + $i + $chX][$pomY + $j + $chY][$pomZ] = $pop2[$pomX + $i][$pomY + $j][$pomZ];
+            }
+        }
+        return $pop;
+    }
+
+    private function moveQuere4x4Multi($pop, $nr = 10)
+    {
+        $r = rand(2, 4);
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $r; $i++) {
+            $pop = $this->moveQuere4x4($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+    private function moveQuere5x5($pop, $nr = 10, $z = -1)
+    {
+        return $this->moveQuere4x4Head($pop, $nr, 5, $z);
+    }
+
+    private function moveQuere5x5Multi($pop, $nr = 10)
+    {
+        $r = 2;
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $r; $i++) {
+            $pop = $this->moveQuere5x5($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+
+    private function moveQuere3x3($pop, $nr = 10, $z = -1)
+    {
+        return $this->moveQuere4x4Head($pop, $nr, 3, $z);
+    }
+
+    private function moveQuere3x3Multi($pop, $nr = 10)
+    {
+        $r = rand(2, 8);
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $r; $i++) {
+            $pop = $this->moveQuere3x3($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+    private function moveQuere6x6($pop, $nr = 10, $z = -1)
+    {
+        return $this->moveQuere4x4Head($pop, $nr, 6, $z);
+    }
+
+    private function moveQuere2x2($pop, $nr = 10, $z = -1)
+    {
+        return $this->moveQuere4x4Head($pop, $nr, 2, $z);
+    }
+
+    private function moveQuere2x2Multi($pop, $nr = 10)
+    {
+        $r = rand(2, 8);
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $r; $i++) {
+            $pop = $this->moveQuere2x2($pop, $nr, $pomZ);
+        }
         return $pop;
     }
 }

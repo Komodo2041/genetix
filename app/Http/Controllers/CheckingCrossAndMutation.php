@@ -27,7 +27,7 @@ class CheckingCrossAndMutation extends Controller
 
 
     private $saveCrosMutationMatrix = 1.000001;
-    //private $saveCrosMutationMatrix = 1.0001;
+    //private $saveCrosMutationMatrix = 1.001;
     private $saveCalculationInCrossAndMuationMatrix = 1;
     private $main = null;
 
