@@ -10,6 +10,7 @@
 <a href="/calcMatrix/{{$area->id}}/200"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji - 200</button></a>&nbsp;<br />
 <a href="/calcMatrix/{{$area->id}}/500"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji - 500</button></a>&nbsp;<br />
 <a href="/calcMatrix/{{$area->id}}/1000"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji - 1000</button></a>&nbsp;<br />
+<a href="/calcMatrix/{{$area->id}}/2000"><button>Aktualizuj Matryce Mutacji na wiekszej liczbie mutacji - 2000</button></a>&nbsp;<br />
 <h3>Matryca Mutacji</h3>
 <div class="container">
 

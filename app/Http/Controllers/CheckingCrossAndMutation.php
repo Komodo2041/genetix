@@ -27,6 +27,8 @@ class CheckingCrossAndMutation extends Controller
 
 
     private $saveCrosMutationMatrix = 1.000001;
+    // private $saveCrosMutationMatrix = 1.0000001;
+
     //private $saveCrosMutationMatrix = 1.001;
     private $saveCalculationInCrossAndMuationMatrix = 1;
     private $main = null;
@@ -103,7 +105,7 @@ class CheckingCrossAndMutation extends Controller
             $mutation->setNrMutation($nrM);
         }
 
-        set_time_limit(14400);
+        set_time_limit(72000);
         $mutations = $mutation->getAllMethod();
         if ($mutmed) {
             $mutations = [$mutmed];
@@ -641,7 +643,7 @@ class CheckingCrossAndMutation extends Controller
 
     public function calcBigMutationLayer($id, $tryb, $nrM, BigMutatorData $powermutation, GenetixDataGenerator $gtx)
     {
-        set_time_limit(12000);
+        set_time_limit(30000);
         $area = Area::find($id);
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');

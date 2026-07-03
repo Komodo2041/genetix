@@ -222,7 +222,27 @@ class MutationData
         "moveQuere3x3Multi",
         "moveQuere6x6",
         "moveQuere2x2Multi",
-        "moveQuere2x2"
+        "moveQuere2x2",
+        "shuffleDiagonal_w1",
+        "shuffleDiagonal_w2",
+        "shuffleDiagonal_w3",
+        "shuffleDiagonal_w4",
+        "shuffleDiagonal_w5",
+        "bw1",
+        "bw2",
+        "bw3",
+        "bw4",
+        "bw5",
+        "bw12345",
+        "bw12345rand50",
+        "inveroZ",
+        "neighbourchangeOnlyZMulti5",
+        "neighbourchangeOnlyZ",
+        "neighbourchangeOnlyZMulti8",
+        "neighbourchangeOnlyZMulti16",
+        "neighbourchangeOnlyZMulti32",
+        "neighbourchangeOnlyZMulti64",
+        "neighbourchangeOnlyZMulti128"
     ];
 
     public function setNumerMutation($nr)
@@ -4877,5 +4897,234 @@ class MutationData
             $pop = $this->moveQuere2x2($pop, $nr, $pomZ);
         }
         return $pop;
+    }
+
+    private function shuffleDiagonal_w1($pop, $nr = 10)
+    {
+        return $this->shuffleDiagonalWidth($pop, $nr, 1);
+    }
+
+    private function shuffleDiagonal_w2($pop, $nr = 10)
+    {
+        return $this->shuffleDiagonalWidth($pop, $nr, 2);
+    }
+
+    private function shuffleDiagonal_w3($pop, $nr = 10)
+    {
+        return $this->shuffleDiagonalWidth($pop, $nr, 3);
+    }
+
+    private function shuffleDiagonal_w4($pop, $nr = 10)
+    {
+        return $this->shuffleDiagonalWidth($pop, $nr, 4);
+    }
+
+    private function shuffleDiagonal_w5($pop, $nr = 10)
+    {
+        return $this->shuffleDiagonalWidth($pop, $nr, 5);
+    }
+
+    private function shuffleDiagonalWidth($pop, $nr = 10, $w = 1)
+    {
+        $pom_z = rand(0, $nr - 1);
+        $w = $w - 1;
+        $pom = rand(1, ($nr - 1) * 2);
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = $i + $j;
+                    if ($z == $pom_z && $sum >= $pom && $pom <= $sum + $w) {
+                        $used[] = $pop[$i][$j][$z];
+                    }
+                }
+            }
+        }
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $sum = $i + $j;
+                    if ($z == $pom_z && $sum >= $pom && $pom <= $sum + $w) {
+                        $pop[$i][$j][$z] = array_shift($used);
+                    }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    private function bw1($pop, $nr = 10)
+    {
+        return $this->shuffleBorderinZtype2($pop, $nr, 0);
+    }
+
+    private function bw2($pop, $nr = 10)
+    {
+        return $this->shuffleBorderinZtype2($pop, $nr, 1);
+    }
+
+    private function bw3($pop, $nr = 10)
+    {
+        return $this->shuffleBorderinZtype2($pop, $nr, 2);
+    }
+
+    private function bw4($pop, $nr = 10)
+    {
+        return $this->shuffleBorderinZtype2($pop, $nr, 3);
+    }
+
+    private function bw5($pop, $nr = 10)
+    {
+        return $this->shuffleBorderinZtype2($pop, $nr, 4);
+    }
+
+    private function bw12345($pop, $nr = 10)
+    {
+        $pom_z = rand(0, $nr - 1);
+        $pop = $this->shuffleBorderinZtype2($pop, $nr, 0, $pom_z);
+        $pop = $this->shuffleBorderinZtype2($pop, $nr, 1, $pom_z);
+        $pop = $this->shuffleBorderinZtype2($pop, $nr, 2, $pom_z);
+        $pop = $this->shuffleBorderinZtype2($pop, $nr, 3, $pom_z);
+        $pop = $this->shuffleBorderinZtype2($pop, $nr, 4, $pom_z);
+        return $pop;
+    }
+
+    private function bw12345rand50($pop, $nr = 10)
+    {
+        $pom_z = rand(0, $nr - 1);
+        for ($i = 0; $i <= 4; $i++) {
+            if (rand(0, 1) == 1) {
+                $pop = $this->shuffleBorderinZtype2($pop, $nr, $i, $pom_z);
+            }
+        }
+
+        return $pop;
+    }
+
+
+    private function shuffleBorderinZtype2($pop, $nr = 10, $dist = 0, $z = -1)
+    {
+        $pom_z = $z;
+        if ($pom_z < 0) {
+            $pom_z = rand(0, $nr - 1);
+        }
+        $max = $nr - 1;
+        $used = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $min = min($i, $j, $max - $i, $max - $j);
+                    if ($pom_z == $z && $min == $dist) {
+                        $used[] = $pop[$i][$j][$z];
+                    }
+                }
+            }
+        }
+
+        shuffle($used);
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    $min = min($i, $j, $max - $i, $max - $j);
+                    if ($pom_z == $z && $min == $dist) {
+                        $pop[$i][$j][$z] = array_shift($used);
+                    }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    private function inveroZ($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+
+                    if ($pomZ == $z) {
+                        if ($pop[$i][$j][$z] == 1) {
+                            $pop[$i][$j][$z] = 0;
+                        } elseif ($pop[$i][$j][$z] == 0) {
+                            $pop[$i][$j][$z] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZ($pop, $nr = 10, $zz = -1)
+    {
+
+        $changed = 0;
+        $ix = 500;
+        $pomZ = $zz;
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        while ($changed == 0 && $ix > 0) {
+
+            $pom1 = rand(1, $nr - 2);
+            $pom2 = rand(1, $nr - 2);
+
+            $changex = rand(-1, 1);
+            $changey = rand(-1, 1);
+
+            if ($pop[$pom1 + $changex][$pom2 + $changey][$pomZ] != $pop[$pom1][$pom2][$pomZ]) {
+                $pom = $pop[$pom1][$pom2][$pomZ];
+                $pop[$pom1][$pom2][$pomZ] = $pop[$pom1 + $changex][$pom2 + $changey][$pomZ];
+                $pop[$pom1 + $changex][$pom2 + $changey][$pomZ] = $pom;
+                $changed = 1;
+            }
+            $ix--;
+        }
+
+
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZMulti5($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZMulti($pop, $nr, 4);
+    }
+
+    private function neighbourchangeOnlyZMulti($pop, $nr = 10, $many = 4)
+    {
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $many; $i++) {
+            $pop = $this->neighbourchangeOnlyZ($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZMulti16($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZMulti($pop, $nr, 16);
+    }
+
+    private function neighbourchangeOnlyZMulti32($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZMulti($pop, $nr, 32);
+    }
+
+    private function neighbourchangeOnlyZMulti64($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZMulti($pop, $nr, 64);
+    }
+
+    private function neighbourchangeOnlyZMulti8($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZMulti($pop, $nr, 8);
+    }
+
+    private function neighbourchangeOnlyZMulti128($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZMulti($pop, $nr, 128);
     }
 }
