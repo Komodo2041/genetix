@@ -4,6 +4,8 @@
 <a href="/"><button>Strona główna</button></a><br />
 <a href="/showCalcSame/{{$area->id}}"><button>Porównań Wyniki</button></a><br />
 <br />
+<a href="/compareGen0/{{$area->id}}/2"><button>Porównań Gen0 Z [2 różnic]</button></a>&nbsp;<br />
+<a href="/compareGen0/{{$area->id}}/10"><button>Porównań Gen0 Z [10 różnic]</button></a>&nbsp;
 <a href="/compareGen0/{{$area->id}}/20"><button>Porównań Gen0 Z [20 różnic]</button></a>&nbsp;
 <a href="/compareGen0/{{$area->id}}/50"><button>Porównań Gen0 Z [50 różnic]</button></a>&nbsp;
 <a href="/compareGen0/{{$area->id}}/100"><button>Porównań Gen0 Z [100 różnic]</button></a>&nbsp;

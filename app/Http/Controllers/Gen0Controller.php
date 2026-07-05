@@ -22,9 +22,11 @@ class Gen0Controller extends Controller
     // php artisan app:calc-gen0 16 5
     // php artisan app:calc-gen0 16 9
 
+    // php artisan app:calc-gen0 34 13 1 1
+
     // app:calc-gen0_ciag 17 0
 
-    // app:calc-gen0-x-y-z 17 20
+    // php artisan app:calc-gen0-x-y-z 17 20
 
     // php artisan app:up-down-gen-z 17 0
     // php artisan app:calc-adv-gen0 24 {nr=10}
@@ -459,7 +461,7 @@ class Gen0Controller extends Controller
         $individual = 10;
 
         $pattern = [];
-        $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(50)->get()->shuffle()->first();
+        $best = Gen0::where("area_id", $id)->where("dim", 0)->orderBy("result", "DESC")->take(10)->get()->shuffle()->first();
         $patternZ = json_decode($best->data);
         $bestX = Gen0::where("area_id", $id)->where("dim", 1)->orderBy("result", "DESC")->take(50)->get()->shuffle()->take(10)->toArray();
         $countX = count($bestX);
