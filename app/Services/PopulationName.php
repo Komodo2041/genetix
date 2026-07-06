@@ -127,6 +127,7 @@ class PopulationName
         107 => "Create Pattern River", // X
         108 => "Tama calc", // X
         109 => "Kosz Gen0 Calc", // X
+        110 => "Use Best Pattern Gen0 - 3D"
     ];
 
     public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102, 105, 106, 107, 108, 109];

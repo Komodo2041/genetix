@@ -634,6 +634,25 @@ class MainController extends Controller
             }
             $res = $cross->createNewPopulation($population0, "random50");
             $population0 = $res[0];
+        } elseif ($randomDoing == 110) {
+            $best = Gen0::where("area_id", $id)->where("tryb", 22)->orderBy("result", "DESC")->take(10)->get()->random(1)->first();
+            if (!$best) {
+                $calculations = $this->getCalculationLevel($id, $lvl, 10);
+                foreach ($calculations as $c) {
+                    $population0[] = json_decode($c->data);
+                    $usedcalc[] = $c->id;
+                }
+                $randomDoing = -1;
+            } else {
+                $patterns = json_decode($best->data2, true);
+                $all = 0;
+                for ($i = 0; $i < 10; $i++) {
+                    $all += $patterns["Z"][$i];
+                }
+                for ($n = 0; $n < $this->startPopulation; $n++) {
+                    $population0[] = $gen0->createBoard3Dim($patterns["Z"], $patterns["X"], $patterns["Y"], $all, 10);
+                }
+            }
         } elseif (in_array($randomDoing, $this->pn->diamondCrossing)) {
 
             $res = $this->stereDiaomond($randomDoing, $mutation, $bigmutation);
