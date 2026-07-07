@@ -18,7 +18,7 @@
       @forelse ($area AS $a)
       <tr @if (isset($areasMax[$a->id]) && $areasMax[$a->id] > 0) class="green" @endif>
          <td>
-            @if ($a->river > 0) Rzeka @endif
+            @if ($a->river > 0) Rzeka [<b>{{$a->river}}</b>] @endif
             @if ($a->tama > 0) Tama @endif
             @if ($a->basket > 0) Kosz @endif
             <br />
