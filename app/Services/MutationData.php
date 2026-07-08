@@ -242,7 +242,12 @@ class MutationData
         "neighbourchangeOnlyZMulti16",
         "neighbourchangeOnlyZMulti32",
         "neighbourchangeOnlyZMulti64",
-        "neighbourchangeOnlyZMulti128"
+        "neighbourchangeOnlyZMulti128",
+        "useSamePowerInOneLayerZ100",
+        "useSamePowerInOneLayerZ50",
+        "useSamePowerInOneLayerZ20",
+        "useSamePowerInOneLayerZ10",
+        "useSamePowerInOneLayerZ5"
     ];
 
     public function setNumerMutation($nr)
@@ -5126,5 +5131,107 @@ class MutationData
     private function neighbourchangeOnlyZMulti128($pop, $nr = 10)
     {
         return $this->neighbourchangeOnlyZMulti($pop, $nr, 128);
+    }
+
+    private function useSamePowerInOneLayerZ100($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        return $this->useSamePowerInOneLayerZ($pop, $nr, $pomZ, 0);
+    }
+
+    private function useSamePowerInOneLayerZ50($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        return $this->useSamePowerInOneLayerZ($pop, $nr, $pomZ, 1);
+    }
+
+    private function useSamePowerInOneLayerZ20($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        return $this->useSamePowerInOneLayerZ($pop, $nr, $pomZ, 2);
+    }
+
+    private function useSamePowerInOneLayerZ10($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        return $this->useSamePowerInOneLayerZ($pop, $nr, $pomZ, 3);
+    }
+
+    private function useSamePowerInOneLayerZ5($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        return $this->useSamePowerInOneLayerZ($pop, $nr, $pomZ, 4);
+    }
+
+    private function useSamePowerInOneLayerZ($pop, $nr = 10, $pomZ = -1, $stere = 0)
+    {
+        $orders = $this->getOrders($nr);
+        if (!$orders) {
+            return $pop;
+        }
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        $values = [];
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                $val = $orders[$i . "-" . $j . "-" . $pomZ];
+                if (!in_array($val, $values)) {
+                    $values[] = $val;
+                }
+            }
+        }
+
+        $used = [];
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pomZ) {
+                        $key = array_search($orders[$i . "-" . $j . "-" . $z], $values);
+                        $used[$key][] = $pop[$i][$j][$z];
+                    }
+                }
+            }
+        }
+
+        $chance = 100;
+        switch ($stere) {
+            case 0:
+                $chance = 100;
+                break;
+            case 1:
+                $chance = 50;
+                break;
+            case 2:
+                $chance = 20;
+                break;
+            case 3:
+                $chance = 10;
+                break;
+            case 4:
+                $chance = 5;
+                break;
+        }
+
+        foreach ($used as $key => $rec) {
+            $r = rand(0, 100);
+            if ($r <= $chance) {
+                shuffle($used[$key]);
+            }
+        }
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pomZ) {
+                        $key = array_search($orders[$i . "-" . $j . "-" . $z], $values);
+                        $pop[$i][$j][$z] = array_shift($used[$key]);
+                    }
+                }
+            }
+        }
+        return $pop;
     }
 }
