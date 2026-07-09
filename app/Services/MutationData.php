@@ -247,7 +247,18 @@ class MutationData
         "useSamePowerInOneLayerZ50",
         "useSamePowerInOneLayerZ20",
         "useSamePowerInOneLayerZ10",
-        "useSamePowerInOneLayerZ5"
+        "useSamePowerInOneLayerZ5",
+        "neighbourchangeOnlyZmoreCH2",
+        "neighbourchangeOnlyZmoreCH2Multi5",
+        "neighbourchangeOnlyZOneDirectXMulti5",
+        "neighbourchangeOnlyZOneDirectXMulti8",
+        "neighbourchangeOnlyZOneDirectYMulti5",
+        "neighbourchangeOnlyZOneDirectYMulti8",
+        "neighbourchangeOnlyZDiagonal",
+        "neighbourchangeOnlyZDiagonalMulti5",
+        "neighbourchangeOnlyZJumper",
+        "neighbourchangeOnlyZJumperMulti5",
+        "neighbourchangeOnlyZJumperMulti8"
     ];
 
     public function setNumerMutation($nr)
@@ -5094,6 +5105,129 @@ class MutationData
         return $pop;
     }
 
+    private function neighbourchangeOnlyZmoreCH2($pop, $nr = 10, $zz = -1)
+    {
+
+        $changed = 0;
+        $ix = 500;
+        $pomZ = $zz;
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        while ($changed == 0 && $ix > 0) {
+
+            $pom1 = rand(2, $nr - 3);
+            $pom2 = rand(2, $nr - 3);
+
+            $changex = rand(-2, 2);
+            $changey = rand(-2, 2);
+
+            if ($pop[$pom1 + $changex][$pom2 + $changey][$pomZ] != $pop[$pom1][$pom2][$pomZ]) {
+                $pom = $pop[$pom1][$pom2][$pomZ];
+                $pop[$pom1][$pom2][$pomZ] = $pop[$pom1 + $changex][$pom2 + $changey][$pomZ];
+                $pop[$pom1 + $changex][$pom2 + $changey][$pomZ] = $pom;
+                $changed = 1;
+            }
+            $ix--;
+        }
+
+
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZOneDirectMulti($pop, $nr = 10, $many = 4, $stere = 0)
+    {
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < $many; $i++) {
+            $pop = $this->neighbourchangeOnlyZOneDirect($pop, $nr, $pomZ, $stere);
+        }
+        return $pop;
+    }
+
+
+    private function neighbourchangeOnlyZOneDirectXMulti5($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZOneDirectMulti($pop, $nr, 4, 0);
+    }
+
+    private function neighbourchangeOnlyZOneDirectYMulti5($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZOneDirectMulti($pop, $nr, 4, 1);
+    }
+
+    private function neighbourchangeOnlyZOneDirectXMulti8($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZOneDirectMulti($pop, $nr, 8, 0);
+    }
+
+    private function neighbourchangeOnlyZOneDirectYMulti8($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZOneDirectMulti($pop, $nr, 8, 1);
+    }
+
+    private function neighbourchangeOnlyZOneDirect($pop, $nr = 10, $zz = -1, $stere = 0)
+    {
+
+        $changed = 0;
+        $ix = 500;
+        $pomZ = $zz;
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        while ($changed == 0 && $ix > 0) {
+
+            $pom1 = rand(0, $nr - 2);
+            $pom2 = rand(0, $nr - 1);
+
+            $changex = 1;
+            $changey = 0;
+
+            if ($stere == 0) {
+                $pom1 = rand(0, $nr - 2);
+                $pom2 = rand(0, $nr - 1);
+
+                $changex = 1;
+                $changey = 0;
+            } elseif ($stere == 1) {
+                $pom1 = rand(0, $nr - 1);
+                $pom2 = rand(0, $nr - 2);
+
+                $changex = 0;
+                $changey = 1;
+            }
+
+            if ($pop[$pom1 + $changex][$pom2 + $changey][$pomZ] != $pop[$pom1][$pom2][$pomZ]) {
+                $pom = $pop[$pom1][$pom2][$pomZ];
+                $pop[$pom1][$pom2][$pomZ] = $pop[$pom1 + $changex][$pom2 + $changey][$pomZ];
+                $pop[$pom1 + $changex][$pom2 + $changey][$pomZ] = $pom;
+                $changed = 1;
+            }
+            $ix--;
+        }
+
+
+        return $pop;
+    }
+
+
+    private function neighbourchangeOnlyZmoreCH2Multi($pop, $nr = 10, $many = 4)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        for ($i = 0; $i < $many; $i++) {
+            $pop = $this->neighbourchangeOnlyZmoreCH2($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZmoreCH2Multi5($pop, $nr = 10)
+    {
+        return $this->neighbourchangeOnlyZmoreCH2Multi($pop, $nr, 4);
+    }
+
+
     private function neighbourchangeOnlyZMulti5($pop, $nr = 10)
     {
         return $this->neighbourchangeOnlyZMulti($pop, $nr, 4);
@@ -5231,6 +5365,151 @@ class MutationData
                     }
                 }
             }
+        }
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZDiagonal($pop, $nr = 10, $zz = -1)
+    {
+
+        $changed = 0;
+        $ix = 500;
+        $pomZ = $zz;
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        $stere = rand(0, 3);
+
+        while ($changed == 0 && $ix > 0) {
+
+            $pom1 = rand(1, $nr - 2);
+            $pom2 = rand(1, $nr - 2);
+
+            $changex = 0;
+            $changey = 0;
+
+            if ($stere == 0) {
+                $changex = 1;
+                $changey = 1;
+            } elseif ($stere == 1) {
+
+                $changex = -1;
+                $changey = 1;
+            } elseif ($stere == 2) {
+
+                $changex = -1;
+                $changey = -1;
+            } elseif ($stere == 3) {
+
+                $changex = 1;
+                $changey = -1;
+            }
+
+            if ($pop[$pom1 + $changex][$pom2 + $changey][$pomZ] != $pop[$pom1][$pom2][$pomZ]) {
+                $pom = $pop[$pom1][$pom2][$pomZ];
+                $pop[$pom1][$pom2][$pomZ] = $pop[$pom1 + $changex][$pom2 + $changey][$pomZ];
+                $pop[$pom1 + $changex][$pom2 + $changey][$pomZ] = $pom;
+                $changed = 1;
+            }
+            $ix--;
+        }
+
+
+        return $pop;
+    }
+
+    public function neighbourchangeOnlyZDiagonalMulti5($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < 4; $i++) {
+            $pop = $this->neighbourchangeOnlyZDiagonal($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+    private function neighbourchangeOnlyZJumper($pop, $nr = 10, $zz = -1)
+    {
+
+        $changed = 0;
+        $ix = 500;
+        $pomZ = $zz;
+        if ($pomZ < 0) {
+            $pomZ = rand(0, $nr - 1);
+        }
+
+        $stere = rand(0, 7);
+
+        while ($changed == 0 && $ix > 0) {
+
+            $pom1 = rand(2, $nr - 3);
+            $pom2 = rand(2, $nr - 3);
+
+            $changex = 0;
+            $changey = 0;
+
+            switch ($stere) {
+                case 0:
+                    $changex = 2;
+                    $changey = 1;
+                    break;
+                case 1:
+                    $changex = 1;
+                    $changey = 2;
+                    break;
+                case 2:
+                    $changex = 2;
+                    $changey = -1;
+                    break;
+                case 3:
+                    $changex = 1;
+                    $changey = -2;
+                    break;
+                case 4:
+                    $changex = -2;
+                    $changey = -1;
+                    break;
+                case 5:
+                    $changex = -1;
+                    $changey = -2;
+                    break;
+                case 6:
+                    $changex = -2;
+                    $changey = 1;
+                    break;
+                case 7:
+                    $changex = -1;
+                    $changey = 2;
+                    break;
+            }
+
+            if ($pop[$pom1 + $changex][$pom2 + $changey][$pomZ] != $pop[$pom1][$pom2][$pomZ]) {
+                $pom = $pop[$pom1][$pom2][$pomZ];
+                $pop[$pom1][$pom2][$pomZ] = $pop[$pom1 + $changex][$pom2 + $changey][$pomZ];
+                $pop[$pom1 + $changex][$pom2 + $changey][$pomZ] = $pom;
+                $changed = 1;
+            }
+            $ix--;
+        }
+
+
+        return $pop;
+    }
+
+    public function neighbourchangeOnlyZJumperMulti5($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < 4; $i++) {
+            $pop = $this->neighbourchangeOnlyZJumper($pop, $nr, $pomZ);
+        }
+        return $pop;
+    }
+
+    public function neighbourchangeOnlyZJumperMulti8($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        for ($i = 0; $i < 8; $i++) {
+            $pop = $this->neighbourchangeOnlyZJumper($pop, $nr, $pomZ);
         }
         return $pop;
     }

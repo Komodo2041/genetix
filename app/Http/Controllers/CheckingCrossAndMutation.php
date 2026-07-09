@@ -101,11 +101,15 @@ class CheckingCrossAndMutation extends Controller
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
 
+        set_time_limit(72000);
+        ini_set('memory_limit', '350M');
+
+
         if ($nrM) {
             $mutation->setNrMutation($nrM);
         }
 
-        set_time_limit(72000);
+
         $mutations = $mutation->getAllMethod();
         if ($mutmed) {
             $mutations = [$mutmed];
