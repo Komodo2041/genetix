@@ -85,6 +85,9 @@ Route::get('addTama/{id}',  "App\Http\Controllers\RiverController@addTama");
 Route::get('diamon/add/{id}',  "App\Http\Controllers\DiamondController@adddiamond");
 
 Route::get('createweighingscale/{id}',  "App\Http\Controllers\WagaController@createweighingscale");
+Route::get('showwagainArea/{id}',  "App\Http\Controllers\WagaController@shoWagainArea");
+Route::get('showCalcWaga/{id}',  "App\Http\Controllers\WagaController@showCalcWaga");
+
 
 Route::get('showCron',  "App\Http\Controllers\CronController@show");
 Route::post('showCron',  "App\Http\Controllers\CronController@show");

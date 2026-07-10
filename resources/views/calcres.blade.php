@@ -9,6 +9,8 @@
 <a href="/area/usedmethods/{{$area->id}}"><button>Wybór pierwszego pokolenia</button></a>&nbsp;
 <a href="/area/deleteSameCalc/{{$area->id}}"><button>Usuń Takie same obliczenia</button></a>&nbsp;
 <a href="/addTama/{{$area->id}}"><button>Dodaj tamę</button></a>&nbsp;
+<a href="/showwagainArea/{{$area->id}}"><button>Pokaż wagi</button></a>&nbsp;
+
 
 <h3>Obliczenia dla {{$area->name}} - {{$area->id}}</h3>
 <div class="container">

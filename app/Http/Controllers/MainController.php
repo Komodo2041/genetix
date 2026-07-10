@@ -42,6 +42,7 @@ use App\Http\Controllers\DiamondController;
 // php artisan app:onecalculation 82 240
 
 // php artisan app:calc-pattern 17
+// php artisan app:tama-calc 34 20
 
 class MainController extends Controller
 {

@@ -258,7 +258,19 @@ class MutationData
         "neighbourchangeOnlyZDiagonalMulti5",
         "neighbourchangeOnlyZJumper",
         "neighbourchangeOnlyZJumperMulti5",
-        "neighbourchangeOnlyZJumperMulti8"
+        "neighbourchangeOnlyZJumperMulti8",
+        "inver50inOneLayerZ",
+        "inver50inOneLayerZx25",
+        "inver50inOneLayerZx16",
+        "inver50inOneLayerZx9",
+        "inver50inOneLayerZx16r3",
+        "inver50inOneLayerZr3",
+        "inver50inOneLayerZr4",
+        "inver50inOneLayerZr5",
+        "inver50inOneLayerZr6",
+        "inver50inOneLayerZr10",
+        "inver50inOneLayerZr20",
+        "inver50inOneLayerZx4"
     ];
 
     public function setNumerMutation($nr)
@@ -5512,5 +5524,162 @@ class MutationData
             $pop = $this->neighbourchangeOnlyZJumper($pop, $nr, $pomZ);
         }
         return $pop;
+    }
+
+    public function inver50inOneLayerZ($pop, $nr = 10, $maxRand = 1)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($z == $pomZ) {
+                        $r = rand(0, $maxRand);
+                        if ($r == 1 && $pop[$i][$j][$z] == 0) {
+                            $pop[$i][$j][$z] = 1;
+                        } elseif ($r == 1 && $pop[$i][$j][$z] == 1) {
+                            $pop[$i][$j][$z] = 0;
+                        }
+                    }
+                }
+            }
+        }
+        return $pop;
+    }
+
+    public function inver50inOneLayerZx25($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        $pomX = rand(0, $nr - 5);
+        $pomY = rand(0, $nr - 5);
+
+        for ($i = $pomX; $i < $pomX + 5; $i++) {
+            for ($j = $pomY; $j < $pomY + 5; $j++) {
+
+                $r = rand(0, 1);
+                if ($r == 1 && $pop[$i][$j][$pomZ] == 0) {
+                    $pop[$i][$j][$pomZ] = 1;
+                } elseif ($r == 1 && $pop[$i][$j][$pomZ] == 1) {
+                    $pop[$i][$j][$pomZ] = 0;
+                }
+            }
+        }
+        return $pop;
+    }
+
+    public function inver50inOneLayerZx16($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        $pomX = rand(0, $nr - 4);
+        $pomY = rand(0, $nr - 4);
+
+        for ($i = $pomX; $i < $pomX + 4; $i++) {
+            for ($j = $pomY; $j < $pomY + 4; $j++) {
+
+                $r = rand(0, 1);
+                if ($r == 1 && $pop[$i][$j][$pomZ] == 0) {
+                    $pop[$i][$j][$pomZ] = 1;
+                } elseif ($r == 1 && $pop[$i][$j][$pomZ] == 1) {
+                    $pop[$i][$j][$pomZ] = 0;
+                }
+            }
+        }
+        return $pop;
+    }
+
+    public function inver50inOneLayerZx16r3($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        $pomX = rand(0, $nr - 4);
+        $pomY = rand(0, $nr - 4);
+
+        for ($i = $pomX; $i < $pomX + 4; $i++) {
+            for ($j = $pomY; $j < $pomY + 4; $j++) {
+
+                $r = rand(0, 2);
+                if ($r == 1 && $pop[$i][$j][$pomZ] == 0) {
+                    $pop[$i][$j][$pomZ] = 1;
+                } elseif ($r == 1 && $pop[$i][$j][$pomZ] == 1) {
+                    $pop[$i][$j][$pomZ] = 0;
+                }
+            }
+        }
+        return $pop;
+    }
+
+
+    public function inver50inOneLayerZx9($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        $pomX = rand(0, $nr - 3);
+        $pomY = rand(0, $nr - 3);
+
+        for ($i = $pomX; $i < $pomX + 3; $i++) {
+            for ($j = $pomY; $j < $pomY + 3; $j++) {
+
+                $r = rand(0, 1);
+                if ($r == 1 && $pop[$i][$j][$pomZ] == 0) {
+                    $pop[$i][$j][$pomZ] = 1;
+                } elseif ($r == 1 && $pop[$i][$j][$pomZ] == 1) {
+                    $pop[$i][$j][$pomZ] = 0;
+                }
+            }
+        }
+        return $pop;
+    }
+
+    public function inver50inOneLayerZx4($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+
+        $pomX = rand(0, $nr - 2);
+        $pomY = rand(0, $nr - 2);
+
+        for ($i = $pomX; $i < $pomX + 2; $i++) {
+            for ($j = $pomY; $j < $pomY + 2; $j++) {
+
+                $r = rand(0, 1);
+                if ($r == 1 && $pop[$i][$j][$pomZ] == 0) {
+                    $pop[$i][$j][$pomZ] = 1;
+                } elseif ($r == 1 && $pop[$i][$j][$pomZ] == 1) {
+                    $pop[$i][$j][$pomZ] = 0;
+                }
+            }
+        }
+        return $pop;
+    }
+
+    public function inver50inOneLayerZr3($pop, $nr = 10)
+    {
+        return $this->inver50inOneLayerZ($pop, $nr, 2);
+    }
+
+    public function inver50inOneLayerZr4($pop, $nr = 10)
+    {
+        return $this->inver50inOneLayerZ($pop, $nr, 3);
+    }
+
+    public function inver50inOneLayerZr5($pop, $nr = 10)
+    {
+        return $this->inver50inOneLayerZ($pop, $nr, 4);
+    }
+
+    public function inver50inOneLayerZr6($pop, $nr = 10)
+    {
+        return $this->inver50inOneLayerZ($pop, $nr, 5);
+    }
+
+    public function inver50inOneLayerZr10($pop, $nr = 10)
+    {
+        return $this->inver50inOneLayerZ($pop, $nr, 9);
+    }
+
+    public function inver50inOneLayerZr20($pop, $nr = 10)
+    {
+        return $this->inver50inOneLayerZ($pop, $nr, 19);
     }
 }
