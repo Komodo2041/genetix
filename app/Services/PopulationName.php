@@ -127,7 +127,8 @@ class PopulationName
         107 => "Create Pattern River", // X
         108 => "Tama calc", // X
         109 => "Kosz Gen0 Calc", // X
-        110 => "Use Best Pattern Gen0 - 3D"
+        110 => "Use Best Pattern Gen0 - 3D",
+        111 => "Waga - change Only Top"
     ];
 
     public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102, 105, 106, 107, 108, 109];
@@ -137,7 +138,7 @@ class PopulationName
 
     public $normalSelecting = [0, 1, 2, 3, 10, 23, 24, 28];
 
-    public $wagaSelecting = [17, 18, 19, 20];
+    public $wagaSelecting = [17, 18, 19, 20, 111];
 
     public $biglayerSelecting = [11, 12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72]; // Z
     public $biglayerSelectingShort = [12, 13, 14, 65, 66, 67, 68, 69, 70, 71, 72]; // Z

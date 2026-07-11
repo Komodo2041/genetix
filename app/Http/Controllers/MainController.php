@@ -407,6 +407,8 @@ class MainController extends Controller
                 $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.03);
             } elseif ($randomDoing == 20) {
                 $population0 = $gtx->createPopulation0FromWaga($this->startPopulation, $dataBest, $wdiff, 0.01);
+            } elseif ($randomDoing == 111) {
+                $population0 = $gtx->createPopulation0FromWagaOnlyTop($this->startPopulation, $dataBest, $wdiff);
             }
             $population0 = $gtx->usepower($population0, $power);
             $population0[] = $dataBest;
@@ -932,7 +934,7 @@ class MainController extends Controller
                 $this->ls->saveCalco($calco->id, $lvlReso[1]);
             }
 
-            return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych ");
+            return redirect("/")->with('error', "Zapisano słabe obliczenie w bazie danych " . $calco->id);
         }
     }
 

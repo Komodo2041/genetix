@@ -1,13 +1,13 @@
 @extends('template')
 @section('content')
 
+
 <a href="/"><button>Strona główna </button></a><br />
 <a href="/calculations/{{$area->id}}"><button> Obliczenia {{$area->name}}</button></a><br />
 
+<h3>Wagi</h3>
 
 <div class="container">
-
-
 
 
     <table>

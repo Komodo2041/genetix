@@ -41,7 +41,7 @@ class WagaController extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
-        $calculations = Waga::select('calculation.*')->join("calculation", "calculation.id", "=", "waga.calculation_id")->where("waga.area_id", $id)->orderBy("obtainedresult", "DESC")->get()->toArray();
+        $calculations = Waga::select('calculation.*')->join("calculation", "calculation.id", "=", "waga.calculation_id")->where("waga.area_id", $id)->orderBy("waga.id", "DESC")->get()->toArray();
 
         return view("waga", ['area' => $area, "calco" => $calculations]);
     }

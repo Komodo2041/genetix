@@ -664,6 +664,63 @@ class GenetixDataGenerator
         return $res;
     }
 
+    public function createPopulation0FromWagaOnlyTop($nr, $data, $wg)
+    {
+        $res = [];
+        $topZ = -1;
+        $size = 10;
+
+        $pom = [];
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($wg[$i][$j][$z] == 1 && $topZ == -1) {
+                        $topZ = $z;
+                        break;
+                    }
+                }
+            }
+        }
+        $new = $data;
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($wg[$i][$j][$z] == 1 && $topZ == $z) {
+                        if ($new[$i][$j][$z] == 1) {
+                            $new[$i][$j][$z] = 0;
+                        } else {
+                            $new[$i][$j][$z] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        $res[] = $new;
+
+        for ($x = 0; $x < $nr - 1; $x++) {
+            $new = $data;
+            for ($i = 0; $i < $size; $i++) {
+                for ($j = 0; $j < $size; $j++) {
+                    for ($z = 0; $z < $size; $z++) {
+
+                        if ($wg[$i][$j][$z] == 1 && $topZ == $z) {
+                            $r = rand(0, 1);
+                            if ($r == 1) {
+                                if ($new[$i][$j][$z] == 1) {
+                                    $new[$i][$j][$z] = 0;
+                                } else {
+                                    $new[$i][$j][$z] = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $res[] = $new;
+        }
+        return $res;
+    }
+
 
     public function calcPowerPoints($area, $nr)
     {
