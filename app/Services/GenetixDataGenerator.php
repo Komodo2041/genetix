@@ -794,4 +794,68 @@ class GenetixDataGenerator
         $res = $this->usepower($pop, $power, $ug);
         return $res;
     }
+
+    public function getDiffPattern($data, $pattern, $size = 10)
+    {
+        $res = [];
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($data[$i][$j][$z] == $pattern[$i][$j][$z]) {
+                        $res[$i][$j][$z] = 0;
+                    } else {
+                        $res[$i][$j][$z] = 1;
+                    }
+                }
+            }
+        }
+        return $res;
+    }
+
+    public function getmaxdiff($data, $size = 10)
+    {
+        $sum = 0;
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($data[$i][$j][$z] == 1) {
+                        $sum++;
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
+
+    public function createPopulationFromAreaPattern($data, $i, $changes, $pattern, $max)
+    {
+
+        $res = [];
+        for ($h = 0; $h < $max; $h++) {
+            $res[] = $this->changeDataUseAreaPattern($data, $i, $changes, $pattern);
+        }
+        return $res;
+    }
+
+    private function changeDataUseAreaPattern($data, $i, $changes, $pattern, $size = 10)
+    {
+
+        for ($j = 0; $j < $i; $j++) {
+            $ch = 2000;
+            $x = rand(0, $size - 1);
+            $y = rand(0, $size - 1);
+            $z = rand(0, $size - 1);
+            while ($changes[$x][$y][$z] == 0 && $ch > 0) {
+                $x = rand(0, $size - 1);
+                $y = rand(0, $size - 1);
+                $z = rand(0, $size - 1);
+
+                $ch--;
+            }
+            $data[$x][$y][$z] = $pattern[$x][$y][$z];
+            $changes[$x][$y][$z] = 0;
+        }
+
+        return $data;
+    }
 }

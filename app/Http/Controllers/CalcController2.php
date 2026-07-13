@@ -8,6 +8,7 @@ use App\Services\GenetixDataGenerator;
 
 use App\Models\Calculation;
 use App\Models\Area;
+use App\Models\Pomcalcarea;
 
 use App\Services\LevelStering;
 use App\Http\Controllers\MainController;
@@ -18,6 +19,7 @@ class CalcController2 extends Controller
 {
 
     public $nrMaxPopulation = 120;
+    public $startPop = 1000;
 
     public $main = null;
     public $ls = null;
@@ -480,5 +482,51 @@ class CalcController2 extends Controller
         }
 
         return view("percent", ['calco' => $calc]);
+    }
+
+    public function goPomCalculating($id, GenetixDataGenerator $gtx)
+    {
+        $calc = Calculation::find($id);
+        if (!$calc) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obliczenia');
+        }
+        $area = Area::find($calc->area_id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
+        }
+        set_time_limit(14400);
+        ini_set('memory_limit', '350M');
+        $data = json_decode($calc->data);
+        $pattern = json_decode($area->data);
+        $changes = $gtx->getDiffPattern($data, $pattern);
+        $max = $gtx->getmaxdiff($changes);
+
+
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $pattern);
+        $population0 = [$data];
+        $res = $gtx->calcPopulation($population0, $headPoints);
+        $result0 = $res[0]['sum'];
+
+        $better = 0;
+        $power = $gtx->getPower([$data]);
+
+        for ($i = 1; $i < $max; $i++) {
+            $better = 0;
+            $population0 =  $gtx->createPopulationFromAreaPattern($data, $i, $changes, $pattern, $this->startPop);
+            $population0 = $gtx->usepower($population0, $power);
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            foreach ($res as $record) {
+                if ($record['sum'] > $result0) {
+                    $better++;
+                }
+            }
+            Pomcalcarea::create([
+                "calc_id" => $id,
+                "area_id" => $area->id,
+                "change" => $i,
+                "result" => $better / $this->startPop
+            ]);
+        }
+        return redirect("/area/showpercent/" . $area->id)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $id);
     }
 }
