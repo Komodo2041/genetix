@@ -496,11 +496,13 @@ class CalcController2 extends Controller
         }
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
+        $gtx->setPowerMatrixSize(10);
+
         $data = json_decode($calc->data);
         $pattern = json_decode($area->data);
         $changes = $gtx->getDiffPattern($data, $pattern);
         $max = $gtx->getmaxdiff($changes);
-
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
 
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $pattern);
         $population0 = [$data];
@@ -508,7 +510,9 @@ class CalcController2 extends Controller
         $result0 = $res[0]['sum'];
 
         $better = 0;
-        $power = $gtx->getPower([$data]);
+
+        $power = $gtx->getPower($population0);
+
 
         for ($i = 1; $i < $max; $i++) {
             $better = 0;
@@ -524,6 +528,7 @@ class CalcController2 extends Controller
                 "calc_id" => $id,
                 "area_id" => $area->id,
                 "change" => $i,
+                "max" => $res[0]['sum'] / $maxPoints,
                 "result" => $better / $this->startPop
             ]);
         }

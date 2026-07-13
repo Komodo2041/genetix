@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Pomcalcarea extends Model
 {
     public $table = "pomcalcarea";
-    public $fillable = ["area_id", "calc_id", "result", "change"];
+    public $fillable = ["area_id", "calc_id", "result", "change", "max"];
 }
