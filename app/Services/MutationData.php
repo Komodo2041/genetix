@@ -270,7 +270,12 @@ class MutationData
         "inver50inOneLayerZr6",
         "inver50inOneLayerZr10",
         "inver50inOneLayerZr20",
-        "inver50inOneLayerZx4"
+        "inver50inOneLayerZx4",
+        "InLayerSmCrossShuffle",
+        "InLayerSmPlusShuffle",
+        "InLayerSmSequence3",
+        "InLayerSmSequence4",
+        "InLayerSmSequence5"
     ];
 
     public function setNumerMutation($nr)
@@ -5681,5 +5686,123 @@ class MutationData
     public function inver50inOneLayerZr20($pop, $nr = 10)
     {
         return $this->inver50inOneLayerZ($pop, $nr, 19);
+    }
+
+    public function InLayerSmPlusShuffle($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        $pomX = rand(1, $nr - 2);
+        $pomY = rand(1, $nr - 2);
+        $used = [];
+
+        $used[] = $pop[$pomX][$pomY - 1][$pomZ];
+        $used[] = $pop[$pomX][$pomY + 1][$pomZ];
+        $used[] = $pop[$pomX - 1][$pomY][$pomZ];
+        $used[] = $pop[$pomX + 1][$pomY][$pomZ];
+        shuffle($used);
+        $pop[$pomX][$pomY - 1][$pomZ] = array_shift($used);
+        $pop[$pomX][$pomY + 1][$pomZ] = array_shift($used);
+        $pop[$pomX - 1][$pomY][$pomZ] = array_shift($used);
+        $pop[$pomX + 1][$pomY][$pomZ] = array_shift($used);
+
+        return $pop;
+    }
+
+    public function InLayerSmCrossShuffle($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        $pomX = rand(1, $nr - 2);
+        $pomY = rand(1, $nr - 2);
+        $used = [];
+
+        $used[] = $pop[$pomX - 1][$pomY - 1][$pomZ];
+        $used[] = $pop[$pomX + 1][$pomY + 1][$pomZ];
+        $used[] = $pop[$pomX - 1][$pomY + 1][$pomZ];
+        $used[] = $pop[$pomX + 1][$pomY - 1][$pomZ];
+        shuffle($used);
+        $pop[$pomX - 1][$pomY - 1][$pomZ] = array_shift($used);
+        $pop[$pomX + 1][$pomY + 1][$pomZ] = array_shift($used);
+        $pop[$pomX - 1][$pomY + 1][$pomZ] = array_shift($used);
+        $pop[$pomX + 1][$pomY - 1][$pomZ] = array_shift($used);
+
+        return $pop;
+    }
+
+    private function createSequenceForPlusCross($nr)
+    {
+        $res = [];
+        for ($i = -1; $i <= 1; $i++) {
+            for ($j = -1; $j <= 1; $j++) {
+                if ($i != 0 || $j != 0) {
+                    $new = [$i, $j];
+                    $res[] = $new;
+                }
+            }
+        }
+
+        shuffle($res);
+
+        return array_slice($res, 0, $nr);
+    }
+
+    public function InLayerSmSequence3($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        $pomX = rand(1, $nr - 2);
+        $pomY = rand(1, $nr - 2);
+
+        $used = [];
+        $size = 3;
+        $changes = $this->createSequenceForPlusCross($size);
+        for ($i = 0; $i < $size; $i++) {
+            $used[] = $pop[$pomX + $changes[$i][0]][$pomY  + $changes[$i][1]][$pomZ];
+        }
+        shuffle($used);
+        for ($i = 0; $i < $size; $i++) {
+            $pop[$pomX + $changes[$i][0]][$pomY  + $changes[$i][1]][$pomZ] = array_shift($used);
+        }
+
+        return $pop;
+    }
+
+    public function InLayerSmSequence4($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        $pomX = rand(1, $nr - 2);
+        $pomY = rand(1, $nr - 2);
+
+        $used = [];
+        $size = 4;
+        $changes = $this->createSequenceForPlusCross($size);
+        for ($i = 0; $i < $size; $i++) {
+            $used[] = $pop[$pomX + $changes[$i][0]][$pomY  + $changes[$i][1]][$pomZ];
+        }
+        shuffle($used);
+        for ($i = 0; $i < $size; $i++) {
+            $pop[$pomX + $changes[$i][0]][$pomY  + $changes[$i][1]][$pomZ] = array_shift($used);
+        }
+
+        return $pop;
+    }
+
+    public function InLayerSmSequence5($pop, $nr = 10)
+    {
+        $pomZ = rand(0, $nr - 1);
+        $pomX = rand(1, $nr - 2);
+        $pomY = rand(1, $nr - 2);
+
+        $used = [];
+        $size = 5;
+        $changes = $this->createSequenceForPlusCross($size);
+
+        for ($i = 0; $i < $size; $i++) {
+            $used[] = $pop[$pomX + $changes[$i][0]][$pomY  + $changes[$i][1]][$pomZ];
+        }
+        shuffle($used);
+        for ($i = 0; $i < $size; $i++) {
+            $pop[$pomX + $changes[$i][0]][$pomY  + $changes[$i][1]][$pomZ] = array_shift($used);
+        }
+
+        return $pop;
     }
 }
