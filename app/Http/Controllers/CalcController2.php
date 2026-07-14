@@ -24,6 +24,9 @@ class CalcController2 extends Controller
     public $main = null;
     public $ls = null;
 
+    // php artisan app:big-crossing 34 0 10
+    // php artisan app:big-crossing 34 1 10
+
     public function __construct()
     {
         $this->main = new MainController();
@@ -484,7 +487,7 @@ class CalcController2 extends Controller
         return view("percent", ['calco' => $calc]);
     }
 
-    public function goPomCalculating($id, GenetixDataGenerator $gtx)
+    public function goPomCalculating($id, GenetixDataGenerator $gtx, $cid = null, $t = 112)
     {
         $calc = Calculation::find($id);
         if (!$calc) {
@@ -494,34 +497,55 @@ class CalcController2 extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
         }
+
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
         $gtx->setPowerMatrixSize(10);
 
         $data = json_decode($calc->data);
         $pattern = json_decode($area->data);
-        $changes = $gtx->getDiffPattern($data, $pattern);
+        $pattern2 = json_decode($area->data);
+        $population0 = [$data];
+        if ($cid) {
+            $calc2 = Calculation::find($cid);
+            $pattern2 = json_decode($calc2->data);
+            $population0 = [$data, $pattern2];
+        }
+
+        $changes = $gtx->getDiffPattern($data, $pattern2);
         $max = $gtx->getmaxdiff($changes);
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
 
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $pattern);
-        $population0 = [$data];
+
         $res = $gtx->calcPopulation($population0, $headPoints);
         $result0 = $res[0]['sum'];
 
         $better = 0;
-
         $power = $gtx->getPower($population0);
-
+        $lvlmax = Calculation::where("area_id", $area->id)->max("level");
 
         for ($i = 1; $i < $max; $i++) {
             $better = 0;
-            $population0 =  $gtx->createPopulationFromAreaPattern($data, $i, $changes, $pattern, $this->startPop);
+            $population0 =  $gtx->createPopulationFromAreaPattern($data, $i, $changes, $pattern2, $this->startPop);
             $population0 = $gtx->usepower($population0, $power);
             $res = $gtx->calcPopulation($population0, $headPoints);
             foreach ($res as $record) {
                 if ($record['sum'] > $result0) {
                     $better++;
+                    if ($cid > 0) {
+                        $je = json_encode($record['area']);
+                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
+                            Calculation::create([
+                                "result" => "Wynik dzięki Cross muttation",
+                                "data" => $je,
+                                "area_id" => $area->id,
+                                "level" => $lvlmax,
+                                "obtainedresult" => $record['sum'] / $maxPoints,
+                                "typecalc" => $t
+                            ]);
+                        }
+                    }
                 }
             }
             Pomcalcarea::create([
@@ -529,9 +553,34 @@ class CalcController2 extends Controller
                 "area_id" => $area->id,
                 "change" => $i,
                 "max" => $res[0]['sum'] / $maxPoints,
-                "result" => $better / $this->startPop
+                "result" => $better / $this->startPop,
+                "calc2_id" => $cid,
+                "r2" =>  $res[0]['sum'] / $result0
             ]);
         }
         return redirect("/area/showpercent/" . $area->id)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $id);
+    }
+
+    public function bigcrossingtwocalc($aid, GenetixDataGenerator $gtx)
+    {
+        $area = Area::find($aid);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
+        }
+        $calculations = Calculation::select('calculation.*')->join("comparecalc", "comparecalc.calc_id", "=", "calculation.id")->where("area_id", $aid)
+            ->whereNotNull("head")->orderBy("obtainedresult", "DESC")->take(30)->get()->random(2)->pluck("id")->toArray();
+        $this->goPomCalculating($calculations[0], $gtx, $calculations[1]);
+        return redirect("/showCalcSame/" . $aid)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $calculations[0] . " i " . $calculations[1]);
+    }
+
+    public function crossingOneLevel($aid, GenetixDataGenerator $gtx)
+    {
+        $area = Area::find($aid);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
+        }
+        $calculations = Calculation::where("area_id", $aid)->whereNotNul("start")->orderBy("obtainedresult", "DESC")->take(30)->get()->random(2)->pluck("id")->toArray();
+        $this->goPomCalculating($calculations[0], $gtx, $calculations[1], 113);
+        return redirect("/showCalcSame/" . $aid)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $calculations[0] . " i " . $calculations[1]);
     }
 }

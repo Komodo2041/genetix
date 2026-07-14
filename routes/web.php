@@ -58,6 +58,7 @@ Route::get('area/histogram/{id}',  "App\Http\Controllers\CalcController2@histogr
 Route::get('calcallavg/{id}',  "App\Http\Controllers\CalcController2@calcallavg");
 Route::get('area/showpercent/{id}',  "App\Http\Controllers\CalcController2@percentshow");
 Route::get('goPomCalculating/{id}',  "App\Http\Controllers\CalcController2@goPomCalculating");
+Route::get('bigcrossingtwocalc/{id}',  "App\Http\Controllers\CalcController2@bigcrossingtwocalc");
 
 
 Route::get('showgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@showgeneration0");

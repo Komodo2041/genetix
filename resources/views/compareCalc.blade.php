@@ -6,7 +6,9 @@
 
 <br />
 <a href="/compareCalculations/{{$area->id}}"><button>Porównań Wyniki</button></a><br />
-
+<a href="/bigcrossingtwocalc/{{$area->id}}"><button>Big Crossing 2 Calculation</button></a>
+<a href="/crossingOneLevel/{{$area->id}}"><button>Big Crossing - Level 1</button></a>
+<br />
 
 <a href="/checkBlob/{{$area->id}}/0"><button>Blob 1 levela</button></a>
 <a href="/checkBlob/{{$area->id}}/1"><button>Blob 2 levela</button></a>

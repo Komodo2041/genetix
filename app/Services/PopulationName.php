@@ -128,10 +128,12 @@ class PopulationName
         108 => "Tama calc", // X
         109 => "Kosz Gen0 Calc", // X
         110 => "Use Best Pattern Gen0 - 3D",
-        111 => "Waga - change Only Top"
+        111 => "Waga - change Only Top",
+        112 => "Big Crossing", // X
+        113 => "Big Crossing - 1 Level", // X
     ];
 
-    public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102, 105, 106, 107, 108, 109];
+    public $noSelectingPopulation = [-1, 21, 22, 25, 30, 63, 96, 97, 98, 99, 102, 105, 106, 107, 108, 109, 112, 113];
 
     public $selectUsingPower = [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
     public $selectUsingPowerBottomLayerZero = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62];
