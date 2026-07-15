@@ -858,4 +858,33 @@ class GenetixDataGenerator
 
         return $data;
     }
+
+    public function createPopulationSpirallMutation($data, $i, $max)
+    {
+
+        $res = [];
+        for ($h = 0; $h < $max; $h++) {
+            $res[] = $this->changeSpirallmutation($data, $i);
+        }
+        return $res;
+    }
+
+    private function changeSpirallmutation($data, $i, $size = 10)
+    {
+
+        for ($j = 0; $j < $i; $j++) {
+
+            $x = rand(0, $size - 1);
+            $y = rand(0, $size - 1);
+            $z = rand(0, $size - 1);
+
+            if ($data[$x][$y][$z] == 1) {
+                $data[$x][$y][$z] = 0;
+            } else {
+                $data[$x][$y][$z] = 1;
+            }
+        }
+
+        return $data;
+    }
 }

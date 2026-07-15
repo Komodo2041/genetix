@@ -535,7 +535,7 @@ class CalcController2 extends Controller
                     $better++;
                     if ($cid > 0) {
                         $je = json_encode($record['area']);
-                        if (Calculation::where("area_id", $id)->where("data", $je)->count() == 0) {
+                        if (Calculation::where("area_id", $area->id)->where("data", $je)->count() == 0) {
                             Calculation::create([
                                 "result" => "Wynik dzięki Cross muttation",
                                 "data" => $je,
@@ -579,8 +579,67 @@ class CalcController2 extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
         }
-        $calculations = Calculation::where("area_id", $aid)->whereNotNul("start")->orderBy("obtainedresult", "DESC")->take(30)->get()->random(2)->pluck("id")->toArray();
+        $calculations = Calculation::where("area_id", $aid)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(30)->get()->random(2)->pluck("id")->toArray();
         $this->goPomCalculating($calculations[0], $gtx, $calculations[1], 113);
         return redirect("/showCalcSame/" . $aid)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $calculations[0] . " i " . $calculations[1]);
+    }
+
+    public function spirallMutation($aid, GenetixDataGenerator $gtx)
+    {
+        $area = Area::find($aid);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
+        }
+        $calc = Calculation::where("area_id", $aid)->orderBy("obtainedresult", "DESC")->take(30)->get()->random(1)->first();
+        set_time_limit(14400);
+        ini_set('memory_limit', '350M');
+        $gtx->setPowerMatrixSize(10);
+
+        $data = json_decode($calc->data);
+
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, json_decode($area->data));
+        $population0 = [$data];
+        $res = $gtx->calcPopulation($population0, $headPoints);
+        $result0 = $res[0]['sum'];
+
+        $better = 0;
+        $power = $gtx->getPower($population0);
+        $lvlmax = Calculation::where("area_id", $area->id)->max("level");
+
+        for ($i = 1; $i < 50; $i++) {
+            $better = 0;
+            $population0 =  $gtx->createPopulationSpirallMutation($data, $i, $this->startPop);
+            $population0 = $gtx->usepower($population0, $power);
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            foreach ($res as $record) {
+                if ($record['sum'] > $result0) {
+                    $better++;
+
+                    $je = json_encode($record['area']);
+                    if (Calculation::where("area_id", $aid)->where("data", $je)->count() == 0) {
+                        Calculation::create([
+                            "result" => "Wynik dzięki Spirall muttation",
+                            "data" => $je,
+                            "area_id" => $area->id,
+                            "level" => $lvlmax,
+                            "obtainedresult" => $record['sum'] / $maxPoints,
+                            "typecalc" => 114
+                        ]);
+                    }
+                }
+            }
+            Pomcalcarea::create([
+                "calc_id" => $calc->id,
+                "area_id" => $aid,
+                "change" => $i,
+                "max" => $res[0]['sum'] / $maxPoints,
+                "result" => $better / $this->startPop,
+                "m" => 1,
+                "r2" =>  $res[0]['sum'] / $result0
+            ]);
+        }
+        return redirect("/calculations/" . $area->id)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $aid);
     }
 }
