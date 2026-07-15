@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Area extends Model
 {
     public $table = "area";
-    public $fillable = ["name", "data", "hide", "river", "matrixcross", "matrixtribe", "flex", "cronmatrix", "gen0set", "pattern", "tama", "basket"];
+    public $fillable = ["name", "data", "hide", "river", "matrixcross", "matrixtribe", "flex", "cronmatrix", "gen0set", "pattern", "tama", "basket", "rabbit", "rabbitjump"];
 
     public function calculations()
     {

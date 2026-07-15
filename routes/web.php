@@ -85,6 +85,8 @@ Route::get('riverSettings/{id}',  "App\Http\Controllers\RiverController@riverSet
 Route::post('river/changeName/{id}',  "App\Http\Controllers\RiverController@changeName");
 Route::post('river/settingGen0Box/{id}',  "App\Http\Controllers\RiverController@settingGen0Box");
 Route::get('addTama/{id}',  "App\Http\Controllers\RiverController@addTama");
+Route::get('addRabbit/{id}',  "App\Http\Controllers\RiverController@addRabbit");
+
 
 Route::get('diamon/add/{id}',  "App\Http\Controllers\DiamondController@adddiamond");
 

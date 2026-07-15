@@ -200,4 +200,17 @@ class RiverController extends Controller
         Area::where("id", $sett)->update(["gen0set" => 1]);
         return redirect("/riverSettings/" . $area->id)->with('success', 'Zmieniono Ustawienia Gen0');
     }
+
+    public function addRabbit($id)
+    {
+        $area = Area::find($id);
+        if (!$area || is_null($area->pattern)) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area lub area nie ma pattern');
+        }
+
+        $calc = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(30)->get()->random(1)->first();
+        $rabbit = Area::create(["name" => "Zając", "data" => $calc->data, "river" => $id, "rabbit" => 1, "pattern" => $area->pattern]);
+        Area::create(["name" => "Zając - Skok", "data" => $area->data, "river" => $id, "rabbitjump" => $rabbit->id, "pattern" => $area->pattern]);
+        return redirect("/")->with('success', 'Dodano zająca');
+    }
 }

@@ -11,6 +11,9 @@
 <a href="/addTama/{{$area->id}}"><button>Dodaj tamę</button></a>&nbsp;
 <a href="/showwagainArea/{{$area->id}}"><button>Pokaż wagi</button></a>&nbsp;
 <a href="/spirallMutation/{{$area->id}}"><button>Spiralna mutacja</button></a>&nbsp;
+@if ($area->pattern)
+<a href="/addRabbit/{{$area->id}}"><button>Dodaj Królika</button></a>&nbsp;
+@endif
 
 <h3>Obliczenia dla {{$area->name}} - {{$area->id}}</h3>
 <div class="container">
