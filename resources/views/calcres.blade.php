@@ -14,6 +14,9 @@
 @if ($area->pattern)
 <a href="/addRabbit/{{$area->id}}"><button>Dodaj Królika</button></a>&nbsp;
 @endif
+@if ($area->rabbit)
+<a href="/calcRabbit/{{$area->id}}"><button>Oblicz skok zająca</button></a>&nbsp;
+@endif
 
 <h3>Obliczenia dla {{$area->name}} - {{$area->id}}</h3>
 <div class="container">

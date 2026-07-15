@@ -642,4 +642,50 @@ class CalcController2 extends Controller
         }
         return redirect("/calculations/" . $area->id)->with('success', 'Dokonano pomocnych obliczeń dla obliczenia ' . $aid);
     }
+
+    public function calcRabbit($id, GenetixDataGenerator $gtx)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
+        }
+        $jump = Area::where("rabbitjump", $id)->first();
+        if (!$jump) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru skoku Królika');
+        }
+        set_time_limit(14400);
+        ini_set('memory_limit', '350M');
+
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, json_decode($jump->data));
+
+        Calculation::where("area_id", $id)->update(["pomcalc" => 0]);
+        $calculations = Calculation::where("area_id", $id)->where("pomcalc", 0)->take(50)->get();
+        while ($calculations->count() > 0) {
+            $population0 = [];
+            $ids = [];
+            foreach ($calculations as $c) {
+                $population0[] = json_decode($c->data);
+                $ids[] = $c->id;
+            }
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            foreach ($res as $rekord) {
+                $je = json_encode($rekord['area']);
+                if (Calculation::where("area_id", $jump->id)->where("data", $je)->count() == 0) {
+                    Calculation::create([
+                        "result" => "Skok Królika ",
+                        "data" => $je,
+                        "area_id" => $jump->id,
+                        "level" => 1,
+                        "obtainedresult" => $rekord['sum'] / $maxPoints,
+                        "typecalc" => 115
+                    ]);
+                }
+            }
+
+            Calculation::whereIn("id", $ids)->update(["pomcalc" => 1]);
+            $calculations = Calculation::where("area_id", $id)->where("pomcalc", 0)->take(50)->get();
+        }
+        return redirect("/calculations/" . $area->id)->with('success', 'Obliczono skok królika ' . $id);
+    }
 }
