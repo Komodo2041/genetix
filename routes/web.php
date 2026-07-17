@@ -62,6 +62,8 @@ Route::get('bigcrossingtwocalc/{id}',  "App\Http\Controllers\CalcController2@big
 Route::get('crossingOneLevel/{id}',  "App\Http\Controllers\CalcController2@crossingOneLevel");
 Route::get('spirallMutation/{id}',  "App\Http\Controllers\CalcController2@spirallMutation");
 Route::get('calcRabbit/{id}',  "App\Http\Controllers\CalcController2@calcRabbit");
+Route::get('diffbestCalculation/{id}',  "App\Http\Controllers\CalcController2@diffbestCalculation");
+
 
 Route::get('showgeneration0/{id}/{dimension}',  "App\Http\Controllers\Gen0Controller@showgeneration0");
 Route::get('calcGeneration0/{id}/{tryb}/{dimension}',  "App\Http\Controllers\Gen0Controller@calcGeneration0");

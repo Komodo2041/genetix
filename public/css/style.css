@@ -142,3 +142,9 @@ div.groupBox {
 #colorTable td.green {
     background: green;
 }
+
+table.small td,
+table.small th {
+    font-size: 12px;
+    padding: 3px;
+}

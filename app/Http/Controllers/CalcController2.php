@@ -12,7 +12,7 @@ use App\Models\Pomcalcarea;
 
 use App\Services\LevelStering;
 use App\Http\Controllers\MainController;
-
+use App\Services\MatrixHelper;
 
 
 class CalcController2 extends Controller
@@ -23,7 +23,7 @@ class CalcController2 extends Controller
 
     public $main = null;
     public $ls = null;
-
+    public $helperMatrix = null;
     // php artisan app:big-crossing 34 0 10
     // php artisan app:big-crossing 34 1 10
 
@@ -31,6 +31,7 @@ class CalcController2 extends Controller
     {
         $this->main = new MainController();
         $this->ls = new LevelStering();
+        $this->helperMatrix = new MatrixHelper();
     }
 
     public function list($id, Request $request)
@@ -686,6 +687,39 @@ class CalcController2 extends Controller
             Calculation::whereIn("id", $ids)->update(["pomcalc" => 1]);
             $calculations = Calculation::where("area_id", $id)->where("pomcalc", 0)->take(50)->get();
         }
+        $this->ls->calcarea($jump->id);
         return redirect("/calculations/" . $area->id)->with('success', 'Obliczono skok królika ' . $id);
+    }
+
+    public function diffbestCalculation($id)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego obszaru Area');
+        }
+        $calc = [];
+        $res = [];
+        $res2 = [];
+        $table = json_decode($area->data);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(30)->get();
+        foreach ($calculations as $c) {
+            $data = json_decode($c->data);
+            $calc[$c->id]['diff'] = $this->helperMatrix->calcpointer($data, $table);
+            $calc[$c->id]['res'] = $c->obtainedresult;
+        }
+
+        foreach ($calculations as $c) {
+            foreach ($calculations as $c2) {
+                if ($c->id == $c2->id) {
+                    $res[$c->id][$c2->id] = 'X';
+                    $res2[$c->id][$c2->id] = 'X';
+                } else {
+                    $res[$c->id][$c2->id] =  $this->helperMatrix->calcpointer(json_decode($c->data), json_decode($c2->data), 1);
+                    $res2[$c->id][$c2->id] = $this->helperMatrix->comparediff(json_decode($c->data), json_decode($c2->data), $table);
+                }
+            }
+        }
+
+        return view("diffbeztcalc", ['area' => $area, 'calco' => $calc, 'res' => $res, 'cdiff' => $res2]);
     }
 }

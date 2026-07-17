@@ -17,6 +17,7 @@
 @if ($area->rabbit)
 <a href="/calcRabbit/{{$area->id}}"><button>Oblicz skok zająca</button></a>&nbsp;
 @endif
+<a href="/diffbestCalculation/{{$area->id}}"><button>Najlepsze wyniki - różnice</button></a>&nbsp;
 
 <h3>Obliczenia dla {{$area->name}} - {{$area->id}}</h3>
 <div class="container">

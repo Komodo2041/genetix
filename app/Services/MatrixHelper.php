@@ -274,7 +274,7 @@ class MatrixHelper
 
 
 
-    public function calcpointer($one, $two)
+    public function calcpointer($one, $two, $option = 0)
     {
         $sum = 0;
         $nr = 10;
@@ -287,7 +287,11 @@ class MatrixHelper
                 }
             }
         }
-        return $sum;
+        if ($option == 0) {
+            return $sum;
+        } elseif ($option == 1) {
+            return $nr * $nr * $nr - $sum;
+        }
     }
 
 
@@ -320,5 +324,31 @@ class MatrixHelper
             $res[] = $nem;
         }
         return $res;
+    }
+
+    public function comparediff($one, $two, $table)
+    {
+        $sum = 0;
+        $nr = 10;
+        $same = 0;
+        for ($i = 0; $i < $nr; $i++) {
+            for ($j = 0; $j < $nr; $j++) {
+                for ($z = 0; $z < $nr; $z++) {
+                    if ($one[$i][$j][$z] == $two[$i][$j][$z]) {
+                        $sum++;
+                    } else {
+                        if ($two[$i][$j][$z] == $table[$i][$j][$z]) {
+                            $same++;
+                        }
+                    }
+                }
+            }
+        }
+        $diff = $nr * $nr * $nr - $sum;
+        if ($diff > 0) {
+            return round($same / $diff, 4) * 100;
+        } else {
+            return 1;
+        }
     }
 }
