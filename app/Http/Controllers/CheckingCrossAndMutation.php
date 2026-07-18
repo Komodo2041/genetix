@@ -872,7 +872,7 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(100)->get()->random(40);
+        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(200)->get()->random(40);
 
         $population = [];
         foreach ($calculations as $c) {
@@ -912,5 +912,84 @@ class CheckingCrossAndMutation extends Controller
         });
 
         return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom]);
+    }
+
+    public function random50MultipleTryb2($id, CrossingData $cross, GenetixDataGenerator $gtx)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $table = json_decode($area->data);
+        set_time_limit(14400);
+        ini_set('memory_limit', '350M');
+
+        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(300)->get()->random(40);
+
+        $population = [];
+        foreach ($calculations as $c) {
+            $population[] = json_decode($c->data);
+        }
+
+        $cross->changeMethodList(["random50multiple"]);
+
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, json_decode($area->data));
+        $res = $gtx->calcPopulation($population, $headPoints);
+        $result = [];
+        $pom = [];
+        $mh = new MatrixHelper();
+        $max0 = $res[0]['sum'];
+        $better = 0;
+
+
+        for ($step = 1; $step < 20; $step++) {
+            $population0 = [];
+            $better = 0;
+            $pom = [];
+            $pom2 = [];
+            $ar = $mh->getZeroTable(10);
+            for ($i = 0; $i < 2000; $i++) {
+                $population0[] = $cross->random50multiple($population, count($population) - 1, 10, 2);
+            }
+
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            foreach ($res as $rekord) {
+                $pom[] =  $mh->calcpointer($table, $rekord['area']);
+                if ($rekord['sum'] > $max0) {
+                    $better++;
+                }
+                $ar = $gtx->compareWithArea($ar, $table, $rekord['area']);
+            }
+
+            $result[] = [
+                'm' => $step,
+                'min' => min($pom),
+                'max' => max($pom),
+                'b' => $better,
+                'avg' => array_sum($pom) / count($pom),
+                'allP' => $mh->calcOneInTable($ar)
+            ];
+
+            foreach ($res as $rekord) {
+                $pom2[] = [
+                    'area' => $rekord['area'],
+                    'joincalc' => $mh->calcpointerForPopulation($population, $rekord['area'])
+                ];
+            }
+
+            usort($pom2, function ($a, $b) {
+                if ($a['joincalc'] == $b['joincalc']) {
+                    return 0;
+                }
+                return ($a['joincalc'] < $b['joincalc']) ? -1 : 1;
+            });
+
+            $population = [];
+            for ($i = 0; $i < 50; $i++) {
+                $population[] = $pom2[$i]['area'];
+            }
+        }
+
+        return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);
     }
 }

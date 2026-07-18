@@ -4,6 +4,8 @@
 <a href="/"><button>Strona główna</button></a><br />
 <a href="/calculations/{{$area->id}}"><button>Obliczenia Area</button></a><br />
 <a href="/random50Multiple/{{$area->id}}"><button>Oblicz pokolenia multiple</button></a><br />
+<a href="/random50MultipleTryb2/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb2</button></a><br />
+
 
 <h3>Random50Multiple </h3>
 
