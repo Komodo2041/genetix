@@ -6,6 +6,8 @@
 
 <a href="/diffbestCalculation/{{$area->id}}"><button>Róznice Najlepszych obliczeń</button></a><br />
 
+<a href="/showrandom50Multiple/{{$area->id}}"><button>Pokaż wszystkie obliczenia random50Multiple</button></a><br />
+
 <h3>Crossing - random50Multiple</h3>
 <div class="container">
 

@@ -294,6 +294,14 @@ class MatrixHelper
         }
     }
 
+    public function calcpointerForPopulation($pops, $area)
+    {
+        $sum = 0;
+        foreach ($pops as $pop) {
+            $sum += $this->calcpointer($area, $pop, 1);
+        }
+        return $sum;
+    }
 
     public function checkedSameResultsinLine($usedcalculations, $area)
     {

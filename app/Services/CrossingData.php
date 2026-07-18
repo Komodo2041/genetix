@@ -3157,7 +3157,7 @@ class CrossingData
             $max = count($newpopulation);
 
             $nextpop  = [];
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 0; $i < 40; $i++) {
 
                 $nextpop[] = $this->random50($newpopulation, $max, $nr);
             }

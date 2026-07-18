@@ -802,7 +802,7 @@ class CheckingCrossAndMutation extends Controller
         return view("calcOneCrossing", ['area' => $area, "methods" => $methods]);
     }
 
-    public function random50Multiple($id, CrossingData $cross, GenetixDataGenerator $gtx, $multiple = 4)
+    public function random50Multiple($id, CrossingData $cross, GenetixDataGenerator $gtx)
     {
         $area = Area::find($id);
         if (!$area) {
@@ -812,7 +812,7 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(1000)->get()->random(40);
+        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(200)->get()->random(40);
         $gtx->setPowerMatrixSize(10);
 
         $population = [];
@@ -821,7 +821,7 @@ class CheckingCrossAndMutation extends Controller
         }
 
         $cross->changeMethodList(["random50multiple"]);
-        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, json_decode($area->data));
         $res = $gtx->calcPopulation($population, $headPoints);
         $result = [];
@@ -829,9 +829,9 @@ class CheckingCrossAndMutation extends Controller
         $mh = new MatrixHelper();
         $max0 = $res[0]['sum'];
         $better = 0;
-        // $power = $gtx->getPower($population);
 
-        for ($multiple = 2; $multiple < 20; $multiple++) {
+
+        for ($multiple = 2; $multiple < 10; $multiple++) {
             $population0 = [];
             $better = 0;
             $pom = [];
@@ -839,7 +839,7 @@ class CheckingCrossAndMutation extends Controller
             for ($i = 0; $i < 1000; $i++) {
                 $population0[] = $cross->random50multiple($population, 10, 10, $multiple);
             }
-            //  $population0 = $gtx->usepower($population0, $power);
+
             $res = $gtx->calcPopulation($population0, $headPoints);
             foreach ($res as $rekord) {
                 $pom[] =  $mh->calcpointer($table, $rekord['area']);
@@ -860,5 +860,57 @@ class CheckingCrossAndMutation extends Controller
         }
 
         return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);
+    }
+
+    public function showrandom50Multiple($id, CrossingData $cross, GenetixDataGenerator $gtx)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $table = json_decode($area->data);
+        set_time_limit(14400);
+        ini_set('memory_limit', '350M');
+
+        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(100)->get()->random(40);
+
+        $population = [];
+        foreach ($calculations as $c) {
+            $population[] = json_decode($c->data);
+        }
+
+        $cross->changeMethodList(["random50multiple"]);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
+
+
+        $pom = [];
+        $mh = new MatrixHelper();
+
+        $population0 = [];
+
+        $pom = [];
+
+        for ($i = 0; $i < 1000; $i++) {
+            $population0[] = $cross->random50multiple($population, 10, 10, 3);
+        }
+
+        $res = $gtx->calcPopulation($population0, $headPoints);
+        foreach ($res as $rekord) {
+            $pom[] = [
+                'acalc' => $mh->calcpointer($table, $rekord['area']),
+                'res' => $rekord['sum'] / $maxPoints,
+                'joincalc' => $mh->calcpointerForPopulation($population, $rekord['area'])
+            ];
+        }
+
+        usort($pom, function ($a, $b) {
+            if ($a['joincalc'] == $b['joincalc']) {
+                return 0;
+            }
+            return ($a['joincalc'] < $b['joincalc']) ? -1 : 1;
+        });
+
+        return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom]);
     }
 }
