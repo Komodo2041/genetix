@@ -25,7 +25,8 @@ class CrossingData
         "blob6_wonerandom",
         "blob3_fromthelevel",
         "blob3_wfiverandom",
-        "blob3_wonerandom"
+        "blob3_wonerandom",
+        "random50multiple"
     ];
     public $bestCrossing = ["updown",  "tassingz", "joinwith0", "joinwith0", "tassingy",  "squerInSquere7AxX"];
 
@@ -130,7 +131,8 @@ class CrossingData
         "rombsquere7_inZ",
         "rombsquere6_inZ",
         "rombsquere3_inY",
-        "rombsquere3_inX"
+        "rombsquere3_inX",
+        "random50multiple"
     ];
 
     public function createNewPopulation($population, $cr = null)
@@ -3144,5 +3146,24 @@ class CrossingData
     public function changeMethodList($methods)
     {
         $this->methods = $methods;
+    }
+
+    public function random50multiple($population, $max, $nr = 10, $loop = 6)
+    {
+
+        $nextpop  = [];
+        $newpopulation = $population;
+        for ($j = 0; $j < $loop; $j++) {
+            $max = count($newpopulation);
+
+            $nextpop  = [];
+            for ($i = 0; $i < 30; $i++) {
+
+                $nextpop[] = $this->random50($newpopulation, $max, $nr);
+            }
+            $newpopulation = $nextpop;
+        }
+
+        return $this->random50($newpopulation, $max, $nr);
     }
 }

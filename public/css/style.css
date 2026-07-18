@@ -143,6 +143,10 @@ div.groupBox {
     background: green;
 }
 
+#colorTable td.red {
+    background: red;
+}
+
 table.small td,
 table.small th {
     font-size: 12px;

@@ -351,4 +351,19 @@ class MatrixHelper
             return 1;
         }
     }
+
+    public function calcOneInTable($table, $size = 10)
+    {
+        $sum = 0;
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($table[$i][$j][$z] == 1) {
+                        $sum++;
+                    }
+                }
+            }
+        }
+        return $sum;
+    }
 }

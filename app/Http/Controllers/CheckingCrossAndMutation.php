@@ -16,8 +16,7 @@ use App\Models\Matrix;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect;
 use App\Models\BigMutationMatrix;
-use App\Models\CompareCalc;
-
+use App\Services\MatrixHelper;
 use App\Services\Generation0Helper;
 
 use App\Http\Controllers\MainController;
@@ -801,5 +800,65 @@ class CheckingCrossAndMutation extends Controller
         }
 
         return view("calcOneCrossing", ['area' => $area, "methods" => $methods]);
+    }
+
+    public function random50Multiple($id, CrossingData $cross, GenetixDataGenerator $gtx, $multiple = 4)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $table = json_decode($area->data);
+        set_time_limit(14400);
+        ini_set('memory_limit', '350M');
+
+        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(1000)->get()->random(40);
+        $gtx->setPowerMatrixSize(10);
+
+        $population = [];
+        foreach ($calculations as $c) {
+            $population[] = json_decode($c->data);
+        }
+
+        $cross->changeMethodList(["random50multiple"]);
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
+        $headPoints = $gtx->calcPoints($this->nrMaxPopulation, json_decode($area->data));
+        $res = $gtx->calcPopulation($population, $headPoints);
+        $result = [];
+        $pom = [];
+        $mh = new MatrixHelper();
+        $max0 = $res[0]['sum'];
+        $better = 0;
+        // $power = $gtx->getPower($population);
+
+        for ($multiple = 2; $multiple < 20; $multiple++) {
+            $population0 = [];
+            $better = 0;
+            $pom = [];
+            $ar = $mh->getZeroTable(10);
+            for ($i = 0; $i < 1000; $i++) {
+                $population0[] = $cross->random50multiple($population, 10, 10, $multiple);
+            }
+            //  $population0 = $gtx->usepower($population0, $power);
+            $res = $gtx->calcPopulation($population0, $headPoints);
+            foreach ($res as $rekord) {
+                $pom[] =  $mh->calcpointer($table, $rekord['area']);
+                if ($rekord['sum'] > $max0) {
+                    $better++;
+                }
+                $ar = $gtx->compareWithArea($ar, $table, $rekord['area']);
+            }
+
+            $result[] = [
+                'm' => $multiple,
+                'min' => min($pom),
+                'max' => max($pom),
+                'b' => $better,
+                'avg' => array_sum($pom) / count($pom),
+                'allP' => $mh->calcOneInTable($ar)
+            ];
+        }
+
+        return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);
     }
 }

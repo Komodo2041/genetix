@@ -887,4 +887,18 @@ class GenetixDataGenerator
 
         return $data;
     }
+
+    public function compareWithArea($ar, $table, $data, $size = 10)
+    {
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                for ($z = 0; $z < $size; $z++) {
+                    if ($data[$i][$j][$z] ==  $table[$i][$j][$z]) {
+                        $ar[$i][$j][$z] = 1;
+                    }
+                }
+            }
+        }
+        return $ar;
+    }
 }

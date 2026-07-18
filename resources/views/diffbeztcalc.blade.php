@@ -4,6 +4,8 @@
 <a href="/"><button>Strona główna</button></a><br />
 <a href="/calculations/{{$area->id}}"><button>Obliczenia</button></a><br />
 
+<a href="/random50Multiple/{{$area->id}}"><button>Sprawdź Random50Multiple</button></a><br />
+
 <h3>Różnice wyników</h3>
 <div class="container">
 
@@ -27,7 +29,7 @@
 
     <h3> Różnice Obliczenia</h3>
 
-    <table class="small">
+    <table id="colorTable" class="small">
 
         <tr>
             <th>X</th>
@@ -39,7 +41,7 @@
         <tr>
             <td>{{$cid}}</th>
                 @foreach ($res2 AS $cid2 => $v)
-            <td>
+            <td @if ($cdiff[$cid][$cid2]>= 50) class="green" @endif >
                 {{$v}} <br />
                 {{$cdiff[$cid][$cid2]}}%
             </td>
