@@ -924,7 +924,7 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(300)->get()->random(40);
+        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(300)->get()->random(60);
 
         $population = [];
         foreach ($calculations as $c) {
@@ -985,9 +985,22 @@ class CheckingCrossAndMutation extends Controller
             });
 
             $population = [];
-            for ($i = 0; $i < 50; $i++) {
-                $population[] = $pom2[$i]['area'];
+            $i = 0;
+            while (count($population) < 100 && $i < 2000) {
+                $isused = 0;
+                for ($k = 0; $k < count($population); $k++) {
+                    if ($population[$k] == $pom2[$i]['area']) {
+                        $isused = 1;
+                        break;
+                    }
+                }
+                if ($isused == 0) {
+                    $population[] = $pom2[$i]['area'];
+                }
+                $i++;
             }
+            echo count($population);
+            echo " ";
         }
 
         return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);
