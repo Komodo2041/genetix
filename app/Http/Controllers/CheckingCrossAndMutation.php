@@ -855,7 +855,8 @@ class CheckingCrossAndMutation extends Controller
                 'max' => max($pom),
                 'b' => $better,
                 'avg' => array_sum($pom) / count($pom),
-                'allP' => $mh->calcOneInTable($ar)
+                'allP' => $mh->calcOneInTable($ar),
+                'diff' => "-"
             ];
         }
 
@@ -942,16 +943,20 @@ class CheckingCrossAndMutation extends Controller
         $better = 0;
 
 
+        $todiffpop = $population;
+
         for ($step = 1; $step < 20; $step++) {
             $population0 = [];
             $better = 0;
             $pom = [];
             $pom2 = [];
             $ar = $mh->getZeroTable(10);
-            for ($i = 0; $i < 2000; $i++) {
+            for ($i = 0; $i < 1000; $i++) {
                 $population0[] = $cross->random50multiple($population, count($population) - 1, 10, 2);
             }
-
+            for ($i = 0; $i < count($population); $i++) {
+                $population0[] = $population[$i];
+            }
             $res = $gtx->calcPopulation($population0, $headPoints);
             foreach ($res as $rekord) {
                 $pom[] =  $mh->calcpointer($table, $rekord['area']);
@@ -961,19 +966,10 @@ class CheckingCrossAndMutation extends Controller
                 $ar = $gtx->compareWithArea($ar, $table, $rekord['area']);
             }
 
-            $result[] = [
-                'm' => $step,
-                'min' => min($pom),
-                'max' => max($pom),
-                'b' => $better,
-                'avg' => array_sum($pom) / count($pom),
-                'allP' => $mh->calcOneInTable($ar)
-            ];
-
             foreach ($res as $rekord) {
                 $pom2[] = [
                     'area' => $rekord['area'],
-                    'joincalc' => $mh->calcpointerForPopulation($population, $rekord['area'])
+                    'joincalc' => $mh->calcpointerForPopulation($todiffpop, $rekord['area'])
                 ];
             }
 
@@ -984,9 +980,19 @@ class CheckingCrossAndMutation extends Controller
                 return ($a['joincalc'] < $b['joincalc']) ? -1 : 1;
             });
 
+            $result[] = [
+                'm' => $step,
+                'min' => min($pom),
+                'max' => max($pom),
+                'b' => $better,
+                'avg' => array_sum($pom) / count($pom),
+                'allP' => $mh->calcOneInTable($ar),
+                'diff' => $pom2[0]['joincalc']
+            ];
+
             $population = [];
             $i = 0;
-            while (count($population) < 100 && $i < 2000) {
+            while (count($population) < 100 && $i < 1000) {
                 $isused = 0;
                 for ($k = 0; $k < count($population); $k++) {
                     if ($population[$k] == $pom2[$i]['area']) {
@@ -999,8 +1005,6 @@ class CheckingCrossAndMutation extends Controller
                 }
                 $i++;
             }
-            echo count($population);
-            echo " ";
         }
 
         return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);

@@ -22,6 +22,7 @@
             <th>Avg</th>
             <th>Better</th>
             <th>All</th>
+            <th>Diff</th>
         </tr>
         @foreach ($calco AS $rekord)
 
@@ -32,6 +33,7 @@
             <td>{{$rekord['avg']}}</td>
             <td>{{$rekord['b']}}</td>
             <td>{{$rekord['allP']}}</td>
+            <td>{{$rekord['diff']}}</td>
         </tr>
 
         @endforeach

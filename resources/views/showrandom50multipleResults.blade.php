@@ -17,6 +17,7 @@
             <th>Res</th>
             <th>Same</th>
             <th>SameJoin</th>
+
         </tr>
         @foreach ($calco AS $record)
         <tr>
@@ -24,6 +25,7 @@
             <td>{{$record['res']}}</td>
             <td>{{$record['acalc']}}</td>
             <td>{{$record['joincalc']}}</td>
+
         </tr>
         @endforeach
     </table>
