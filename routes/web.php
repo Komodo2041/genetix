@@ -46,7 +46,7 @@ Route::post('calcOneCrossing/{id}',  "App\Http\Controllers\CheckingCrossAndMutat
 Route::get('random50Multiple/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@random50Multiple");
 Route::get('showrandom50Multiple/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@showrandom50Multiple");
 Route::get('random50MultipleTryb2/{id}',  "App\Http\Controllers\CheckingCrossAndMutation@random50MultipleTryb2");
-
+Route::get('showrandom50Multiple/{id}/{param}',  "App\Http\Controllers\CheckingCrossAndMutation@showrandom50Multiple");
 
 Route::get('calculations/{id}',  "App\Http\Controllers\CalcController2@list");
 Route::get('/calculating/progress/{id}',  "App\Http\Controllers\CalcController2@showprocess");

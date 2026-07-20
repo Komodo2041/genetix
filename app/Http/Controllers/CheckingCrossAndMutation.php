@@ -812,7 +812,7 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(200)->get()->random(40);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(200)->get()->random(40);
         $gtx->setPowerMatrixSize(10);
 
         $population = [];
@@ -863,7 +863,7 @@ class CheckingCrossAndMutation extends Controller
         return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);
     }
 
-    public function showrandom50Multiple($id, CrossingData $cross, GenetixDataGenerator $gtx)
+    public function showrandom50Multiple($id, CrossingData $cross, GenetixDataGenerator $gtx, $param = 'joincalc')
     {
         $area = Area::find($id);
         if (!$area) {
@@ -873,7 +873,7 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(200)->get()->random(40);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
 
         $population = [];
         foreach ($calculations as $c) {
@@ -893,7 +893,7 @@ class CheckingCrossAndMutation extends Controller
         $pom = [];
 
         for ($i = 0; $i < 1000; $i++) {
-            $population0[] = $cross->random50multiple($population, 10, 10, 3);
+            $population0[] = $cross->random50multiple($population, count($population), 10, 3);
         }
 
         $res = $gtx->calcPopulation($population0, $headPoints);
@@ -905,11 +905,11 @@ class CheckingCrossAndMutation extends Controller
             ];
         }
 
-        usort($pom, function ($a, $b) {
-            if ($a['joincalc'] == $b['joincalc']) {
+        usort($pom, function ($a, $b)  use ($param) {
+            if ($a[$param] == $b[$param]) {
                 return 0;
             }
-            return ($a['joincalc'] < $b['joincalc']) ? -1 : 1;
+            return ($a[$param] < $b[$param]) ? -1 : 1;
         });
 
         return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom]);
@@ -921,11 +921,14 @@ class CheckingCrossAndMutation extends Controller
         if (!$area) {
             return redirect("/")->with('error', 'Nie znaleziono podanego area');
         }
+
+        $joinAreaId = $this->getIdJoinArea($area);
+
         $table = json_decode($area->data);
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(300)->get()->random(60);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
 
         $population = [];
         foreach ($calculations as $c) {
@@ -941,18 +944,18 @@ class CheckingCrossAndMutation extends Controller
         $mh = new MatrixHelper();
         $max0 = $res[0]['sum'];
         $better = 0;
-
+        $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
 
         $todiffpop = $population;
 
-        for ($step = 1; $step < 20; $step++) {
+        for ($step = 1; $step < 5; $step++) {
             $population0 = [];
             $better = 0;
             $pom = [];
             $pom2 = [];
             $ar = $mh->getZeroTable(10);
             for ($i = 0; $i < 1000; $i++) {
-                $population0[] = $cross->random50multiple($population, count($population) - 1, 10, 2);
+                $population0[] = $cross->random50multiple($population, count($population), 10, 3);
             }
             for ($i = 0; $i < count($population); $i++) {
                 $population0[] = $population[$i];
@@ -969,6 +972,7 @@ class CheckingCrossAndMutation extends Controller
             foreach ($res as $rekord) {
                 $pom2[] = [
                     'area' => $rekord['area'],
+                    'sum' => $rekord['sum'],
                     'joincalc' => $mh->calcpointerForPopulation($todiffpop, $rekord['area'])
                 ];
             }
@@ -987,7 +991,8 @@ class CheckingCrossAndMutation extends Controller
                 'b' => $better,
                 'avg' => array_sum($pom) / count($pom),
                 'allP' => $mh->calcOneInTable($ar),
-                'diff' => $pom2[0]['joincalc']
+                'diff' => $pom2[0]['joincalc'],
+
             ];
 
             $population = [];
@@ -1005,8 +1010,44 @@ class CheckingCrossAndMutation extends Controller
                 }
                 $i++;
             }
+
+            for ($i = 0; $i < 2; $i++) {
+                $reso = $pom2[$i]['sum'] / $maxPoints;
+                Calculation::create([
+                    "result" => "Joiner Tryb 2",
+                    "data" => json_encode($res[0]['area']),
+                    "area_id" => $joinAreaId,
+                    "level" => 1,
+                    "obtainedresult" =>  $reso,
+                    "typecalc" => 116,
+                ]);
+            }
         }
 
         return view("checkrandom50multiple", ['area' => $area, 'calco' => $result]);
+    }
+
+    private function getIdJoinArea($area)
+    {
+        if ($area->isjoiner) {
+            return $area->id;
+        }
+        if ($area->river) {
+            $area = Area::find($area->river);
+        }
+        if ($area->joiner != null) {
+            return $area->joiner;
+        } else {
+            $newArea = Area::create([
+                "data" => $area->data,
+                "name" => "Joiner: " . $area->name,
+                "river" => $area->id,
+                "isjoiner" => 1,
+                "hide" => 0
+            ]);
+            $area->joiner = $newArea->id;
+            $area->save();
+            return $area->joiner;
+        }
     }
 }

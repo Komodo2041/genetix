@@ -5,6 +5,7 @@
 <a href="/calculations/{{$area->id}}"><button>Obliczenia</button></a><br />
 
 <a href="/random50Multiple/{{$area->id}}"><button>Sprawdź Random50Multiple</button></a><br />
+<a href="/showrandom50Multiple/{{$area->id}}"><button>Pokaż wszystkie obliczenia random50Multiple</button></a><br />
 
 <h3>Różnice wyników</h3>
 <div class="container">
