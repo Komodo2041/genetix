@@ -4,11 +4,11 @@
 <a href="/"><button>Strona główna</button></a><br />
 <a href="/calculations/{{$area->id}}"><button>Obliczenia</button></a><br />
 
-<a href="/diffbestCalculation/{{$area->id}}"><button>Róznice Najlepszych obliczeń</button></a><br />
+<a href="/diffbestCalculation/{{$area->id}}"><button>Róznice Najlepszych obliczeń</button></a> >
 
-<a href="/showrandom50Multiple/{{$area->id}}"><button>Pokaż wszystkie obliczenia random50Multiple</button></a><br />
-<a href="/random50Multiple/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb1</button></a><br />
-<a href="/random50MultipleTryb2/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb2</button></a><br />
+<a href="/showrandom50Multiple/{{$area->id}}"><button>Pokaż wszystkie obliczenia random50Multiple</button></a>
+<a href="/random50Multiple/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb1</button></a>
+<a href="/random50MultipleTryb2/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb2</button></a>
 
 <h3>Crossing - random50Multiple</h3>
 <div class="container">

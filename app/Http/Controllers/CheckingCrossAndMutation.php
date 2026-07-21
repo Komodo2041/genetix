@@ -873,7 +873,7 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(20);
 
         $population = [];
         foreach ($calculations as $c) {
@@ -893,18 +893,38 @@ class CheckingCrossAndMutation extends Controller
         $pom = [];
 
         for ($i = 0; $i < 1000; $i++) {
-            $population0[] = $cross->random50multiple($population, count($population), 10, 3);
+            $population0[] = $cross->random50multiple($population, count($population), 10, 2);
         }
+        $avgArea = $mh->getAvgPopArea($population, $table);
 
         $res = $gtx->calcPopulation($population0, $headPoints);
+
+        $acalcPom1 = 0;
+        $acalcPom2 = 0;
+        $mindistPom1 = 0;
+        $mindistPom2 = 0;
+
         foreach ($res as $rekord) {
+            $mhdat = $mh->calcpointerForPopulation($population, $rekord['area']);
+            $ac =  $mh->calcpointer($table, $rekord['area']);
             $pom[] = [
-                'acalc' => $mh->calcpointer($table, $rekord['area']),
+                'acalc' => $ac,
                 'res' => $rekord['sum'] / $maxPoints,
-                'joincalc' => $mh->calcpointerForPopulation($population, $rekord['area'])
+                'joincalc' => $mhdat[0],
+                'mindist' => $mhdat[1],
+                'maxdist' => $mhdat[2],
+                'param' => $mhdat[1] + $mhdat[2],
+                'green' => $ac > $avgArea,
+                'mediana' =>  $mhdat[3],
             ];
+            $this->setParamsTORandom50($acalcPom1, $acalcPom2, $mindistPom1, $mindistPom2, $mhdat[0], $mhdat[1]);
         }
 
+        foreach ($pom as $key => $rec) {
+            //  $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) + ($rec['mindist'] - $mindistPom1)   / ($mindistPom2 - $mindistPom1);
+            $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) * ($rec['mindist'] - $mindistPom1)   / ($mindistPom2 - $mindistPom1);
+        }
+        $param = 'param_2';
         usort($pom, function ($a, $b)  use ($param) {
             if ($a[$param] == $b[$param]) {
                 return 0;
@@ -913,6 +933,22 @@ class CheckingCrossAndMutation extends Controller
         });
 
         return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom]);
+    }
+
+    private function setParamsTORandom50(&$acalcPom1, &$acalcPom2, &$mindistPom1, &$mindistPom2, $calc, $min)
+    {
+        if ($calc < $acalcPom1 || $acalcPom1  == 0) {
+            $acalcPom1 = $calc;
+        }
+        if ($calc > $acalcPom2 || $acalcPom2  == 0) {
+            $acalcPom2 = $calc;
+        }
+        if ($min < $mindistPom1 || $mindistPom1 == 0) {
+            $mindistPom1 = $min;
+        }
+        if ($min > $mindistPom2 || $mindistPom2  == 0) {
+            $mindistPom2 = $min;
+        }
     }
 
     public function random50MultipleTryb2($id, CrossingData $cross, GenetixDataGenerator $gtx)

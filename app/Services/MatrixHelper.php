@@ -297,10 +297,36 @@ class MatrixHelper
     public function calcpointerForPopulation($pops, $area)
     {
         $sum = 0;
+        $min = 1000;
+        $max = 0;
+        $all = [];
         foreach ($pops as $pop) {
-            $sum += $this->calcpointer($area, $pop, 1);
+            $diff = $this->calcpointer($area, $pop, 1);
+            $sum += $diff;
+            if ($diff < $min) {
+                $min = $diff;
+            }
+            if ($diff > $max) {
+                $max = $diff;
+            }
+            $all[] = $diff;
         }
-        return $sum;
+        sort($all);
+        $m = (int) floor(count($all) / 2);
+        $mediana = $all[$m];
+        return [$sum, $min, $max, $mediana];
+    }
+
+    public function getAvgPopArea($pops, $area)
+    {
+        $nr = 0;
+        $sum = 0;
+        foreach ($pops as $pop) {
+            $diff = $this->calcpointer($area, $pop);
+            $sum += $diff;
+            $nr++;
+        }
+        return round($sum / $nr, 1);
     }
 
     public function checkedSameResultsinLine($usedcalculations, $area)
