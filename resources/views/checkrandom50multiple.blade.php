@@ -11,6 +11,7 @@
 <a href="/random50MultipleTryb2/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb2</button></a>
 
 <h3>Crossing - random50Multiple</h3>
+
 <div class="container">
 
 
@@ -43,5 +44,8 @@
 
 
 </div>
+
+
+
 
 @endsection('content')
