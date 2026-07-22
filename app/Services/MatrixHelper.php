@@ -230,6 +230,7 @@ class MatrixHelper
 
         $maxpairs = [];
         $max = 0;
+
         for ($i = 0; $i < $count; $i++) {
             for ($j = 0; $j < $count; $j++) {
                 if ($i == $j) {
@@ -245,13 +246,13 @@ class MatrixHelper
 
         for ($i = 2; $i <= $nr; $i++) {
             $max = 0;
-            $newNumber = 0;
+            $newNumber = -1;
             for ($j = 0; $j < $count; $j++) {
                 if (in_array($j, $maxpairs)) {
                     continue;
                 }
                 $sum = 0;
-                $newNumber = -1;
+
                 foreach ($maxpairs as $m) {
                     $sum += $results[$j][$m];
                 }
@@ -260,6 +261,7 @@ class MatrixHelper
                     $newNumber = $j;
                 }
             }
+
             if ($newNumber > -1) {
                 $maxpairs[] = $newNumber;
             }

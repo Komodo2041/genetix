@@ -873,8 +873,13 @@ class CheckingCrossAndMutation extends Controller
         set_time_limit(14400);
         ini_set('memory_limit', '350M');
 
-        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(200)->get()->random(20);
-        $othercalculations = Calculation::where("area_id", $id)->whereNotNull("start")->orderBy("obtainedresult", "DESC")->take(500)->get();
+        $mh = new MatrixHelper();
+
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
+        $othercalculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1000)->get();
+
+        $calculations = $mh->getmostdifferent($calculations, 5);
+        $othercalculations = $mh->getmostdifferent($othercalculations, 500);
 
         $population = [];
         $otherpopulation = [];
@@ -889,7 +894,7 @@ class CheckingCrossAndMutation extends Controller
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
 
-        $mh = new MatrixHelper();
+
 
         $population0 = [];
 
@@ -956,7 +961,7 @@ class CheckingCrossAndMutation extends Controller
         }
 
 
-        $param = 'param_2';
+        // $param = 'param_2';
         $param = 'joincalc';
         usort($pom, function ($a, $b)  use ($param) {
             if ($a[$param] == $b[$param]) {
