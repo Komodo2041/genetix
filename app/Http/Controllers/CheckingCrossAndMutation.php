@@ -26,6 +26,11 @@ use App\Http\Controllers\MainController;
 class CheckingCrossAndMutation extends Controller
 {
 
+    /**
+     * 
+     * php artisan app:random50-multiple-calc-all-time 34 20
+     * 
+     */
 
     private $saveCrosMutationMatrix = 1.000001;
     // private $saveCrosMutationMatrix = 1.0000001;
@@ -38,7 +43,7 @@ class CheckingCrossAndMutation extends Controller
     public $nrMaxPopulation = 120;
 
     private $saveinJoiner1 = 0;
-    private $saveinJoiner2 = 0;
+    private $saveinJoiner2 = 1;
 
     public function __construct()
     {
@@ -929,6 +934,7 @@ class CheckingCrossAndMutation extends Controller
             $ac =  $mh->calcpointer($table, $rekord['area']);
             $pom[] = [
                 'acalc' => $ac,
+                'sumarea' => $rekord['sum'],
                 'res' => $rekord['sum'] / $maxPoints,
                 'joincalc' => $mhdat[0],
                 'mindist' => $mhdat[1],
@@ -959,6 +965,7 @@ class CheckingCrossAndMutation extends Controller
             $ac =  $mh->calcpointer($table, $rekord['area']);
             $pomOther[] = [
                 'acalc' => $ac,
+                'sumarea' => $rekord['sum'],
                 'res' => $rekord['sum'] / $maxPoints,
                 'joincalc' => $mhdat[0],
                 'mindist' => $mhdat[1],
@@ -1004,6 +1011,34 @@ class CheckingCrossAndMutation extends Controller
         }
         $this->saveJoiner50Table($id, $umax, $pom, 1);
         $this->saveJoiner50Table($id, $umax, $pom, 2);
+
+
+        if ($this->saveinJoiner2) {
+            $joinAreaId = $this->getIdJoinArea($area);
+            for ($i = 0; $i < 10; $i++) {
+
+                $areaTable = [];
+                $suma = $pom[$i]['sumarea'];
+                foreach ($res as $rekord) {
+                    if ($rekord['sum'] == $suma) {
+                        $areaTable = $rekord['area'];
+                        break;
+                    }
+                }
+
+                if ($areaTable) {
+                    Calculation::create([
+                        "result" => "Joiner Tryb - Created Betters",
+                        "data" => json_encode($areaTable),
+                        "area_id" => $joinAreaId,
+                        "level" => 1,
+                        "obtainedresult" => $pom[$i]['res'],
+                        "typecalc" => 117,
+                    ]);
+                }
+            }
+        }
+
 
         return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom, 'calco2' => $pomOther]);
     }
