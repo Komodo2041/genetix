@@ -16,6 +16,8 @@ use App\Models\Matrix;
 use App\Models\CrossMatrix;
 use App\Models\PowerSelect;
 use App\Models\BigMutationMatrix;
+use App\Models\Joiner50;
+
 use App\Services\MatrixHelper;
 use App\Services\Generation0Helper;
 
@@ -35,6 +37,8 @@ class CheckingCrossAndMutation extends Controller
     private $powerCalc = 120;
     public $nrMaxPopulation = 120;
 
+    private $saveinJoiner1 = 0;
+    private $saveinJoiner2 = 0;
 
     public function __construct()
     {
@@ -876,13 +880,14 @@ class CheckingCrossAndMutation extends Controller
         $mh = new MatrixHelper();
 
         $firstcalco = $this->getCalcFormoneLevel($area, 300);
+        $firstcalco = $mh->getmostdifferent($firstcalco, 100);
 
         $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
-        $othercalculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1000)->get();
-
         $calculations = $mh->getmostdifferent($calculations, 10);
+
+        $othercalculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1000)->get();
         $othercalculations = $mh->getmostdifferent($othercalculations, 500);
-        $firstcalco = $mh->getmostdifferent($firstcalco, 100);
+
 
         $population = [];
         $otherpopulation = [];
@@ -901,8 +906,6 @@ class CheckingCrossAndMutation extends Controller
         $cross->changeMethodList(["random50multiple"]);
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
         $headPoints = $gtx->calcPoints($this->nrMaxPopulation, $table);
-
-
 
         $population0 = [];
 
@@ -963,6 +966,7 @@ class CheckingCrossAndMutation extends Controller
                 'param' => $mhdat[1] + $mhdat[2],
                 'green' => $ac > $avgArea,
                 'dist_first' => $mfirst[0],
+
             ];
             $this->setParamsTORandom50($acalcPom1, $acalcPom2, $mindistPom1, $mindistPom2, $mhdat[0], $mfirst[0]);
         }
@@ -992,7 +996,14 @@ class CheckingCrossAndMutation extends Controller
             return ($a[$param] < $b[$param]) ? -1 : 1;
         });
 
-
+        $umax = Joiner50::where("area_id", $id)->max("max");
+        if (!$umax) {
+            $umax = 1;
+        } else {
+            $umax++;
+        }
+        $this->saveJoiner50Table($id, $umax, $pom, 1);
+        $this->saveJoiner50Table($id, $umax, $pom, 2);
 
         return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom, 'calco2' => $pomOther]);
     }
@@ -1109,16 +1120,18 @@ class CheckingCrossAndMutation extends Controller
                 $i++;
             }
 
-            for ($i = 0; $i < 2; $i++) {
-                $reso = $pom2[$i]['sum'] / $maxPoints;
-                Calculation::create([
-                    "result" => "Joiner Tryb 2",
-                    "data" => json_encode($res[0]['area']),
-                    "area_id" => $joinAreaId,
-                    "level" => 1,
-                    "obtainedresult" =>  $reso,
-                    "typecalc" => 116,
-                ]);
+            if ($this->saveinJoiner1) {
+                for ($i = 0; $i < 2; $i++) {
+                    $reso = $pom2[$i]['sum'] / $maxPoints;
+                    Calculation::create([
+                        "result" => "Joiner Tryb 2",
+                        "data" => json_encode($res[0]['area']),
+                        "area_id" => $joinAreaId,
+                        "level" => 1,
+                        "obtainedresult" =>  $reso,
+                        "typecalc" => 116,
+                    ]);
+                }
             }
         }
 
@@ -1156,5 +1169,25 @@ class CheckingCrossAndMutation extends Controller
         }
         $cacls = Calculation::where("area_id", $area->id)->where("level", 1)->inRandomOrder()->take($nr)->get();
         return $cacls;
+    }
+
+    private function saveJoiner50Table($area_id, $umax, $pom, $tryb)
+    {
+        foreach ($pom as $record) {
+            Joiner50::create([
+                "area_id" => $area_id,
+                "max" => $umax,
+                "tryb" => $tryb,
+                "res" => $record['res'],
+                "same" => $record['acalc'],
+                "samejoin" => $record['joincalc'],
+                "mindist" => $record['mindist'],
+                "maxdist" => $record['maxdist'],
+                "firstdist" => $record['dist_first'],
+                "param2" => $record['param_2'],
+                "param3" => $record['param_3'],
+                "better" => $record['green']
+            ]);
+        }
     }
 }
