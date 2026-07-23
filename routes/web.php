@@ -111,3 +111,6 @@ Route::get('compareCalculations/{id}',  "App\Http\Controllers\SameCalcController
 Route::get('checkBlob/{id}/{tryb}',  "App\Http\Controllers\SameCalcController@checkBlob");
 Route::get('compareGen0/{id}/{count}',  "App\Http\Controllers\SameCalcController@compareGen0");
 Route::post('setRiverGen0/{id}',  "App\Http\Controllers\SameCalcController@setRiverGen0");
+
+Route::get('joiner50List/{id}',  "App\Http\Controllers\Joiner50Controller@list");
+Route::get('showSpecialJoin/{id}/{join}',  "App\Http\Controllers\Joiner50Controller@showjoin");

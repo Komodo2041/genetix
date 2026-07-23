@@ -6,6 +6,7 @@
 <a href="/random50Multiple/{{$area->id}}"><button>Oblicz pokolenia multiple</button></a>
 <a href="/random50MultipleTryb2/{{$area->id}}"><button>Oblicz pokolenia multiple Tryb2</button></a>
 <a href="/showrandom50Multiple/{{$area->id}}"><button>Pokaż wszystkie obliczenia random50Multiple</button></a>
+<a href="/joiner50List/{{$area->id}}"><button>Joiner50</button></a>&nbsp;
 
 <h3>Random50Multiple </h3>
 <a name="first"></a>

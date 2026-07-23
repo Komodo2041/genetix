@@ -83,6 +83,8 @@
 
             <a href="/showCalcSame/{{$a->id}}"><button>Porównaj obliczenia</button></a>&nbsp;
 
+            <a href="/joiner50List/{{$a->id}}"><button>Joiner50</button></a>&nbsp;
+
             <br />
             @foreach ($a->diamonds AS $d)
             <a href="diamond/{{$a->id}}/{{ count($calco[$a->id]) - 1 }}/{{$d->id}}"><button>Oblicz Diament {{$d->id}}</button></a>
