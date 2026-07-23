@@ -301,7 +301,6 @@ class MatrixHelper
         $sum = 0;
         $min = 1000;
         $max = 0;
-        $all = [];
         foreach ($pops as $pop) {
             $diff = $this->calcpointer($area, $pop, 1);
             $sum += $diff;
@@ -311,12 +310,9 @@ class MatrixHelper
             if ($diff > $max) {
                 $max = $diff;
             }
-            $all[] = $diff;
         }
-        sort($all);
-        $m = (int) floor(count($all) / 2);
-        $mediana = $all[$m];
-        return [$sum, $min, $max, $mediana];
+
+        return [$sum, $min, $max];
     }
 
     public function getAvgPopArea($pops, $area)

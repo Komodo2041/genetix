@@ -875,20 +875,28 @@ class CheckingCrossAndMutation extends Controller
 
         $mh = new MatrixHelper();
 
+        $firstcalco = $this->getCalcFormoneLevel($area, 300);
+
         $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
         $othercalculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1000)->get();
 
-        $calculations = $mh->getmostdifferent($calculations, 5);
+        $calculations = $mh->getmostdifferent($calculations, 10);
         $othercalculations = $mh->getmostdifferent($othercalculations, 500);
+        $firstcalco = $mh->getmostdifferent($firstcalco, 100);
 
         $population = [];
         $otherpopulation = [];
+        $firstPop = [];
         foreach ($calculations as $c) {
             $population[] = json_decode($c->data);
         }
         foreach ($othercalculations as $c) {
             $otherpopulation[] = json_decode($c->data);
         }
+        foreach ($firstcalco as $c) {
+            $firstPop[] = json_decode($c->data);
+        }
+
 
         $cross->changeMethodList(["random50multiple"]);
         $maxPoints = $gtx->getmaxPoints($this->nrMaxPopulation);
@@ -914,6 +922,7 @@ class CheckingCrossAndMutation extends Controller
 
         foreach ($res as $rekord) {
             $mhdat = $mh->calcpointerForPopulation($population, $rekord['area']);
+            $mfirst = $mh->calcpointerForPopulation($firstPop, $rekord['area']);
             $ac =  $mh->calcpointer($table, $rekord['area']);
             $pom[] = [
                 'acalc' => $ac,
@@ -923,14 +932,16 @@ class CheckingCrossAndMutation extends Controller
                 'maxdist' => $mhdat[2],
                 'param' => $mhdat[1] + $mhdat[2],
                 'green' => $ac > $avgArea,
-                'mediana' =>  $mhdat[3],
+                'dist_first' => $mfirst[0],
             ];
-            $this->setParamsTORandom50($acalcPom1, $acalcPom2, $mindistPom1, $mindistPom2, $mhdat[0], $mhdat[1]);
+            $this->setParamsTORandom50($acalcPom1, $acalcPom2, $mindistPom1, $mindistPom2, $mhdat[0], $mfirst[0]);
         }
 
         foreach ($pom as $key => $rec) {
             //  $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) + ($rec['mindist'] - $mindistPom1)   / ($mindistPom2 - $mindistPom1);
-            $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) * ($rec['mindist'] - $mindistPom1)   / ($mindistPom2 - $mindistPom1);
+            //  $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) *  ($mindistPom2 -  $rec['dist_first'])  / ($mindistPom2 - $mindistPom1);
+            $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) *  ($rec['dist_first'] - $mindistPom1)  / ($mindistPom2 - $mindistPom1);
+            $pom[$key]['param_3'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) *  ($rec['dist_first'] - $mindistPom1)  / ($mindistPom2 - $mindistPom1);
         }
 
         // OTHER CALCULATIONS
@@ -941,6 +952,7 @@ class CheckingCrossAndMutation extends Controller
 
         foreach ($res as $rekord) {
             $mhdat = $mh->calcpointerForPopulation($otherpopulation, $rekord['area']);
+            $mfirst = $mh->calcpointerForPopulation($firstPop, $rekord['area']);
             $ac =  $mh->calcpointer($table, $rekord['area']);
             $pomOther[] = [
                 'acalc' => $ac,
@@ -950,19 +962,22 @@ class CheckingCrossAndMutation extends Controller
                 'maxdist' => $mhdat[2],
                 'param' => $mhdat[1] + $mhdat[2],
                 'green' => $ac > $avgArea,
-                'mediana' =>  $mhdat[3],
+                'dist_first' => $mfirst[0],
             ];
-            $this->setParamsTORandom50($acalcPom1, $acalcPom2, $mindistPom1, $mindistPom2, $mhdat[0], $mhdat[1]);
+            $this->setParamsTORandom50($acalcPom1, $acalcPom2, $mindistPom1, $mindistPom2, $mhdat[0], $mfirst[0]);
         }
 
         foreach ($pomOther as $key => $rec) {
             //  $pom[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) + ($rec['mindist'] - $mindistPom1)   / ($mindistPom2 - $mindistPom1);
-            $pomOther[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) * ($rec['mindist'] - $mindistPom1)   / ($mindistPom2 - $mindistPom1);
+            // $pomOther[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) * ($mindistPom2 -  $rec['dist_first'])  / ($mindistPom2 - $mindistPom1);
+            $pomOther[$key]['param_2'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) *  ($rec['dist_first'] - $mindistPom1)  / ($mindistPom2 - $mindistPom1);
+            $pomOther[$key]['param_3'] = ($rec['joincalc'] - $acalcPom1)   / ($acalcPom2 - $acalcPom1) +  ($rec['dist_first'] - $mindistPom1)  / ($mindistPom2 - $mindistPom1);
         }
 
 
         // $param = 'param_2';
         $param = 'joincalc';
+        // $param = 'dist_first';
         usort($pom, function ($a, $b)  use ($param) {
             if ($a[$param] == $b[$param]) {
                 return 0;
@@ -976,6 +991,8 @@ class CheckingCrossAndMutation extends Controller
             }
             return ($a[$param] < $b[$param]) ? -1 : 1;
         });
+
+
 
         return view("showrandom50multipleResults", ['area' => $area, 'calco' => $pom, 'calco2' => $pomOther]);
     }
@@ -1130,5 +1147,14 @@ class CheckingCrossAndMutation extends Controller
             $area->save();
             return $area->joiner;
         }
+    }
+
+    private function getCalcFormoneLevel($area, $nr)
+    {
+        while (!is_null($area->river)) {
+            $area = Area::find($area->river);
+        }
+        $cacls = Calculation::where("area_id", $area->id)->where("level", 1)->inRandomOrder()->take($nr)->get();
+        return $cacls;
     }
 }

@@ -21,7 +21,8 @@
             <th>Min Dist</th>
             <th>Max Dist</th>
             <th>Param</th>
-            <th>Mediana</th>
+            <th>Param 2</th>
+            <th>Dist First</th>
         </tr>
         @foreach ($calco AS $record)
         <tr @if ($record['green']) class="green" @endif>
@@ -32,7 +33,8 @@
             <td>{{$record['mindist']}}</td>
             <td>{{$record['maxdist']}}</td>
             <td>{{$record['param_2']}}</td>
-            <td>{{$record['mediana']}}</td>
+            <td>{{$record['param_3']}}</td>
+            <td>{{$record['dist_first']}}</td>
         </tr>
         @endforeach
     </table>
@@ -53,7 +55,8 @@
             <th>Min Dist</th>
             <th>Max Dist</th>
             <th>Param</th>
-            <th>Mediana</th>
+            <th>Param 2</th>
+            <th>Dist First</th>
         </tr>
         @foreach ($calco2 AS $record)
         <tr @if ($record['green']) class="green" @endif>
@@ -64,7 +67,8 @@
             <td>{{$record['mindist']}}</td>
             <td>{{$record['maxdist']}}</td>
             <td>{{$record['param_2']}}</td>
-            <td>{{$record['mediana']}}</td>
+            <td>{{$record['param_3']}}</td>
+            <td>{{$record['dist_first']}}</td>
         </tr>
         @endforeach
     </table>
