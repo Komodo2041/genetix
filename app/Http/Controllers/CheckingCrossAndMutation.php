@@ -887,10 +887,10 @@ class CheckingCrossAndMutation extends Controller
         $firstcalco = $this->getCalcFormoneLevel($area, 300);
         $firstcalco = $mh->getmostdifferent($firstcalco, 100);
 
-        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(500)->get()->random(50);
+        $calculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1000)->get()->random(50);
         $calculations = $mh->getmostdifferent($calculations, 10);
 
-        $othercalculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(1000)->get();
+        $othercalculations = Calculation::where("area_id", $id)->orderBy("obtainedresult", "DESC")->take(2000)->get();
         $othercalculations = $mh->getmostdifferent($othercalculations, 500);
 
 
@@ -1176,7 +1176,24 @@ class CheckingCrossAndMutation extends Controller
     private function getIdJoinArea($area)
     {
         if ($area->isjoiner) {
-            return $area->id;
+            if ($area->joinerjoiner == 1) {
+                if ($area->joiner != null) {
+                    return $area->joiner;
+                } else {
+                    $newArea = Area::create([
+                        "data" => $area->data,
+                        "name" => "Joiner2: " . $area->name,
+                        "river" => $area->id,
+                        "isjoiner" => 1,
+                        "hide" => 0
+                    ]);
+                    $area->joiner = $newArea->id;
+                    $area->save();
+                    return $area->joiner;
+                }
+            } else {
+                return $area->id;
+            }
         }
         if ($area->river) {
             $area = Area::find($area->river);

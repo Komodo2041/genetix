@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 Route::match(["get", "post"], '/', "App\Http\Controllers\AreaController@list");
 Route::get('hidearea/{id}',  "App\Http\Controllers\AreaController@hide");
 Route::get('changeFlex/{id}/{tr}',  "App\Http\Controllers\AreaController@changeFlex");
+Route::get('turnOffJoiner/{id}',  "App\Http\Controllers\AreaController@turnOffJoiner");
+Route::get('turnOnJoiner/{id}',  "App\Http\Controllers\AreaController@turnOnJoiner");
 
 Route::match(["get", "post"], 'area/calc_level2/{id}/{lvl}', "App\Http\Controllers\MainController@calcarea_level");
 Route::match(["get", "post"], 'diamond/{id}/{lvl}/{dId}', "App\Http\Controllers\MainController@calcarea_level");

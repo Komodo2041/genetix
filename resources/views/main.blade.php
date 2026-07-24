@@ -29,6 +29,14 @@
             @else
             <a href="/changeFlex/{{$a->id}}/0"><button>Wyłącz flex</button></a> <br />
             @endif
+
+            @if ($a->isjoiner)
+            @if ($a->joinerjoiner == 1)
+            <a href="/turnOffJoiner/{{$a->id}}"><button>Wyłącz następny Joiner</button></a> <br />
+            @else
+            <a href="/turnOnJoiner/{{$a->id}}"><button>Włącz następny Joiner</button></a> <br />
+            @endif
+            @endif
          </td>
          <td style="width:400px;">
             <h4>All: {{$a?->calculations->count()}} </h4>

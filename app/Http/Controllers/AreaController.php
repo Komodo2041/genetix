@@ -96,4 +96,26 @@ class AreaController extends Controller
         Area::where("id", $id)->update(["flex" => $tr]);
         return redirect("/")->with('success', 'Włączono Flex dla: ' . $id . " VAL: " . $tr);
     }
+
+    public function turnOffJoiner($id)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $area->joinerjoiner = 0;
+        $area->save();
+        return redirect("/")->with('success', 'Wyłączono JoinerJoiner');
+    }
+
+    public function turnOnJoiner($id)
+    {
+        $area = Area::find($id);
+        if (!$area) {
+            return redirect("/")->with('error', 'Nie znaleziono podanego area');
+        }
+        $area->joinerjoiner = 1;
+        $area->save();
+        return redirect("/")->with('success', 'Włączono JoinerJoiner');
+    }
 }
